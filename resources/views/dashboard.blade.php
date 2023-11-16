@@ -44,12 +44,7 @@
         <!-- auth page content -->
         <div class="auth-page-content">
             <div class="container">
-               
-           
-
-                
-                 
-               
+                     
             </div>
             <!-- end container -->
         </div>

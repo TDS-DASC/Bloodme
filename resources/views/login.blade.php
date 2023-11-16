@@ -32,6 +32,7 @@
     <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
     <!-- Custom CSS-->
     <link href="assets/css/custom.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="assets/images/logo.png">
 </head>
 
 <body>
@@ -42,28 +43,15 @@
         <!-- auth page content -->
         <div class="auth-page-content">
             <div class="container">
-
-
-                <div class="row">
-                    <div class="col-lg-12">
-                         <!-- AQUI poner arriba del cuadro del login para dar formato -->
-                    </div>
-                </div>
                
-
                 <!-- AQUI EMPIEZA EL CODIGO DEL LOGIN -->
-
                 <div class="row justify-content-center">
-
-                    <div class="col-md-4 ">
-                        <img src="resources\images\logo.png" alt="">                   <!-- no se mira la imagen  y ajustar tamaños de ser necesario (ARREGLAR) -->
-                        
+                    <div class="col-md-4 me-5">
+                        <img src="{{ asset('images/logo.png') }}" class="w-100" alt="No se pudo cargar el logo">     
+                        <h1 class="text-center text-danger">BLOODME</h1>
                     </div>
-
-
                     <div class="col-md-8 col-lg-6 col-xl-5 mt-5">
                         <div class="card mt-4">
-
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
                                     <h5 class="text-danger">BIENVENIDO A BLOODME!</h5>
@@ -91,7 +79,7 @@
                                         </div>
 
                                         <div class="mt-4">
-                                            <button class="btn btn-danger w-100 boton-rojo" type="submit">INICIAR SESION</button>
+                                            <button class="btn btn-danger w-100 boton-rojo" type="submit">INICIAR SESIÓN</button>
                                         </div>
 
                                     </form>
@@ -100,10 +88,25 @@
                             <!-- end card body -->
                         </div>
                         <!-- end card -->
-
                         <div class="mt-4 text-center">
-                            <p class="mb-0">Quieres crear una cuenta? <a href="auth-signup-basic.html" class="fw-semibold text-primary text-decoration-underline"> Registrate Aqui </a> </p>
+                            <p class="mb-5">¿Quieres crear una cuenta? <a href="auth-signup-basic.html" class="fw-semibold text-danger text-decoration-underline"> Registrate aquí</a></p>
                         </div>
+
+                        <!-- footer -->
+                        <footer class="footer">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="text-center">
+                                            <p class="mb-0 text-muted">&copy;
+                                                <script>document.write(new Date().getFullYear())</script> Proyecto Bloodme<i class="mdi mdi-heart text-danger"></i>    <!-- centrarlo debajo del login (ARREGLAR) -->
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+        <!-- end Footer -->
 
                     </div>
                 </div>
@@ -112,22 +115,6 @@
             <!-- end container -->
         </div>
         <!-- end auth page content -->
-
-        <!-- footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center">
-                            <p class="mb-0 text-muted">&copy;
-                                <script>document.write(new Date().getFullYear())</script> JORGE MAQUETADOR PRO <i class="mdi mdi-heart text-danger"></i> Por Papu Tilin    <!-- centrarlo debajo del login (ARREGLAR) -->
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- end Footer -->
     </div>
     <!-- end auth-page-wrapper -->
 
