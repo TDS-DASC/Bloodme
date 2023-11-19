@@ -187,7 +187,15 @@
                             ]);
 
                             var options = {
-                                title: 'Datos generales'
+                                title: 'Datos generales',
+                                slices: {
+                                    0: { color: '#77baff' },
+                                    1: { color: '#ff5c57' },
+                                    2: { color: '#1488ff' },
+                                    3: { color: '#ff352e' },
+                                    4: { color: '#007eff' }
+                                }
+                                
                             };
 
                             var chart = new google.visualization.PieChart(document.getElementById('piechart'));
