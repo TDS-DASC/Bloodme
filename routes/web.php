@@ -23,3 +23,18 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 
+Route::get('/usuarios', function () {
+    return view('usuarios');
+});
+
+Route::get('/campañas', function () {
+    return view('campañas');
+});
+
+Route::get('/unidadesMedicas', function () {
+    return view('unidades');
+});
+
+Route::get('/prueba', function () {
+    return view('saludoPlantilla');
+});

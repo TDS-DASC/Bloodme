@@ -45,6 +45,7 @@
 </head>
 
 <body>
+<div class ="dashboard" data-section="dashboard">
     <!--INICIO HEADER-->
     <header id="page-topbar" class="py-3 border-top border-bottom">
         <div class="layout-width">
@@ -125,7 +126,7 @@
 <!-- ============================================================== -->
 <!-- Start right Content here -->
 <!-- ============================================================== -->
-<div class="main-content ml-5 mt-5">
+<div class="dashboards ml-5 mt-5">
 
     <div class="page-content">
         <div class="container">
@@ -303,7 +304,20 @@
 <!-- App js -->
 <script src="assets/js/app.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> <!-- NO FUNCIONA, INTENTO DE BARRA DE NAVEGACION FUNCIONAL -->
+<script> 
+    $(document).ready(function () {
+        $('.nav-item').on('click', function (e) {
+            e.preventDefault();
+            var sectionId = $(this).data('section');
+            $('html, body').animate({
+                scrollTop: $('.' + sectionId).offset().top
+            }, 1000);
+        });
+    });
+</script>
 
+</div>
 </body>
 
 </html>
