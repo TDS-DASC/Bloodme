@@ -24,6 +24,7 @@
         nav.navbar {
             height: 50px; 
         }
+
     </style>
 
     <!-- Main HTML partial -->
@@ -87,34 +88,35 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span class="ms-1">Dashboards</span>
+                        <i class="ri-dashboard-2-line fa-solid fa-circle-half-stroke text-danger" " style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Dashboards</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span class="ms-1">Usuarios</span>
+                        <i class="ri-dashboard-2-line fa-solid fa-user text-danger"   style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Usuarios</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span class="ms-1">Campañas</span>
+                        <i class="ri-dashboard-2-line fa-solid fa-tents text-danger" style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Campañas</span>
                     </a>
                 </li>
                 
                 <li class="nav-item">
                     <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span class="ms-1">Unidades Medicas</span>
+                        <i class="ri-dashboard-2-line fa-solid fa-hospital text-danger" style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Unidades Medicas</span>
                     </a>
                 </li>
+                
             </ul>
         </div>
     </div>
 </nav>
 
 
-     <!-- ========== FIN NAVBAR ========== -->
+    <!-- ========== FIN NAVBAR ========== -->
         <!-- Begin page -->
     <div id="layout-wrapper">
 
@@ -130,35 +132,35 @@
 
             <div class="row w-100 d-flex justify-content-center">
                 <div class="col-3 ">
-                    <div class="card card-animate">
+                    <div class="card card-animate"  style="background-color: #EFF6FF;">
                         <div class="card-body">
                                 <div>
                                     <p class="fw-medium text-muted mb-0">Campañas</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-tents"></i> 0</span></h2>
+                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-tents text-danger"></i> 0</span></h2>
                                 </div>
                         </div><!-- end card body -->
                     </div>
                 </div>
                 <div class="col-3">
-                    <div class="card card-animate">
+                    <div class="card card-animate"  style="background-color: #EFF6FF;">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <p class="fw-medium text-muted mb-0">Solicitudes</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-envelope"></i> 0</span></h2>
+                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-envelope text-danger"></i> 0</span></h2>
                                 </div>
                             </div>
                         </div><!-- end card body -->
                     </div> <!-- end card-->
                 </div>
                 <div class="col-3">
-                    <div class="card card-animate">
+                    <div class="card card-animate"  style="background-color: #EFF6FF;">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <p class="fw-medium text-muted mb-0">Donaciones</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold tex-center"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-hand-holding-dollar"></i> 0</span></h2>
-                                   
+                                    <h2 class="mt-4 ff-secondary fw-semibold tex-center"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-hand-holding-dollar text-danger"></i> 0</span></h2>
+                                
                                 </div>
                                 
                             </div>
@@ -167,7 +169,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-6 mr-5">
                     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                     <script type="text/javascript">
                         google.charts.load('current', {'packages':['corechart']});
@@ -196,23 +198,23 @@
                     <div id="piechart" style="width: 900px; height: 500px;"></div>
                 </div>
                 <div class="col-6 mt-5">
-                    <div class="col-12 w-50">
-                        <div class="card card-animate">
+                    <div class="col-12 w-50 ms-5"> 
+                        <div class="card card-animate"  style="background-color: #EFF6FF;">
                             <div class="card-body">
                                     <div>
                                         <p class="fw-medium text-muted mb-0">Usuarios</p>
-                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-user"></i> 0</span></h2>
+                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-user text-danger"></i> 0</span></h2>
                                     </div>
                             </div><!-- end card body -->
                         </div>
                     </div>
-                    <div class="col-12 mt-5 w-50">
-                        <div class="card card-animate">
+                    <div class="col-12 mt-5 w-50 ms-5">
+                        <div class="card card-animate"  style="background-color: #EFF6FF;">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <p class="fw-medium text-muted mb-0">Donadores</p>
-                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-heart-circle-plus"></i> 0</span></h2>
+                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="28.05"><i class="fa-solid fa-heart-circle-plus text-danger"></i> 0</span></h2>
                                     </div>
                                 </div>
                             </div><!-- end card body -->
