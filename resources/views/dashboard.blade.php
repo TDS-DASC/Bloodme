@@ -14,6 +14,7 @@
 
     <!--fontawesome-->
     <script src="https://kit.fontawesome.com/675de417d6.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
     <style>
@@ -27,21 +28,7 @@
 
     </style>
 
-    <!-- Main HTML partial -->
-    <link href="css/colores.css" rel="stylesheet" type="text/css" />
-
-
-    <link href="assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
-    <!-- Layout config Js -->
-    <script src="resources/assets/js/layout.js"></script>
-    <!-- Bootstrap CSS -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <!-- Icons CSS -->
-    <link href="resources/assets/icons.csss" rel="stylesheet" type="text/css" />
-    <!-- App CSS-->
-    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
-    <!-- Custom CSS-->
-    <link href="assets/css/custom.min.css" rel="stylesheet" type="text/css" />
+  
 </head>
 
 <body>
@@ -67,7 +54,7 @@
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
                             <!--foto del usuario-->
-                            <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Avatar">
+                            <!--<img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Avatar"    (aqui luego poner imagen)>-->
                             <!--Nombre del usuario-->
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Nombre Usuario</span>
@@ -289,22 +276,7 @@
 </div>
 <!-- END layout-wrapper -->
 
-
-
-<!-- apexcharts -->
-<script src="assets/libs/apexcharts/apexcharts.min.js"></script>
-
-<!-- Vector map-->
-<script src="assets/libs/jsvectormap/js/jsvectormap.min.js"></script>
-<script src="assets/libs/jsvectormap/maps/world-merc.js"></script>
-
-<!-- Dashboard init -->
-<script src="assets/js/pages/dashboard-analytics.init.js"></script>
-
-<!-- App js -->
-<script src="assets/js/app.js"></script>
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> <!-- NO FUNCIONA, INTENTO DE BARRA DE NAVEGACION FUNCIONAL -->
+<!-- NO FUNCIONA, INTENTO DE BARRA DE NAVEGACION FUNCIONAL -->
 <script> 
     $(document).ready(function () {
         $('.nav-item').on('click', function (e) {

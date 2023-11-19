@@ -14,10 +14,8 @@
 
     <!--fontawesome-->
     <script src="https://kit.fontawesome.com/675de417d6.js" crossorigin="anonymous"></script>
-
-
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <style>
         header {
@@ -31,20 +29,7 @@
     </style>
 
     <!-- Main HTML partial -->
-    <link href="css/colores.css" rel="stylesheet" type="text/css" />
 
-
-    <link href="assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
-    <!-- Layout config Js -->
-    <script src="resources/assets/js/layout.js"></script>
-    <!-- Bootstrap CSS -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <!-- Icons CSS -->
-    <link href="resources/assets/icons.csss" rel="stylesheet" type="text/css" />
-    <!-- App CSS-->
-    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
-    <!-- Custom CSS-->
-    <link href="assets/css/custom.min.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -69,7 +54,7 @@
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
                             <!--foto del usuario-->
-                            <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Avatar">
+                            <!--<img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Avatar"    (aqui luego poner imagen)>-->
                             <!--Nombre del usuario-->
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Nombre Usuario</span>
@@ -141,7 +126,7 @@
                                 <div class="row g-4 mb-3">
                                     <div class="col-sm-auto">
                                         <div>
-                                            <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#addModal"><i class="ri-add-line align-bottom me-1"></i> Add</button>
+                                            <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#addModal"><i class="ri-add-line align-bottom me-1"></i> Añadir</button>
                                             <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                                         </div>
                                     </div>
@@ -195,10 +180,10 @@
                                                 <td>
                                                     <div class="d-flex gap-2">
                                                         <div class="edit">
-                                                            <button class="btn btn-sm btn-success edit-item-btn" data-bs-toggle="modal" data-bs-target="#showModal">Edit</button>
+                                                            <button class="btn btn-sm btn-success edit-item-btn" data-bs-toggle="modal" data-bs-target="#showModal">Editar</button>
                                                         </div>
                                                         <div class="remove">
-                                                            <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Remove</button>
+                                                            <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Eliminar</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -314,19 +299,10 @@
 <!-- END layout-wrapper -->
 
 
-<!-- prismjs plugin -->
-<script src="assets/libs/prismjs/prism.js"></script>
-<script src="assets/libs/list.js/list.min.js"></script>
-<script src="assets/libs/list.pagination.js/list.pagination.min.js"></script>
 
-<!-- listjs init -->
-<script src="assets/js/pages/listjs.init.js"></script>
-
-<!-- Sweet Alerts js -->
-<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
 <!-- App js -->
-<script src="assets/js/app.js"></script>
+
     <!-- ========== FIN NAVBAR ========== -->
         <!-- Begin page -->
 
@@ -341,30 +317,6 @@
 
 
 <!-- end main content-->
-
-
-
-
-
-<!-- apexcharts -->
-<script src="assets/libs/apexcharts/apexcharts.min.js"></script>
-
-<!-- Vector map-->
-<script src="assets/libs/jsvectormap/js/jsvectormap.min.js"></script>
-<script src="assets/libs/jsvectormap/maps/world-merc.js"></script>
-
-<!-- Dashboard init -->
-<script src="assets/js/pages/dashboard-analytics.init.js"></script>
-
-<!-- App js -->
-<script src="assets/js/app.js"></script>
-
-<script>
-    $(document).ready(function() {
-        // Abre el modal de agregar al cargar la página (para probar)
-        $('#addModal').modal('show');
-    });
-</script>
 
 
 </body>
