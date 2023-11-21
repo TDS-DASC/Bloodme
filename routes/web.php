@@ -21,19 +21,19 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-});
+})->name('dashboardRuta');
 
 Route::get('/usuarios', function () {
     return view('usuarios');
-});
+})->name('usuariosRuta');
 
 Route::get('/campañas', function () {
     return view('campañas');
-});
+})->name('campañasRuta');
 
 Route::get('/unidadesMedicas', function () {
     return view('unidades');
-});
+})->name('unidadesRuta');
 
 Route::get('/prueba', function () {
     return view('saludoPlantilla');

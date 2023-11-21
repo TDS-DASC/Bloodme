@@ -40,11 +40,12 @@
                 <div class="d-flex ms-5">
                     <!--DIV DEL LOGO -->
                     <div class="navbar-brand-box horizontal-logo">
+                        <a href="{{route('dashboardRuta')}}">
                             <span class="logo-sm">
                                 <img src="{{asset('images/logo.png')}}" alt="" width="70px">
                             </span>
+                            <h2 style="display: inline-block" class="text-danger">BLOODME</h2>
                         </a>
-                        <h2 style="display: inline-block" class="text-danger">BLOODME</h2>
                     </div>
                 </div>
 
@@ -75,29 +76,28 @@
         <div id="scrollbar" class="d-flex justify-content-start align-items-center">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link" href="{{route('dashboardRuta')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line fa-solid fa-circle-half-stroke text-danger"  style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Dashboards</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link" href="{{route('usuariosRuta')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line fa-solid fa-user text-danger"   style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Usuarios</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link" href="{{route('campañasRuta')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line fa-solid fa-tents text-danger" style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Campañas</span>
                     </a>
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link" href="{{route('unidadesRuta')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line fa-solid fa-hospital text-danger" style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Unidades Medicas</span>
                     </a>
                 </li>
-                
             </ul>
         </div>
     </div>
@@ -188,8 +188,8 @@
         <div id="barchart" style="width: 900px; height: 500px;"></div>
     </div>
 
-    <div class="col-6 mt-4"> <!-- Cambiado a mt-4 -->
-        <div class="col-12 w-50 ml-4"> <!-- Añadida ml-4 -->
+    <div class="col-6 mt-5 d-flex align-items-center flex-column"> <!-- Cambiado a mt-4 -->
+        <div class="col-12 w-50 ml-4 me-4"> <!-- Añadida ml-4 -->
             <div class="card card-animate" style="background-color: #EFF6FF;">
                 <div class="card-body">
                     <div>
@@ -199,7 +199,7 @@
                 </div><!-- end card body -->
             </div>
         </div>
-        <div class="col-12 mt-4 w-50 ml-3"> <!-- Añadida ml-3 -->
+        <div class="col-12 mt-5 w-50 ml-3 me-4"> <!-- Añadida ml-3 -->
             <div class="card card-animate" style="background-color: #EFF6FF;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
@@ -224,19 +224,6 @@
 
 </div>
 <!-- END layout-wrapper -->
-
-<!-- NO FUNCIONA, INTENTO DE BARRA DE NAVEGACION FUNCIONAL -->
-<script> 
-    $(document).ready(function () {
-        $('.nav-item').on('click', function (e) {
-            e.preventDefault();
-            var sectionId = $(this).data('section');
-            $('html, body').animate({
-                scrollTop: $('.' + sectionId).offset().top
-            }, 1000);
-        });
-    });
-</script>
 
 </div>
 </body>

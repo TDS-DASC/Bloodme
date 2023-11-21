@@ -13,6 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!--fontawesome-->
+    <script src="https://kit.fontawesome.com/675de417d6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WySzFDRiFOoUqPaWoJ/JCaeQpW+qI0Ih2Q" crossorigin="anonymous"></script>
@@ -41,11 +42,12 @@
                 <div class="d-flex ms-5">
                     <!--DIV DEL LOGO -->
                     <div class="navbar-brand-box horizontal-logo">
+                        <a href="{{route('dashboardRuta')}}">
                             <span class="logo-sm">
                                 <img src="{{asset('images/logo.png')}}" alt="" width="70px">
                             </span>
+                            <h2 style="display: inline-block" class="text-danger">BLOODME</h2>
                         </a>
-                        <h2 style="display: inline-block" class="text-danger">BLOODME</h2>
                     </div>
                 </div>
 
@@ -76,29 +78,28 @@
         <div id="scrollbar" class="d-flex justify-content-start align-items-center">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line fa-solid fa-circle-half-stroke text-danger" style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Dashboards</span>
+                    <a class="nav-link" href="{{route('dashboardRuta')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                        <i class="ri-dashboard-2-line fa-solid fa-circle-half-stroke text-danger"  style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Dashboards</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link" href="{{route('usuariosRuta')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line fa-solid fa-user text-danger"   style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Usuarios</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link" href="{{route('campañasRuta')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line fa-solid fa-tents text-danger" style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Campañas</span>
                     </a>
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link" href="{{route('unidadesRuta')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line fa-solid fa-hospital text-danger" style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Unidades Medicas</span>
                     </a>
                 </li>
-                
             </ul>
         </div>
     </div>
