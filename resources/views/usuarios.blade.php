@@ -13,8 +13,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!--fontawesome-->
-    <script src="https://kit.fontawesome.com/675de417d6.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WySzFDRiFOoUqPaWoJ/JCaeQpW+qI0Ih2Q" crossorigin="anonymous"></script>
 
 
     <style>
@@ -76,7 +77,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line fa-solid fa-circle-half-stroke text-danger" " style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Dashboards</span>
+                        <i class="ri-dashboard-2-line fa-solid fa-circle-half-stroke text-danger" style="color: #080908;"></i> <span class="ms-1" style="color: #080908;">Dashboards</span>
                     </a>
                 </li>
 
@@ -109,7 +110,7 @@
 <!-- ============================================================== -->
 <!-- Start right Content here -->
 <!-- ============================================================== -->
-<div class="main-content">
+<div class="main-content mt-4">
 
     <div class="page-content">
         <div class="container-fluid">
@@ -126,7 +127,7 @@
                                 <div class="row g-4 mb-3">
                                     <div class="col-sm-auto">
                                         <div>
-                                            <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#addModal"><i class="ri-add-line align-bottom me-1"></i> Añadir</button>
+                                            <button type="button" class="btn btn-danger  add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#addModal" onclick="mensajeConsola()"><i class="ri-add-line align-bottom me-1"></i> Añadir</button>
                                             <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                                         </div>
                                     </div>
@@ -180,10 +181,10 @@
                                                 <td>
                                                     <div class="d-flex gap-2">
                                                         <div class="edit">
-                                                            <button class="btn btn-sm btn-success edit-item-btn" data-bs-toggle="modal" data-bs-target="#showModal">Editar</button>
+                                                            <button class="btn btn-sm btn-danger edit-item-btn" data-bs-toggle="modal" data-bs-target="#showModal">Editar</button>
                                                         </div>
                                                         <div class="remove">
-                                                            <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Eliminar</button>
+                                                            <button class="btn btn-sm btn-light btn-outline-secondary  remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Eliminar</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -313,8 +314,15 @@
 <!-- Start right Content here -->
 <!-- ============================================================== -->
 
+    <script>
+        function mensajeConsola() {
+            console.log("boton añadir");
+            // Aquí puedes agregar más mensajes o lógica según tus necesidades
+        }
+    </script>
 
 
+    
 
 <!-- end main content-->
 

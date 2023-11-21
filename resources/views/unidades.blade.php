@@ -126,7 +126,7 @@
                                 <div class="row g-4 mb-3">
                                     <div class="col-sm-auto">
                                         <div>
-                                            <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#addModal"><i class="ri-add-line align-bottom me-1"></i> Añadir</button>
+                                            <button type="button" class="btn btn-danger add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#addModal"><i class="ri-add-line align-bottom me-1"></i> Añadir</button>
                                             <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                                         </div>
                                     </div>
@@ -171,10 +171,10 @@
                                                 <td>
                                                     <div class="d-flex gap-2">
                                                         <div class="edit">
-                                                            <button class="btn btn-sm btn-success edit-item-btn" data-bs-toggle="modal" data-bs-target="#showModal">Editar</button>
+                                                            <button class="btn btn-sm btn-danger edit-item-btn" data-bs-toggle="modal" data-bs-target="#showModal">Editar</button>
                                                         </div>
                                                         <div class="remove">
-                                                            <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Eliminar</button>
+                                                            <button class="btn btn-sm btn-light btn-outline-secondary  remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Eliminar</button>
                                                         </div>
                                                     </div>
                                                 </td>
