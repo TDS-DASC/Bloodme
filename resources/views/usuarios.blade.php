@@ -28,6 +28,19 @@
             height: 50px; 
         }
 
+        #modal{
+            background: #fff;
+            height: 600px;
+            width: 600px;
+            border: 1px solid #000;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            margin: auto;
+            z-index: 1;
+        }
     </style>
 
     <!-- Main HTML partial -->
@@ -111,6 +124,17 @@
 <!-- ============================================================== -->
 <!-- Start right Content here -->
 <!-- ============================================================== -->
+
+<style>
+    #modal{
+       
+    }
+</style>
+
+<div id="modal" style="display: none">
+    <button id="btnCerrar" onclick="cerrarModal()">Cerrar</button>
+</div>
+
 <div class="main-content mt-4">
 
     <div class="page-content">
@@ -317,8 +341,13 @@
 
     <script>
         function mensajeConsola() {
+            document.getElementById('modal').style.display = 'block';
             console.log("boton añadir");
             // Aquí puedes agregar más mensajes o lógica según tus necesidades
+        }
+
+        function cerrarModal(){
+            document.getElementById('modal').style.display = 'none';
         }
     </script>
 
