@@ -11,7 +11,7 @@ use Laravel\Passport\HasApiTokens;
 
 class AuthController extends Controller
 {
-    //use HasApiTokens;
+    use HasApiTokens;
     //
 
     public function register(Request $request){
@@ -41,9 +41,14 @@ class AuthController extends Controller
             return response(['message' => 'invalid credentials']);
         }
 
-       // $accessToken = auth()->user()->createToken('authToken')->accessToken;
+        //CHECAR MAS TARDE CREATE TOKEN ._____.
+       $accessToken = auth()->user()->createToken('authToken')->accessToken;
 
        $user = Auth::user();
+
+       return response(['user' => $user, 'access_token' => $accessToken]);
+
+      // return response(['message' => 'fuckingLogin']);
       // $accessToken = $user->createToken('authToken')->accessToken;
         //$credentials = $request->only('email', 'password');
         //if(auth()->attempt($credentials)) {
