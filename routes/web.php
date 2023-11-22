@@ -15,6 +15,11 @@ use App\Http\Controllers\Controller;
 */
 
 //Welcome
+
+Route::get('/prueba', function () {
+    return view('saludoPlantilla');
+});
+
 Route::get('/', function () {
     return view('login');
 });
@@ -38,3 +43,19 @@ Route::get('/unidadesMedicas', function () {
 Route::get('/prueba', function () {
     return view('saludoPlantilla');
 });
+
+
+
+
+
+Route::get('/usuario', function () {
+    return view('mainUsuarios');
+})->name('usuariosMainRuta');
+
+Route::get('/agendarDonatorio', function () {
+    return view('registrarDonatorio');
+})->name('agendarDonatorioRuta');
+
+Route::get('/agendarCita', function () {
+    return view('agendarCita');
+})->name('agendarCitaRuta');

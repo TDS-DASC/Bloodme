@@ -19,8 +19,15 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'last_name',
         'email',
         'password',
+        'blood_type',
+        'birthdate',
+        'curp',
+        'gender',
+        'donator',
+        'user_type'
     ];
 
     /**
@@ -40,6 +47,15 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
+
+    public function donations(){
+        return $this->hasMany(Donation::class);
+    }
+    public function donationDates(){
+        return $this->hasMany(DonationDate::class);
+    }
+    public function campaign(){
+        return $this->hasMany(Campaign::class);
+    }
 }
