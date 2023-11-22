@@ -34,6 +34,19 @@ class DatabaseSeeder extends Seeder
             'donator' => 0,
             'user_type' => 'admin'
         ],[
+            'name' => 'usuario03',
+            'last_name' => 'pruebapero3',
+            'email' => 'prueba03@gmail.com',
+            'password' => Hash::make('12345'),
+            'blood_type' => 'A+',
+            'curp' => 'cumj00000000',
+            'birthdate' => '2010/10/10',
+            'gender' => 'unassigned',
+            'donator' => 0,
+            'user_type' => 'medical_u'
+        ]);
+
+        DB::table('users')->insert([
             'name' => 'usuario02',
             'last_name' => 'prueba',
             'email' => 'prueba@gmail.com',
@@ -44,19 +57,7 @@ class DatabaseSeeder extends Seeder
             'gender' => 'male',
             'donator' => 0,
             'user_type' => 'user'
-        ],[
-            'name' => 'usuario03',
-            'last_name' => 'pruebapero3',
-            'email' => 'prueba03@gmail.com',
-            'password' => Hash::make('12345'),
-            'blood_type' => 'A+',
-            'curp' => 'cumj00000000',
-            'birthdate' => '2010/10/10',
-            'gender' => 'unassigned',
-            'donator' => 0,
-            'user_type' => 'user'
         ]);
-
         $this->call(MedicalUnitSeeder::class);
         $this->call(CampaignSeeder::class);
     }

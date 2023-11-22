@@ -160,6 +160,9 @@ return [
          * Package Service Providers...
          */
 
+         //extras
+         Laravel\Fortify\FortifyServiceProvider::class,
+
         /*
          * Application Service Providers...
          */

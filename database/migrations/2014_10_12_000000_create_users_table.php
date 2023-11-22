@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('curp');
             $table->date('birthdate');
             $table->string('gender');
-            $table->enum('type_user', ['admin', 'user','medical_u'] )->default('user');
+            $table->enum('user_type', ['admin', 'user','medical_u'] )->default('user');
             $table->rememberToken();
             $table->timestamps();
         });
