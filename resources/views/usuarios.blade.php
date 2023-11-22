@@ -154,7 +154,7 @@
                                                 <th class="sort" data-sort="customer_name">Nombre</th>
                                                 <th class="sort" data-sort="email">Email</th>
                                                 <th class="sort" data-sort="phone">Tipo de Sangre</th>
-                                                <th class="sort" data-sort="date">Cumpleaños</th>
+                                                <th class="sort" data-sort="date">Fecha Nacimiento</th>
                                                 <th class="sort" data-sort="status">Genero</th>
                                                 <th class="sort" data-sort="action">Donador</th>
                                                 <th class="sort" data-sort="action">Curp</th>

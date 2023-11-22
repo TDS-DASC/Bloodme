@@ -288,10 +288,6 @@
 
 </div>
 <!-- END layout-wrapper -->
-
-
-
-
 <!-- App js -->
 
     <!-- ========== FIN NAVBAR ========== -->
