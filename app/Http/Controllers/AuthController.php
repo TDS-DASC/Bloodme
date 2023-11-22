@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
+
 
 
 class AuthController extends Controller
@@ -25,8 +27,13 @@ class AuthController extends Controller
             'birthdate' => 'required',
             'gender' => 'required'
         ]);
+        
+
 
         $user = User::create($validateData);
+        $user->password = Hash::make($request->newPassword);
+        $user->save();
+
         $accessToken = $user->createToken('authToken')->accessToken;
         return response(['user' => $user, 'access_token' => $accessToken]);
     }
