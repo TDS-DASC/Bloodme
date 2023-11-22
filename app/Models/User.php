@@ -26,7 +26,8 @@ class User extends Authenticatable
         'birthdate',
         'curp',
         'gender',
-        'donator'
+        'donator',
+        'user_type'
     ];
 
     /**

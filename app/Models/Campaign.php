@@ -10,8 +10,8 @@ class Campaign extends Model
     use HasFactory;
 
     protected $fillable = [
-        'start_campaign',
-        'end_campaign',
+        'start_date',
+        'end_date',
         'platelets',
         'blood',
         'donations_required',

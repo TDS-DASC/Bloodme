@@ -32,6 +32,29 @@ class DatabaseSeeder extends Seeder
             'birthdate' => '2020/10/10',
             'gender' => 'Helicoptero Apache',
             'donator' => 0,
+            'user_type' => 'admin'
+        ],[
+            'name' => 'usuario02',
+            'last_name' => 'prueba',
+            'email' => 'prueba@gmail.com',
+            'password' => Hash::make('12345'),
+            'blood_type' => 'A+',
+            'curp' => 'cumj00000000',
+            'birthdate' => '2010/10/10',
+            'gender' => 'male',
+            'donator' => 0,
+            'user_type' => 'user'
+        ],[
+            'name' => 'usuario03',
+            'last_name' => 'pruebapero3',
+            'email' => 'prueba03@gmail.com',
+            'password' => Hash::make('12345'),
+            'blood_type' => 'A+',
+            'curp' => 'cumj00000000',
+            'birthdate' => '2010/10/10',
+            'gender' => 'unassigned',
+            'donator' => 0,
+            'user_type' => 'user'
         ]);
 
         $this->call(MedicalUnitSeeder::class);
