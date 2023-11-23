@@ -248,5 +248,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MedicalUnitSeeder::class);
         $this->call(CampaignSeeder::class);
         $this->call(DonationSeeder::class);
+        $this->call(CampaignMedicalUnitSeeder::class);
     }
 }
