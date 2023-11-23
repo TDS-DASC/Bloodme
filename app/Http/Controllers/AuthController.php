@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Hash;
 
 
 
+
 class AuthController extends Controller
 {
     use HasApiTokens;
-    //
 
     public function register(Request $request){
         $validateData = $request->validate([

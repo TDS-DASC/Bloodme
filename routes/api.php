@@ -32,8 +32,9 @@ Route::post('login', [AuthController::class, 'login']);
 // -----------------------------------------------------//
 
 //Usuarios -------------------------------
-Route::get('showUser/{id}', [UserController::class, 'show']);
-Route::get('showallUsers', [UserController::class, 'showall']);
+Route::get('showUser/id/{id}', [UserController::class, 'showid']);
+Route::get('showallUsers/', [UserController::class, 'showall']);
+
 // ----------------------------------------------------//
 
 //Campañas -------------------------------

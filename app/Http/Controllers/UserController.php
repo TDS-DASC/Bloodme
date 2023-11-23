@@ -8,7 +8,7 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function show($id){
+    public function showid($id){
         $user = User::find($id);
 
         if(!$user){
@@ -18,6 +18,9 @@ class UserController extends Controller
 
         return response()->json(['user' => $user],200);
     }
+
+
+
 
     public function showall(){
         $users = User::all();
