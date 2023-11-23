@@ -103,9 +103,9 @@
   
   <div class="app-brand demo ">
     <a href="index.html" class="app-brand-link">
-    <span class="app-brand-logo demo">
-      <svg width="32" height="22" viewBox="0 0 32 22" fill="none">
-        <img src="public/images/logo.png" alt="Logo de BLOODME"> <!-- ACOMODAR LOGO -->
+      <span class="app-brand-logo demo">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <img src="../../images/logo.png" alt="Logo de BLOODME" style="width: 130%; height: auto;">
         </svg>
     </span>
       <span class="app-brand-text demo menu-text fw-bold">BLOODME</span>
