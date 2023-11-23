@@ -130,13 +130,13 @@
     </li>
 
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminDashboardRuta') }}" class="menu-link">
       <span class="menu-header-text">Dashboard</span>
       </a>
     </ul>
 
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminUsuariosRutas') }}" class="menu-link">
       <span class="menu-header-text">Administrar Usuarios</span>
       </a>
     </ul>
@@ -274,7 +274,7 @@
              
              
               <li>
-                <a class="dropdown-item" href="auth-login-cover.html" target="_blank">
+                <a class="dropdown-item" href="{{route('login')}}">
                   <i class="ti ti-logout me-2 ti-sm"></i>
                   <span class="align-middle">Log Out</span>
                 </a>

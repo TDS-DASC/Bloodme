@@ -30,8 +30,11 @@ Route::get('/prueba', function () {
 
 Route::get('/', function () {
     return view('login');
-});
+})->name('login');
 
+
+
+/** ------- RUTAS VIEJAS ----------*/
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboardRuta');
