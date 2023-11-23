@@ -20,6 +20,9 @@ Route::get('/admin', function () {
     return view('adminDashboard');
 })->name('adminDashboardRuta');
 
+Route::get('/adminUsuarios', function () {
+    return view('adminUsuarios');
+})->name('adminUsuariosRutas');
 
 Route::get('/prueba', function () {
     return view('saludoPlantilla');
