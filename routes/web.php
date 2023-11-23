@@ -24,6 +24,11 @@ Route::get('/adminUsuarios', function () {
     return view('adminUsuarios');
 })->name('adminUsuariosRutas');
 
+Route::get('/adminCampañas', function () {
+    return view('adminCampañas');
+})->name('adminCampañasRutas');
+
+
 Route::get('/prueba', function () {
     return view('saludoPlantilla');
 });

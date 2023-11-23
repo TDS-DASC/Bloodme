@@ -20,7 +20,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Administrador | Usuarios</title>
+    <title>Administrador | Camapañas</title>
 
     
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
@@ -394,123 +394,13 @@
               </div>
             </div>
             <!-- ---------------------------------------Users List Table ----------------------------->
-           <!-- Bootstrap Table with Header - Light -->
-           <div class="card">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <h4>Listado de Usuarios</h4>
-    <button type="button" class="btn btn-secondary" id="btnAdd">Añadir</button>
-  </div>
-  
-  <div class="table-responsive text-nowrap">
-    <table class="table">
-      <thead class="table-light">
-        <tr>
-          <th>Nombre</th>
-          <th>Correo Electronico</th>
-          <th>Tipo de Sangre</th>
-          <th>Fecha de Nacimiento</th>
-          <th>Genero</th>
-          <th>Donador</th>
-          <th>CURP</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody class="table-border-bottom-0">
-        <tr>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>
-            <div class="dropdown">
-              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-pencil me-1"></i> Edit</a>
-                <a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-trash me-1"></i> Delete</a>
-              </div>
-            </div>
-          </td>
-        </tr>
-        
-      </tbody>
-    </table>
-  </div>
-</div>
-<!-- Bootstrap Table with Header - Light -->
-
-
-<!-- Modal Añadir Usuarios -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddUser" aria-labelledby="offcanvasAddUserLabel">
-    <div class="offcanvas-header">
-      <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Añadir Usuario</h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-      <form class="add-new-user pt-0" id="addNewUserForm" onsubmit="return false">
-        <div class="mb-3">
-          <label class="form-label" for="add-user-fullname">Nombre Completo</label>
-          <input type="text" class="form-control" id="add-NombreCompleto" placeholder="Escribir Nombre Completo "  aria-label="John Doe" />
+            
+            <div class="mb-3 row">
+          <label for="html5-date-input" class="col-md-2 col-form-label">Date</label>
+          <div class="col-md-10">
+            <input class="form-control" type="date" value="2021-06-18" id="html5-date-input" />
+          </div>
         </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="add-correoElectronico">Correo Electrónico</label>
-          <input type="text" id="add-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronico()" />
-          <div id="mensajeErrorCorreo" style="color: red;"></div>
-      </div>
-
-        <div class="mb-3">
-        <label class="form-label" for="add-fechaNacimiento">Fecha de Nacimiento</label>
-            <div class="col-md-10">
-              <input class="form-control" type="date" value="" id="html5-date-input" />
-            </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="add-genero">Género</label>
-          <select id="add-genero" class="form-select">
-            <option selected disabled value="">Opciones...</option>
-            <option value="Hombre">Hombre</option>
-            <option value="Mujer">Mujer</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="add-tipoSangre">Tipo de Sangre</label>
-          <select id="add-tipoSangre" class="form-select">
-            <option selected disabled value="">Opciones...</option>
-            <option value="A+">A+</option>
-            <option value="O+">O+</option>
-            <option value="B+">B+</option>
-            <option value="AB+">AB+</option>
-            <option value="A-">A-</option>
-            <option value="O-">O-</option>
-            <option value="B-">B-</option>
-            <option value="AB-">AB-</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="add-donador">Donador</label>
-          <select id="add-donador" class="form-select">
-            <option selected disabled value="">Opciones...</option>
-            <option value="Si">Si</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCampos()">Añadir</button>
-        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-                      </div>
-                      <!-- / Content -->
-
           
           
 
@@ -592,31 +482,17 @@
 
 
   <script>
+  // Obtén una referencia al botón "Añadir"
   var btnAdd = document.getElementById('btnAdd');
+
+  // Obtén una referencia al modal "offcanvasAddUser"
   var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+
+  // Agrega un evento de clic al botón "Añadir" para abrir el modal
   btnAdd.addEventListener('click', function () {
     offcanvasAddUser.show();
   });
 </script>
-
-<script>
-    function validarCorreoElectronico() {
-        var inputCorreo = document.getElementById('add-correoElectronico');
-        var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
-
-
-        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!regexCorreo.test(inputCorreo.value)) {
-            mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
-            inputCorreo.classList.add('is-invalid');
-        } else {
-            mensajeErrorCorreo.textContent = '';
-            inputCorreo.classList.remove('is-invalid');
-        }
-    }
-</script>
-
   
 </body>
 
