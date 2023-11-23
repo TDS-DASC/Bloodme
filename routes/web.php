@@ -16,6 +16,13 @@ use App\Http\Controllers\Controller;
 
 //Welcome
 
+Route::get('/admin', function () {
+    return view('adminDashboard');
+});
+
+
+
+
 Route::get('/prueba', function () {
     return view('saludoPlantilla');
 });
@@ -59,3 +66,4 @@ Route::get('/agendarDonatorio', function () {
 Route::get('/agendarCita', function () {
     return view('agendarCita');
 })->name('agendarCitaRuta');
+
