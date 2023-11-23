@@ -120,13 +120,13 @@
     </li>
 
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminDashboardRuta') }}" class="menu-link">
       <span class="menu-header-text">Dashboard</span>
       </a>
     </ul>
 
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminUsuariosRutas') }}" class="menu-link">
       <span class="menu-header-text">Administrar Usuarios</span>
       </a>
     </ul>
