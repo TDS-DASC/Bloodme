@@ -4691,3 +4691,69 @@
 #29 C:\\xampp\\htdocs\\WebBlood\\blood-app\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\xampp\\\\htdocs...')
 #30 {main}
 "} 
+[2023-11-23 02:47:41] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:212)
+[stacktrace]
+#0 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(137): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(124): Illuminate\\Log\\LogManager->get(NULL)
+#2 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(665): Illuminate\\Log\\LogManager->driver()
+#3 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(317): Illuminate\\Log\\LogManager->error('Class \"Laravel\\\\...', Array)
+#4 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(278): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable(Object(Error))
+#5 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(523): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#6 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(203): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#7 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2023-11-23 02:47:41] laravel.ERROR: Class "Laravel\Fortify\Features" not found {"exception":"[object] (Error(code: 0): Class \"Laravel\\Fortify\\Features\" not found at D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\config\\fortify.php:148)
+[stacktrace]
+#0 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(70): require()
+#1 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(261): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(447): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(199): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-11-23 02:48:02] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:212)
+[stacktrace]
+#0 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(137): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(124): Illuminate\\Log\\LogManager->get(NULL)
+#2 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(665): Illuminate\\Log\\LogManager->driver()
+#3 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(317): Illuminate\\Log\\LogManager->error('Class \"Laravel\\\\...', Array)
+#4 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(278): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable(Object(Error))
+#5 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(523): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#6 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(203): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#7 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2023-11-23 02:48:02] laravel.ERROR: Class "Laravel\Fortify\Features" not found {"exception":"[object] (Error(code: 0): Class \"Laravel\\Fortify\\Features\" not found at D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\config\\fortify.php:148)
+[stacktrace]
+#0 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(70): require()
+#1 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(261): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(447): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(199): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-11-23 02:48:40] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:212)
+[stacktrace]
+#0 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(137): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(124): Illuminate\\Log\\LogManager->get(NULL)
+#2 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(665): Illuminate\\Log\\LogManager->driver()
+#3 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(317): Illuminate\\Log\\LogManager->error('Class \"Laravel\\\\...', Array)
+#4 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(278): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable(Object(Error))
+#5 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(523): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#6 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(203): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#7 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2023-11-23 02:48:40] laravel.ERROR: Class "Laravel\Fortify\Features" not found {"exception":"[object] (Error(code: 0): Class \"Laravel\\Fortify\\Features\" not found at D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\config\\fortify.php:148)
+[stacktrace]
+#0 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(70): require()
+#1 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(261): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(447): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(199): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 

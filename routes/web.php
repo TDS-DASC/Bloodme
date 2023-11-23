@@ -18,9 +18,7 @@ use App\Http\Controllers\Controller;
 
 Route::get('/admin', function () {
     return view('adminDashboard');
-});
-
-
+})->name('adminDashboardRuta');
 
 
 Route::get('/prueba', function () {

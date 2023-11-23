@@ -99,15 +99,12 @@
   
   <div class="app-brand demo ">
     <a href="index.html" class="app-brand-link">
-      <span class="app-brand-logo demo">
-<svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z" fill="#7367F0" />
-  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z" fill="#161616" />
-  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z" fill="#161616" />
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z" fill="#7367F0" />
-</svg>
-</span>
-      <span class="app-brand-text demo menu-text fw-bold">Vuexy</span>
+    <span class="app-brand-logo demo">
+      <svg width="32" height="22" viewBox="0 0 32 22" fill="none">
+        <img src="public/images/logo.png" alt="Logo de BLOODME"> <!-- ACOMODAR LOGO -->
+        </svg>
+    </span>
+      <span class="app-brand-text demo menu-text fw-bold">BLOODME</span>
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -121,93 +118,57 @@
   
   
   <ul class="menu-inner py-1">
-    
 
-    <!-- Apps & Pages -->
+    <!-- NavBar -->
+    
     <li class="menu-header small text-uppercase">
-      <span class="menu-header-text">Apps &amp; Pages</span>
+      <span class="menu-header-text">Barra de Navegación</span>
     </li>
-    <li class="menu-item">
-      <a href="app-email.html" class="menu-link">
-        <i class="menu-icon tf-icons ti ti-mail"></i>
-        <div data-i18n="Email">Email</div>
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="" class="menu-link">
+      <span class="menu-header-text">Dashboard</span>
       </a>
-    </li>
-    <li class="menu-item">
-      <a href="app-chat.html" class="menu-link">
-        <i class="menu-icon tf-icons ti ti-messages"></i>
-        <div data-i18n="Chat">Chat</div>
+    </ul>
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="" class="menu-link">
+      <span class="menu-header-text">Administrar Usuarios</span>
       </a>
-    </li>
-    <li class="menu-item">
-      <a href="app-calendar.html" class="menu-link">
-        <i class="menu-icon tf-icons ti ti-calendar"></i>
-        <div data-i18n="Calendar">Calendar</div>
+    </ul>
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="" class="menu-link">
+      <span class="menu-header-text">Administrar Campañas</span>
       </a>
-    </li>
-    <li class="menu-item">
-      <a href="app-kanban.html" class="menu-link">
-        <i class="menu-icon tf-icons ti ti-layout-kanban"></i>
-        <div data-i18n="Kanban">Kanban</div>
+    </ul>
+
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="" class="menu-link">
+      <span class="menu-header-text">Administrar Unidades Medicas</span>
       </a>
-    </li>
+    </ul>
+
+    
+    
    <!-- FIN NAVBAR-->
 
 
-    
-    <!-- EJEMPLO DESPLEGABLE -->
-    <li class="menu-item">
-      <a href="javascript:void(0)" class="menu-link menu-toggle">
-        <i class="menu-icon tf-icons ti ti-brand-tabler"></i>
-        <div data-i18n="Icons">Icons</div>
-      </a>
-      <ul class="menu-sub">
-        <li class="menu-item">
-          <a href="icons-tabler.html" class="menu-link">
-            <div data-i18n="Tabler">Tabler</div>
-          </a>
-        </li>
-        <li class="menu-item">
-          <a href="icons-font-awesome.html" class="menu-link">
-            <div data-i18n="Fontawesome">Fontawesome</div>
-          </a>
-        </li>
-      </ul>
-    </li>
-
-
-
-    
   </ul>
-  
   
 
 </aside>
 <!-- / Menu -->
 
-    
-
     <!-- Layout container -->
     <div class="layout-page">
       
-      
-
-
 
 <!-- Navbar -->
 
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
   
-
-  
-
-  
-
-      
-      
-
-      
-      
       <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0   d-xl-none ">
         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
           <i class="ti ti-menu-2 ti-sm"></i>
@@ -218,53 +179,17 @@
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
 
         
-        <!-- Search -->
+        <!-- HEADER -->
         <div class="navbar-nav align-items-center">
           <div class="nav-item navbar-search-wrapper mb-0">
-            <a class="nav-item nav-link search-toggler d-flex align-items-center px-0" href="javascript:void(0);">
-              <i class="ti ti-search ti-md me-2"></i>
-              <span class="d-none d-md-inline-block text-muted">Search (Ctrl+/)</span>
+              <span class="d-none d-md-inline-block text-muted">DASHBOARD ADMINISTRATIVOS</span>
             </a>
           </div>
         </div>
-        <!-- /Search -->
-        
-        
-
+        <!-- /HEADER -->
         
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
-          
-          <!-- Language -->
-          <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
-            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-              <i class='ti ti-language rounded-circle ti-md'></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li>
-                <a class="dropdown-item" href="javascript:void(0);" data-language="en">
-                  <span class="align-middle">English</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="javascript:void(0);" data-language="fr">
-                  <span class="align-middle">French</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="javascript:void(0);" data-language="de">
-                  <span class="align-middle">German</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="javascript:void(0);" data-language="pt">
-                  <span class="align-middle">Portuguese</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <!--/ Language -->
-          
           
           <!-- Style Switcher -->
           <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
@@ -291,275 +216,6 @@
           </li>
           <!-- / Style Switcher-->
           
-          <!-- Quick links  -->
-          <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-2 me-xl-0">
-            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-              <i class='ti ti-layout-grid-add ti-md'></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end py-0">
-              <div class="dropdown-menu-header border-bottom">
-                <div class="dropdown-header d-flex align-items-center py-3">
-                  <h5 class="text-body mb-0 me-auto">Shortcuts</h5>
-                  <a href="javascript:void(0)" class="dropdown-shortcuts-add text-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Add shortcuts"><i class="ti ti-sm ti-apps"></i></a>
-                </div>
-              </div>
-              <div class="dropdown-shortcuts-list scrollable-container">
-                <div class="row row-bordered overflow-visible g-0">
-                  <div class="dropdown-shortcuts-item col">
-                    <span class="dropdown-shortcuts-icon rounded-circle mb-2">
-                      <i class="ti ti-calendar fs-4"></i>
-                    </span>
-                    <a href="app-calendar.html" class="stretched-link">Calendar</a>
-                    <small class="text-muted mb-0">Appointments</small>
-                  </div>
-                  <div class="dropdown-shortcuts-item col">
-                    <span class="dropdown-shortcuts-icon rounded-circle mb-2">
-                      <i class="ti ti-file-invoice fs-4"></i>
-                    </span>
-                    <a href="app-invoice-list.html" class="stretched-link">Invoice App</a>
-                    <small class="text-muted mb-0">Manage Accounts</small>
-                  </div>
-                </div>
-                <div class="row row-bordered overflow-visible g-0">
-                  <div class="dropdown-shortcuts-item col">
-                    <span class="dropdown-shortcuts-icon rounded-circle mb-2">
-                      <i class="ti ti-users fs-4"></i>
-                    </span>
-                    <a href="app-user-list.html" class="stretched-link">User App</a>
-                    <small class="text-muted mb-0">Manage Users</small>
-                  </div>
-                  <div class="dropdown-shortcuts-item col">
-                    <span class="dropdown-shortcuts-icon rounded-circle mb-2">
-                      <i class="ti ti-lock fs-4"></i>
-                    </span>
-                    <a href="app-access-roles.html" class="stretched-link">Role Management</a>
-                    <small class="text-muted mb-0">Permission</small>
-                  </div>
-                </div>
-                <div class="row row-bordered overflow-visible g-0">
-                  <div class="dropdown-shortcuts-item col">
-                    <span class="dropdown-shortcuts-icon rounded-circle mb-2">
-                      <i class="ti ti-chart-bar fs-4"></i>
-                    </span>
-                    <a href="index.html" class="stretched-link">Dashboard</a>
-                    <small class="text-muted mb-0">User Profile</small>
-                  </div>
-                  <div class="dropdown-shortcuts-item col">
-                    <span class="dropdown-shortcuts-icon rounded-circle mb-2">
-                      <i class="ti ti-settings fs-4"></i>
-                    </span>
-                    <a href="pages-account-settings-account.html" class="stretched-link">Setting</a>
-                    <small class="text-muted mb-0">Account Settings</small>
-                  </div>
-                </div>
-                <div class="row row-bordered overflow-visible g-0">
-                  <div class="dropdown-shortcuts-item col">
-                    <span class="dropdown-shortcuts-icon rounded-circle mb-2">
-                      <i class="ti ti-help fs-4"></i>
-                    </span>
-                    <a href="pages-faq.html" class="stretched-link">FAQs</a>
-                    <small class="text-muted mb-0">FAQs & Articles</small>
-                  </div>
-                  <div class="dropdown-shortcuts-item col">
-                    <span class="dropdown-shortcuts-icon rounded-circle mb-2">
-                      <i class="ti ti-square fs-4"></i>
-                    </span>
-                    <a href="modal-examples.html" class="stretched-link">Modals</a>
-                    <small class="text-muted mb-0">Useful Popups</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <!-- Quick links -->
-
-          <!-- Notification -->
-          <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
-            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-              <i class="ti ti-bell ti-md"></i>
-              <span class="badge bg-danger rounded-pill badge-notifications">5</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end py-0">
-              <li class="dropdown-menu-header border-bottom">
-                <div class="dropdown-header d-flex align-items-center py-3">
-                  <h5 class="text-body mb-0 me-auto">Notification</h5>
-                  <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark all as read"><i class="ti ti-mail-opened fs-4"></i></a>
-                </div>
-              </li>
-              <li class="dropdown-notifications-list scrollable-container">
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0 me-3">
-                        <div class="avatar">
-                          <img src="../../assets/img/avatars/1.png" alt class="h-auto rounded-circle">
-                        </div>
-                      </div>
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">Congratulation Lettie 🎉</h6>
-                        <p class="mb-0">Won the monthly best seller gold badge</p>
-                        <small class="text-muted">1h ago</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="ti ti-x"></span></a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0 me-3">
-                        <div class="avatar">
-                          <span class="avatar-initial rounded-circle bg-label-danger">CF</span>
-                        </div>
-                      </div>
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">Charles Franklin</h6>
-                        <p class="mb-0">Accepted your connection</p>
-                        <small class="text-muted">12hr ago</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="ti ti-x"></span></a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0 me-3">
-                        <div class="avatar">
-                          <img src="../../assets/img/avatars/2.png" alt class="h-auto rounded-circle">
-                        </div>
-                      </div>
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">New Message ✉️</h6>
-                        <p class="mb-0">You have new message from Natalie</p>
-                        <small class="text-muted">1h ago</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="ti ti-x"></span></a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0 me-3">
-                        <div class="avatar">
-                          <span class="avatar-initial rounded-circle bg-label-success"><i class="ti ti-shopping-cart"></i></span>
-                        </div>
-                      </div>
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">Whoo! You have new order 🛒 </h6>
-                        <p class="mb-0">ACME Inc. made new order $1,154</p>
-                        <small class="text-muted">1 day ago</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="ti ti-x"></span></a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0 me-3">
-                        <div class="avatar">
-                          <img src="../../assets/img/avatars/9.png" alt class="h-auto rounded-circle">
-                        </div>
-                      </div>
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">Application has been approved 🚀 </h6>
-                        <p class="mb-0">Your ABC project application has been approved.</p>
-                        <small class="text-muted">2 days ago</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="ti ti-x"></span></a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0 me-3">
-                        <div class="avatar">
-                          <span class="avatar-initial rounded-circle bg-label-success"><i class="ti ti-chart-pie"></i></span>
-                        </div>
-                      </div>
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">Monthly report is generated</h6>
-                        <p class="mb-0">July monthly financial report is generated </p>
-                        <small class="text-muted">3 days ago</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="ti ti-x"></span></a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0 me-3">
-                        <div class="avatar">
-                          <img src="../../assets/img/avatars/5.png" alt class="h-auto rounded-circle">
-                        </div>
-                      </div>
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">Send connection request</h6>
-                        <p class="mb-0">Peter sent you connection request</p>
-                        <small class="text-muted">4 days ago</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="ti ti-x"></span></a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0 me-3">
-                        <div class="avatar">
-                          <img src="../../assets/img/avatars/6.png" alt class="h-auto rounded-circle">
-                        </div>
-                      </div>
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">New message from Jane</h6>
-                        <p class="mb-0">Your have new message from Jane</p>
-                        <small class="text-muted">5 days ago</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="ti ti-x"></span></a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0 me-3">
-                        <div class="avatar">
-                          <span class="avatar-initial rounded-circle bg-label-warning"><i class="ti ti-alert-triangle"></i></span>
-                        </div>
-                      </div>
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">CPU is running high</h6>
-                        <p class="mb-0">CPU Utilization Percent is currently at 88.63%,</p>
-                        <small class="text-muted">5 days ago</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="ti ti-x"></span></a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-              <li class="dropdown-menu-footer border-top">
-                <a href="javascript:void(0);" class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center">
-                  View all notifications
-                </a>
-              </li>
-            </ul>
-          </li>
-          <!--/ Notification -->
 
           <!-- User -->
           <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -590,42 +246,29 @@
               <li>
                 <a class="dropdown-item" href="pages-profile-user.html">
                   <i class="ti ti-user-check me-2 ti-sm"></i>
-                  <span class="align-middle">My Profile</span>
+                  <span class="align-middle">Mi Perfil</span>
                 </a>
               </li>
               <li>
                 <a class="dropdown-item" href="pages-account-settings-account.html">
                   <i class="ti ti-settings me-2 ti-sm"></i>
-                  <span class="align-middle">Settings</span>
+                  <span class="align-middle">Editar Perfil</span>
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item" href="pages-account-settings-billing.html">
-                  <span class="d-flex align-items-center align-middle">
-                    <i class="flex-shrink-0 ti ti-credit-card me-2 ti-sm"></i>
-                    <span class="flex-grow-1 align-middle">Billing</span>
-                    <span class="flex-shrink-0 badge badge-center rounded-pill bg-label-danger w-px-20 h-px-20">2</span>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <div class="dropdown-divider"></div>
-              </li>
+
               <li>
                 <a class="dropdown-item" href="pages-faq.html">
                   <i class="ti ti-help me-2 ti-sm"></i>
-                  <span class="align-middle">FAQ</span>
+                  <span class="align-middle">Mis Campañas</span>
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item" href="pages-pricing.html">
-                  <i class="ti ti-currency-dollar me-2 ti-sm"></i>
-                  <span class="align-middle">Pricing</span>
-                </a>
-              </li>
+              
               <li>
                 <div class="dropdown-divider"></div>
               </li>
+              
+             
+             
               <li>
                 <a class="dropdown-item" href="auth-login-cover.html" target="_blank">
                   <i class="ti ti-logout me-2 ti-sm"></i>
@@ -640,16 +283,11 @@
 
         </ul>
       </div>
-
       
       <!-- Search Small Screens -->
-      <div class="navbar-search-wrapper search-input-wrapper  d-none">
-        <input type="text" class="form-control search-input container-xxl border-0" placeholder="Search..." aria-label="Search...">
-        <i class="ti ti-x ti-sm search-toggler cursor-pointer"></i>
-      </div>
       
       
-  
+      
 </nav>
 
 <!-- / Navbar -->
@@ -731,276 +369,6 @@
   </div>
 
   <!-- Revenue Growth -->
-  <div class="col-xl-4 col-md-8 mb-4">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <div class="d-flex flex-column">
-            <div class="card-title mb-auto">
-              <h5 class="mb-1 text-nowrap">Revenue Growth</h5>
-              <small>Weekly Report</small>
-            </div>
-            <div class="chart-statistics">
-              <h3 class="card-title mb-1">$4,673</h3>
-              <span class="badge bg-label-success">+15.2%</span>
-            </div>
-          </div>
-          <div id="revenueGrowth"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Earning Reports Tabs-->
-  <div class="col-12 col-xl-8 mb-4">
-    <div class="card">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-          <h5 class="mb-0">Earning Reports</h5>
-          <small class="text-muted">Yearly Earnings Overview</small>
-        </div>
-        <div class="dropdown">
-          <button class="btn p-0" type="button" id="earningReportsTabsId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="ti ti-dots-vertical ti-sm text-muted"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="earningReportsTabsId">
-            <a class="dropdown-item" href="javascript:void(0);">View More</a>
-            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <ul class="nav nav-tabs widget-nav-tabs pb-3 gap-4 mx-1 d-flex flex-nowrap" role="tablist">
-          <li class="nav-item">
-            <a href="javascript:void(0);" class="nav-link btn active d-flex flex-column align-items-center justify-content-center" role="tab" data-bs-toggle="tab" data-bs-target="#navs-orders-id" aria-controls="navs-orders-id" aria-selected="true">
-              <div class="badge bg-label-secondary rounded p-2"><i class="ti ti-shopping-cart ti-sm"></i></div>
-              <h6 class="tab-widget-title mb-0 mt-2">Orders</h6>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="javascript:void(0);" class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab" data-bs-toggle="tab" data-bs-target="#navs-sales-id" aria-controls="navs-sales-id" aria-selected="false">
-              <div class="badge bg-label-secondary rounded p-2"><i class="ti ti-chart-bar ti-sm"></i></div>
-              <h6 class="tab-widget-title mb-0 mt-2"> Sales</h6>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="javascript:void(0);" class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab" data-bs-toggle="tab" data-bs-target="#navs-profit-id" aria-controls="navs-profit-id" aria-selected="false">
-              <div class="badge bg-label-secondary rounded p-2"><i class="ti ti-currency-dollar ti-sm"></i></div>
-              <h6 class="tab-widget-title mb-0 mt-2">Profit</h6>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="javascript:void(0);" class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab" data-bs-toggle="tab" data-bs-target="#navs-income-id" aria-controls="navs-income-id" aria-selected="false">
-              <div class="badge bg-label-secondary rounded p-2"><i class="ti ti-chart-pie-2 ti-sm"></i></div>
-              <h6 class="tab-widget-title mb-0 mt-2">Income</h6>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="javascript:void(0);" class="nav-link btn d-flex align-items-center justify-content-center disabled" role="tab" data-bs-toggle="tab" aria-selected="false">
-              <div class="badge bg-label-secondary rounded p-2"><i class="ti ti-plus ti-sm"></i></div>
-            </a>
-          </li>
-        </ul>
-        <div class="tab-content p-0 ms-0 ms-sm-2">
-          <div class="tab-pane fade show active" id="navs-orders-id" role="tabpanel">
-            <div id="earningReportsTabsOrders"></div>
-          </div>
-          <div class="tab-pane fade" id="navs-sales-id" role="tabpanel">
-            <div id="earningReportsTabsSales"></div>
-          </div>
-          <div class="tab-pane fade" id="navs-profit-id" role="tabpanel">
-            <div id="earningReportsTabsProfit"></div>
-          </div>
-          <div class="tab-pane fade" id="navs-income-id" role="tabpanel">
-            <div id="earningReportsTabsIncome"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Sales last 6 months -->
-  <div class="col-md-6 col-xl-4 mb-4">
-    <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-          <h5 class="mb-0">Sales</h5>
-          <small class="text-muted">Last 6 Months</small>
-        </div>
-        <div class="dropdown">
-          <button class="btn p-0" type="button" id="salesLastMonthMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="ti ti-dots-vertical ti-sm text-muted"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="salesLastMonthMenu">
-            <a class="dropdown-item" href="javascript:void(0);">View More</a>
-            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div id="salesLastMonth"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Browser States -->
-  <div class="col-xl-4 col-md-6 mb-4">
-    <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title m-0 me-2">
-          <h5 class="m-0 me-2">Browser States</h5>
-          <small class="text-muted">Counter April 2022</small>
-        </div>
-        <div class="dropdown">
-          <button class="btn p-0" type="button" id="employeeList" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="ti ti-dots-vertical ti-sm text-muted"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="employeeList">
-            <a class="dropdown-item" href="javascript:void(0);">Download</a>
-            <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-            <a class="dropdown-item" href="javascript:void(0);">Share</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <ul class="p-0 m-0">
-          <li class="d-flex mb-4 pb-1 align-items-center">
-            <img src="../../assets/img/icons/brands/chrome.png" alt="Chrome" height="28" class="me-3 rounded">
-            <div class="d-flex w-100 align-items-center gap-2">
-              <div class="d-flex justify-content-between flex-grow-1 flex-wrap">
-                <div>
-                  <h6 class="mb-0">Google Chrome</h6>
-                </div>
-
-                <div class="user-progress d-flex align-items-center gap-2">
-                  <h6 class="mb-0">90.4%</h6>
-                </div>
-              </div>
-              <div class="chart-progress" data-color="secondary" data-series="85"></div>
-            </div>
-          </li>
-          <li class="d-flex mb-4 pb-1 align-items-center">
-            <img src="../../assets/img/icons/brands/safari.png" alt="Safari" height="28" class="me-3 rounded">
-            <div class="d-flex w-100 align-items-center gap-2">
-              <div class="d-flex justify-content-between flex-grow-1 flex-wrap">
-                <div>
-                  <h6 class="mb-0">Apple Safari</h6>
-                </div>
-                <div class="user-progress d-flex align-items-center gap-2">
-                  <h6 class="mb-0">70.6%</h6>
-                </div>
-              </div>
-              <div class="chart-progress" data-color="success" data-series="70"></div>
-            </div>
-          </li>
-          <li class="d-flex mb-4 pb-1 align-items-center">
-            <img src="../../assets/img/icons/brands/firefox.png" alt="Firefox" height="28" class="me-3 rounded">
-            <div class="d-flex w-100 align-items-center gap-2">
-              <div class="d-flex justify-content-between flex-grow-1 flex-wrap">
-                <div>
-                  <h6 class="mb-0">Mozilla Firefox</h6>
-                </div>
-                <div class="user-progress d-flex align-items-center gap-2">
-                  <h6 class="mb-0">35.5%</h6>
-                </div>
-              </div>
-              <div class="chart-progress" data-color="primary" data-series="25"></div>
-            </div>
-          </li>
-          <li class="d-flex mb-4 pb-1 align-items-center">
-            <img src="../../assets/img/icons/brands/opera.png" alt="Opera" height="28" class="me-3 rounded">
-            <div class="d-flex w-100 align-items-center gap-2">
-              <div class="d-flex justify-content-between flex-grow-1 flex-wrap">
-                <div>
-                  <h6 class="mb-0">Opera Mini</h6>
-                </div>
-
-                <div class="user-progress d-flex align-items-center gap-2">
-                  <h6 class="mb-0">80.0%</h6>
-                </div>
-              </div>
-              <div class="chart-progress" data-color="danger" data-series="75"></div>
-            </div>
-          </li>
-          <li class="d-flex mb-4 pb-1 align-items-center">
-            <img src="../../assets/img/icons/brands/edge.png" alt="Edge" height="28" class="me-3 rounded">
-            <div class="d-flex w-100 align-items-center gap-2">
-              <div class="d-flex justify-content-between flex-grow-1 flex-wrap">
-                <div>
-                  <h6 class="mb-0">Internet Explorer</h6>
-                </div>
-                <div class="user-progress d-flex align-items-center gap-2">
-                  <h6 class="mb-0">62.2%</h6>
-                </div>
-              </div>
-              <div class="chart-progress" data-color="info" data-series="60"></div>
-            </div>
-          </li>
-          <li class="d-flex align-items-center">
-            <img src="../../assets/img/icons/brands/brave.png" alt="Brave" height="28" class="me-3 rounded">
-            <div class="d-flex w-100 align-items-center gap-2">
-              <div class="d-flex justify-content-between flex-grow-1 flex-wrap">
-                <div>
-                  <h6 class="mb-0">Brave</h6>
-                </div>
-                <div class="user-progress d-flex align-items-center gap-2">
-                  <h6 class="mb-0">46.3%</h6>
-                </div>
-              </div>
-              <div class="chart-progress" data-color="warning" data-series="45"></div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- Project Status -->
-  <div class="col-12 col-xl-4 mb-4 col-md-6">
-    <div class="card">
-      <div class="card-header d-flex justify-content-between">
-        <h5 class="mb-0 card-title">Project Status</h5>
-        <div class="dropdown">
-          <button class="btn p-0" type="button" id="projectStatusId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="ti ti-dots-vertical ti-sm text-muted"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="projectStatusId">
-            <a class="dropdown-item" href="javascript:void(0);">View More</a>
-            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="d-flex align-items-start">
-          <div class="badge rounded bg-label-warning p-2 me-3 rounded"><i class="ti ti-currency-dollar ti-sm"></i></div>
-          <div class="d-flex justify-content-between w-100 gap-2 align-items-center">
-            <div class="me-2">
-              <h6 class="mb-0">$4,3742</h6>
-              <small class="text-muted">Your Earnings</small>
-            </div>
-            <p class="mb-0 text-success">+10.2%</p>
-          </div>
-        </div>
-        <div id="projectStatusChart"></div>
-        <div class="d-flex justify-content-between mb-3">
-          <h6 class="mb-0">Donates</h6>
-          <div class="d-flex">
-            <p class="mb-0 me-3">$756.26</p>
-            <p class="mb-0 text-danger">-139.34</p>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between mb-3 pb-1">
-          <h6 class="mb-0">Podcasts</h6>
-          <div class="d-flex">
-            <p class="mb-0 me-3">$2,207.03</p>
-            <p class="mb-0 text-success">+576.24</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Active Projects -->
   <div class="col-xl-4 col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-header d-flex justify-content-between">
@@ -1122,230 +490,82 @@
     </div>
   </div>
 
-  <!-- Last Transaction -->
-  <div class="col-lg-6 mb-4 mb-lg-0">
-    <div class="card h-100">
+ <!-- FIN GROWTH -->
+ 
+ 
+
+  
+
+  <!-- Project Status -->
+  <div class="col-12 col-xl-4 mb-4 col-md-6">
+    <div class="card">
       <div class="card-header d-flex justify-content-between">
-        <h5 class="card-title m-0 me-2">Last Transaction</h5>
+        <h5 class="mb-0 card-title">Project Status</h5>
         <div class="dropdown">
-          <button class="btn p-0" type="button" id="teamMemberList" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn p-0" type="button" id="projectStatusId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="ti ti-dots-vertical ti-sm text-muted"></i>
           </button>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="teamMemberList">
-            <a class="dropdown-item" href="javascript:void(0);">Download</a>
-            <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-            <a class="dropdown-item" href="javascript:void(0);">Share</a>
+          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="projectStatusId">
+            <a class="dropdown-item" href="javascript:void(0);">View More</a>
+            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
           </div>
         </div>
       </div>
-      <div class="table-responsive">
-        <table class="table table-borderless border-top">
-          <thead class="border-bottom">
-            <tr>
-              <th>CARD</th>
-              <th>DATE</th>
-              <th>STATUS</th>
-              <th>TREND</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div class="d-flex justify-content-start align-items-center">
-                  <div class="me-3">
-                    <img src="../../assets/img/icons/payments/visa-img.png" alt="Visa" height="30">
-                  </div>
-                  <div class="d-flex flex-column">
-                    <p class="mb-0 fw-medium">*4230</p><small class="text-muted">Credit</small>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="d-flex flex-column">
-                  <p class="mb-0 fw-medium">Sent</p>
-                  <small class="text-muted text-nowrap">17 Mar 2022</small>
-                </div>
-              </td>
-              <td><span class="badge bg-label-success">Verified</span></td>
-              <td>
-                <p class="mb-0 fw-medium">+$1,678</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="d-flex justify-content-start align-items-center">
-                  <div class="me-3">
-                    <img src="../../assets/img/icons/payments/master-card-img.png" alt="Visa" height="30">
-                  </div>
-                  <div class="d-flex flex-column">
-                    <p class="mb-0 fw-medium">*5578</p><small class="text-muted">Credit</small>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="d-flex flex-column">
-                  <p class="mb-0 fw-medium">Sent</p>
-                  <small class="text-muted text-nowrap">12 Feb 2022</small>
-                </div>
-              </td>
-              <td><span class="badge bg-label-danger">Rejected</span></td>
-              <td>
-                <p class="mb-0 fw-medium">-$839</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="d-flex justify-content-start align-items-center">
-                  <div class="me-3">
-                    <img src="../../assets/img/icons/payments/american-express-img.png" alt="Visa" height="30">
-                  </div>
-                  <div class="d-flex flex-column">
-                    <p class="mb-0 fw-medium">*4567</p><small class="text-muted">Credit</small>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="d-flex flex-column">
-                  <p class="mb-0 fw-medium">Sent</p>
-                  <small class="text-muted text-nowrap">28 Feb 2022</small>
-                </div>
-              </td>
-              <td><span class="badge bg-label-success">Verified</span></td>
-              <td>
-                <p class="mb-0 fw-medium">+$435</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="d-flex justify-content-start align-items-center">
-                  <div class="me-3">
-                    <img src="../../assets/img/icons/payments/visa-img.png" alt="Visa" height="30">
-                  </div>
-                  <div class="d-flex flex-column">
-                    <p class="mb-0 fw-medium">*5699</p><small class="text-muted">Credit</small>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="d-flex flex-column">
-                  <p class="mb-0 fw-medium">Sent</p>
-                  <small class="text-muted text-nowrap">8 Jan 2022</small>
-                </div>
-              </td>
-              <td><span class="badge bg-label-secondary">Pending</span></td>
-              <td>
-                <p class="mb-0 fw-medium">+$2,345</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="d-flex justify-content-start align-items-center">
-                  <div class="me-3">
-                    <img src="../../assets/img/icons/payments/visa-img.png" alt="Visa" height="30">
-                  </div>
-                  <div class="d-flex flex-column">
-                    <p class="mb-0 fw-medium">*5699</p><small class="text-muted">Credit</small>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="d-flex flex-column">
-                  <p class="mb-0 fw-medium">Sent</p>
-                  <small class="text-muted text-nowrap">8 Jan 2022</small>
-                </div>
-              </td>
-              <td><span class="badge bg-label-danger">Rejected</span></td>
-              <td>
-                <p class="mb-0 fw-medium">-$234</p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <!-- Activity Timeline -->
-  <div class="col-lg-6 col-md-12">
-    <div class="card ">
-      <div class="card-header d-flex justify-content-between">
-        <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i class="ti ti-list-details ms-n1 me-2"></i> Activity Timeline</h5>
-        <div class="dropdown">
-          <button class="btn p-0" type="button" id="timelineWapper" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="ti ti-dots-vertical ti-sm text-muted"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="timelineWapper">
-            <a class="dropdown-item" href="javascript:void(0);">Download</a>
-            <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-            <a class="dropdown-item" href="javascript:void(0);">Share</a>
+      <div class="card-body">
+        <div class="d-flex align-items-start">
+          <div class="badge rounded bg-label-warning p-2 me-3 rounded"><i class="ti ti-currency-dollar ti-sm"></i></div>
+          <div class="d-flex justify-content-between w-100 gap-2 align-items-center">
+            <div class="me-2">
+              <h6 class="mb-0">$4,3742</h6>
+              <small class="text-muted">Your Earnings</small>
+            </div>
+            <p class="mb-0 text-success">+10.2%</p>
+          </div>
+        </div>
+        <div id="projectStatusChart"></div>
+        <div class="d-flex justify-content-between mb-3">
+          <h6 class="mb-0">Donates</h6>
+          <div class="d-flex">
+            <p class="mb-0 me-3">$756.26</p>
+            <p class="mb-0 text-danger">-139.34</p>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mb-3 pb-1">
+          <h6 class="mb-0">Podcasts</h6>
+          <div class="d-flex">
+            <p class="mb-0 me-3">$2,207.03</p>
+            <p class="mb-0 text-success">+576.24</p>
           </div>
         </div>
       </div>
-      <div class="card-body pb-0">
-        <ul class="timeline ms-1 mb-0">
-          <li class="timeline-item timeline-item-transparent ps-4">
-            <span class="timeline-point timeline-point-warning"></span>
-            <div class="timeline-event">
-              <div class="timeline-header">
-                <h6 class="mb-0">Client Meeting</h6>
-                <small class="text-muted">Today</small>
-              </div>
-              <p class="mb-2">Project meeting with john @10:15am</p>
-              <div class="d-flex flex-wrap">
-                <div class="avatar me-2">
-                  <img src="../../assets/img/avatars/3.png" alt="Avatar" class="rounded-circle" />
-                </div>
-                <div class="ms-1">
-                  <h6 class="mb-0">Lester McCarthy (Client)</h6>
-                  <span>CEO of Infibeam</span>
-                </div>
-              </div>
+    </div>
+  </div>
+
+  <!--RENEVUE GRWOTH--> 
+
+  <div class="col-xl-4 col-md-8 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex flex-column">
+            <div class="card-title mb-auto">
+              <h5 class="mb-1 text-nowrap">Revenue Growth</h5>
+              <small>Weekly Report</small>
             </div>
-          </li>
-          <li class="timeline-item timeline-item-transparent ps-4">
-            <span class="timeline-point timeline-point-primary"></span>
-            <div class="timeline-event">
-              <div class="timeline-header">
-                <h6 class="mb-0">Create a new project for client</h6>
-                <small class="text-muted">2 Day Ago</small>
-              </div>
-              <p class="mb-0">Add files to new design folder</p>
+            <div class="chart-statistics">
+              <h3 class="card-title mb-1">$4,673</h3>
+              <span class="badge bg-label-success">+15.2%</span>
             </div>
-          </li>
-          <li class="timeline-item timeline-item-transparent ps-4">
-            <span class="timeline-point timeline-point-info"></span>
-            <div class="timeline-event">
-              <div class="timeline-header">
-                <h6 class="mb-0">Shared 2 New Project Files</h6>
-                <small class="text-muted">6 Day Ago</small>
-              </div>
-              <p class="mb-2">Sent by Mollie Dixon</p>
-              <div class="d-flex flex-wrap gap-2 pt-1">
-                <a href="javascript:void(0)" class="me-3 d-flex align-items-center">
-                  <i class="ti ti-file-text text-warning me-2 ti-xs"></i>
-                  <span class="fw-medium text-heading">App Guidelines</span>
-                </a>
-                <a href="javascript:void(0)" class="d-flex align-items-center">
-                  <i class="ti ti-table text-success me-2 ti-xs"></i>
-                  <span class="fw-medium text-heading">Testing Results</span>
-                </a>
-              </div>
-            </div>
-          </li>
-          <li class="timeline-item timeline-item-transparent ps-4 border-transparent">
-            <span class="timeline-point timeline-point-secondary"></span>
-            <div class="timeline-event pb-0">
-              <div class="timeline-header">
-                <h6 class="mb-0">Project status updated</h6>
-                <small class="text-muted">10 Day Ago</small>
-              </div>
-              <p class="mb-0">Woocommerce iOS App Completed</p>
-            </div>
-          </li>
-        </ul>
+          </div>
+          <div id="revenueGrowth"></div>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+
+ 
+ 
 
           </div>
           <!-- / Content -->
@@ -1362,18 +582,12 @@
         document.write(new Date().getFullYear())
 
         </script>
-        , made with ❤️ by <a href="https://pixinvent.com" target="_blank" class="fw-medium">Pixinvent</a>
+        , Bloodme <a href="" target="_blank" class="fw-medium"></a>
       </div>
       <div class="d-none d-lg-inline-block">
         
-        <a href="https://themeforest.net/licenses/standard" class="footer-link me-4" target="_blank">License</a>
-        <a href="https://1.envato.market/pixinvent_portfolio" target="_blank" class="footer-link me-4">More Themes</a>
-        
-        <a href="../../documentation/index.html" target="_blank" class="footer-link me-4">Documentation</a>
-        
-        
-        <a href="https://pixinvent.ticksy.com/" target="_blank" class="footer-link d-none d-sm-inline-block">Support</a>
-        
+        <a href="https://themeforest.net/licenses/standard" class="footer-link me-4" target="_blank">AQUI PONER UN FOOTER SI QUEREMOS</a>
+       
       </div>
     </div>
   </div>
@@ -1400,10 +614,6 @@
   </div>
   <!-- / Layout wrapper -->
 
-  
-  <div class="buy-now">
-    <a href="https://1.envato.market/vuexy_admin" target="_blank" class="btn btn-danger btn-buy-now">Buy Now</a>
-  </div>
   
 
   

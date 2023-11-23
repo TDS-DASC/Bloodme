@@ -79,7 +79,7 @@
                                         </div>
 
                                         <div class="mt-4">
-                                            <button class="btn btn-danger w-100 boton-rojo" type="submit">INICIAR SESIÓN</button>
+                                            <button  href="{{route('adminDashboardRuta')}}" class="btn btn-danger w-100 boton-rojo" type="submit">INICIAR SESIÓN</button>
                                         </div>
 
                                     </form>
