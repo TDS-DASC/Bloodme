@@ -32,13 +32,21 @@ Route::post('login', [AuthController::class, 'login']);
 // -----------------------------------------------------//
 
 //Usuarios -------------------------------
-Route::get('showUser/id/{id}', [UserController::class, 'showid']);
-Route::get('showallUsers/', [UserController::class, 'showall']);
+Route::get('user/{id}', [UserController::class, 'showid']); // Muestra usuario por ID
+Route::get('userrs/{input}/{looking}', ['UserController@showByInput']);
+Route::get('users/', [UserController::class, 'showall']); // muestra todos los usuarios
+
+Route::put('users/{id}', 'UserController@updateWID'); //UPDATE al usuario, ID se entrega mediante el link
+Route::put('users/', 'UserController@update'); //UPDATE al usuario, ID se entrega por el request
+Route::delete('users/{id}','UserController@delete');  //BORRAR USUARIO POR REQUEST
+Route::delete('users/{id}','UserController@deleteWID');  //BORRAR USUARIO POR ID
 
 // ----------------------------------------------------//
 
 //Campañas -------------------------------
-Route::get('showallCampaigns', [CampaignController::class, 'showall']);
+Route::get('campaigns/{id}', 'CampaignController@showid'); //Muestra campaña por su ID
+Route::get('campaigns/', [CampaignController::class, 'showall']); //Muestra todas las camapañas
+
 // ----------------------------------------------------//
 
 //Donaciones -------------------------------
