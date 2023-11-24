@@ -35,7 +35,7 @@ Route::get('/prueba', function () {
 
 Route::get('/', function () {
     return view('login');
-})->name('login');
+})->name('loginHome'); // te cambia aca por un problema con el back
 
 
 

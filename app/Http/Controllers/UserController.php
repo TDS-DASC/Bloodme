@@ -30,7 +30,7 @@ class UserController extends Controller
         $users = User::where($input,$looking)->get();
 
         if(!$users){
-            return response()->json(['message' => 'Input errorr/User Not found'],404);
+            return response()->json(['message' => 'Input error/User Not found'],404);
         }
 
         return response()->json(['users' => $users],200);
@@ -49,7 +49,7 @@ class UserController extends Controller
     }
 
 
-    public function delete($request){
+    public function delete(Request $request){
         $user = User::find($request->input('id'));
 
         if(!$user){
