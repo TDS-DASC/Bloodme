@@ -39,7 +39,7 @@
     <!-- End Google Tag Manager -->
     
  <!-- Favicon -->
- <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
+ <link rel="icon" type="image/x-icon" href="../../images/logo.png" />
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,9 +103,9 @@
   
   <div class="app-brand demo ">
     <a href="index.html" class="app-brand-link">
-    <span class="app-brand-logo demo">
-      <svg width="32" height="22" viewBox="0 0 32 22" fill="none">
-        <img src="public/images/logo.png" alt="Logo de BLOODME"> <!-- ACOMODAR LOGO -->
+      <span class="app-brand-logo demo">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <img src="../../images/logo.png" alt="Logo de BLOODME" style="width: 130%; height: auto;">
         </svg>
     </span>
       <span class="app-brand-text demo menu-text fw-bold">BLOODME</span>
@@ -448,11 +448,16 @@
       <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Añadir Usuario</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
       <form class="add-new-user pt-0" id="addNewUserForm" onsubmit="return false">
+
+
+
         <div class="mb-3">
-          <label class="form-label" for="add-user-fullname">Nombre Completo</label>
-          <input type="text" class="form-control" id="add-NombreCompleto" placeholder="Escribir Nombre Completo "  aria-label="John Doe" />
+            <label class="form-label" for="add-NombreCompleto">Nombre Completo</label>
+            <input type="text" id="add-NombreCompleto" class="form-control" placeholder="Escribir Nombre Completo" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event)" />
+            <div id="mensajeErrorLetras" style="color: red;"></div>
         </div>
 
         <div class="mb-3">
@@ -599,12 +604,31 @@
   });
 </script>
 
+
+<script>
+    function validarSoloLetras(event) {
+        var charCode = event.which || event.keyCode;
+
+        // Permitir solo letras (sin espacios, números o caracteres especiales)
+        if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
+            var mensajeErrorLetras = document.getElementById('mensajeErrorLetras');
+            mensajeErrorLetras.textContent = 'Solo se permiten letras (sin espacios, números o caracteres especiales).';
+            return false;
+        }
+
+        // Limpiar mensaje de error si la entrada es válida
+        var mensajeErrorLetras = document.getElementById('mensajeErrorLetras');
+        mensajeErrorLetras.textContent = '';
+        return true;
+    }
+</script>
+
 <script>
     function validarCorreoElectronico() {
         var inputCorreo = document.getElementById('add-correoElectronico');
         var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
 
-
+        // Expresión regular para validar un formato de correo electrónico básico
         var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!regexCorreo.test(inputCorreo.value)) {
@@ -616,8 +640,62 @@
         }
     }
 </script>
+<script>
+    function verificarCampos() {
+        // Obtener valores de los campos
+        var nombreCompleto = document.getElementById('add-NombreCompleto').value;
+        var correoElectronico = document.getElementById('add-correoElectronico').value;
+        var fechaNacimiento = document.getElementById('html5-date-input').value;
+        var genero = document.getElementById('add-genero').value;
+        var tipoSangre = document.getElementById('add-tipoSangre').value;
+        var donador = document.getElementById('add-donador').value;
 
-  
+        // Validar que todos los campos estén llenos
+        if (
+            nombreCompleto.trim() === '' ||
+            correoElectronico.trim() === '' ||
+            fechaNacimiento.trim() === '' ||
+            genero.trim() === '' ||
+            tipoSangre.trim() === '' ||
+            donador.trim() === ''
+        ) {
+            alert('Por favor, completa todos los campos.');
+            return;
+        }
+
+        // Validar formato de correo electrónico
+        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regexCorreo.test(correoElectronico)) {
+            alert('Por favor, ingresa un correo electrónico válido.');
+            return;
+        }
+
+        // Validar que el nombre solo contenga letras
+        var regexLetras = /^[a-zA-Z\s]+$/;
+        if (!regexLetras.test(nombreCompleto)) {
+            alert('Por favor, ingresa un nombre válido (solo letras y espacios).');
+            return;
+        }
+
+        // Si todos los campos están llenos y las validaciones son exitosas, imprimir en consola
+        console.log('Datos válidos:', {
+            NombreCompleto: nombreCompleto,
+            CorreoElectronico: correoElectronico,
+            FechaNacimiento: fechaNacimiento,
+            Genero: genero,
+            TipoSangre: tipoSangre,
+            Donador: donador
+        });
+
+        // Aquí podrías enviar los datos al servidor si es necesario
+
+        // Cerrar el modal (opcional)
+        var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        offcanvasAddUser.hide();
+    }
+</script>
+
+
 </body>
 
 </html>
