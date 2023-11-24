@@ -299,7 +299,7 @@
 <div class="row">
 
   <!-- Sales last year -->
-  <div class="col-xl-2 col-md-4 col-6 mb-4">
+  <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Sales</h5>
@@ -316,7 +316,7 @@
   </div>
 
   <!-- Sessions Last month -->
-  <div class="col-xl-2 col-md-4 col-6 mb-4">
+  <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Sessions</h5>
@@ -333,30 +333,34 @@
   </div>
 
   <!-- Total Profit -->
-  <div class="col-xl-2 col-md-4 col-6 mb-4">
+  <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
+      <div class="card-header pb-0">
+        <h5 class="card-title mb-0">Total Profit</h5>
+        <small class="text-muted">Last Month</small>
+      </div>
       <div class="card-body">
-        <div class="badge p-2 bg-label-danger mb-2 rounded"><i class="ti ti-currency-dollar ti-md"></i></div>
-        <h5 class="card-title mb-1 pt-2">Total Profit</h5>
-        <small class="text-muted">Last week</small>
-        <p class="mb-2 mt-1">1.28k</p>
-        <div class="pt-1">
-          <span class="badge bg-label-secondary">-12.2%</span>
+        <div id="sessionsLastMonth"></div>
+        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+          <h4 class="mb-0">45.1k</h4>
+          <small class="text-success">+12.6%</small>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Total Sales -->
-  <div class="col-xl-2 col-md-4 col-6 mb-4">
+    <!-- Total Sales -->
+    <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
+      <div class="card-header pb-0">
+        <h5 class="card-title mb-0">Total Profit</h5>
+        <small class="text-muted">Last Month</small>
+      </div>
       <div class="card-body">
-        <div class="badge p-2 bg-label-info mb-2 rounded"><i class="ti ti-chart-bar ti-md"></i></div>
-        <h5 class="card-title mb-1 pt-2">Total Sales</h5>
-        <small class="text-muted">Last week</small>
-        <p class="mb-2 mt-1">$4,673</p>
-        <div class="pt-1">
-          <span class="badge bg-label-secondary">+25.2%</span>
+        <div id="sessionsLastMonth"></div>
+        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+          <h4 class="mb-0">45.1k</h4>
+          <small class="text-success">+12.6%</small>
         </div>
       </div>
     </div>
@@ -488,7 +492,6 @@
  
  
 
-  
 
   <!-- Project Status -->
   <div class="col-12 col-xl-4 mb-4 col-md-6">
