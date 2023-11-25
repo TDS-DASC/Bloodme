@@ -27,11 +27,11 @@ class AuthController extends Controller
             'birthdate' => 'required',
             'gender' => 'required'
         ]);
-        
+
 
 
         $user = User::create($validateData);
-        $user->password = Hash::make($request->newPassword);
+        $user->password = Hash::make($request->password);
         $user->save();
 
         $accessToken = $user->createToken('authToken')->accessToken;

@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 0,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Jane Doe',
             'last_name' => 'Johnson',
@@ -75,7 +75,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 1,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Alex Rodriguez',
             'last_name' => 'Martinez',
@@ -88,7 +88,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 0,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Sara Garcia',
             'last_name' => 'Lopez',
@@ -101,7 +101,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 1,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Carlos Mendez',
             'last_name' => 'Gomez',
@@ -114,7 +114,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 0,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Elena Torres',
             'last_name' => 'Ramirez',
@@ -127,7 +127,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 1,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Raul Hernandez',
             'last_name' => 'Alvarez',
@@ -140,7 +140,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 0,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Laura Sanchez',
             'last_name' => 'Perez',
@@ -153,7 +153,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 1,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Jose Rodriguez',
             'last_name' => 'Gonzalez',
@@ -166,7 +166,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 0,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Monica Mendoza',
             'last_name' => 'Santos',
@@ -179,7 +179,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 1,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Fernando Jimenez',
             'last_name' => 'Rios',
@@ -192,7 +192,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 0,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Ana Gutierrez',
             'last_name' => 'Hernandez',
@@ -205,7 +205,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 1,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Ricardo Perez',
             'last_name' => 'Marquez',
@@ -218,7 +218,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 0,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Isabel Castro',
             'last_name' => 'Guerrero',
@@ -231,7 +231,7 @@ class DatabaseSeeder extends Seeder
             'donator' => 1,
             'user_type' => 'user'
         ]);
-        
+
         DB::table('users')->insert([
             'name' => 'Martin Ramirez',
             'last_name' => 'Ortega',
@@ -244,10 +244,11 @@ class DatabaseSeeder extends Seeder
             'donator' => 0,
             'user_type' => 'user'
         ]);
-        
+
         $this->call(MedicalUnitSeeder::class);
         $this->call(CampaignSeeder::class);
         $this->call(DonationSeeder::class);
         $this->call(CampaignMedicalUnitSeeder::class);
+        $this->call(DonationDateSeeder::class);
     }
 }

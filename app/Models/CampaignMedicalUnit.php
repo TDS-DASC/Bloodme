@@ -8,13 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class CampaignMedicalUnit extends Model
 {
     use HasFactory;
-    use HasFactory;
 
     protected $table = 'campaign_medical_unit';
 
     protected $fillable = [
         'campaign_id',
         'medical_unit_id',
+        'updated_at'
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
     ];
 
 }
