@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
-            $table->date('start_campaign');
+            $table->date('start_campaign')->nullable();
             $table->date('end_campaign')->nullable();
             $table->tinyInteger('platelets')->default(0);
             $table->tinyInteger('blood')->default(0);

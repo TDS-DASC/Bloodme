@@ -8,6 +8,20 @@ use App\Models\Campaign;
 
 class CampaignController extends Controller
 {
+    public function create(Request $request){
+        $validateData = $request->validate([
+           'start_campaign' => 'required',
+            'donations_required' => 'required',
+            'user_id' => 'required'
+        ]);
+        $campaign = Campaign::create($validateData);
+        $campaign->save();
+
+        return response(['campaign' => $campaign]);
+
+    }
+
+
     public function showid($id){
         $campaign = Campaign::find($id);
 
