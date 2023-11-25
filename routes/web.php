@@ -35,8 +35,11 @@ Route::get('/prueba', function () {
 
 Route::get('/', function () {
     return view('nuevoLogin');
-})->name('loginHome'); // te cambia aca por un problema con el back
+})->name('loginHome'); // LOGIN NUEVO
 
+Route::get('/registrar', function () {
+    return view('registrarUsuario');
+})->name('registrarRutas'); // REGISTAR CUENTA NUEVA
 
 
 /** ------- RUTAS VIEJAS ----------*/

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Login Bloodme</title>
+    <title>Registar Nuevo Usuario</title>
 
     
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
@@ -71,90 +71,64 @@
   
   <!-- Content -->
 
-<div class="authentication-wrapper authentication-cover authentication-bg">
-  <div class="authentication-inner row">
-    <!-- /Left Text -->
-    <div class="d-none d-lg-flex col-lg-7 p-0">
-        <div class="auth-cover-bg auth-cover-bg-color d-flex flex-column justify-content-center align-items-center">
-            <img src="../../images/logo.png" alt="auth-login-cover" class="img-fluid  auth-illustration">
-            <h1 class="text-center text-danger mb-5">BLOODME</h1>
-        </div>
-    </div>
-    <!-- /Left Text -->
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner py-4">
 
-    <!-- Login -->
-    <div class="d-flex col-12 col-lg-5 align-items-center p-sm-5 p-4">
-      <div class="w-px-400 mx-auto">
-        
-        <h3 class="mb-1">Bienvenido a BLOODME</h3>
-        <p class="mb-4">Registrarse antes de iniciar</p>
-
-        <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
-          <div class="mb-3">
-            <label for="email" class="form-label">Email or Username</label>
-            <input type="text" class="form-control" id="email" name="email-username" placeholder="Enter your email or username" autofocus>
-          </div>
-          <div class="mb-3 form-password-toggle">
-            <div class="d-flex justify-content-between">
-              <label class="form-label" for="password">Password</label>
-              <a href="auth-forgot-password-cover.html">
-                <small>Forgot Password?</small>
+      <!-- Register Card -->
+      <div class="card">
+        <div class="card-body">
+          <!-- Logo -->
+          <div class="app-brand justify-content-center mb-4 mt-2">
+              <a href="index.html" class="app-brand-link gap-2 d-flex flex-column align-items-center">
+                  <img src="../../images/logo.png" alt="Logo" class="mb-2" width="110" height="90">
+                  <span class="app-brand-text demo text-danger fw-bold mb-2">BLOODME</span>
               </a>
-            </div>
-            <div class="input-group input-group-merge">
-              <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
-              <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
-            </div>
           </div>
-          <div class="mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="remember-me">
-              <label class="form-check-label" for="remember-me">
-                Remember Me
-              </label>
+          <!-- /Logo -->
+          <h4 class="mb-1 pt-2">Cada gota cuenta</h4>
+          <p class="mb-4">Regístrate para donar y contribuir</p>
+
+          <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+            <div class="mb-3">
+              <label for="username" class="form-label">Nombre de Usuario</label>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Escribe tu nombre de usuario" autofocus>
             </div>
-          </div>
-          <button class="btn btn-primary d-grid w-100">
-            Sign in
-          </button>
-        </form>
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo Electronico</label>
+              <input type="text" class="form-control" id="email" name="email" placeholder="Escribe tu correo electronico">
+            </div>
+            <div class="mb-3 form-password-toggle">
+              <label class="form-label" for="password">Contraseña</label>
+              <div class="input-group input-group-merge">
+                <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+              </div>
+            </div>
 
-        <p class="text-center">
-          <span>New on our platform?</span>
-          <a href="auth-register-cover.html">
-            <span>Create an account</span>
-          </a>
-        </p>
+           
+            <button class="btn btn-danger d-grid w-100">
+              REGISTRARSE
+            </button>
+          </form>
 
-        <div class="divider my-4">
-          <div class="divider-text">or</div>
-        </div>
+          <p class="text-center">
+            <span>Ya tienes una cuenta?</span>
+            <a href="auth-login-basic.html">
+              <span>Inicia sesión en su lugar</span>
+            </a>
+          </p>
 
-        <div class="d-flex justify-content-center">
-          <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
-            <i class="tf-icons fa-brands fa-facebook-f fs-5"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
-            <i class="tf-icons fa-brands fa-google fs-5"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon btn-label-twitter">
-            <i class="tf-icons fa-brands fa-twitter fs-5"></i>
-          </a>
+          
         </div>
       </div>
+      <!-- Register Card -->
     </div>
-    <!-- /Login -->
   </div>
 </div>
 
 <!-- / Content -->
 
-  
-  <div class="buy-now">
-    <a href="https://1.envato.market/vuexy_admin" target="_blank" class="btn btn-danger btn-buy-now">Buy Now</a>
-  </div>
   
 
   
