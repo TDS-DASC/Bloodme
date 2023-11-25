@@ -1,2 +1,3 @@
-# Bloodme
-Plataforma administrativa para bloodme 
+Dependencias a instalar:
+
+Composer require laravel/fortify
