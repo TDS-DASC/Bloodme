@@ -395,6 +395,113 @@
             </div>
             <!-- ---------------------------------------Users List Table ----------------------------->
            <!-- Bootstrap Table with Header - Light -->
+
+
+           <script>
+   function verificarCampos() {
+    // Obtener valores de los campos
+    var nombres = document.getElementById('add-Nombres').value;
+    var apellidos = document.getElementById('add-Apellidos').value;
+    var correoElectronico = document.getElementById('add-correoElectronico').value;
+    var contrasena = document.getElementById('add-contrasena').value;
+    var tipoSangre = document.getElementById('add-tipoSangre').value;
+    //var curp = document.getElementById('add-CURP').value;
+    var curp = "12133";
+    var fechaNacimiento = document.getElementById('html5-date-input').value;
+    var genero = document.getElementById('add-genero').value;
+
+     // Validar que todos los campos estén llenos
+     if (
+        nombres.trim() === '' ||
+        apellidos.trim() === '' ||
+        correoElectronico.trim() === '' ||
+        contrasena.trim() === '' ||
+        tipoSangre.trim() === '' ||
+        curp.trim() === '' ||
+        fechaNacimiento.trim() === '' ||
+        genero.trim() === ''
+    ) {
+        alert('Por favor, completa todos los campos.');
+        return;
+    }
+
+    // Validar formato de correo electrónico
+    var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regexCorreo.test(correoElectronico)) {
+        alert('Por favor, ingresa un correo electrónico válido.');
+        return;
+    }
+
+    // Validar que los nombres y apellidos solo contengan letras
+    var regexLetras = /^[a-zA-Z\s]+$/;
+    if (!regexLetras.test(nombres) || !regexLetras.test(apellidos)) {
+        alert('Por favor, ingresa nombres y apellidos válidos (solo letras y espacios).');
+        return;
+    }
+
+    console.log('Datos válidos:', {
+        Nombres: nombres,
+        Apellidos: apellidos,
+        CorreoElectronico: correoElectronico,
+        Contrasena: contrasena,
+        TipoSangre: tipoSangre,
+        CURP: curp,
+        FechaNacimiento: fechaNacimiento,
+        Genero: genero
+    });
+
+    // Crear objeto de datos para enviar al servidor
+    var userData = {
+        name: nombres,
+        last_name: apellidos,
+        email: correoElectronico,
+        password: contrasena,
+        blood_type: tipoSangre,
+        curp: curp,
+        birthdate: fechaNacimiento,
+        gender: genero
+    };
+
+    // Realizar la solicitud POST a la API
+    fetch('http://127.0.0.1:8000/api/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
+        }
+        return response.json(); // Intenta parsear la respuesta como JSON
+    })
+    .then(data => {
+        // La respuesta exitosa del servidor, puedes manejarla aquí
+        console.log('Respuesta del servidor:', data);
+    })
+    .catch(error => {
+        // Manejar errores en la solicitud
+        console.error('Error en la solicitud:', error);
+
+        // Verificar si la respuesta es un JSON
+        if (error instanceof SyntaxError && error.message.includes('Unexpected token')) {
+            // Intenta obtener más información sobre la respuesta
+            response.text().then(text => {
+                console.error('Contenido de la respuesta:', text);
+            });
+        }
+    });
+
+    // Cerrar el modal (opcional)
+    var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+    offcanvasAddUser.hide();
+}
+</script>
+
+
+
+
            <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h4>Listado de Usuarios</h4>
@@ -455,8 +562,14 @@
 
 
         <div class="mb-3">
-            <label class="form-label" for="add-NombreCompleto">Nombre Completo</label>
-            <input type="text" id="add-NombreCompleto" class="form-control" placeholder="Escribir Nombre Completo" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event)" />
+            <label class="form-label" for="add-NombreCompleto">Nombres</label>
+            <input type="text" id="add-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event)" />
+            <div id="mensajeErrorLetras" style="color: red;"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="add-Apellidos">Apellidos</label>
+            <input type="text" id="add-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event)" />
             <div id="mensajeErrorLetras" style="color: red;"></div>
         </div>
 
@@ -465,6 +578,12 @@
           <input type="text" id="add-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronico()" />
           <div id="mensajeErrorCorreo" style="color: red;"></div>
       </div>
+
+      <div class="mb-3">
+            <label class="form-label" for="add-contrasena">Contraseña</label>
+            <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contra" aria-label="Nombre Contra" onkeypress="return validarSoloLetras(event)" />
+            <div id="mensajeErrorLetras" style="color: red;"></div>
+        </div>
 
         <div class="mb-3">
         <label class="form-label" for="add-fechaNacimiento">Fecha de Nacimiento</label>
@@ -640,60 +759,7 @@
         }
     }
 </script>
-<script>
-    function verificarCampos() {
-        // Obtener valores de los campos
-        var nombreCompleto = document.getElementById('add-NombreCompleto').value;
-        var correoElectronico = document.getElementById('add-correoElectronico').value;
-        var fechaNacimiento = document.getElementById('html5-date-input').value;
-        var genero = document.getElementById('add-genero').value;
-        var tipoSangre = document.getElementById('add-tipoSangre').value;
-        var donador = document.getElementById('add-donador').value;
 
-        // Validar que todos los campos estén llenos
-        if (
-            nombreCompleto.trim() === '' ||
-            correoElectronico.trim() === '' ||
-            fechaNacimiento.trim() === '' ||
-            genero.trim() === '' ||
-            tipoSangre.trim() === '' ||
-            donador.trim() === ''
-        ) {
-            alert('Por favor, completa todos los campos.');
-            return;
-        }
-
-        // Validar formato de correo electrónico
-        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!regexCorreo.test(correoElectronico)) {
-            alert('Por favor, ingresa un correo electrónico válido.');
-            return;
-        }
-
-        // Validar que el nombre solo contenga letras
-        var regexLetras = /^[a-zA-Z\s]+$/;
-        if (!regexLetras.test(nombreCompleto)) {
-            alert('Por favor, ingresa un nombre válido (solo letras y espacios).');
-            return;
-        }
-
-        // Si todos los campos están llenos y las validaciones son exitosas, imprimir en consola
-        console.log('Datos válidos:', {
-            NombreCompleto: nombreCompleto,
-            CorreoElectronico: correoElectronico,
-            FechaNacimiento: fechaNacimiento,
-            Genero: genero,
-            TipoSangre: tipoSangre,
-            Donador: donador
-        });
-
-        // Aquí podrías enviar los datos al servidor si es necesario
-
-        // Cerrar el modal (opcional)
-        var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-        offcanvasAddUser.hide();
-    }
-</script>
 
 
 </body>
