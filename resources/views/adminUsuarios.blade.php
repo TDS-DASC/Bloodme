@@ -76,6 +76,102 @@
 
 <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 <script src="../../assets/js/config.js"></script>
+
+
+
+
+
+
+
+<script>
+        // Función para cargar y mostrar usuarios al cargar la página
+        window.onload = function () {
+            cargarYMostrarUsuarios();
+        };
+
+        // Función para cargar y mostrar usuarios
+        function cargarYMostrarUsuarios() {
+    // Realizar la solicitud GET a la API para obtener la lista de usuarios
+    fetch('http://127.0.0.1:8000/api/users/')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener la lista de usuarios. Código de estado: ' + response.status);
+            }
+            return response.json(); // Intenta parsear la respuesta como JSON
+        })
+        .then(data => {
+            // Verificar si la respuesta tiene un campo 'users'
+            if (data.users && Array.isArray(data.users)) {
+                // Mostrar los usuarios en la tabla
+                renderizarTablaUsuarios(data.users);
+            } else {
+                throw new Error('Formato de respuesta inesperado. Se esperaba un campo "users" de tipo array.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al cargar usuarios:', error);
+        });
+}
+
+        // Función para renderizar la tabla con los datos de los usuarios
+        function renderizarTablaUsuarios(usuarios) {
+    // Obtener el cuerpo de la tabla
+    var tbody = document.getElementById('tablaUsuariosBody');
+
+    // Verificar si el elemento tbody existe
+    if (!tbody) {
+        console.error('Elemento tbody no encontrado.');
+        return;
+    }
+
+    // Limpiar el contenido actual de la tabla
+    tbody.innerHTML = '';
+
+    // Iterar sobre los usuarios y agregar filas a la tabla
+    usuarios.forEach(usuario => {
+        var row = tbody.insertRow();
+
+        // Agregar celdas con los datos del usuario
+        var cellNombre = row.insertCell(0);
+        var cellCorreo = row.insertCell(1);
+        var cellTipoSangre = row.insertCell(2);
+        var cellFechaNacimiento = row.insertCell(3);
+        var cellGenero = row.insertCell(4);
+        var cellDonador = row.insertCell(5);
+        var cellCURP = row.insertCell(6);
+        var cellAcciones = row.insertCell(7);
+
+        // Asignar valores a las celdas
+        cellNombre.innerText = usuario.name + ' ' + usuario.last_name;
+        cellCorreo.innerText = usuario.email;
+        cellTipoSangre.innerText = usuario.blood_type;
+        cellFechaNacimiento.innerText = usuario.birthdate;
+        cellGenero.innerText = usuario.gender;
+        cellDonador.innerText = usuario.donor;
+        cellCURP.innerText = usuario.curp;
+
+        // Agregar botones de acciones (editar y eliminar)
+        cellAcciones.innerHTML = '<div class="dropdown">' +
+            '<button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>' +
+            '<div class="dropdown-menu">' +
+            '<a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-pencil me-1"></i> Edit</a>' +
+            '<a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-trash me-1"></i> Delete</a>' +
+            '</div>' +
+            '</div>';
+    });
+}
+
+        function verificarCampos() {
+            // ... (Tu código existente para agregar un usuario)
+
+            // Cargar y mostrar usuarios actualizados después de agregar uno nuevo
+            cargarYMostrarUsuarios();
+
+            // Cerrar el modal
+            var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+            offcanvasAddUser.hide();
+        }
+    </script>
     
 </head>
 
@@ -477,7 +573,7 @@
         return response.json(); // Intenta parsear la respuesta como JSON
     })
     .then(data => {
-        // La respuesta exitosa del servidor, puedes manejarla aquí
+        // La respuesta exitosa del servidor
         console.log('Respuesta del servidor:', data);
     })
     .catch(error => {
@@ -493,7 +589,7 @@
         }
     });
 
-    // Cerrar el modal (opcional)
+    // Cerrar el modal 
     var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
     offcanvasAddUser.hide();
 }
@@ -501,8 +597,7 @@
 
 
 
-
-           <div class="card">
+<div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h4>Listado de Usuarios</h4>
     <button type="button" class="btn btn-secondary" id="btnAdd">Añadir</button>
@@ -522,25 +617,9 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody class="table-border-bottom-0">
-        <tr>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>
-            <div class="dropdown">
-              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-pencil me-1"></i> Edit</a>
-                <a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-trash me-1"></i> Delete</a>
-              </div>
-            </div>
-          </td>
-        </tr>
+      <!-- Asegúrate de tener un tbody con el ID 'tablaUsuariosBody' -->
+      <tbody class="table-border-bottom-0" id="tablaUsuariosBody">
+        <!-- Aquí puedes tener filas predefinidas si lo deseas -->
         
       </tbody>
     </table>
