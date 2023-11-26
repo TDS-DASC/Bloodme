@@ -650,6 +650,7 @@
         .catch(error => {
             // Manejar errores en la solicitud
             console.error('Error en la solicitud:', error);
+            alert('Error al agregar el usuario: ');
 
             // Verificar si la respuesta es un JSON
             if (error instanceof SyntaxError && error.message.includes('Unexpected token')) {
