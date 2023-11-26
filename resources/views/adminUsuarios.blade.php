@@ -493,108 +493,205 @@
            <!-- Bootstrap Table with Header - Light -->
 
 
-           <script>
-   function verificarCampos() {
-    // Obtener valores de los campos
-    var nombres = document.getElementById('add-Nombres').value;
-    var apellidos = document.getElementById('add-Apellidos').value;
-    var correoElectronico = document.getElementById('add-correoElectronico').value;
-    var contrasena = document.getElementById('add-contrasena').value;
-    var tipoSangre = document.getElementById('add-tipoSangre').value;
-    //var curp = document.getElementById('add-CURP').value;
-    var curp = "12133";
-    var fechaNacimiento = document.getElementById('html5-date-input').value;
-    var genero = document.getElementById('add-genero').value;
-
-     // Validar que todos los campos estén llenos
-     if (
-        nombres.trim() === '' ||
-        apellidos.trim() === '' ||
-        correoElectronico.trim() === '' ||
-        contrasena.trim() === '' ||
-        tipoSangre.trim() === '' ||
-        curp.trim() === '' ||
-        fechaNacimiento.trim() === '' ||
-        genero.trim() === ''
-    ) {
-        alert('Por favor, completa todos los campos.');
-        return;
-    }
-
-    // Validar formato de correo electrónico
-    var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!regexCorreo.test(correoElectronico)) {
-        alert('Por favor, ingresa un correo electrónico válido.');
-        return;
-    }
-
-    // Validar que los nombres y apellidos solo contengan letras
-    var regexLetras = /^[a-zA-Z\s]+$/;
-    if (!regexLetras.test(nombres) || !regexLetras.test(apellidos)) {
-        alert('Por favor, ingresa nombres y apellidos válidos (solo letras y espacios).');
-        return;
-    }
-
-    console.log('Datos válidos:', {
-        Nombres: nombres,
-        Apellidos: apellidos,
-        CorreoElectronico: correoElectronico,
-        Contrasena: contrasena,
-        TipoSangre: tipoSangre,
-        CURP: curp,
-        FechaNacimiento: fechaNacimiento,
-        Genero: genero
-    });
-
-    // Crear objeto de datos para enviar al servidor
-    var userData = {
-        name: nombres,
-        last_name: apellidos,
-        email: correoElectronico,
-        password: contrasena,
-        blood_type: tipoSangre,
-        curp: curp,
-        birthdate: fechaNacimiento,
-        gender: genero
-    };
-
-    // Realizar la solicitud POST a la API
-    fetch('http://127.0.0.1:8000/api/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
+<script>
+  function mostrarErrorLetras(id, mensaje) {
+        var mensajeErrorLetras = document.getElementById(id);
+        if (mensajeErrorLetras) {
+            mensajeErrorLetras.textContent = mensaje;
         }
-        return response.json(); // Intenta parsear la respuesta como JSON
-    })
-    .then(data => {
-        // La respuesta exitosa del servidor
-        console.log('Respuesta del servidor:', data);
-    })
-    .catch(error => {
-        // Manejar errores en la solicitud
-        console.error('Error en la solicitud:', error);
+    }
 
-        // Verificar si la respuesta es un JSON
-        if (error instanceof SyntaxError && error.message.includes('Unexpected token')) {
-            // Intenta obtener más información sobre la respuesta
-            response.text().then(text => {
-                console.error('Contenido de la respuesta:', text);
-            });
+    function validarSoloLetras(event, campoInput) {
+        var charCode = event.which || event.keyCode;
+        var mensajeErrorId = 'mensajeErrorLetras' + campoInput.id.charAt(4); // Genera un identificador dinámico
+
+        // Permitir solo letras (sin espacios, números o caracteres especiales)
+        if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
+            mostrarErrorLetras(mensajeErrorId, 'Solo se permiten letras (sin espacios, números o caracteres especiales).');
+            return false;
         }
-    });
 
-    // Cerrar el modal 
-    var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-    offcanvasAddUser.hide();
+        // Limpiar mensaje de error si la entrada es válida
+        mostrarErrorLetras(mensajeErrorId, ''); // Limpiar el mensaje de error
+        return true;
+    }
+
+    function validarCorreoElectronico() {
+        var inputCorreo = document.getElementById('add-correoElectronico');
+        var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
+
+        // Expresión regular para validar un formato de correo electrónico básico
+        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!regexCorreo.test(inputCorreo.value)) {
+            mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
+            inputCorreo.classList.add('is-invalid');
+        } else {
+            mensajeErrorCorreo.textContent = '';
+            inputCorreo.classList.remove('is-invalid');
+        }
+    }
+
+
+    function validarCurp() {
+        var curpInput = document.getElementById('add-curp');
+        var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
+
+        // Verificar la longitud del CURP
+        if (curpInput.value.length !== 18) {
+            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres.';
+            curpInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud es correcta
+            curpInput.classList.remove('is-invalid');
+        }
+    }
+
+
+    function validarContrasena() {
+        var contrasenaInput = document.getElementById('add-contrasena');
+        var mensajeErrorContrasena = document.getElementById('mensajeErrorContrasena');
+
+        // Verificar la longitud de la contraseña
+        if (contrasenaInput.value.length < 6 || contrasenaInput.value.length > 15) {
+            mensajeErrorContrasena.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
+            contrasenaInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorContrasena.textContent = ''; // Limpiar el mensaje de error si la longitud es correcta
+            contrasenaInput.classList.remove('is-invalid');
+        }
+    }
+
+
+    function verificarCampos() {
+        // Obtener el formulario
+        var formulario = document.getElementById('addNewUserForm');
+
+        // Verificar la validez del formulario
+        if (!formulario.checkValidity()) {
+            // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
+            formulario.reportValidity();
+            return;
+        }
+
+        // Obtener valores de los campos
+        var nombres = document.getElementById('add-Nombres').value;
+        var apellidos = document.getElementById('add-Apellidos').value;
+        var correoElectronico = document.getElementById('add-correoElectronico').value;
+        var contrasena = document.getElementById('add-contrasena').value;
+        var tipoSangre = document.getElementById('add-tipoSangre').value;
+        var curp = document.getElementById('add-curp').value;
+        var fechaNacimiento = document.getElementById('html5-date-input').value;
+        var genero = document.getElementById('add-genero').value;
+        
+
+        
+
+        console.log('Datos válidos:', {
+            Nombres: nombres,
+            Apellidos: apellidos,
+            CorreoElectronico: correoElectronico,
+            Contrasena: contrasena,
+            TipoSangre: tipoSangre,
+            CURP: curp,
+            FechaNacimiento: fechaNacimiento,
+            Genero: genero
+        });
+
+        // Crear objeto de datos para enviar al servidor
+        var userData = {
+            name: nombres,
+            last_name: apellidos,
+            email: correoElectronico,
+            password: contrasena,
+            blood_type: tipoSangre,
+            curp: curp,
+            birthdate: fechaNacimiento,
+            gender: genero
+        };
+
+        // Realizar la solicitud POST a la API
+        fetch('http://127.0.0.1:8000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
+            }
+            return response.json(); // Intenta parsear la respuesta como JSON
+        })
+        .then(data => {
+            // La respuesta exitosa del servidor
+            console.log('Respuesta del servidor:', data);
+
+            var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+            offcanvasAddUser.hide();
+
+            // Mostrar alerta de creación exitosa después de un breve retraso para dar tiempo al modal para ocultarse completamente
+            setTimeout(function() {
+                alert('Usuario creado exitosamente.');
+
+                 // Restablecer valores de los campos a blanco
+        document.getElementById('add-Nombres').value = '';
+        document.getElementById('add-Apellidos').value = '';
+        document.getElementById('add-correoElectronico').value = '';
+        document.getElementById('add-contrasena').value = '';
+        document.getElementById('add-tipoSangre').value = '';
+        document.getElementById('add-curp').value = '';
+        document.getElementById('html5-date-input').value = '';
+        document.getElementById('add-genero').value = '';
+        
+            }, 300);
+        })
+        .catch(error => {
+            // Manejar errores en la solicitud
+            console.error('Error en la solicitud:', error);
+
+            // Verificar si la respuesta es un JSON
+            if (error instanceof SyntaxError && error.message.includes('Unexpected token')) {
+                // Intenta obtener más información sobre la respuesta
+                response.text().then(text => {
+                    console.error('Contenido de la respuesta:', text);
+                });
+            }
+        });
+
+        // Cerrar el modal 
+        var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        offcanvasAddUser.hide();
+    }
+
+
+    function validarFechaNacimiento() {
+    var fechaInput = document.getElementById('html5-date-input');
+    var mensajeErrorFecha = document.getElementById('mensajeErrorFecha');
+
+    // Verifica si hay más de 4 dígitos en el año y corrige si es necesario
+    var fechaArray = fechaInput.value.split('-');
+    if (fechaArray.length === 3 && fechaArray[0].length > 4) {
+        fechaArray[0] = fechaArray[0].substring(0, 4);
+        fechaInput.value = fechaArray.join('-');
+    }
+
+    // Verifica si la fecha está dentro del rango deseado
+    var fechaSeleccionada = new Date(fechaInput.value);
+    var fechaMinima = new Date('1900-01-01');
+    var fechaMaxima = new Date('2023-12-31');
+
+    if (fechaSeleccionada < fechaMinima || fechaSeleccionada > fechaMaxima) {
+        mensajeErrorFecha.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
+        fechaInput.classList.add('is-invalid');
+    } else {
+        mensajeErrorFecha.innerText = '';
+        fechaInput.classList.remove('is-invalid');
+    }
 }
-</script>
 
+</script>
 
 
 <div class="card">
@@ -628,10 +725,10 @@
 <!-- Bootstrap Table with Header - Light -->
 
 
-<!-- Modal Añadir Usuarios -->
+<!-- ---------------------------------------------------------Modal Añadir Usuarios---------------------------------------------------------- -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddUser" aria-labelledby="offcanvasAddUserLabel">
     <div class="offcanvas-header">
-      <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Añadir Usuario</h5>
+      <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Usuario</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
@@ -639,18 +736,17 @@
       <form class="add-new-user pt-0" id="addNewUserForm" onsubmit="return false">
 
 
+      <div class="mb-3">
+    <label class="form-label" for="add-Nombres">Nombres</label>
+    <input type="text" id="add-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
+    <div id="mensajeErrorLetrasNombres" style="color: red;"></div>
+</div>
 
-        <div class="mb-3">
-            <label class="form-label" for="add-NombreCompleto">Nombres</label>
-            <input type="text" id="add-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event)" />
-            <div id="mensajeErrorLetras" style="color: red;"></div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" for="add-Apellidos">Apellidos</label>
-            <input type="text" id="add-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event)" />
-            <div id="mensajeErrorLetras" style="color: red;"></div>
-        </div>
+<div class="mb-3">
+    <label class="form-label" for="add-Apellidos">Apellidos</label>
+    <input type="text" id="add-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)" />
+    <div id="mensajeErrorLetrasApellidos" style="color: red;"></div>
+</div>
 
         <div class="mb-3">
           <label class="form-label" for="add-correoElectronico">Correo Electrónico</label>
@@ -659,17 +755,19 @@
       </div>
 
       <div class="mb-3">
-            <label class="form-label" for="add-contrasena">Contraseña</label>
-            <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contra" aria-label="Nombre Contra" onkeypress="return validarSoloLetras(event)" />
-            <div id="mensajeErrorLetras" style="color: red;"></div>
-        </div>
+    <label class="form-label" for="add-contrasena">Contraseña</label>
+    <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
+    <div id="mensajeErrorContrasena" style="color: red;"></div>
+</div>
 
         <div class="mb-3">
-        <label class="form-label" for="add-fechaNacimiento">Fecha de Nacimiento</label>
-            <div class="col-md-10">
-              <input class="form-control" type="date" value="" id="html5-date-input" />
-            </div>
-        </div>
+    <label class="form-label" for="add-fechaNacimiento">Fecha de Nacimiento</label>
+    <div class="col-md-10">
+        <!-- Agrega el atributo oninput y el script de JavaScript -->
+        <input class="form-control" type="date" value="" id="html5-date-input" oninput="validarFechaNacimiento()" min='1900-01-01' max='2023-12-31' />
+        <div id="mensajeErrorFecha" style="color: red;"></div>
+    </div>
+</div>
 
         <div class="mb-3">
           <label class="form-label" for="add-genero">Género</label>
@@ -679,6 +777,15 @@
             <option value="Mujer">Mujer</option>
           </select>
         </div>
+
+        
+          <div class="mb-3">
+              <label class="form-label" for="add-curp">CURP</label>
+              <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onkeypress="return validarSoloLetras(event, this)"  onblur="validarCurp()"/>
+              <div id="mensajeErrorCurp" style="color: red;"></div>
+              
+          </div>
+
 
         <div class="mb-3">
           <label class="form-label" for="add-tipoSangre">Tipo de Sangre</label>
@@ -704,7 +811,7 @@
           </select>
         </div>
 
-        <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCampos()">Añadir</button>
+        <button type="submit" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCampos()">Confirmar</button>
         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
       </form>
     </div>
@@ -728,11 +835,7 @@
         </script>
         , Bloodme <a href="" target="_blank" class="fw-medium"></a>
       </div>
-      <div class="d-none d-lg-inline-block">
-        
-        <a href="https://themeforest.net/licenses/standard" class="footer-link me-4" target="_blank">AQUI PONER UN FOOTER SI QUEREMOS</a>
-       
-      </div>
+      
     </div>
   </div>
 </footer>
@@ -800,43 +903,6 @@
   btnAdd.addEventListener('click', function () {
     offcanvasAddUser.show();
   });
-</script>
-
-
-<script>
-    function validarSoloLetras(event) {
-        var charCode = event.which || event.keyCode;
-
-        // Permitir solo letras (sin espacios, números o caracteres especiales)
-        if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
-            var mensajeErrorLetras = document.getElementById('mensajeErrorLetras');
-            mensajeErrorLetras.textContent = 'Solo se permiten letras (sin espacios, números o caracteres especiales).';
-            return false;
-        }
-
-        // Limpiar mensaje de error si la entrada es válida
-        var mensajeErrorLetras = document.getElementById('mensajeErrorLetras');
-        mensajeErrorLetras.textContent = '';
-        return true;
-    }
-</script>
-
-<script>
-    function validarCorreoElectronico() {
-        var inputCorreo = document.getElementById('add-correoElectronico');
-        var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
-
-        // Expresión regular para validar un formato de correo electrónico básico
-        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!regexCorreo.test(inputCorreo.value)) {
-            mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
-            inputCorreo.classList.add('is-invalid');
-        } else {
-            mensajeErrorCorreo.textContent = '';
-            inputCorreo.classList.remove('is-invalid');
-        }
-    }
 </script>
 
 
