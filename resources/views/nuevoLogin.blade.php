@@ -130,7 +130,7 @@
           <h4 class="mb-1 pt-2">Bienvenido!</h4>
           <p class="mb-4">Ingresa tus datos para continuar</p>
 
-          <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+          <form id="uniqueFormAuthentication" class="mb-3" action="http://127.0.0.1:8000/api/login" method="POST">
             <div class="mb-3">
               <label for="email" class="form-label">Correo Electronico</label>
               <input type="text" class="form-control" id="email" name="email-username" placeholder="Escribir correo electronico" autofocus>
@@ -153,7 +153,7 @@
 
           <p class="text-center">
             <span>No tienes una cuenta?</span>
-            <a href="auth-register-basic.html">
+            <a href="{{route('registrarRutas')}}">
               <span>Click aquí</span>
             </a>
           </p>
@@ -198,7 +198,42 @@
 
   <!-- Page JS -->
   <script src="../../assets/js/pages-auth.js"></script>
-  
+
+  <script>
+    $(document).ready(function () {
+  $("#uniqueFormAuthentication").submit(function (event) {
+    event.preventDefault();
+
+    var email = $("#email").val();
+    var password = $("#password").val();
+
+    $.ajax({
+      type: "POST",
+      url: "http://127.0.0.1:8000/api/login",
+      data: {
+        email: email,
+        password: password
+      },
+      success: function (response) {
+        console.log(response);
+
+        // Verifica si la propiedad 'user' existe en la respuesta
+        if (response.user) {
+          alert("Inicio de sesión exitoso");
+          window.location.href = '/admin';
+        } else {
+          alert("Correo o contraseña incorrectos");
+        }
+      },
+      error: function () {
+        alert("Error al conectar con la API");
+      }
+    });
+  });
+});
+
+  </script>
+    
 </body>
 
 </html>
