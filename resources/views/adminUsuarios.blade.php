@@ -78,31 +78,21 @@
 <script src="../../assets/js/config.js"></script>
 
 
-
-
-
-
-
 <script>
-        // Función para cargar y mostrar usuarios al cargar la página
         window.onload = function () {
-            cargarYMostrarUsuarios();
-        };
+    cargarYMostrarUsuarios();
+};
 
-        // Función para cargar y mostrar usuarios
-        function cargarYMostrarUsuarios() {
-    // Realizar la solicitud GET a la API para obtener la lista de usuarios
+function cargarYMostrarUsuarios() {
     fetch('http://127.0.0.1:8000/api/users/')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al obtener la lista de usuarios. Código de estado: ' + response.status);
             }
-            return response.json(); // Intenta parsear la respuesta como JSON
+            return response.json();
         })
         .then(data => {
-            // Verificar si la respuesta tiene un campo 'users'
             if (data.users && Array.isArray(data.users)) {
-                // Mostrar los usuarios en la tabla
                 renderizarTablaUsuarios(data.users);
             } else {
                 throw new Error('Formato de respuesta inesperado. Se esperaba un campo "users" de tipo array.');
@@ -113,25 +103,17 @@
         });
 }
 
-        // Función para renderizar la tabla con los datos de los usuarios
-        function renderizarTablaUsuarios(usuarios) {
-    // Obtener el cuerpo de la tabla
+function renderizarTablaUsuarios(usuarios) {
     var tbody = document.getElementById('tablaUsuariosBody');
-
-    // Verificar si el elemento tbody existe
     if (!tbody) {
         console.error('Elemento tbody no encontrado.');
         return;
     }
-
-    // Limpiar el contenido actual de la tabla
     tbody.innerHTML = '';
 
-    // Iterar sobre los usuarios y agregar filas a la tabla
     usuarios.forEach(usuario => {
         var row = tbody.insertRow();
 
-        // Agregar celdas con los datos del usuario
         var cellNombre = row.insertCell(0);
         var cellCorreo = row.insertCell(1);
         var cellTipoSangre = row.insertCell(2);
@@ -141,7 +123,6 @@
         var cellCURP = row.insertCell(6);
         var cellAcciones = row.insertCell(7);
 
-        // Asignar valores a las celdas
         cellNombre.innerText = usuario.name + ' ' + usuario.last_name;
         cellCorreo.innerText = usuario.email;
         cellTipoSangre.innerText = usuario.blood_type;
@@ -150,28 +131,78 @@
         cellDonador.innerText = usuario.donor;
         cellCURP.innerText = usuario.curp;
 
-        // Agregar botones de acciones (editar y eliminar)
-        cellAcciones.innerHTML = '<div class="dropdown">' +
-            '<button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>' +
-            '<div class="dropdown-menu">' +
-            '<a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-pencil me-1"></i> Edit</a>' +
-            '<a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-trash me-1"></i> Delete</a>' +
-            '</div>' +
-            '</div>';
+        cellAcciones.innerHTML = `
+        <button type="button" class="btn btn-primary" onclick="editarUsuario(${usuario.id})">Editar</button>
+            <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
     });
 }
 
-        function verificarCampos() {
-            // ... (Tu código existente para agregar un usuario)
+let usuarioSeleccionadoId = null;
 
-            // Cargar y mostrar usuarios actualizados después de agregar uno nuevo
-            cargarYMostrarUsuarios();
-
-            // Cerrar el modal
-            var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-            offcanvasAddUser.hide();
+// Función para obtener y mostrar los detalles del usuario en el modal de edición
+function obtenerDetallesUsuario(userId) {
+    fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles del usuario. Código de estado: ${response.status}`);
         }
-    </script>
+        return response.json();
+    })
+    .then(data => {
+        console.log('Respuesta completa de la API:', data);
+
+        // Modifica esta parte según la estructura real de tu respuesta
+        const usuarioId = data.user.id || '';
+        const usuarioNombre = data.user.name || '';
+        const usuarioApellido = data.user.last_name || '';
+        const usuarioEmail = data.user.email || '';
+
+        if (usuarioId && usuarioNombre && usuarioApellido && usuarioEmail) {
+            // Almacena el ID del usuario seleccionado globalmente
+            usuarioSeleccionadoId = usuarioId;
+
+            // Espera a que la página se cargue completamente antes de acceder a los elementos del DOM
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById('edit-Nombres').value = usuarioNombre;
+                document.getElementById('edit-Apellidos').value = usuarioApellido;
+                document.getElementById('edit-correoElectronico').value = usuarioEmail;
+                document.getElementById('edit-tipoSangre').value = data.user.blood_type || '';
+                document.getElementById('edit-curp').value = data.user.curp || '';
+                document.getElementById('edit-html5-date-input').value = data.user.birthdate || '';
+                document.getElementById('edit-genero').value = data.user.gender || '';
+
+                // Mostrar el modal de edición
+                var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+                offcanvasEditUser.show();
+            });
+        } else {
+            throw new Error('Formato de respuesta inesperado. Datos incompletos del usuario.');
+        }
+    })
+    .catch(error => {
+        console.error('Error al obtener los detalles del usuario:', error);
+        alert('Error al obtener los detalles del usuario.');
+    });
+}
+
+// Función para abrir el modal de edición al hacer clic en el botón de editar
+function editarUsuario(userId) {
+    obtenerDetallesUsuario(userId);
+}
+
+// Asigna el evento de clic al botón de editar para abrir el modal de edición
+document.getElementById('btnEdit').addEventListener('click', function() {
+    editarUsuario(usuarioSeleccionadoId);
+});
+
+
+
+
+
+
+</script>
     
 </head>
 
@@ -185,12 +216,6 @@
   <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar  ">
   <div class="layout-container">
-
-    
-    
-
-
-
 
 <!-- Menu -->
 
@@ -400,98 +425,8 @@
         <!-- Content -->
         
         <div class="container-xxl flex-grow-1 container-p-y">
-            
-            
-
-            <div class="row g-4 mb-4">
-              <div class="col-sm-6 col-xl-3">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                      <div class="content-left">
-                        <span>Session</span>
-                        <div class="d-flex align-items-center my-2">
-                          <h3 class="mb-0 me-2">21,459</h3>
-                          <p class="text-success mb-0">(+29%)</p>
-                        </div>
-                        <p class="mb-0">Total Users</p>
-                      </div>
-                      <div class="avatar">
-                        <span class="avatar-initial rounded bg-label-primary">
-                          <i class="ti ti-user ti-sm"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-xl-3">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                      <div class="content-left">
-                        <span>Paid Users</span>
-                        <div class="d-flex align-items-center my-2">
-                          <h3 class="mb-0 me-2">4,567</h3>
-                          <p class="text-success mb-0">(+18%)</p>
-                        </div>
-                        <p class="mb-0">Last week analytics </p>
-                      </div>
-                      <div class="avatar">
-                        <span class="avatar-initial rounded bg-label-danger">
-                          <i class="ti ti-user-plus ti-sm"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-xl-3">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                      <div class="content-left">
-                        <span>Active Users</span>
-                        <div class="d-flex align-items-center my-2">
-                          <h3 class="mb-0 me-2">19,860</h3>
-                          <p class="text-danger mb-0">(-14%)</p>
-                        </div>
-                        <p class="mb-0">Last week analytics</p>
-                      </div>
-                      <div class="avatar">
-                        <span class="avatar-initial rounded bg-label-success">
-                          <i class="ti ti-user-check ti-sm"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-xl-3">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                      <div class="content-left">
-                        <span>Pending Users</span>
-                        <div class="d-flex align-items-center my-2">
-                          <h3 class="mb-0 me-2">237</h3>
-                          <p class="text-success mb-0">(+42%)</p>
-                        </div>
-                        <p class="mb-0">Last week analytics</p>
-                      </div>
-                      <div class="avatar">
-                        <span class="avatar-initial rounded bg-label-warning">
-                          <i class="ti ti-user-exclamation ti-sm"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <!-- ---------------------------------------Users List Table ----------------------------->
-           <!-- Bootstrap Table with Header - Light -->
-
+        
 
 <script>
   function mostrarErrorLetras(id, mensaje) {
@@ -726,6 +661,96 @@
 <!-- Bootstrap Table with Header - Light -->
 
 
+
+<!-- ---------------------------------------------------------Modal Editar Usuarios---------------------------------------------------------- -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="edit-user pt-0" id="editUserForm" onsubmit="return false">
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-Nombres">Nombres</label>
+                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
+                <div id="mensajeErrorLetrasNombres" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-Apellidos">Apellidos</label>
+                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)" />
+                <div id="mensajeErrorLetrasApellidos" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
+                <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronico()" />
+                <div id="mensajeErrorCorreo" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-contrasena">Contraseña</label>
+                <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
+                <div id="mensajeErrorContrasena" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
+                <div class="col-md-10">
+                    <!-- Agrega el atributo oninput y el script de JavaScript -->
+                    <input class="form-control" type="date" value="" id="edit-html5-date-input" oninput="validarFechaNacimiento()" min='1900-01-01' max='2023-12-31' />
+                    <div id="mensajeErrorFecha" style="color: red;"></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-genero">Género</label>
+                <select id="edit-genero" class="form-select">
+                    <option selected disabled value="">Opciones...</option>
+                    <option value="Hombre">Hombre</option>
+                    <option value="Mujer">Mujer</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-curp">CURP</label>
+                <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onkeypress="return validarSoloLetras(event, this)" onblur="validarCurp()" />
+                <div id="mensajeErrorCurp" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-tipoSangre">Tipo de Sangre</label>
+                <select id="edit-tipoSangre" class="form-select">
+                    <option selected disabled value="">Opciones...</option>
+                    <option value="A+">A+</option>
+                    <option value="O+">O+</option>
+                    <option value="B+">B+</option>
+                    <option value="AB+">AB+</option>
+                    <option value="A-">A-</option>
+                    <option value="O-">O-</option>
+                    <option value="B-">B-</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-donador">Donador</label>
+                <select id="edit-donador" class="form-select">
+                    <option selected disabled value="">Opciones...</option>
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdicion()">Guardar Cambios</button>
+            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+
 <!-- ---------------------------------------------------------Modal Añadir Usuarios---------------------------------------------------------- -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddUser" aria-labelledby="offcanvasAddUserLabel">
     <div class="offcanvas-header">
@@ -819,7 +844,7 @@
   </div>
 </div>
 
-                      </div>
+</div>
                       <!-- / Content -->
 
           
@@ -913,4 +938,3 @@
 </html>
 
 <!-- beautify ignore:end -->
-
