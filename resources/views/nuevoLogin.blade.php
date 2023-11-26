@@ -59,6 +59,8 @@
     <script src="../../assets/vendor/js/template-customizer.js"></script>
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="../../assets/js/config.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
 </head>
 
@@ -69,6 +71,46 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5DDHKGP" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   
+
+
+  <script>
+  $(document).ready(function () {
+    $("#formAuthentication").submit(function (event) {
+      // Evitar que el formulario se envíe normalmente
+      event.preventDefault();
+
+      // Obtener los valores de correo y contraseña
+      var email = $("#email").val();
+      var password = $("#password").val();
+
+      // Hacer la solicitud a la API
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:8000/api/users/",
+        data: {
+          email: email,
+          password: password
+        },
+        success: function (response) {
+          // Verificar la respuesta de la API
+          if (response.success) {
+            // Las credenciales son válidas, puedes redirigir al usuario o realizar otras acciones
+            alert("Inicio de sesión exitoso");
+          } else {
+            // Las credenciales no son válidas, muestra un mensaje de alerta
+            alert("Correo o contraseña incorrectos");
+          }
+        },
+        error: function () {
+          // Ocurrió un error al realizar la solicitud
+          alert("Error al conectar con la API");
+        }
+      });
+    });
+  });
+</script>
+
+
   <!-- Content -->
 
 <div class="container-xxl">
