@@ -129,6 +129,7 @@
           <!-- /Logo -->
           <h4 class="mb-1 pt-2">Bienvenido!</h4>
           <p class="mb-4">Ingresa tus datos para continuar</p>
+          <p style="display: none" id="dateIncorrect">Datos incorrectos</p>
 
           <form id="uniqueFormAuthentication" class="mb-3" action="http://127.0.0.1:8000/api/login" method="POST">
             <div class="mb-3">
@@ -142,7 +143,7 @@
               </div>
               <div class="input-group input-group-merge">
                 <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
-                <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                <span class="input-group-text cursor-pointer" id="eye"><i class="ti ti-eye-off"></i></span>
               </div>
             </div>
             
@@ -222,7 +223,11 @@
           alert("Inicio de sesión exitoso");
           window.location.href = '/admin';
         } else {
-          alert("Correo o contraseña incorrectos");
+          document.getElementById('email').style.outline = '1px solid #f93a57';
+          document.getElementById('password').style.outline = '1px solid #f93a57';
+          document.getElementById('eye').style.border = '1px solid #f93a57';
+          $(".form-label").addClass("error-label");
+          document.getElementById('dateIncorrect').style.display = 'block';
         }
       },
       error: function () {
@@ -233,7 +238,16 @@
 });
 
   </script>
-    
+  
+  <style>
+      .error-label{
+        color: #f93a57;
+      }
+
+      #dateIncorrect{
+        color: #f93a57
+      }
+  </style>
 </body>
 
 </html>
