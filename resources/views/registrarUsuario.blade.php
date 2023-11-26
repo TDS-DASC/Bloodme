@@ -375,7 +375,7 @@
 
           <p class="text-center">
             <span>Ya tienes una cuenta?</span>
-            <a href="auth-login-basic.html">
+            <a href="{{route('loginHome')}}">
               <span>Inicia sesión en su lugar</span>
             </a>
           </p>
