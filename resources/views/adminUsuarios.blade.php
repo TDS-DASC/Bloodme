@@ -806,13 +806,13 @@ function verificarCamposEdit() {
 
             <div class="mb-3">
                 <label class="form-label" for="edit-Nombres">Nombres</label>
-                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" />
+                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
                 <div id="mensajeErrorLetrasNombresEdit" style="color: red;"></div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="edit-Apellidos">Apellidos</label>
-                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo"  />
+                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)"  />
                 <div id="mensajeErrorLetrasApellidosEdit" style="color: red;"></div>
             </div>
 
