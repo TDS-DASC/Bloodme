@@ -493,20 +493,20 @@ document.getElementById('btnEdit').addEventListener('click', function() {
     }
 
     function validarCorreoElectronicoEdit() {
-      var inputCorreo = document.getElementById('add-correoElectronico');
-        var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
+        var inputCorreoEdit = document.getElementById('edit-correoElectronico');
+        var mensajeErrorCorreoEdit = document.getElementById('mensajeErrorCorreoEdit');
 
         // Expresión regular para validar un formato de correo electrónico básico
         var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!regexCorreo.test(inputCorreo.value)) {
-            mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
-            inputCorreo.classList.add('is-invalid');
+        if (!regexCorreo.test(inputCorreoEdit.value)) {
+            mensajeErrorCorreoEdit.textContent = 'Por favor, ingresa un correo electrónico válido.';
+            inputCorreoEdit.classList.add('is-invalid');
         } else {
-            mensajeErrorCorreo.textContent = '';
-            inputCorreo.classList.remove('is-invalid');
+            mensajeErrorCorreoEdit.textContent = '';
+            inputCorreoEdit.classList.remove('is-invalid');
         }
-}
+    }
 
 function validarContrasenaEdit() {
   var contrasenaInput = document.getElementById('add-contrasena');
@@ -817,11 +817,11 @@ function verificarCamposEdit() {
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
-                <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com"  />
-                <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
-            </div>
-
+              <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
+              <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronicoEdit()" />
+              <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
+          </div>
+          
             <div class="mb-3">
                 <label class="form-label" for="edit-contrasena">Contraseña</label>
                 <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña"  />
