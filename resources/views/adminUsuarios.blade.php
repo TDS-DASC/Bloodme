@@ -703,10 +703,17 @@ function verificarCamposEdit() {
           blood_type: tipoSangre,
           curp: curp,
           birthdate: fechaNacimiento,
+<<<<<<< HEAD
           gender: genero,
           donator:donadorValue
         };
 
+=======
+          gender: genero
+        };
+
+          // Realizar la solicitud PUT a la API para editar el usuario
+>>>>>>> dedb45dc0fc6017a56d99f374b133f97cfe794cc
           fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
             method: 'PUT',
             headers: {
@@ -717,6 +724,55 @@ function verificarCamposEdit() {
     .then(response => {
         if (!response.ok) {
             throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
+<<<<<<< HEAD
+=======
+        }
+        return response.json(); // Intenta parsear la respuesta como JSON
+    })
+    .then(data => {
+        // La respuesta exitosa del servidor
+        console.log('Respuesta del servidor:', data);
+
+        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        offcanvasEditUser.hide();
+
+        // Mostrar alerta de edición exitosa después de un breve retraso para dar tiempo al modal para ocultarse completamente
+        setTimeout(function() {
+            alert('Usuario editado exitosamente.');
+
+            // Restablecer valores de los campos a blanco si es necesario
+            // (puedes adaptar esto según tu lógica específica)
+        }, 300);
+    })
+    .catch(error => {
+        // Manejar errores en la solicitud de edición
+        console.error('Error en la solicitud de edición:', error);
+        alert('Error al editar el usuario.');
+
+        // Verificar si hay una respuesta del servidor
+        if (error && error.response && error.response.text) {
+            // Intenta obtener más información sobre la respuesta
+            error.response.text().then(text => {
+                console.error('Contenido de la respuesta:', text);
+            });
+        }
+    });
+
+    // Cerrar el modal de edición
+    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
+    offcanvasEditUser.hide();
+}
+
+    function verificarCampos() {
+        // Obtener el formulario
+        var formulario = document.getElementById('addNewUserForm');
+
+        // Verificar la validez del formulario
+        if (!formulario.checkValidity()) {
+            // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
+            formulario.reportValidity();
+            return;
+>>>>>>> dedb45dc0fc6017a56d99f374b133f97cfe794cc
         }
         return response.json(); 
     })
