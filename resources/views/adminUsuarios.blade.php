@@ -133,7 +133,7 @@ function renderizarTablaUsuarios(usuarios) {
 
         cellAcciones.innerHTML = `
         <button type="button" class="btn btn-primary" onclick="obtenerDetallesUsuario(${usuario.id})">Editar</button>
-        <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+            <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
     });
 }
 
@@ -196,30 +196,6 @@ document.getElementById('btnEdit').addEventListener('click', function() {
         verificarCamposEdit();
     });
 
-
-    function eliminarUsuario(usuarioId) {
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
-            method: 'DELETE'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Usuario eliminado exitosamente:', data);
-
-            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
-            cargarYMostrarUsuarios();
-        })
-        .catch(error => {
-            console.error('Error al eliminar el usuario:', error);
-            alert('Error al eliminar el usuario.');
-        });
-    }
-}
 
 </script>
     
@@ -621,61 +597,64 @@ function verificarCamposEdit() {
         });
 
         // Crear objeto de datos para enviar al servidor
-        var userData = {
-            name: nombres,
-            last_name: apellidos,
-            email: correoElectronico,
-            password: contrasena,
-            blood_type: tipoSangre,
-            curp: curp,
-            birthdate: fechaNacimiento,
-            gender: genero
+        var editedUserData = {
+          name: nombres,
+          last_name: apellidos,
+          email: correoElectronico,
+          password: contrasena,
+          blood_type: tipoSangre,
+          curp: curp,
+          birthdate: fechaNacimiento,
+          gender: genero
         };
 
-        // Realizar la solicitud POST a la API
-        fetch('http://127.0.0.1:8000/api/edit', {
-            method: 'POST',
+          // Realizar la solicitud PUT a la API para editar el usuario
+          fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(userData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
-            }
-            return response.json(); // Intenta parsear la respuesta como JSON
-        })
-        .then(data => {
-            // La respuesta exitosa del servidor
-            console.log('Respuesta del servidor:', data);
+            body: JSON.stringify(editedUserData)
+          })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
+        }
+        return response.json(); // Intenta parsear la respuesta como JSON
+    })
+    .then(data => {
+        // La respuesta exitosa del servidor
+        console.log('Respuesta del servidor:', data);
 
-            var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
-            offcanvasEditUser.hide();
-
-            // Mostrar alerta de edición exitosa después de un breve retraso para dar tiempo al modal para ocultarse completamente
-            setTimeout(function() {
-                alert('Usuario editado exitosamente.');
-            }, );
-        })
-        .catch(error => {
-            // Manejar errores en la solicitud
-            console.error('Error en la solicitud:', error);
-            alert('Error al editar el usuario.');
-
-            // Verificar si hay una respuesta del servidor
-            if (error && error.response && error.response.text) {
-                // Intenta obtener más información sobre la respuesta
-                error.response.text().then(text => {
-                    console.error('Contenido de la respuesta:', text);
-                });
-            }
-        });
-
-        // Cerrar el modal
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
+        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
         offcanvasEditUser.hide();
-    }
+
+        // Mostrar alerta de edición exitosa después de un breve retraso para dar tiempo al modal para ocultarse completamente
+        setTimeout(function() {
+            alert('Usuario editado exitosamente.');
+
+            // Restablecer valores de los campos a blanco si es necesario
+            // (puedes adaptar esto según tu lógica específica)
+        }, 300);
+    })
+    .catch(error => {
+        // Manejar errores en la solicitud de edición
+        console.error('Error en la solicitud de edición:', error);
+        alert('Error al editar el usuario.');
+
+        // Verificar si hay una respuesta del servidor
+        if (error && error.response && error.response.text) {
+            // Intenta obtener más información sobre la respuesta
+            error.response.text().then(text => {
+                console.error('Contenido de la respuesta:', text);
+            });
+        }
+    });
+
+    // Cerrar el modal de edición
+    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
+    offcanvasEditUser.hide();
+}
 
     function verificarCampos() {
         // Obtener el formulario
@@ -879,7 +858,7 @@ function verificarCamposEdit() {
             <div class="mb-3">
               <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
               <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="edit-html5-date-input" oninput="validarFechaNacimientoEdit()" min='1900-01-01' max='2023-12-31' />
+                  <input class="form-control" type="date" value="" id="edit-html5-date-input"  min='1900-01-01' max='2023-12-31' />
                   <div id="mensajeErrorFechaEdit" style="color: red;"></div>
               </div>
             </div>
