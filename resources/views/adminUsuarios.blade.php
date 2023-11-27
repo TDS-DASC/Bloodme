@@ -192,7 +192,8 @@ function editarUsuario(userId) {
 
 // Asigna el evento de clic al botón de editar para abrir el modal de edición
 document.getElementById('btnEdit').addEventListener('click', function() {
-    editarUsuario(usuarioSeleccionadoId);
+  console.log("Soy el botón editar");
+    verificarCamposEdit();
 });
 
 
@@ -491,6 +492,142 @@ document.getElementById('btnEdit').addEventListener('click', function() {
         }
     }
 
+    function validarCorreoElectronicoEdit() {
+      var inputCorreo = document.getElementById('add-correoElectronico');
+        var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
+
+        // Expresión regular para validar un formato de correo electrónico básico
+        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!regexCorreo.test(inputCorreo.value)) {
+            mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
+            inputCorreo.classList.add('is-invalid');
+        } else {
+            mensajeErrorCorreo.textContent = '';
+            inputCorreo.classList.remove('is-invalid');
+        }
+}
+
+function validarContrasenaEdit() {
+  var contrasenaInput = document.getElementById('add-contrasena');
+        var mensajeErrorContrasena = document.getElementById('mensajeErrorContrasena');
+
+        // Verificar la longitud de la contraseña
+        if (contrasenaInput.value.length < 6 || contrasenaInput.value.length > 15) {
+            mensajeErrorContrasena.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
+            contrasenaInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorContrasena.textContent = ''; // Limpiar el mensaje de error si la longitud es correcta
+            contrasenaInput.classList.remove('is-invalid');
+        }
+}
+
+function validarCurpEdit() {
+  var curpInput = document.getElementById('add-curp');
+        var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
+
+        // Verificar la longitud del CURP
+        if (curpInput.value.length !== 18) {
+            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres.';
+            curpInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud es correcta
+            curpInput.classList.remove('is-invalid');
+        }
+}
+
+function validarFechaNacimientoEdit() {
+    // Lógica de validación para la fecha de nacimiento en modo edición
+}
+
+function verificarCamposEdit() {
+    // Obtener el formulario de edición
+    var formularioEdit = document.getElementById('editUserForm');
+
+    // Verificar la validez del formulario
+    if (!formularioEdit.checkValidity()) {
+        // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
+        formularioEdit.reportValidity();
+        return;
+    }
+
+    // Obtener valores de los campos editables
+    var editNombres = document.getElementById('edit-Nombres').value;
+    var editApellidos = document.getElementById('edit-Apellidos').value;
+    var editCorreoElectronico = document.getElementById('edit-correoElectronico').value;
+    var editTipoSangre = document.getElementById('edit-tipoSangre').value;
+    var editCurp = document.getElementById('edit-curp').value;
+    var editFechaNacimiento = document.getElementById('edit-html5-date-input').value;
+    var editGenero = document.getElementById('edit-genero').value;
+
+    console.log('Datos de edición válidos:', {
+        Nombres: editNombres,
+        Apellidos: editApellidos,
+        CorreoElectronico: editCorreoElectronico,
+        TipoSangre: editTipoSangre,
+        CURP: editCurp,
+        FechaNacimiento: editFechaNacimiento,
+        Genero: editGenero
+    });
+
+    // Crear objeto de datos para enviar al servidor
+    var editedUserData = {
+        name: editNombres,
+        last_name: editApellidos,
+        email: editCorreoElectronico,
+        blood_type: editTipoSangre,
+        curp: editCurp,
+        birthdate: editFechaNacimiento,
+        gender: editGenero
+    };
+
+    // Realizar la solicitud PUT a la API para editar el usuario
+    fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editedUserData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
+        }
+        return response.json(); // Intenta parsear la respuesta como JSON
+    })
+    .then(data => {
+        // La respuesta exitosa del servidor
+        console.log('Respuesta del servidor:', data);
+
+        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        offcanvasEditUser.hide();
+
+        // Mostrar alerta de edición exitosa después de un breve retraso para dar tiempo al modal para ocultarse completamente
+        setTimeout(function() {
+            alert('Usuario editado exitosamente.');
+
+            // Restablecer valores de los campos a blanco si es necesario
+            // (puedes adaptar esto según tu lógica específica)
+        }, 300);
+    })
+    .catch(error => {
+        // Manejar errores en la solicitud de edición
+        console.error('Error en la solicitud de edición:', error);
+        alert('Error al editar el usuario.');
+
+        // Verificar si hay una respuesta del servidor
+        if (error && error.response && error.response.text) {
+            // Intenta obtener más información sobre la respuesta
+            error.response.text().then(text => {
+                console.error('Contenido de la respuesta:', text);
+            });
+        }
+    });
+
+    // Cerrar el modal de edición
+    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
+    offcanvasEditUser.hide();
+}
 
     function verificarCampos() {
         // Obtener el formulario
@@ -738,7 +875,7 @@ document.getElementById('btnEdit').addEventListener('click', function() {
                 </select>
             </div>
 
-            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdicion()">Guardar Cambios</button>
+            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
         </form>
     </div>
