@@ -64,6 +64,9 @@
 
     <!-- Page CSS -->
     
+    <!--jquery-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 
    
     
@@ -264,7 +267,7 @@
              
              
               <li>
-                <a class="dropdown-item" href="{{route('loginHome')}}" target="_blank">
+                <a class="dropdown-item" href="{{route('loginHome')}}">
                   <i class="ti ti-logout me-2 ti-sm"></i>
                   <span class="align-middle">Log Out</span>
                 </a>
@@ -302,7 +305,7 @@
   <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Sales</h5>
+        <h5 class="card-title mb-0">Usuarios</h5>
         <small class="text-muted">Last Year</small>
       </div>
       <div id="salesLastYear"></div>
@@ -319,7 +322,7 @@
   <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Sessions</h5>
+        <h5 class="card-title mb-0">Donadores</h5>
         <small class="text-muted">Last Month</small>
       </div>
       <div class="card-body">
@@ -336,7 +339,7 @@
   <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Total Profit</h5>
+        <h5 class="card-title mb-0">Campañas activas</h5>
         <small class="text-muted">Last Month</small>
       </div>
       <div class="card-body">
@@ -353,7 +356,7 @@
     <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Total Profit</h5>
+        <h5 class="card-title mb-0">Unidades médicas</h5>
         <small class="text-muted">Last Month</small>
       </div>
       <div class="card-body">
@@ -639,6 +642,35 @@
 
   <!-- Page JS -->
   <script src="../../assets/js/dashboards-crm.js"></script>
+
+  <!--http://127.0.0.1:8000/api/users/-->
+  <script>
+    // Espera a que el DOM esté listo
+    $(document).ready(function () {
+      // Realiza una solicitud AJAX al backend para obtener el número de usuarios
+      $.ajax({
+        url: 'http://127.0.0.1:8000/api/users/', // Reemplaza con la ruta correcta
+        method: 'GET', // O el método HTTP correcto
+        dataType: 'json',
+        success: function (response) {
+          // Verifica si la respuesta del backend es exitosa
+          if (response.success) {
+            // Actualiza el contenido del div "Usuarios" con el número obtenido
+            console.log('Sí se pudo');
+            $('#usuariosDiv').text(response.numeroUsuarios);
+          } else {
+            // Maneja el caso en el que la respuesta no fue exitosa
+            console.error('Error al obtener el número de usuarios.');
+          }
+        },
+        error: function () {
+          // Maneja el caso de un error en la solicitud AJAX
+          console.error('Error en la solicitud AJAX.');
+        }
+      });
+    });
+  </script>
+  
   
 </body>
 
