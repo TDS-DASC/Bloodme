@@ -133,7 +133,7 @@ function renderizarTablaUsuarios(usuarios) {
 
         cellAcciones.innerHTML = `
         <button type="button" class="btn btn-primary" onclick="editarUsuario(${usuario.id})">Editar</button>
-            <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+        <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
     });
 }
 
@@ -198,8 +198,29 @@ document.getElementById('btnEdit').addEventListener('click', function() {
 });
 
 
+function eliminarUsuario(usuarioId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Usuario eliminado exitosamente:', data);
 
-
+            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
+            cargarYMostrarUsuarios();
+        })
+        .catch(error => {
+            console.error('Error al eliminar el usuario:', error);
+            alert('Error al eliminar el usuario.');
+        });
+    }
+}
 
 
 </script>
