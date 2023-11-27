@@ -10291,6 +10291,7 @@ Did you mean this?
 #47 C:\\xampp\\htdocs\\blood-app\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\xampp\\\\htdocs...')
 #48 {main}
 "} 
+<<<<<<< HEAD
 [2023-11-27 21:27:08] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`sangre`.`donations`, CONSTRAINT `donations_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)) (Connection: mysql, SQL: delete from `users` where `id` = 4) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 23000): SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`sangre`.`donations`, CONSTRAINT `donations_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)) (Connection: mysql, SQL: delete from `users` where `id` = 4) at D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:822)
 [stacktrace]
 #0 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(776): Illuminate\\Database\\Connection->runQueryCallback('delete from `us...', Array, Object(Closure))
@@ -10699,3 +10700,5 @@ Did you mean this?
 #47 D:\\Archivos de programa\\XAMPP\\htdocs\\laravel\\Bloodme2\\Bloodme\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('D:\\\\Archivos de ...')
 #48 {main}
 "} 
+=======
+>>>>>>> e7490e4306e7ba63d9278aee2df01e54a467f77e
