@@ -132,8 +132,8 @@ function renderizarTablaUsuarios(usuarios) {
         cellCURP.innerText = usuario.curp;
 
         cellAcciones.innerHTML = `
-        <button type="button" class="btn btn-primary" onclick="editarUsuario(${usuario.id})">Editar</button>
-        <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+        <button type="button" class="btn btn-primary" onclick="obtenerDetallesUsuario(${usuario.id})">Editar</button>
+            <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
     });
 }
 
@@ -163,20 +163,18 @@ function obtenerDetallesUsuario(userId) {
             // Almacena el ID del usuario seleccionado globalmente
             usuarioSeleccionadoId = usuarioId;
 
-            // Espera a que la página se cargue completamente antes de acceder a los elementos del DOM
-            document.addEventListener("DOMContentLoaded", function() {
-                document.getElementById('edit-Nombres').value = usuarioNombre;
-                document.getElementById('edit-Apellidos').value = usuarioApellido;
-                document.getElementById('edit-correoElectronico').value = usuarioEmail;
-                document.getElementById('edit-tipoSangre').value = data.user.blood_type || '';
-                document.getElementById('edit-curp').value = data.user.curp || '';
-                document.getElementById('edit-html5-date-input').value = data.user.birthdate || '';
-                document.getElementById('edit-genero').value = data.user.gender || '';
+            // Rellenar campos del formulario de edición
+            document.getElementById('edit-Nombres').value = usuarioNombre;
+            document.getElementById('edit-Apellidos').value = usuarioApellido;
+            document.getElementById('edit-correoElectronico').value = usuarioEmail;
+            document.getElementById('edit-tipoSangre').value = data.user.blood_type || '';
+            document.getElementById('edit-curp').value = data.user.curp || '';
+            document.getElementById('edit-html5-date-input').value = data.user.birthdate || '';
+            document.getElementById('edit-genero').value = data.user.gender || '';
 
-                // Mostrar el modal de edición
-                var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-                offcanvasEditUser.show();
-            });
+            // Mostrar el modal de edición
+            var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
+            offcanvasEditUser.show();
         } else {
             throw new Error('Formato de respuesta inesperado. Datos incompletos del usuario.');
         }
@@ -194,33 +192,8 @@ function editarUsuario(userId) {
 
 // Asigna el evento de clic al botón de editar para abrir el modal de edición
 document.getElementById('btnEdit').addEventListener('click', function() {
-    editarUsuario(usuarioSeleccionadoId);
+    verificarCamposEdit();
 });
-
-
-function eliminarUsuario(usuarioId) {
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
-            method: 'DELETE'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Usuario eliminado exitosamente:', data);
-
-            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
-            cargarYMostrarUsuarios();
-        })
-        .catch(error => {
-            console.error('Error al eliminar el usuario:', error);
-            alert('Error al eliminar el usuario.');
-        });
-    }
-}
 
 
 </script>
@@ -518,6 +491,53 @@ function eliminarUsuario(usuarioId) {
         }
     }
 
+    function validarCorreoElectronicoEdit() {
+      var inputCorreo = document.getElementById('add-correoElectronico');
+        var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
+
+        // Expresión regular para validar un formato de correo electrónico básico
+        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!regexCorreo.test(inputCorreo.value)) {
+            mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
+            inputCorreo.classList.add('is-invalid');
+        } else {
+            mensajeErrorCorreo.textContent = '';
+            inputCorreo.classList.remove('is-invalid');
+        }
+}
+
+function validarContrasenaEdit() {
+  var contrasenaInput = document.getElementById('add-contrasena');
+        var mensajeErrorContrasena = document.getElementById('mensajeErrorContrasena');
+
+        // Verificar la longitud de la contraseña
+        if (contrasenaInput.value.length < 6 || contrasenaInput.value.length > 15) {
+            mensajeErrorContrasena.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
+            contrasenaInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorContrasena.textContent = ''; // Limpiar el mensaje de error si la longitud es correcta
+            contrasenaInput.classList.remove('is-invalid');
+        }
+}
+
+function validarCurpEdit() {
+  var curpInput = document.getElementById('add-curp');
+        var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
+
+        // Verificar la longitud del CURP
+        if (curpInput.value.length !== 18) {
+            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres.';
+            curpInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud es correcta
+            curpInput.classList.remove('is-invalid');
+        }
+}
+
+function validarFechaNacimientoEdit() {
+    // Lógica de validación para la fecha de nacimiento en modo edición
+}
 
     function verificarCampos() {
         // Obtener el formulario
@@ -604,18 +624,18 @@ function eliminarUsuario(usuarioId) {
             }, 300);
         })
         .catch(error => {
-            // Manejar errores en la solicitud
-            console.error('Error en la solicitud:', error);
-            alert('Error al agregar el usuario: ');
+    // Manejar errores en la solicitud
+    console.error('Error en la solicitud:', error);
+    alert('Error al agregar el usuario.');
 
-            // Verificar si la respuesta es un JSON
-            if (error instanceof SyntaxError && error.message.includes('Unexpected token')) {
-                // Intenta obtener más información sobre la respuesta
-                response.text().then(text => {
-                    console.error('Contenido de la respuesta:', text);
-                });
-            }
+    // Verificar si hay una respuesta del servidor
+    if (error && error.response && error.response.text) {
+        // Intenta obtener más información sobre la respuesta
+        error.response.text().then(text => {
+            console.error('Contenido de la respuesta:', text);
         });
+    }
+});
 
         // Cerrar el modal 
         var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
@@ -683,7 +703,7 @@ function eliminarUsuario(usuarioId) {
 
 
 
-<!-- ---------------------------------------------------------Modal Editar Usuarios---------------------------------------------------------- -->
+<!-- Modal Editar Usuarios -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
@@ -695,34 +715,33 @@ function eliminarUsuario(usuarioId) {
 
             <div class="mb-3">
                 <label class="form-label" for="edit-Nombres">Nombres</label>
-                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
-                <div id="mensajeErrorLetrasNombres" style="color: red;"></div>
+                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" />
+                <div id="mensajeErrorLetrasNombresEdit" style="color: red;"></div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="edit-Apellidos">Apellidos</label>
-                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)" />
-                <div id="mensajeErrorLetrasApellidos" style="color: red;"></div>
+                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo"  />
+                <div id="mensajeErrorLetrasApellidosEdit" style="color: red;"></div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
-                <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronico()" />
-                <div id="mensajeErrorCorreo" style="color: red;"></div>
+                <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com"  />
+                <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="edit-contrasena">Contraseña</label>
-                <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
-                <div id="mensajeErrorContrasena" style="color: red;"></div>
+                <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña"  />
+                <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
                 <div class="col-md-10">
-                    <!-- Agrega el atributo oninput y el script de JavaScript -->
-                    <input class="form-control" type="date" value="" id="edit-html5-date-input" oninput="validarFechaNacimiento()" min='1900-01-01' max='2023-12-31' />
-                    <div id="mensajeErrorFecha" style="color: red;"></div>
+                    <input class="form-control" type="date" value="" id="edit-html5-date-input" oninput="validarFechaNacimientoEdit()" min='1900-01-01' max='2023-12-31' />
+                    <div id="mensajeErrorFechaEdit" style="color: red;"></div>
                 </div>
             </div>
 
@@ -737,8 +756,8 @@ function eliminarUsuario(usuarioId) {
 
             <div class="mb-3">
                 <label class="form-label" for="edit-curp">CURP</label>
-                <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onkeypress="return validarSoloLetras(event, this)" onblur="validarCurp()" />
-                <div id="mensajeErrorCurp" style="color: red;"></div>
+                <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP"  />
+                <div id="mensajeErrorCurpEdit" style="color: red;"></div>
             </div>
 
             <div class="mb-3">
@@ -765,7 +784,7 @@ function eliminarUsuario(usuarioId) {
                 </select>
             </div>
 
-            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdicion()">Guardar Cambios</button>
+            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit">Guardar Cambios</button>
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
         </form>
     </div>
