@@ -508,19 +508,19 @@ document.getElementById('btnEdit').addEventListener('click', function() {
         }
     }
 
-function validarContrasenaEdit() {
-  var contrasenaInput = document.getElementById('add-contrasena');
-        var mensajeErrorContrasena = document.getElementById('mensajeErrorContrasena');
+    function validarContrasenaEdit() {
+        var contrasenaInputEdit = document.getElementById('edit-contrasena');
+        var mensajeErrorContrasenaEdit = document.getElementById('mensajeErrorContrasenaEdit');
 
         // Verificar la longitud de la contraseña
-        if (contrasenaInput.value.length < 6 || contrasenaInput.value.length > 15) {
-            mensajeErrorContrasena.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
-            contrasenaInput.classList.add('is-invalid');
+        if (contrasenaInputEdit.value.length < 6 || contrasenaInputEdit.value.length > 15) {
+            mensajeErrorContrasenaEdit.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
+            contrasenaInputEdit.classList.add('is-invalid');
         } else {
-            mensajeErrorContrasena.textContent = ''; // Limpiar el mensaje de error si la longitud es correcta
-            contrasenaInput.classList.remove('is-invalid');
+            mensajeErrorContrasenaEdit.textContent = ''; // Limpiar el mensaje de error si la longitud es correcta
+            contrasenaInputEdit.classList.remove('is-invalid');
         }
-}
+    }
 
 function validarCurpEdit() {
   var curpInput = document.getElementById('add-curp');
@@ -823,9 +823,9 @@ function verificarCamposEdit() {
           </div>
           
             <div class="mb-3">
-                <label class="form-label" for="edit-contrasena">Contraseña</label>
-                <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña"  />
-                <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
+              <label class="form-label" for="edit-contrasena">Contraseña</label>
+              <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
+              <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
             </div>
 
             <div class="mb-3">
@@ -912,10 +912,10 @@ function verificarCamposEdit() {
       </div>
 
       <div class="mb-3">
-    <label class="form-label" for="add-contrasena">Contraseña</label>
-    <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
-    <div id="mensajeErrorContrasena" style="color: red;"></div>
-</div>
+      <label class="form-label" for="add-contrasena">Contraseña</label>
+      <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
+      <div id="mensajeErrorContrasena" style="color: red;"></div>
+     </div>
 
         <div class="mb-3">
     <label class="form-label" for="add-fechaNacimiento">Fecha de Nacimiento</label>
