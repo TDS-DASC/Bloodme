@@ -16,7 +16,7 @@ class AuthController extends Controller
 {
     use HasApiTokens;
 
-    public function register(Request $request){
+       public function register(Request $request){
         $validateData = $request->validate([
             'name' => 'required',
             'last_name' => 'required',
@@ -29,7 +29,6 @@ class AuthController extends Controller
             'user_type' => 'sometimes',
             'donator' => 'sometimes'
         ]);
-
 
 
         $user = User::create($validateData);
