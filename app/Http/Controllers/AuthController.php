@@ -25,7 +25,9 @@ class AuthController extends Controller
             'blood_type' => 'required',
             'curp' => 'required',
             'birthdate' => 'required',
-            'gender' => 'required'
+            'gender' => 'required',
+            'user_type' => 'sometimes',
+            'donator' => 'sometimes'
         ]);
 
 
