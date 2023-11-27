@@ -522,22 +522,46 @@ document.getElementById('btnEdit').addEventListener('click', function() {
         }
     }
 
-function validarCurpEdit() {
-  var curpInput = document.getElementById('add-curp');
-        var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
+    function validarCurpEdit() {
+        var curpInputEdit = document.getElementById('edit-curp');
+        var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
 
         // Verificar la longitud del CURP
-        if (curpInput.value.length !== 18) {
-            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres.';
-            curpInput.classList.add('is-invalid');
+        if (curpInputEdit.value.length !== 18) {
+            mensajeErrorCurpEdit.innerText = 'El CURP debe tener exactamente 18 caracteres.';
+            curpInputEdit.classList.add('is-invalid');
         } else {
-            mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud es correcta
-            curpInput.classList.remove('is-invalid');
+            mensajeErrorCurpEdit.innerText = ''; // Limpiar el mensaje de error si la longitud es correcta
+            curpInputEdit.classList.remove('is-invalid');
         }
-}
+    }
 
 function validarFechaNacimientoEdit() {
     // Lógica de validación para la fecha de nacimiento en modo edición
+    function validarFechaNacimientoEdit() {
+        var fechaInputEdit = document.getElementById('edit-html5-date-input');
+        var mensajeErrorFechaEdit = document.getElementById('mensajeErrorFechaEdit');
+
+        // Verifica si hay más de 4 dígitos en el año y corrige si es necesario
+        var fechaArrayEdit = fechaInputEdit.value.split('-');
+        if (fechaArrayEdit.length === 3 && fechaArrayEdit[0].length > 4) {
+            fechaArrayEdit[0] = fechaArrayEdit[0].substring(0, 4);
+            fechaInputEdit.value = fechaArrayEdit.join('-');
+        }
+
+        // Verifica si la fecha está dentro del rango deseado
+        var fechaSeleccionadaEdit = new Date(fechaInputEdit.value);
+        var fechaMinimaEdit = new Date('1900-01-01');
+        var fechaMaximaEdit = new Date('2023-12-31');
+
+        if (fechaSeleccionadaEdit < fechaMinimaEdit || fechaSeleccionadaEdit > fechaMaximaEdit) {
+            mensajeErrorFechaEdit.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
+            fechaInputEdit.classList.add('is-invalid');
+        } else {
+            mensajeErrorFechaEdit.innerText = '';
+            fechaInputEdit.classList.remove('is-invalid');
+        }
+    }
 }
 
 function verificarCamposEdit() {
@@ -829,11 +853,11 @@ function verificarCamposEdit() {
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
-                <div class="col-md-10">
-                    <input class="form-control" type="date" value="" id="edit-html5-date-input" oninput="validarFechaNacimientoEdit()" min='1900-01-01' max='2023-12-31' />
-                    <div id="mensajeErrorFechaEdit" style="color: red;"></div>
-                </div>
+              <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
+              <div class="col-md-10">
+                  <input class="form-control" type="date" value="" id="edit-html5-date-input" oninput="validarFechaNacimientoEdit()" min='1900-01-01' max='2023-12-31' />
+                  <div id="mensajeErrorFechaEdit" style="color: red;"></div>
+              </div>
             </div>
 
             <div class="mb-3">
@@ -846,10 +870,10 @@ function verificarCamposEdit() {
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="edit-curp">CURP</label>
-                <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP"  />
-                <div id="mensajeErrorCurpEdit" style="color: red;"></div>
-            </div>
+              <label class="form-label" for="edit-curp">CURP</label>
+              <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP"  onblur="validarCurpEdit()" />
+              <div id="mensajeErrorCurpEdit" style="color: red;"></div>
+          </div>
 
             <div class="mb-3">
                 <label class="form-label" for="edit-tipoSangre">Tipo de Sangre</label>
@@ -938,9 +962,8 @@ function verificarCamposEdit() {
         
           <div class="mb-3">
               <label class="form-label" for="add-curp">CURP</label>
-              <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onkeypress="return validarSoloLetras(event, this)"  onblur="validarCurp()"/>
-              <div id="mensajeErrorCurp" style="color: red;"></div>
-              
+              <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurp()"/>
+              <div id="mensajeErrorCurp" style="color: red;"></div>              
           </div>
 
 
