@@ -192,9 +192,9 @@ function editarUsuario(userId) {
 
 // Asigna el evento de clic al botón de editar para abrir el modal de edición
 document.getElementById('btnEdit').addEventListener('click', function() {
-  console.log("Soy el botón editar");
-    verificarCamposEdit();
-});
+        console.log("Soy el botón editar");
+        verificarCamposEdit();
+    });
 
 
 </script>
@@ -565,93 +565,93 @@ function validarFechaNacimientoEdit() {
 }
 
 function verificarCamposEdit() {
-    // Obtener el formulario de edición
-    var formularioEdit = document.getElementById('editUserForm');
+        // Obtener el formulario
+        var formulario = document.getElementById('editUserForm');
 
-    // Verificar la validez del formulario
-    if (!formularioEdit.checkValidity()) {
-        // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
-        formularioEdit.reportValidity();
-        return;
-    }
-
-    // Obtener valores de los campos editables
-    var editNombres = document.getElementById('edit-Nombres').value;
-    var editApellidos = document.getElementById('edit-Apellidos').value;
-    var editCorreoElectronico = document.getElementById('edit-correoElectronico').value;
-    var editTipoSangre = document.getElementById('edit-tipoSangre').value;
-    var editCurp = document.getElementById('edit-curp').value;
-    var editFechaNacimiento = document.getElementById('edit-html5-date-input').value;
-    var editGenero = document.getElementById('edit-genero').value;
-
-    console.log('Datos de edición válidos:', {
-        Nombres: editNombres,
-        Apellidos: editApellidos,
-        CorreoElectronico: editCorreoElectronico,
-        TipoSangre: editTipoSangre,
-        CURP: editCurp,
-        FechaNacimiento: editFechaNacimiento,
-        Genero: editGenero
-    });
-
-    // Crear objeto de datos para enviar al servidor
-    var editedUserData = {
-        name: editNombres,
-        last_name: editApellidos,
-        email: editCorreoElectronico,
-        blood_type: editTipoSangre,
-        curp: editCurp,
-        birthdate: editFechaNacimiento,
-        gender: editGenero
-    };
-
-    // Realizar la solicitud PUT a la API para editar el usuario
-    fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(editedUserData)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
+        // Verificar la validez del formulario
+        if (!formulario.checkValidity()) {
+            // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
+            formulario.reportValidity();
+            return;
         }
-        return response.json(); // Intenta parsear la respuesta como JSON
-    })
-    .then(data => {
-        // La respuesta exitosa del servidor
-        console.log('Respuesta del servidor:', data);
 
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        // Obtener valores de los campos
+        var nombres = document.getElementById('edit-Nombres').value;
+        var apellidos = document.getElementById('edit-Apellidos').value;
+        var correoElectronico = document.getElementById('edit-correoElectronico').value;
+        var contrasena = document.getElementById('edit-contrasena').value;
+        var tipoSangre = document.getElementById('edit-tipoSangre').value;
+        var curp = document.getElementById('edit-curp').value;
+        var fechaNacimiento = document.getElementById('edit-html5-date-input').value;
+        var genero = document.getElementById('edit-genero').value;
+
+        console.log('Datos válidos:', {
+            Nombres: nombres,
+            Apellidos: apellidos,
+            CorreoElectronico: correoElectronico,
+            Contrasena: contrasena,
+            TipoSangre: tipoSangre,
+            CURP: curp,
+            FechaNacimiento: fechaNacimiento,
+            Genero: genero
+        });
+
+        // Crear objeto de datos para enviar al servidor
+        var userData = {
+            name: nombres,
+            last_name: apellidos,
+            email: correoElectronico,
+            password: contrasena,
+            blood_type: tipoSangre,
+            curp: curp,
+            birthdate: fechaNacimiento,
+            gender: genero
+        };
+
+        // Realizar la solicitud POST a la API
+        fetch('http://127.0.0.1:8000/api/edit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
+            }
+            return response.json(); // Intenta parsear la respuesta como JSON
+        })
+        .then(data => {
+            // La respuesta exitosa del servidor
+            console.log('Respuesta del servidor:', data);
+
+            var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
+            offcanvasEditUser.hide();
+
+            // Mostrar alerta de edición exitosa después de un breve retraso para dar tiempo al modal para ocultarse completamente
+            setTimeout(function() {
+                alert('Usuario editado exitosamente.');
+            }, 300);
+        })
+        .catch(error => {
+            // Manejar errores en la solicitud
+            console.error('Error en la solicitud:', error);
+            alert('Error al editar el usuario.');
+
+            // Verificar si hay una respuesta del servidor
+            if (error && error.response && error.response.text) {
+                // Intenta obtener más información sobre la respuesta
+                error.response.text().then(text => {
+                    console.error('Contenido de la respuesta:', text);
+                });
+            }
+        });
+
+        // Cerrar el modal
+        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
         offcanvasEditUser.hide();
-
-        // Mostrar alerta de edición exitosa después de un breve retraso para dar tiempo al modal para ocultarse completamente
-        setTimeout(function() {
-            alert('Usuario editado exitosamente.');
-
-            // Restablecer valores de los campos a blanco si es necesario
-            // (puedes adaptar esto según tu lógica específica)
-        }, 300);
-    })
-    .catch(error => {
-        // Manejar errores en la solicitud de edición
-        console.error('Error en la solicitud de edición:', error);
-        alert('Error al editar el usuario.');
-
-        // Verificar si hay una respuesta del servidor
-        if (error && error.response && error.response.text) {
-            // Intenta obtener más información sobre la respuesta
-            error.response.text().then(text => {
-                console.error('Contenido de la respuesta:', text);
-            });
-        }
-    });
-
-    // Cerrar el modal de edición
-    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
-    offcanvasEditUser.hide();
-}
+    }
 
     function verificarCampos() {
         // Obtener el formulario
