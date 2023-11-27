@@ -306,13 +306,13 @@
     <div class="card">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Usuarios</h5>
-        <small class="text-muted">Last Year</small>
+        <small class="text-muted">Número de usuarios</small>
       </div>
       <div id="salesLastYear"></div>
       <div class="card-body pt-0">
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0">175k</h4>
-          <small class="text-danger">-16.2%</small>
+          <h4 id="usuariosDiv" class="mb-0"></h4>
+          <small class="text-danger"></small>
         </div>
       </div>
     </div>
@@ -323,12 +323,12 @@
     <div class="card">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Donadores</h5>
-        <small class="text-muted">Last Month</small>
+        <small class="text-muted">Número de donadores</small>
       </div>
       <div class="card-body">
         <div id="sessionsLastMonth"></div>
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0">45.1k</h4>
+          <h4 id="donadoresCount"></h4>
           <small class="text-success">+12.6%</small>
         </div>
       </div>
@@ -340,12 +340,12 @@
     <div class="card">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Campañas activas</h5>
-        <small class="text-muted">Last Month</small>
+        <small class="text-muted">Número de campañas activas</small>
       </div>
       <div class="card-body">
         <div id="sessionsLastMonth"></div>
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0">45.1k</h4>
+          <h4 class="mb-0" id="campagnasActivas"></h4>
           <small class="text-success">+12.6%</small>
         </div>
       </div>
@@ -362,7 +362,7 @@
       <div class="card-body">
         <div id="sessionsLastMonth"></div>
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0">45.1k</h4>
+          <h4 class="mb-0" id="unidadesMedicas"></h4>
           <small class="text-success">+12.6%</small>
         </div>
       </div>
@@ -644,32 +644,92 @@
   <script src="../../assets/js/dashboards-crm.js"></script>
 
   <!--http://127.0.0.1:8000/api/users/-->
-  <script>
-    // Espera a que el DOM esté listo
-    $(document).ready(function () {
-      // Realiza una solicitud AJAX al backend para obtener el número de usuarios
-      $.ajax({
-        url: 'http://127.0.0.1:8000/api/users/', // Reemplaza con la ruta correcta
-        method: 'GET', // O el método HTTP correcto
-        dataType: 'json',
-        success: function (response) {
-          // Verifica si la respuesta del backend es exitosa
-          if (response.success) {
-            // Actualiza el contenido del div "Usuarios" con el número obtenido
-            console.log('Sí se pudo');
-            $('#usuariosDiv').text(response.numeroUsuarios);
-          } else {
-            // Maneja el caso en el que la respuesta no fue exitosa
-            console.error('Error al obtener el número de usuarios.');
-          }
-        },
-        error: function () {
-          // Maneja el caso de un error en la solicitud AJAX
-          console.error('Error en la solicitud AJAX.');
+  <!-- ... tu código HTML anterior ... -->
+
+<script>
+  // Espera a que el DOM esté listo
+  $(document).ready(function () {
+    // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
+    $.ajax({
+      url: 'http://127.0.0.1:8000/api/users/', // Reemplaza con la ruta correcta
+      method: 'GET', // O el método HTTP correcto
+      dataType: 'json',
+      success: function (response) {
+        // Verifica si la respuesta del backend es exitosa
+        if (response.users) {
+          // Actualiza el contenido del div "usuariosDiv" con la longitud del array de usuarios
+          $('#usuariosDiv').text(response.users.length);
+
+          // Filtra los donadores (donator = 1) y cuenta su número
+          const donadoresCount = response.users.filter(user => user.donator === 1).length;
+          
+          // Actualiza el contenido del div "donadoresCount" con el número de donadores
+          $('#donadoresCount').text(donadoresCount);
+        } else {
+          // Maneja el caso en el que la respuesta no fue exitosa
+          console.error('Error al obtener la lista de usuarios.');
         }
-      });
+      },
+      error: function () {
+        // Maneja el caso de un error en la solicitud AJAX
+        console.error('Error en la solicitud AJAX.');
+      }
     });
-  </script>
+  });
+
+  // Espera a que el DOM esté listo
+  $(document).ready(function () {
+  // Realiza una solicitud AJAX al backend para obtener la lista de campañas activas
+  $.ajax({
+    url: 'http://127.0.0.1:8000/api/campaigns', // Reemplaza con la ruta correcta
+    method: 'GET', // O el método HTTP correcto
+    dataType: 'json',
+    success: function (response) {
+      // Verifica si la respuesta del backend es exitosa
+      if (response.Campaigns) { // Cambiado a response.Campaigns con mayúscula inicial
+        // Actualiza el contenido del div "campagnasActivas" con la longitud del array de campañas activas
+        $('#campagnasActivas').text(response.Campaigns.length);
+      } else {
+        // Maneja el caso en el que la respuesta no fue exitosa
+        console.error('Error al obtener la lista de campañas activas.');
+      }
+    },
+    error: function () {
+      // Maneja el caso de un error en la solicitud AJAX
+      console.error('Error en la solicitud AJAX.');
+    }
+  });
+});
+
+// Espera a que el DOM esté listo
+$(document).ready(function () {
+    // Realiza una solicitud AJAX al backend para obtener la lista de unidades médicas
+    $.ajax({
+      url: 'http://127.0.0.1:8000/api/medical_units', // Reemplaza con la ruta correcta
+      method: 'GET', // O el método HTTP correcto
+      dataType: 'json',
+      success: function (response) {
+        console.log(response);
+        // Verifica si la respuesta del backend es exitosa
+        if (response.medicalUnits) { // Cambiado a response.medicalUnits con mayúscula inicial
+          // Actualiza el contenido del div "unidadesMedicas" con la longitud del array de unidades médicas
+          $('#unidadesMedicas').text(response.medicalUnits.length);
+        } else {
+          // Maneja el caso en el que la respuesta no fue exitosa
+          console.error('Error al obtener la lista de unidades médicas.');
+        }
+      },
+      error: function () {
+        // Maneja el caso de un error en la solicitud AJAX
+        console.error('Error en la solicitud AJAX.');
+      }
+    });
+  });
+
+</script>
+
+<!-- ... tu código HTML posterior ... -->
+
   
   
 </body>
