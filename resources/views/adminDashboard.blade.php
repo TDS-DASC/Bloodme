@@ -581,8 +581,8 @@
       function drawUserChart() {
         var data = google.visualization.arrayToDataTable([
           ['Task', 'Hours per Day'],
-          ['Users', usersCount],
-          ['Donors', donadoresCount],
+          ['Usuarios', usersCount],
+          ['Donadores', donadoresCount],
         ]);
     
         var options = {
@@ -601,102 +601,102 @@
     </script>
     
     <!-- Gráfica de tipos de sangre -->
-    <script type="text/javascript">
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-    
-      function drawChart(data) {
-        var defaultData = [
-          ["Element", "Density", { role: "style" }],
-          ["Copper", 8.94, "#b87333"],
-          ["Silver", 10.49, "silver"],
-          ["Gold", 19.30, "gold"],
-          ["Platinum", 21.45, "color: #e5e4e2"]
-        ];
-    
-        data = data || defaultData;
-    
-        var chartData = google.visualization.arrayToDataTable(data);
-    
-        var view = new google.visualization.DataView(chartData);
-        view.setColumns([0, 1,
-                         { calc: "stringify",
-                           sourceColumn: 1,
-                           type: "string",
-                           role: "annotation" },
-                         2]);
-    
-        var options = {
-          title: "Density of Precious Metals, in g/cm^3",
-          width: 600,
-          height: 400,
-          bar: {groupWidth: "95%"},
-          legend: { position: "none" },
-        };
-    
-        var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
-        chart.draw(view, options);
+<script type="text/javascript">
+  google.charts.load("current", {packages:["corechart"]});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart(data) {
+    var defaultData = [
+      ["Element", "Density", { role: "style" }],
+      ["Copper", 8.94, "#b87333"],
+      ["Silver", 10.49, "silver"],
+      ["Gold", 19.30, "gold"],
+      ["Platinum", 21.45, "color: #e5e4e2"]
+    ];
+
+    data = data || defaultData;
+
+    var chartData = google.visualization.arrayToDataTable(data);
+
+    var view = new google.visualization.DataView(chartData);
+    view.setColumns([0, 1,
+                     { calc: "stringify",
+                       sourceColumn: 1,
+                       type: "string",
+                       role: "annotation" },
+                     2]);
+
+    var options = {
+      title: "Tipos de Sangre",
+      width: 600,
+      height: 400,
+      bar: {groupWidth: "95%"},
+      legend: { position: "none" },
+    };
+
+    var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+    chart.draw(view, options);
+  }
+
+  $(document).ready(function () {
+    // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
+    $.ajax({
+      url: 'http://127.0.0.1:8000/api/users/',
+      method: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        if (response.users) {
+          const tiposSangre = response.users.map(user => user.blood_type);
+          console.log('Tipos de sangre:', tiposSangre);
+
+          // Cuenta la frecuencia de cada tipo de sangre
+          const frecuenciaTiposSangre = contarFrecuencia(tiposSangre);
+
+          // Convierte los datos al formato necesario para la gráfica
+          const data = [["Tipo de Sangre", "Frecuencia", { role: "style" }]];
+          Object.entries(frecuenciaTiposSangre).forEach(([tipo, frecuencia]) => {
+            data.push([tipo, frecuencia, getColorForBloodType(tipo)]);
+          });
+
+          // Llama a drawChart con los datos específicos
+          drawChart(data);
+        } else {
+          console.error('Error al obtener la lista de usuarios.');
+        }
+      },
+      error: function () {
+        console.error('Error en la solicitud AJAX.');
       }
-    
-      $(document).ready(function () {
-        // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
-        $.ajax({
-          url: 'http://127.0.0.1:8000/api/users/',
-          method: 'GET',
-          dataType: 'json',
-          success: function (response) {
-            if (response.users) {
-              const tiposSangre = response.users.map(user => user.blood_type);
-              console.log('Tipos de sangre:', tiposSangre);
-    
-              // Cuenta la frecuencia de cada tipo de sangre
-              const frecuenciaTiposSangre = contarFrecuencia(tiposSangre);
-    
-              // Convierte los datos al formato necesario para la gráfica
-              const data = [["Tipo de Sangre", "Frecuencia", { role: "style" }]];
-              Object.entries(frecuenciaTiposSangre).forEach(([tipo, frecuencia]) => {
-                data.push([tipo, frecuencia, getColorForBloodType(tipo)]);
-              });
-    
-              // Llama a drawChart con los datos específicos
-              drawChart(data);
-            } else {
-              console.error('Error al obtener la lista de usuarios.');
-            }
-          },
-          error: function () {
-            console.error('Error en la solicitud AJAX.');
-          }
-        });
-      });
-    
-      // Función para contar la frecuencia de elementos en un array
-      function contarFrecuencia(arr) {
-        return arr.reduce((acc, val) => {
-          acc[val] = (acc[val] || 0) + 1;
-          return acc;
-        }, {});
-      }
-    
-      // Función para obtener un color para cada tipo de sangre
-      function getColorForBloodType(tipo) {
-        // Implementa lógica para asignar colores según el tipo de sangre
-        // Puedes utilizar un objeto de mapeo o cualquier lógica que prefieras
-        // Por ahora, asigno colores de forma estática para ejemplificar
-        const colores = {
-          "A+": "#ff0000",
-          "B+": "#00ff00",
-          "AB+": "#0000ff",
-          "O+": "#ffff00",
-          // ... agrega más tipos de sangre si es necesario
-        };
-    
-        return colores[tipo] || "#000000"; // Negro por defecto si el tipo de sangre no tiene color asignado
-      }
-    </script>
-    <div id="piechart_3d" style="width: 48%; height: 500px;"></div>
-    <div id="barchart_values" style="width: 900px; height: 300px;"></div>
-    
+    });
+  });
+
+  // Función para contar la frecuencia de elementos en un array
+  function contarFrecuencia(arr) {
+    return arr.reduce((acc, val) => {
+      acc[val] = (acc[val] || 0) + 1;
+      return acc;
+    }, {});
+  }
+
+  // Función para obtener un color para cada tipo de sangre
+  function getColorForBloodType(tipo) {
+    const colores = {
+      "A+": "#FADBD8",
+      "A-": "#F5B7B1",
+      "B+": "#F1948A",
+      "B-": "#EC7063",
+      "AB+": "#E74C3C",
+      "AB-": "#CB4335",
+      "O+": "#B03A2E",
+      "O-": "#943126",
+      // ... agrega más tipos de sangre si es necesario
+    };
+
+    return colores[tipo] || "#F0CC90"; 
+  }
+</script>
+<div id="piechart_3d" style="width: 48%; height: 500px;"></div>
+<div id="barchart_values" style="width: 900px; height: 300px;"></div>
 
           
 
