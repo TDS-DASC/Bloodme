@@ -134,7 +134,7 @@ function renderizarTablaUsuarios(usuarios) {
 
         cellAcciones.innerHTML = `
         <button type="button" class="btn btn-primary" onclick="obtenerDetallesUsuario(${usuario.id})">Editar</button>
-            <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+        <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
     });
 }
 
@@ -198,6 +198,29 @@ document.getElementById('btnEdit').addEventListener('click', function() {
         verificarCamposEdit();
     });
 
+    function eliminarUsuario(usuarioId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Usuario eliminado exitosamente:', data);
+
+            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
+            cargarYMostrarUsuarios();
+        })
+        .catch(error => {
+            console.error('Error al eliminar el usuario:', error);
+            alert('Error al eliminar el usuario.');
+        });
+    }
+}
 
 </script>
     
@@ -439,7 +462,7 @@ document.getElementById('btnEdit').addEventListener('click', function() {
         var charCode = event.which || event.keyCode;
         var mensajeErrorId = 'mensajeErrorLetras' + campoInput.id.charAt(4);
 
-        // Permitir solo letras (sin espacios, números o caracteres especiales)
+        // Permitir solo letras (sin espacios, números o caracteres especiales)idacio
         if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
             mostrarErrorLetras(mensajeErrorId, 'Solo se permiten letras (sin espacios, números o caracteres especiales).');
             return false;
@@ -448,20 +471,22 @@ document.getElementById('btnEdit').addEventListener('click', function() {
         return true;
     }
 
-    
     function validarCurp() {
-        var curpInput = document.getElementById('add-curp');
-        var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
+    var curpInput = document.getElementById('add-curp');
+    var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
-        // Verificar la longitud del CURP
-        if (curpInput.value.length !== 18) {
-            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres.';
-            curpInput.classList.add('is-invalid');
-        } else {
-            mensajeErrorCurp.innerText = ''; 
-            curpInput.classList.remove('is-invalid');
-        }
+    // Expresión regular para permitir solo letras sin acentos y números
+    var regexCurp = /^[A-Za-z0-9]+$/;
+
+    // Verificar la longitud del CURP
+    if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
+        mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+        curpInput.classList.add('is-invalid');
+    } else {
+        mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+        curpInput.classList.remove('is-invalid');
     }
+  }
 
     function validarCorreoElectronico() {
         var inputCorreo = document.getElementById('add-correoElectronico');
@@ -632,18 +657,22 @@ function verificarCampos() {
     }
 
     function validarCurpEdit() {
-        var curpInputEdit = document.getElementById('edit-curp');
-        var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
+    var curpInputEdit = document.getElementById('edit-curp');
+    var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
 
-        // Verificar la longitud del CURP
-        if (curpInputEdit.value.length !== 18) {
-            mensajeErrorCurpEdit.innerText = 'El CURP debe tener exactamente 18 caracteres.';
-            curpInputEdit.classList.add('is-invalid');
-        } else {
-            mensajeErrorCurpEdit.innerText = ''; 
-            curpInputEdit.classList.remove('is-invalid');
-        }
+    curpInputEdit.value = curpInputEdit.value.toUpperCase();
+
+    // Expresión regular para permitir solo letras sin acentos y números
+    var regexCurp = /^[A-Z0-9]+$/;
+
+    if (curpInputEdit.value.length !== 18 || !regexCurp.test(curpInputEdit.value)) {
+        mensajeErrorCurpEdit.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+        curpInputEdit.classList.add('is-invalid');
+    } else {
+        mensajeErrorCurpEdit.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+        curpInputEdit.classList.remove('is-invalid');
     }
+}
 
 function validarFechaNacimientoEdit() {
     function validarFechaNacimientoEdit() {
@@ -703,17 +732,10 @@ function verificarCamposEdit() {
           blood_type: tipoSangre,
           curp: curp,
           birthdate: fechaNacimiento,
-<<<<<<< HEAD
           gender: genero,
           donator:donadorValue
         };
 
-=======
-          gender: genero
-        };
-
-          // Realizar la solicitud PUT a la API para editar el usuario
->>>>>>> dedb45dc0fc6017a56d99f374b133f97cfe794cc
           fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
             method: 'PUT',
             headers: {
@@ -724,55 +746,6 @@ function verificarCamposEdit() {
     .then(response => {
         if (!response.ok) {
             throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
-<<<<<<< HEAD
-=======
-        }
-        return response.json(); // Intenta parsear la respuesta como JSON
-    })
-    .then(data => {
-        // La respuesta exitosa del servidor
-        console.log('Respuesta del servidor:', data);
-
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-        offcanvasEditUser.hide();
-
-        // Mostrar alerta de edición exitosa después de un breve retraso para dar tiempo al modal para ocultarse completamente
-        setTimeout(function() {
-            alert('Usuario editado exitosamente.');
-
-            // Restablecer valores de los campos a blanco si es necesario
-            // (puedes adaptar esto según tu lógica específica)
-        }, 300);
-    })
-    .catch(error => {
-        // Manejar errores en la solicitud de edición
-        console.error('Error en la solicitud de edición:', error);
-        alert('Error al editar el usuario.');
-
-        // Verificar si hay una respuesta del servidor
-        if (error && error.response && error.response.text) {
-            // Intenta obtener más información sobre la respuesta
-            error.response.text().then(text => {
-                console.error('Contenido de la respuesta:', text);
-            });
-        }
-    });
-
-    // Cerrar el modal de edición
-    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
-    offcanvasEditUser.hide();
-}
-
-    function verificarCampos() {
-        // Obtener el formulario
-        var formulario = document.getElementById('addNewUserForm');
-
-        // Verificar la validez del formulario
-        if (!formulario.checkValidity()) {
-            // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
-            formulario.reportValidity();
-            return;
->>>>>>> dedb45dc0fc6017a56d99f374b133f97cfe794cc
         }
         return response.json(); 
     })

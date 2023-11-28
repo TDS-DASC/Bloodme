@@ -153,7 +153,7 @@
           </form>
 
           <p class="text-center">
-            <span>No tienes una cuenta?</span>
+            <span>¿No tienes una cuenta?</span>
             <a href="{{route('registrarRutas')}}">
               <span>Click aquí</span>
             </a>

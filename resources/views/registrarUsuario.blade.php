@@ -311,7 +311,7 @@
 
           <div class="mb-3">
             <label class="form-label" for="add-contrasena">Contraseña</label>
-            <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
+            <input type="password" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
             <div id="mensajeErrorContrasena" style="color: red;"></div>
         </div>
 
