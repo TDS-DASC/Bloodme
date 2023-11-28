@@ -1,0 +1,9 @@
+.boton-rojo {
+    background-color: #ef1f4b ;
+    border-color: #ef1f4b;
+    color: #fff;
+}
+::-webkit-input-placeholder {
+    color: #6c757d;  /* Color de texto del placeholder */
+    opacity: 1;      /* Opacidad del placeholder */
+ }
