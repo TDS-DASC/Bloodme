@@ -303,7 +303,6 @@
         <div id="sessionsLastMonth"></div>
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
           <h4 id="donadoresCount"></h4>
-          <small class="text-success">+12.6%</small>
         </div>
       </div>
     </div>
@@ -320,7 +319,6 @@
         <div id="sessionsLastMonth"></div>
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
           <h4 class="mb-0" id="campagnasActivas"></h4>
-          <small class="text-success">+12.6%</small>
         </div>
       </div>
     </div>
@@ -331,13 +329,12 @@
     <div class="card">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Unidades médicas</h5>
-        <small class="text-muted">Last Month</small>
+        <small class="text-muted">Número de unidades médicas</small>
       </div>
       <div class="card-body">
         <div id="sessionsLastMonth"></div>
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
           <h4 class="mb-0" id="unidadesMedicas"></h4>
-          <small class="text-success">+12.6%</small>
         </div>
       </div>
     </div>
