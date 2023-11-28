@@ -475,24 +475,18 @@ document.getElementById('btnEdit').addEventListener('click', function() {
     var curpInput = document.getElementById('add-curp');
     var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
-    // Utilizar evento input para validar en tiempo real
-    curpInput.addEventListener('input', function(event) {
-        // Convertir a mayúsculas
-        curpInput.value = curpInput.value.toUpperCase();
+    // Expresión regular para permitir solo letras sin acentos y números
+    var regexCurp = /^[A-Za-z0-9]+$/;
 
-        // Limpiar caracteres no permitidos (dejar solo letras y números)
-        curpInput.value = curpInput.value.replace(/[^A-Z0-9]/g, '');
-
-        // Verificar la longitud del CURP
-        if (curpInput.value.length !== 18) {
-            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres.';
-            curpInput.classList.add('is-invalid');
-        } else {
-            mensajeErrorCurp.innerText = '';
-            curpInput.classList.remove('is-invalid');
-        }
-    });
-}
+    // Verificar la longitud del CURP
+    if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
+        mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+        curpInput.classList.add('is-invalid');
+    } else {
+        mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+        curpInput.classList.remove('is-invalid');
+    }
+  }
 
     function validarCorreoElectronico() {
         var inputCorreo = document.getElementById('add-correoElectronico');
@@ -668,18 +662,15 @@ function verificarCampos() {
 
     curpInputEdit.value = curpInputEdit.value.toUpperCase();
 
-    if (curpInputEdit.value.length !== 18) {
-        mensajeErrorCurpEdit.innerText = 'El CURP no es valido.';
+    // Expresión regular para permitir solo letras sin acentos y números
+    var regexCurp = /^[A-Z0-9]+$/;
+
+    if (curpInputEdit.value.length !== 18 || !regexCurp.test(curpInputEdit.value)) {
+        mensajeErrorCurpEdit.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
         curpInputEdit.classList.add('is-invalid');
     } else {
-        var regex = /^[A-Z0-9]+$/;
-        if (!regex.test(curpInputEdit.value)) {
-            mensajeErrorCurpEdit.innerText = 'El CURP solo debe contener letras y números.';
-            curpInputEdit.classList.add('is-invalid');
-        } else {
-            mensajeErrorCurpEdit.innerText = '';
-            curpInputEdit.classList.remove('is-invalid');
-        }
+        mensajeErrorCurpEdit.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+        curpInputEdit.classList.remove('is-invalid');
     }
 }
 
