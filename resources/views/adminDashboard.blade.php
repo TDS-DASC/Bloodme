@@ -679,15 +679,15 @@
 $(document).ready(function () {
     // Realiza una solicitud AJAX al backend para obtener la lista de unidades médicas
     $.ajax({
-      url: 'http://127.0.0.1:8000/api/medical_units', // Reemplaza con la ruta correcta
+      url: 'http://127.0.0.1:8000/api/medunits', // Reemplaza con la ruta correcta
       method: 'GET', // O el método HTTP correcto
       dataType: 'json',
       success: function (response) {
         console.log(response);
         // Verifica si la respuesta del backend es exitosa
-        if (response.medicalUnits) { // Cambiado a response.medicalUnits con mayúscula inicial
+        if (response.MedicalUnits) { // Cambiado a response.medicalUnits con mayúscula inicial
           // Actualiza el contenido del div "unidadesMedicas" con la longitud del array de unidades médicas
-          $('#unidadesMedicas').text(response.medicalUnits.length);
+          $('#unidadesMedicas').text(response.MedicalUnits.length);
         } else {
           // Maneja el caso en el que la respuesta no fue exitosa
           console.error('Error al obtener la lista de unidades médicas.');
@@ -700,6 +700,7 @@ $(document).ready(function () {
     });
   });
 
+  
 </script>
 
 <!-- ... tu código HTML posterior ... -->
@@ -711,4 +712,5 @@ $(document).ready(function () {
 </html>
 
 <!-- beautify ignore:end -->
+
 
