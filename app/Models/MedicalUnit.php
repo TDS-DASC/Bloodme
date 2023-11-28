@@ -11,7 +11,9 @@ class MedicalUnit extends Model
 
     protected $fillable = [
         'name',
-        'urlGmaps'
+        'urlGmaps',
+        "multiple_donation",
+        "donations_limit_day"
     ];
 
     public function campaigns()

@@ -76,6 +76,153 @@
 
 <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 <script src="../../assets/js/config.js"></script>
+
+
+<script>
+        window.onload = function () {
+    cargarYMostrarUsuarios();
+};
+
+function cargarYMostrarUsuarios() {
+    fetch('http://127.0.0.1:8000/api/users/')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener la lista de usuarios. Código de estado: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.users && Array.isArray(data.users)) {
+                renderizarTablaUsuarios(data.users);
+            } else {
+                throw new Error('Formato de respuesta inesperado. Se esperaba un campo "users" de tipo array.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al cargar usuarios:', error);
+        });
+}
+
+function renderizarTablaUsuarios(usuarios) {
+    var tbody = document.getElementById('tablaUsuariosBody');
+    if (!tbody) {
+        console.error('Elemento tbody no encontrado.');
+        return;
+    }
+    tbody.innerHTML = '';
+
+    usuarios.forEach(usuario => {
+        var row = tbody.insertRow();
+
+        var cellNombre = row.insertCell(0);
+        var cellCorreo = row.insertCell(1);
+        var cellTipoSangre = row.insertCell(2);
+        var cellFechaNacimiento = row.insertCell(3);
+        var cellGenero = row.insertCell(4);
+        var cellDonador = row.insertCell(5);
+        var cellCURP = row.insertCell(6);
+        var cellAcciones = row.insertCell(7);
+
+        cellNombre.innerText = usuario.name + ' ' + usuario.last_name;
+        cellCorreo.innerText = usuario.email;
+        cellTipoSangre.innerText = usuario.blood_type;
+        cellFechaNacimiento.innerText = usuario.birthdate;
+        cellGenero.innerText = usuario.gender;
+        cellDonador.innerText = usuario.donator === 1 ? 'Si' : 'No';
+        cellCURP.innerText = usuario.curp;
+       
+
+        cellAcciones.innerHTML = `
+        <button type="button" class="btn btn-primary" onclick="obtenerDetallesUsuario(${usuario.id})">Editar</button>
+        <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+    });
+}
+
+let usuarioSeleccionadoId = null;
+
+// Función para obtener y mostrar los detalles del usuario en el modal de edición
+function obtenerDetallesUsuario(userId) {
+    fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles del usuario. Código de estado: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Respuesta completa de la API:', data);
+
+        // Modifica esta parte según la estructura real de tu respuesta
+        const usuarioId = data.user.id || '';
+        const usuarioNombre = data.user.name || '';
+        const usuarioApellido = data.user.last_name || '';
+        const usuarioEmail = data.user.email || '';
+
+        if (usuarioId && usuarioNombre && usuarioApellido && usuarioEmail) {
+            // Almacena el ID del usuario seleccionado globalmente
+            usuarioSeleccionadoId = usuarioId;
+
+            // Rellenar campos del formulario de edición
+            document.getElementById('edit-Nombres').value = usuarioNombre;
+            document.getElementById('edit-Apellidos').value = usuarioApellido;
+            document.getElementById('edit-correoElectronico').value = usuarioEmail;
+            document.getElementById('edit-tipoSangre').value = data.user.blood_type || '';
+            document.getElementById('edit-curp').value = data.user.curp || '';
+            document.getElementById('edit-html5-date-input').value = data.user.birthdate || '';
+            document.getElementById('edit-genero').value = data.user.gender || '';
+            document.getElementById('edit-donador').value = data.user.gender || '';
+
+            // Mostrar el modal de edición
+            var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
+            offcanvasEditUser.show();
+        } else {
+            throw new Error('Formato de respuesta inesperado. Datos incompletos del usuario.');
+        }
+    })
+    .catch(error => {
+        console.error('Error al obtener los detalles del usuario:', error);
+        alert('Error al obtener los detalles del usuario.');
+    });
+}
+
+// Función para abrir el modal de edición al hacer clic en el botón de editar
+function editarUsuario(userId) {
+    obtenerDetallesUsuario(userId);
+}
+
+// Asigna el evento de clic al botón de editar para abrir el modal de edición
+document.getElementById('btnEdit').addEventListener('click', function() {
+        console.log("Soy el botón editar");
+        verificarCamposEdit();
+    });
+
+    function eliminarUsuario(usuarioId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Usuario eliminado exitosamente:', data);
+
+            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
+            cargarYMostrarUsuarios();
+        })
+        .catch(error => {
+            console.error('Error al eliminar el usuario:', error);
+            alert('Error al eliminar el usuario.');
+        });
+    }
+}
+
+</script>
     
 </head>
 
@@ -89,12 +236,6 @@
   <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar  ">
   <div class="layout-container">
-
-    
-    
-
-
-
 
 <!-- Menu -->
 
@@ -274,7 +415,7 @@
              
              
               <li>
-                <a class="dropdown-item" href="{{route('login')}}">
+                <a class="dropdown-item" href="{{route('loginHome')}}">
                   <i class="ti ti-logout me-2 ti-sm"></i>
                   <span class="align-middle">Log Out</span>
                 </a>
@@ -304,98 +445,348 @@
         <!-- Content -->
         
         <div class="container-xxl flex-grow-1 container-p-y">
-            
-            
 
-            <div class="row g-4 mb-4">
-              <div class="col-sm-6 col-xl-3">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                      <div class="content-left">
-                        <span>Session</span>
-                        <div class="d-flex align-items-center my-2">
-                          <h3 class="mb-0 me-2">21,459</h3>
-                          <p class="text-success mb-0">(+29%)</p>
-                        </div>
-                        <p class="mb-0">Total Users</p>
-                      </div>
-                      <div class="avatar">
-                        <span class="avatar-initial rounded bg-label-primary">
-                          <i class="ti ti-user ti-sm"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-xl-3">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                      <div class="content-left">
-                        <span>Paid Users</span>
-                        <div class="d-flex align-items-center my-2">
-                          <h3 class="mb-0 me-2">4,567</h3>
-                          <p class="text-success mb-0">(+18%)</p>
-                        </div>
-                        <p class="mb-0">Last week analytics </p>
-                      </div>
-                      <div class="avatar">
-                        <span class="avatar-initial rounded bg-label-danger">
-                          <i class="ti ti-user-plus ti-sm"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-xl-3">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                      <div class="content-left">
-                        <span>Active Users</span>
-                        <div class="d-flex align-items-center my-2">
-                          <h3 class="mb-0 me-2">19,860</h3>
-                          <p class="text-danger mb-0">(-14%)</p>
-                        </div>
-                        <p class="mb-0">Last week analytics</p>
-                      </div>
-                      <div class="avatar">
-                        <span class="avatar-initial rounded bg-label-success">
-                          <i class="ti ti-user-check ti-sm"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-xl-3">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                      <div class="content-left">
-                        <span>Pending Users</span>
-                        <div class="d-flex align-items-center my-2">
-                          <h3 class="mb-0 me-2">237</h3>
-                          <p class="text-success mb-0">(+42%)</p>
-                        </div>
-                        <p class="mb-0">Last week analytics</p>
-                      </div>
-                      <div class="avatar">
-                        <span class="avatar-initial rounded bg-label-warning">
-                          <i class="ti ti-user-exclamation ti-sm"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
             <!-- ---------------------------------------Users List Table ----------------------------->
-           <!-- Bootstrap Table with Header - Light -->
-           <div class="card">
+        
+
+<script>
+  function mostrarErrorLetras(id, mensaje) {
+        var mensajeErrorLetras = document.getElementById(id);
+        if (mensajeErrorLetras) {
+            mensajeErrorLetras.textContent = mensaje;
+        }
+    }
+
+    function validarSoloLetras(event, campoInput) {
+        var charCode = event.which || event.keyCode;
+        var mensajeErrorId = 'mensajeErrorLetras' + campoInput.id.charAt(4);
+
+        // Permitir solo letras (sin espacios, números o caracteres especiales)idacio
+        if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
+            mostrarErrorLetras(mensajeErrorId, 'Solo se permiten letras (sin espacios, números o caracteres especiales).');
+            return false;
+        }
+        mostrarErrorLetras(mensajeErrorId, ''); 
+        return true;
+    }
+
+    function validarCurp() {
+    var curpInput = document.getElementById('add-curp');
+    var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
+
+    // Utilizar evento input para validar en tiempo real
+    curpInput.addEventListener('input', function(event) {
+        // Convertir a mayúsculas
+        curpInput.value = curpInput.value.toUpperCase();
+
+        // Limpiar caracteres no permitidos (dejar solo letras y números)
+        curpInput.value = curpInput.value.replace(/[^A-Z0-9]/g, '');
+
+        // Verificar la longitud del CURP
+        if (curpInput.value.length !== 18) {
+            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres.';
+            curpInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorCurp.innerText = '';
+            curpInput.classList.remove('is-invalid');
+        }
+    });
+}
+
+    function validarCorreoElectronico() {
+        var inputCorreo = document.getElementById('add-correoElectronico');
+        var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
+        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!regexCorreo.test(inputCorreo.value)) {
+            mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
+            inputCorreo.classList.add('is-invalid');
+        } else {
+            mensajeErrorCorreo.textContent = '';
+            inputCorreo.classList.remove('is-invalid');
+        }
+    }
+
+    function validarContrasena() {
+        var contrasenaInput = document.getElementById('add-contrasena');
+        var mensajeErrorContrasena = document.getElementById('mensajeErrorContrasena');
+
+        // Verificar la longitud de la contraseña
+        if (contrasenaInput.value.length < 6 || contrasenaInput.value.length > 15) {
+            mensajeErrorContrasena.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
+            contrasenaInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorContrasena.textContent = ''; 
+            contrasenaInput.classList.remove('is-invalid');
+        }
+    }
+    function validarFechaNacimiento() {
+    var fechaInput = document.getElementById('html5-date-input');
+    var mensajeErrorFecha = document.getElementById('mensajeErrorFecha');
+    var fechaArray = fechaInput.value.split('-');
+    if (fechaArray.length === 3 && fechaArray[0].length > 4) {
+        fechaArray[0] = fechaArray[0].substring(0, 4);
+        fechaInput.value = fechaArray.join('-');
+    }
+
+    var fechaSeleccionada = new Date(fechaInput.value);
+    var fechaMinima = new Date('1900-01-01');
+    var fechaMaxima = new Date('2023-11-27');
+
+    if (fechaSeleccionada < fechaMinima || fechaSeleccionada > fechaMaxima) {
+        mensajeErrorFecha.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
+        fechaInput.classList.add('is-invalid');
+    } else {
+        mensajeErrorFecha.innerText = '';
+        fechaInput.classList.remove('is-invalid');
+    }
+}
+
+function verificarCampos() {
+        var formulario = document.getElementById('addNewUserForm');
+        if (!formulario.checkValidity()) {
+            formulario.reportValidity();
+            return;
+        }
+
+        // Obtener valores de los campos
+        var nombres = document.getElementById('add-Nombres').value;
+        var apellidos = document.getElementById('add-Apellidos').value;
+        var correoElectronico = document.getElementById('add-correoElectronico').value;
+        var contrasena = document.getElementById('add-contrasena').value;
+        var tipoSangre = document.getElementById('add-tipoSangre').value;
+        var curp = document.getElementById('add-curp').value;
+        var fechaNacimiento = document.getElementById('html5-date-input').value;
+        var genero = document.getElementById('add-genero').value;
+       
+        var donador = document.getElementById('add-donador').value;
+        var donadorValue = donador === 'Si' ? 1 : 0;
+
+        
+        // Crear objeto de datos para enviar al servidor
+        var userData = {
+            name: nombres,
+            last_name: apellidos,
+            email: correoElectronico,
+            password: contrasena,
+            blood_type: tipoSangre,
+            curp: curp,
+            birthdate: fechaNacimiento,
+            gender: genero,
+            donator: donadorValue
+        };
+
+        // Realizar la solicitud POST a la API
+        fetch('http://127.0.0.1:8000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            // La respuesta exitosa del servidor
+            console.log('Respuesta del servidor:', data);
+
+            var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+            offcanvasAddUser.hide();
+
+            
+            setTimeout(function() {
+                alert('Usuario creado exitosamente.');
+
+                 // Restablecer valores de los campos a blanco
+        document.getElementById('add-Nombres').value = '';
+        document.getElementById('add-Apellidos').value = '';
+        document.getElementById('add-correoElectronico').value = '';
+        document.getElementById('add-contrasena').value = '';
+        document.getElementById('add-tipoSangre').value = '';
+        document.getElementById('add-curp').value = '';
+        document.getElementById('html5-date-input').value = '';
+        document.getElementById('add-genero').value = '';
+        document.getElementById('add-donador').value = '';
+        
+            }, 300);
+        })
+        .catch(error => {
+    // Manejar errores en la solicitud
+    console.error('Error en la solicitud:', error);
+    alert('Error al agregar el usuario.');
+
+    // Verificar si hay una respuesta del servidor
+    if (error && error.response && error.response.text) {
+        // Intenta obtener más información sobre la respuesta
+        error.response.text().then(text => {
+            console.error('Contenido de la respuesta:', text);
+        });
+    }
+});
+
+        // Cerrar el modal 
+        var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        offcanvasAddUser.hide();
+    }
+
+
+    // -------------------------AQUI TERMINA EL AÑADIR Y COMIENZA EL EDITAR-----------------------------------------
+    function validarCorreoElectronicoEdit() {
+        var inputCorreoEdit = document.getElementById('edit-correoElectronico');
+        var mensajeErrorCorreoEdit = document.getElementById('mensajeErrorCorreoEdit');
+        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!regexCorreo.test(inputCorreoEdit.value)) {
+            mensajeErrorCorreoEdit.textContent = 'Por favor, ingresa un correo electrónico válido.';
+            inputCorreoEdit.classList.add('is-invalid');
+        } else {
+            mensajeErrorCorreoEdit.textContent = '';
+            inputCorreoEdit.classList.remove('is-invalid');
+        }
+    }
+
+    function validarContrasenaEdit() {
+        var contrasenaInputEdit = document.getElementById('edit-contrasena');
+        var mensajeErrorContrasenaEdit = document.getElementById('mensajeErrorContrasenaEdit');
+        if (contrasenaInputEdit.value.length < 6 || contrasenaInputEdit.value.length > 15) {
+            mensajeErrorContrasenaEdit.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
+            contrasenaInputEdit.classList.add('is-invalid');
+        } else {
+            mensajeErrorContrasenaEdit.textContent = '';
+            contrasenaInputEdit.classList.remove('is-invalid');
+        }
+    }
+
+    function validarCurpEdit() {
+    var curpInputEdit = document.getElementById('edit-curp');
+    var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
+
+    curpInputEdit.value = curpInputEdit.value.toUpperCase();
+
+    if (curpInputEdit.value.length !== 18) {
+        mensajeErrorCurpEdit.innerText = 'El CURP no es valido.';
+        curpInputEdit.classList.add('is-invalid');
+    } else {
+        var regex = /^[A-Z0-9]+$/;
+        if (!regex.test(curpInputEdit.value)) {
+            mensajeErrorCurpEdit.innerText = 'El CURP solo debe contener letras y números.';
+            curpInputEdit.classList.add('is-invalid');
+        } else {
+            mensajeErrorCurpEdit.innerText = '';
+            curpInputEdit.classList.remove('is-invalid');
+        }
+    }
+}
+
+function validarFechaNacimientoEdit() {
+    function validarFechaNacimientoEdit() {
+        var fechaInputEdit = document.getElementById('edit-html5-date-input');
+        var mensajeErrorFechaEdit = document.getElementById('mensajeErrorFechaEdit');
+        var fechaArrayEdit = fechaInputEdit.value.split('-');
+        if (fechaArrayEdit.length === 3 && fechaArrayEdit[0].length > 4) {
+            fechaArrayEdit[0] = fechaArrayEdit[0].substring(0, 4);
+            fechaInputEdit.value = fechaArrayEdit.join('-');
+        }
+
+        // Verifica si la fecha está dentro del rango deseado
+        var fechaSeleccionadaEdit = new Date(fechaInputEdit.value);
+        var fechaMinimaEdit = new Date('1900-01-01');
+        var fechaMaximaEdit = new Date('2023-12-31');
+
+        if (fechaSeleccionadaEdit < fechaMinimaEdit || fechaSeleccionadaEdit > fechaMaximaEdit) {
+            mensajeErrorFechaEdit.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
+            fechaInputEdit.classList.add('is-invalid');
+        } else {
+            mensajeErrorFechaEdit.innerText = '';
+            fechaInputEdit.classList.remove('is-invalid');
+        }
+    }
+}
+
+function verificarCamposEdit() {
+        // Obtener el formulario
+        var formulario = document.getElementById('editUserForm');
+
+        // Verificar la validez del formulario
+        if (!formulario.checkValidity()) {
+            // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
+            formulario.reportValidity();
+            return;
+        }
+
+        // Obtener valores de los campos
+        var nombres = document.getElementById('edit-Nombres').value;
+        var apellidos = document.getElementById('edit-Apellidos').value;
+        var correoElectronico = document.getElementById('edit-correoElectronico').value;
+        var contrasena = document.getElementById('edit-contrasena').value;
+        var tipoSangre = document.getElementById('edit-tipoSangre').value;
+        var curp = document.getElementById('edit-curp').value;
+        var fechaNacimiento = document.getElementById('edit-html5-date-input').value;
+        var genero = document.getElementById('edit-genero').value;
+        var donador = document.getElementById('edit-donador').value;
+        var donadorValue = donador === 'Si' ? 1 : 0;
+       
+
+        // Crear objeto de datos para enviar al servidor
+        var editedUserData = {
+          name: nombres,
+          last_name: apellidos,
+          email: correoElectronico,
+          password: contrasena,
+          blood_type: tipoSangre,
+          curp: curp,
+          birthdate: fechaNacimiento,
+          gender: genero,
+          donator:donadorValue
+        };
+
+          fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(editedUserData)
+          })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
+        }
+        return response.json(); 
+    })
+    .then(data => {
+        console.log('Respuesta del servidor:', data);
+
+        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        offcanvasEditUser.hide();
+        setTimeout(function() {
+            alert('Usuario editado exitosamente.');
+
+        }, 300);
+       
+    })
+    .catch(error => {
+        console.error('Error en la solicitud de edición:', error);
+        alert('Error al editar el usuario.');
+
+        if (error && error.response && error.response.text) {
+            // Intenta obtener más información sobre la respuesta
+            error.response.text().then(text => {
+                console.error('Contenido de la respuesta:', text);
+            });
+        }
+    });
+    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
+    offcanvasEditUser.hide();
+}
+</script>
+
+
+<div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h4>Listado de Usuarios</h4>
     <button type="button" class="btn btn-secondary" id="btnAdd">Añadir</button>
@@ -415,25 +806,9 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody class="table-border-bottom-0">
-        <tr>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>Albert Cook</td>
-          <td>
-            <div class="dropdown">
-              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-pencil me-1"></i> Edit</a>
-                <a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-trash me-1"></i> Delete</a>
-              </div>
-            </div>
-          </td>
-        </tr>
+      <!-- Asegúrate de tener un tbody con el ID 'tablaUsuariosBody' -->
+      <tbody class="table-border-bottom-0" id="tablaUsuariosBody">
+        <!-- Aquí puedes tener filas predefinidas si lo deseas -->
         
       </tbody>
     </table>
@@ -442,10 +817,99 @@
 <!-- Bootstrap Table with Header - Light -->
 
 
-<!-- Modal Añadir Usuarios -->
+
+<!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="edit-user pt-0" id="editUserForm" onsubmit="return false">
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-Nombres">Nombres</label>
+                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
+                <div id="mensajeErrorLetrasNombresEdit" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-Apellidos">Apellidos</label>
+                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)"  />
+                <div id="mensajeErrorLetrasApellidosEdit" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
+              <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronicoEdit()" />
+              <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
+          </div>
+          
+            <div class="mb-3">
+              <label class="form-label" for="edit-contrasena">Contraseña</label>
+              <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
+              <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
+              <div class="col-md-10">
+                  <input class="form-control" type="date" value="" id="edit-html5-date-input"  min='1900-01-01' max='2023-12-31' />
+                  <div id="mensajeErrorFechaEdit" style="color: red;"></div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-genero">Género</label>
+                <select id="edit-genero" class="form-select">
+                    <option selected disabled value="">Opciones...</option>
+                    <option value="Hombre">Hombre</option>
+                    <option value="Mujer">Mujer</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="edit-curp">CURP</label>
+              <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP"  onblur="validarCurpEdit()" />
+              <div id="mensajeErrorCurpEdit" style="color: red;"></div>
+          </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-tipoSangre">Tipo de Sangre</label>
+                <select id="edit-tipoSangre" class="form-select">
+                    <option selected disabled value="">Opciones...</option>
+                    <option value="A+">A+</option>
+                    <option value="O+">O+</option>
+                    <option value="B+">B+</option>
+                    <option value="AB+">AB+</option>
+                    <option value="A-">A-</option>
+                    <option value="O-">O-</option>
+                    <option value="B-">B-</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="edit-donador">Donador</label>
+                <select id="edit-donador" class="form-select">
+                    <option selected disabled value="">Opciones...</option>
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
+            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ---------------------------------------------------------Modal Añadir Usuarios---------------------------------------------------------- -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddUser" aria-labelledby="offcanvasAddUserLabel">
     <div class="offcanvas-header">
-      <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Añadir Usuario</h5>
+      <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Usuario</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
@@ -453,12 +917,17 @@
       <form class="add-new-user pt-0" id="addNewUserForm" onsubmit="return false">
 
 
+      <div class="mb-3">
+    <label class="form-label" for="add-Nombres">Nombres</label>
+    <input type="text" id="add-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
+    <div id="mensajeErrorLetrasNombres" style="color: red;"></div>
+</div>
 
-        <div class="mb-3">
-            <label class="form-label" for="add-NombreCompleto">Nombre Completo</label>
-            <input type="text" id="add-NombreCompleto" class="form-control" placeholder="Escribir Nombre Completo" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event)" />
-            <div id="mensajeErrorLetras" style="color: red;"></div>
-        </div>
+<div class="mb-3">
+    <label class="form-label" for="add-Apellidos">Apellidos</label>
+    <input type="text" id="add-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)" />
+    <div id="mensajeErrorLetrasApellidos" style="color: red;"></div>
+</div>
 
         <div class="mb-3">
           <label class="form-label" for="add-correoElectronico">Correo Electrónico</label>
@@ -466,12 +935,19 @@
           <div id="mensajeErrorCorreo" style="color: red;"></div>
       </div>
 
+      <div class="mb-3">
+      <label class="form-label" for="add-contrasena">Contraseña</label>
+      <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
+      <div id="mensajeErrorContrasena" style="color: red;"></div>
+     </div>
+
         <div class="mb-3">
-        <label class="form-label" for="add-fechaNacimiento">Fecha de Nacimiento</label>
-            <div class="col-md-10">
-              <input class="form-control" type="date" value="" id="html5-date-input" />
-            </div>
-        </div>
+    <label class="form-label" for="add-fechaNacimiento">Fecha de Nacimiento</label>
+    <div class="col-md-10">
+        <input class="form-control" type="date" value="" id="html5-date-input" oninput="validarFechaNacimiento()" min='1900-01-01' max='2023-12-31' />
+        <div id="mensajeErrorFecha" style="color: red;"></div>
+    </div>
+</div>
 
         <div class="mb-3">
           <label class="form-label" for="add-genero">Género</label>
@@ -481,6 +957,14 @@
             <option value="Mujer">Mujer</option>
           </select>
         </div>
+
+        
+          <div class="mb-3">
+              <label class="form-label" for="add-curp">CURP</label>
+              <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurp()"/>
+              <div id="mensajeErrorCurp" style="color: red;"></div>              
+          </div>
+
 
         <div class="mb-3">
           <label class="form-label" for="add-tipoSangre">Tipo de Sangre</label>
@@ -498,22 +982,22 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="add-donador">Donador</label>
-          <select id="add-donador" class="form-select">
-            <option selected disabled value="">Opciones...</option>
-            <option value="Si">Si</option>
-            <option value="No">No</option>
-          </select>
-        </div>
+                <label class="form-label" for="add-donador">Donador</label>
+                <select id="add-donador" class="form-select">
+                    <option selected disabled value="">Opciones...</option>
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
 
-        <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCampos()">Añadir</button>
+        <button type="submit" id="btnAdd" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCampos()">Confirmar</button>
         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
       </form>
     </div>
   </div>
 </div>
 
-                      </div>
+</div>
                       <!-- / Content -->
 
           
@@ -530,11 +1014,7 @@
         </script>
         , Bloodme <a href="" target="_blank" class="fw-medium"></a>
       </div>
-      <div class="d-none d-lg-inline-block">
-        
-        <a href="https://themeforest.net/licenses/standard" class="footer-link me-4" target="_blank">AQUI PONER UN FOOTER SI QUEREMOS</a>
-       
-      </div>
+      
     </div>
   </div>
 </footer>
@@ -605,100 +1085,9 @@
 </script>
 
 
-<script>
-    function validarSoloLetras(event) {
-        var charCode = event.which || event.keyCode;
-
-        // Permitir solo letras (sin espacios, números o caracteres especiales)
-        if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
-            var mensajeErrorLetras = document.getElementById('mensajeErrorLetras');
-            mensajeErrorLetras.textContent = 'Solo se permiten letras (sin espacios, números o caracteres especiales).';
-            return false;
-        }
-
-        // Limpiar mensaje de error si la entrada es válida
-        var mensajeErrorLetras = document.getElementById('mensajeErrorLetras');
-        mensajeErrorLetras.textContent = '';
-        return true;
-    }
-</script>
-
-<script>
-    function validarCorreoElectronico() {
-        var inputCorreo = document.getElementById('add-correoElectronico');
-        var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
-
-        // Expresión regular para validar un formato de correo electrónico básico
-        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!regexCorreo.test(inputCorreo.value)) {
-            mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
-            inputCorreo.classList.add('is-invalid');
-        } else {
-            mensajeErrorCorreo.textContent = '';
-            inputCorreo.classList.remove('is-invalid');
-        }
-    }
-</script>
-<script>
-    function verificarCampos() {
-        // Obtener valores de los campos
-        var nombreCompleto = document.getElementById('add-NombreCompleto').value;
-        var correoElectronico = document.getElementById('add-correoElectronico').value;
-        var fechaNacimiento = document.getElementById('html5-date-input').value;
-        var genero = document.getElementById('add-genero').value;
-        var tipoSangre = document.getElementById('add-tipoSangre').value;
-        var donador = document.getElementById('add-donador').value;
-
-        // Validar que todos los campos estén llenos
-        if (
-            nombreCompleto.trim() === '' ||
-            correoElectronico.trim() === '' ||
-            fechaNacimiento.trim() === '' ||
-            genero.trim() === '' ||
-            tipoSangre.trim() === '' ||
-            donador.trim() === ''
-        ) {
-            alert('Por favor, completa todos los campos.');
-            return;
-        }
-
-        // Validar formato de correo electrónico
-        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!regexCorreo.test(correoElectronico)) {
-            alert('Por favor, ingresa un correo electrónico válido.');
-            return;
-        }
-
-        // Validar que el nombre solo contenga letras
-        var regexLetras = /^[a-zA-Z\s]+$/;
-        if (!regexLetras.test(nombreCompleto)) {
-            alert('Por favor, ingresa un nombre válido (solo letras y espacios).');
-            return;
-        }
-
-        // Si todos los campos están llenos y las validaciones son exitosas, imprimir en consola
-        console.log('Datos válidos:', {
-            NombreCompleto: nombreCompleto,
-            CorreoElectronico: correoElectronico,
-            FechaNacimiento: fechaNacimiento,
-            Genero: genero,
-            TipoSangre: tipoSangre,
-            Donador: donador
-        });
-
-        // Aquí podrías enviar los datos al servidor si es necesario
-
-        // Cerrar el modal (opcional)
-        var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-        offcanvasAddUser.hide();
-    }
-</script>
-
 
 </body>
 
 </html>
 
 <!-- beautify ignore:end -->
-

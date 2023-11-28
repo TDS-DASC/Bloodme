@@ -64,6 +64,9 @@
 
     <!-- Page CSS -->
     
+    <!--jquery-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 
    
     
@@ -184,33 +187,7 @@
         
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
-          
-          <!-- Style Switcher -->
-          <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
-            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-              <i class='ti ti-md'></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
-              <li>
-                <a class="dropdown-item" href="javascript:void(0);" data-theme="light">
-                  <span class="align-middle"><i class='ti ti-sun me-2'></i>Light</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="javascript:void(0);" data-theme="dark">
-                  <span class="align-middle"><i class="ti ti-moon me-2"></i>Dark</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="javascript:void(0);" data-theme="system">
-                  <span class="align-middle"><i class="ti ti-device-desktop me-2"></i>System</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <!-- / Style Switcher-->
-          
-
+        
           <!-- User -->
           <li class="nav-item navbar-dropdown dropdown-user dropdown">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -264,7 +241,7 @@
              
              
               <li>
-                <a class="dropdown-item" href="auth-login-cover.html" target="_blank">
+                <a class="dropdown-item" href="{{route('loginHome')}}">
                   <i class="ti ti-logout me-2 ti-sm"></i>
                   <span class="align-middle">Log Out</span>
                 </a>
@@ -302,14 +279,14 @@
   <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Sales</h5>
-        <small class="text-muted">Last Year</small>
+        <h5 class="card-title mb-0">Usuarios</h5>
+        <small class="text-muted">Número de usuarios</small>
       </div>
       <div id="salesLastYear"></div>
       <div class="card-body pt-0">
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0">175k</h4>
-          <small class="text-danger">-16.2%</small>
+          <h4 id="usuariosDiv" class="mb-0"></h4>
+          <small class="text-danger"></small>
         </div>
       </div>
     </div>
@@ -319,14 +296,13 @@
   <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Sessions</h5>
-        <small class="text-muted">Last Month</small>
+        <h5 class="card-title mb-0">Donadores</h5>
+        <small class="text-muted">Número de donadores</small>
       </div>
       <div class="card-body">
         <div id="sessionsLastMonth"></div>
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0">45.1k</h4>
-          <small class="text-success">+12.6%</small>
+          <h4 id="donadoresCount"></h4>
         </div>
       </div>
     </div>
@@ -336,14 +312,13 @@
   <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Total Profit</h5>
-        <small class="text-muted">Last Month</small>
+        <h5 class="card-title mb-0">Campañas activas</h5>
+        <small class="text-muted">Número de campañas activas</small>
       </div>
       <div class="card-body">
         <div id="sessionsLastMonth"></div>
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0">45.1k</h4>
-          <small class="text-success">+12.6%</small>
+          <h4 class="mb-0" id="campagnasActivas"></h4>
         </div>
       </div>
     </div>
@@ -353,14 +328,13 @@
     <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Total Profit</h5>
-        <small class="text-muted">Last Month</small>
+        <h5 class="card-title mb-0">Unidades médicas</h5>
+        <small class="text-muted">Número de unidades médicas</small>
       </div>
       <div class="card-body">
         <div id="sessionsLastMonth"></div>
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0">45.1k</h4>
-          <small class="text-success">+12.6%</small>
+          <h4 class="mb-0" id="unidadesMedicas"></h4>
         </div>
       </div>
     </div>
@@ -639,10 +613,101 @@
 
   <!-- Page JS -->
   <script src="../../assets/js/dashboards-crm.js"></script>
+
+  <!--http://127.0.0.1:8000/api/users/-->
+  <!-- ... tu código HTML anterior ... -->
+
+<script>
+  // Espera a que el DOM esté listo
+  $(document).ready(function () {
+    // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
+    $.ajax({
+      url: 'http://127.0.0.1:8000/api/users/', // Reemplaza con la ruta correcta
+      method: 'GET', // O el método HTTP correcto
+      dataType: 'json',
+      success: function (response) {
+        // Verifica si la respuesta del backend es exitosa
+        if (response.users) {
+          // Actualiza el contenido del div "usuariosDiv" con la longitud del array de usuarios
+          $('#usuariosDiv').text(response.users.length);
+
+          // Filtra los donadores (donator = 1) y cuenta su número
+          const donadoresCount = response.users.filter(user => user.donator === 1).length;
+          
+          // Actualiza el contenido del div "donadoresCount" con el número de donadores
+          $('#donadoresCount').text(donadoresCount);
+        } else {
+          // Maneja el caso en el que la respuesta no fue exitosa
+          console.error('Error al obtener la lista de usuarios.');
+        }
+      },
+      error: function () {
+        // Maneja el caso de un error en la solicitud AJAX
+        console.error('Error en la solicitud AJAX.');
+      }
+    });
+  });
+
+  // Espera a que el DOM esté listo
+  $(document).ready(function () {
+  // Realiza una solicitud AJAX al backend para obtener la lista de campañas activas
+  $.ajax({
+    url: 'http://127.0.0.1:8000/api/campaigns', // Reemplaza con la ruta correcta
+    method: 'GET', // O el método HTTP correcto
+    dataType: 'json',
+    success: function (response) {
+      // Verifica si la respuesta del backend es exitosa
+      if (response.Campaigns) { // Cambiado a response.Campaigns con mayúscula inicial
+        // Actualiza el contenido del div "campagnasActivas" con la longitud del array de campañas activas
+        $('#campagnasActivas').text(response.Campaigns.length);
+      } else {
+        // Maneja el caso en el que la respuesta no fue exitosa
+        console.error('Error al obtener la lista de campañas activas.');
+      }
+    },
+    error: function () {
+      // Maneja el caso de un error en la solicitud AJAX
+      console.error('Error en la solicitud AJAX.');
+    }
+  });
+});
+
+// Espera a que el DOM esté listo
+$(document).ready(function () {
+    // Realiza una solicitud AJAX al backend para obtener la lista de unidades médicas
+    $.ajax({
+      url: 'http://127.0.0.1:8000/api/medunits', // Reemplaza con la ruta correcta
+      method: 'GET', // O el método HTTP correcto
+      dataType: 'json',
+      success: function (response) {
+        console.log(response);
+        // Verifica si la respuesta del backend es exitosa
+        if (response.MedicalUnits) { // Cambiado a response.medicalUnits con mayúscula inicial
+          // Actualiza el contenido del div "unidadesMedicas" con la longitud del array de unidades médicas
+          $('#unidadesMedicas').text(response.MedicalUnits.length);
+        } else {
+          // Maneja el caso en el que la respuesta no fue exitosa
+          console.error('Error al obtener la lista de unidades médicas.');
+        }
+      },
+      error: function () {
+        // Maneja el caso de un error en la solicitud AJAX
+        console.error('Error en la solicitud AJAX.');
+      }
+    });
+  });
+
+  
+</script>
+
+<!-- ... tu código HTML posterior ... -->
+
+  
   
 </body>
 
 </html>
 
 <!-- beautify ignore:end -->
+
 

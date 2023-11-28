@@ -34,45 +34,9 @@ Route::get('/prueba', function () {
 });
 
 Route::get('/', function () {
-    return view('login');
-})->name('loginHome'); // te cambia aca por un problema con el back
+    return view('nuevoLogin');
+})->name('loginHome'); // LOGIN NUEVO
 
-
-
-/** ------- RUTAS VIEJAS ----------*/
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboardRuta');
-
-Route::get('/usuarios', function () {
-    return view('usuarios');
-})->name('usuariosRuta');
-
-Route::get('/campañas', function () {
-    return view('campañas');
-})->name('campañasRuta');
-
-Route::get('/unidadesMedicas', function () {
-    return view('unidades');
-})->name('unidadesRuta');
-
-Route::get('/prueba', function () {
-    return view('saludoPlantilla');
-});
-
-
-
-
-
-Route::get('/usuario', function () {
-    return view('mainUsuarios');
-})->name('usuariosMainRuta');
-
-Route::get('/agendarDonatorio', function () {
-    return view('registrarDonatorio');
-})->name('agendarDonatorioRuta');
-
-Route::get('/agendarCita', function () {
-    return view('agendarCita');
-})->name('agendarCitaRuta');
-
+Route::get('/registrar', function () {
+    return view('registrarUsuario');
+})->name('registrarRutas'); // REGISTAR CUENTA NUEVA

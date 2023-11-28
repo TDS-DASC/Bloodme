@@ -10,6 +10,7 @@ use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonationDateController;
 use App\Http\Controllers\CampaignMedicalUnitController;
+use App\Http\Controllers\MedicalUnitController;
 //use App\Models\Donation;
 
 //       -----------------------------------------------------------//
@@ -95,13 +96,27 @@ Route::post('cmedicalunit/', [CampaignMedicalUnitController::class, 'create']);
 
 Route::get('cmedicalunit/{id}', [CampaignMedicalUnitController::class, 'showid']);
 Route::get('cmedicalunits/{input}/{looking}', [CampaignMedicalUnitController::class, 'showByInput']);
-Route::get('cmedicalunits/', [CampaignMedicalUnitController::class, 'showall']); // muestra todos las DONACIONES
+Route::get('cmedicalunits/', [CampaignMedicalUnitController::class, 'showall']); // muestra todos las mcunits
 
-Route::put('cmedicalunits/{id}', [CampaignMedicalUnitController::class, 'updateWID']); //UPDATE A LA DONACION, ID se entrega mediante el link
-Route::put('cmedicalunits/', [CampaignMedicalUnitController::class, 'update']); //UPDATE A LA DONACION, ID se entrega por el request
-Route::delete('cmedicalunits/',[CampaignMedicalUnitController::class, 'delete']);  //BORRAR DONACIONES POR REQUEST -- NO DISPONIBLE -- LIMPIAR REFERENCIAS O LIMPIAR TABLA/ROW
-Route::delete('cmedicalunits/{id}',[CampaignMedicalUnitController::class, 'deleteWID']);  //BORRAR DONACIONES POR ID -- NO DISPONIBLE -- LIMPIAR REFERENCIAS O LIMPIAR TABLA/ROW
+Route::put('cmedicalunits/{id}', [CampaignMedicalUnitController::class, 'updateWID']); //UPDATE A LA mcunits, ID se entrega mediante el link
+Route::put('cmedicalunits/', [CampaignMedicalUnitController::class, 'update']); //UPDATE A LA mcunits, ID se entrega por el request
+Route::delete('cmedicalunits/',[CampaignMedicalUnitController::class, 'delete']);  //BORRAR mcunits POR REQUEST -- NO DISPONIBLE -- LIMPIAR REFERENCIAS O LIMPIAR TABLA/ROW
+Route::delete('cmedicalunits/{id}',[CampaignMedicalUnitController::class, 'deleteWID']);  //BORRAR mcunits POR ID -- NO DISPONIBLE -- LIMPIAR REFERENCIAS O LIMPIAR TABLA/ROW
 // ----------------------------------------------------//
+
+//MedicalUnits -------------------------------
+Route::post('medunit/', [MedicalUnitController::class, 'create']);
+
+Route::get('medunit/{id}', [MedicalUnitController::class, 'showid']);
+Route::get('medunits/{input}/{looking}', [MedicalUnitController::class, 'showByInput']);
+Route::get('medunits/', [MedicalUnitController::class, 'showall']); // muestra todos las DONACIONES
+
+Route::put('medunits/{id}', [MedicalUnitController::class, 'updateWID']); //UPDATE A LA DONACION, ID se entrega mediante el link
+Route::put('medunits/', [MedicalUnitController::class, 'update']); //UPDATE A LA DONACION, ID se entrega por el request
+Route::delete('medunits/',[MedicalUnitController::class, 'delete']);  //BORRAR DONACIONES POR REQUEST -- NO DISPONIBLE -- LIMPIAR REFERENCIAS O LIMPIAR TABLA/ROW
+Route::delete('medunits/{id}',[MedicalUnitController::class, 'deleteWID']);  //BORRAR DONACIONES POR ID -- NO DISPONIBLE -- LIMPIAR REFERENCIAS O LIMPIAR TABLA/ROW
+// ----------------------------------------------------//
+
 
 //EjemploX -------------------------------
 // ----------------------------------------------------//
