@@ -22,6 +22,7 @@ class CampaignSeeder extends Seeder
         $campaign->donations_required = 10;
         $campaign->current_donations = 5;
         $campaign->user_id = 1;
+        $campaign->description = "HOLA SOY UNA DESCRIPCION";
         $campaign->save();
 
         $campaign = new Campaign();
