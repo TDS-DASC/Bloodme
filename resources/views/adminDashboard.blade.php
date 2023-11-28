@@ -599,6 +599,8 @@
         chart.draw(data, options);
       }
     </script>
+    <div id="piechart_3d" style="width: 48%; height: 500px;  float: right;"></div>
+
     
     <!-- Gráfica de tipos de sangre -->
 <script type="text/javascript">
@@ -695,8 +697,8 @@
     return colores[tipo] || "#F0CC90"; 
   }
 </script>
-<div id="piechart_3d" style="width: 48%; height: 500px;"></div>
-<div id="barchart_values" style="width: 900px; height: 300px;"></div>
+<div id="piechart_3d" style="width: 48%; height: 500px;  float: left"></div>
+<div id="barchart_values" style="width: 48%; height: 500px;"></div>
 
           
 
