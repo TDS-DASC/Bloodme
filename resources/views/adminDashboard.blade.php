@@ -135,18 +135,29 @@
     </ul>
 
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminDonantesRutas') }}" class="menu-link">
+      <span class="menu-header-text">Administrar Donantes</span>
+      </a>
+    </ul>
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="{{ route('adminCitasRutas') }}" class="menu-link">
+      <span class="menu-header-text">Administrar Citas</span>
+      </a>
+    </ul>
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="{{ route('adminCampañasRutas') }}" class="menu-link">
       <span class="menu-header-text">Administrar Campañas</span>
       </a>
     </ul>
 
-
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminUnidadesRutas') }}" class="menu-link">
       <span class="menu-header-text">Administrar Unidades Medicas</span>
       </a>
     </ul>
-
+  
     
     
    <!-- FIN NAVBAR-->
@@ -214,31 +225,6 @@
               <li>
                 <div class="dropdown-divider"></div>
               </li>
-              <li>
-                <a class="dropdown-item" href="pages-profile-user.html">
-                  <i class="ti ti-user-check me-2 ti-sm"></i>
-                  <span class="align-middle">Mi Perfil</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-account-settings-account.html">
-                  <i class="ti ti-settings me-2 ti-sm"></i>
-                  <span class="align-middle">Editar Perfil</span>
-                </a>
-              </li>
-
-              <li>
-                <a class="dropdown-item" href="pages-faq.html">
-                  <i class="ti ti-help me-2 ti-sm"></i>
-                  <span class="align-middle">Mis Campañas</span>
-                </a>
-              </li>
-              
-              <li>
-                <div class="dropdown-divider"></div>
-              </li>
-              
-             
              
               <li>
                 <a class="dropdown-item" href="{{route('loginHome')}}">

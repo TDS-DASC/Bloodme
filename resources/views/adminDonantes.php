@@ -20,7 +20,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Administrador | Usuarios</title>
+    <title>Administrador | Donantes  </title>
 
     
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
@@ -80,74 +80,67 @@
 
 <script>
         window.onload = function () {
-    cargarYMostrarUsuarios();
+    cargarYMostrarCampanas();
 };
 
-function cargarYMostrarUsuarios() {
-    fetch('http://127.0.0.1:8000/api/users/')
+function cargarYMostrarCampanas() {
+    fetch('http://127.0.0.1:8000/api/campaigns/')
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al obtener la lista de usuarios. Código de estado: ' + response.status);
+                throw new Error('Error al obtener la lista de campañas. Código de estado: ' + response.status);
             }
             return response.json();
         })
         .then(data => {
-            if (data.users && Array.isArray(data.users)) {
-                renderizarTablaUsuarios(data.users);
+            if (data.Campaigns && Array.isArray(data.Campaigns)) {
+                renderizarTablaCampanas(data.Campaigns);
             } else {
-                throw new Error('Formato de respuesta inesperado. Se esperaba un campo "users" de tipo array.');
+                throw new Error('Formato de respuesta inesperado. Se esperaba un campo "Campaigns" de tipo array.');
             }
         })
         .catch(error => {
-            console.error('Error al cargar usuarios:', error);
+            console.error('Error al cargar campañas:', error);
         });
 }
-
-function renderizarTablaUsuarios(usuarios) {
-    var tbody = document.getElementById('tablaUsuariosBody');
+function renderizarTablaCampanas(campaigns) {
+    var tbody = document.getElementById('tablaCampanasBody');
     if (!tbody) {
         console.error('Elemento tbody no encontrado.');
         return;
     }
     tbody.innerHTML = '';
 
-    usuarios.forEach(usuario => {
+    campaigns.forEach(campaign => {
         var row = tbody.insertRow();
 
-        var cellNombre = row.insertCell(0);
-        var cellCorreo = row.insertCell(1);
-        var cellTipoSangre = row.insertCell(2);
-        var cellFechaNacimiento = row.insertCell(3);
-        var cellGenero = row.insertCell(4);
-        var cellDonador = row.insertCell(5);
-        var cellCURP = row.insertCell(6);
-        var cellAcciones = row.insertCell(7);
+        var cellNombre = row.insertCell(0);  //Aqui cambiar por el ROW al que le pertenece nombre porque 0 es el ID
+        var cellDescripcion = row.insertCell(1);
+        var cellTipo = row.insertCell(2);
+        var cellFechaInicio = row.insertCell(3);
+        var cellFechaFin = row.insertCell(4);
+        var cellAcciones = row.insertCell(5);
 
-        cellNombre.innerText = usuario.name + ' ' + usuario.last_name;
-        cellCorreo.innerText = usuario.email;
-        cellTipoSangre.innerText = usuario.blood_type;
-        cellFechaNacimiento.innerText = usuario.birthdate;
-        cellGenero.innerText = usuario.gender;
-        cellDonador.innerText = usuario.donator === 1 ? 'Si' : 'No';
-        cellCURP.innerText = usuario.curp;
-       
+        cellNombre.innerText = campaign.id; 
+        cellDescripcion.innerText = 'N/A'; 
+        cellTipo.innerText = campaign.blood === 1 ? 'Sangre' : 'Plaquetas'; 
+        cellFechaInicio.innerText = campaign.start_campaign;
+        cellFechaFin.innerText = campaign.end_campaign || 'N/A'; 
 
         cellAcciones.innerHTML = `
-        <button type="button" class="btn btn-primary" onclick="obtenerDetallesUsuario(${usuario.id})">Editar</button>
-        <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+        <button type="button" class="btn btn-primary" onclick="obtenerDetallesCampana(${campaign.id})">Editar</button>
+        <button type="button" class="btn btn-danger" onclick="eliminarCampana('${campaign.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
     });
 }
 
 let usuarioSeleccionadoId = null;
 
-// Función para obtener y mostrar los detalles del usuario en el modal de edición
-function obtenerDetallesUsuario(userId) {
-    fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
+function obtenerDetallesCampana(campaignId) {
+    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
         method: 'GET'
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`Error al obtener los detalles del usuario. Código de estado: ${response.status}`);
+            throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
         }
         return response.json();
     })
@@ -155,45 +148,43 @@ function obtenerDetallesUsuario(userId) {
         console.log('Respuesta completa de la API:', data);
 
         // Modifica esta parte según la estructura real de tu respuesta
-        const usuarioId = data.user.id || '';
-        const usuarioNombre = data.user.name || '';
-        const usuarioApellido = data.user.last_name || '';
-        const usuarioEmail = data.user.email || '';
+        const campaign = data.Campaign || {};
+        const campaignId = campaign.id || '';
+        const campaignStartDate = campaign.start_campaign || '';
+        const campaignEndDate = campaign.end_campaign || '';
 
-        if (usuarioId && usuarioNombre && usuarioApellido && usuarioEmail) {
-            // Almacena el ID del usuario seleccionado globalmente
-            usuarioSeleccionadoId = usuarioId;
+        if (campaignId && campaignStartDate) {
+            // Almacena el ID de la campaña seleccionada globalmente
+            campaignSeleccionadaId = campaignId;
 
             // Rellenar campos del formulario de edición
-            document.getElementById('edit-Nombres').value = usuarioNombre;
-            document.getElementById('edit-Apellidos').value = usuarioApellido;
-            document.getElementById('edit-correoElectronico').value = usuarioEmail;
-            document.getElementById('edit-tipoSangre').value = data.user.blood_type || '';
-            document.getElementById('edit-curp').value = data.user.curp || '';
-            document.getElementById('edit-html5-date-input').value = data.user.birthdate || '';
-            document.getElementById('edit-genero').value = data.user.gender || '';
-            document.getElementById('edit-donador').value = data.user.gender || '';
+            document.getElementById('edit-IdCampaña').value = campaignId;
+            document.getElementById('edit-FechaInicioCampaña').value = campaignStartDate;
+            document.getElementById('edit-FechaFinCampaña').value = campaignEndDate || '';
 
             // Mostrar el modal de edición
-            var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
-            offcanvasEditUser.show();
+            var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
+            offcanvasEditCampaign.show();
         } else {
-            throw new Error('Formato de respuesta inesperado. Datos incompletos del usuario.');
+            throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
         }
     })
     .catch(error => {
-        console.error('Error al obtener los detalles del usuario:', error);
-        alert('Error al obtener los detalles del usuario.');
+        console.error('Error al obtener los detalles de la campaña:', error);
+        alert('Error al obtener los detalles de la campaña.');
     });
 }
 
+
+
+
 // Función para abrir el modal de edición al hacer clic en el botón de editar
-function editarUsuario(userId) {
-    obtenerDetallesUsuario(userId);
+function editarCampana(campaignId) {
+    ObtenerDetallesCampana(campaignId);
 }
 
 // Asigna el evento de clic al botón de editar para abrir el modal de edición
-document.getElementById('btnEdit').addEventListener('click', function() {
+  document.getElementById('btnEdit').addEventListener('click', function() {
         console.log("Soy el botón editar");
         verificarCamposEdit();
     });
@@ -213,7 +204,7 @@ document.getElementById('btnEdit').addEventListener('click', function() {
             console.log('Usuario eliminado exitosamente:', data);
 
             // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
-            cargarYMostrarUsuarios();
+            cargarYMostrarCampanas();
         })
         .catch(error => {
             console.error('Error al eliminar el usuario:', error);
@@ -221,7 +212,6 @@ document.getElementById('btnEdit').addEventListener('click', function() {
         });
     }
 }
-
 </script>
     
 </head>
@@ -283,21 +273,33 @@ document.getElementById('btnEdit').addEventListener('click', function() {
     </ul>
 
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminDonantesRutas') }}" class="menu-link">
+      <span class="menu-header-text">Administrar Donantes</span>
+      </a>
+    </ul>
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="{{ route('adminCitasRutas') }}" class="menu-link">
+      <span class="menu-header-text">Administrar Citas</span>
+      </a>
+    </ul>
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="{{ route('adminCampañasRutas') }}" class="menu-link">
       <span class="menu-header-text">Administrar Campañas</span>
       </a>
     </ul>
 
-
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminUnidadesRutas') }}" class="menu-link">
       <span class="menu-header-text">Administrar Unidades Medicas</span>
       </a>
     </ul>
-
+  
     
     
    <!-- FIN NAVBAR-->
+
 
 
   </ul>
@@ -589,8 +591,8 @@ function verificarCampos() {
             // La respuesta exitosa del servidor
             console.log('Respuesta del servidor:', data);
 
-            var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-            offcanvasAddUser.hide();
+            var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
+            offcanvasAddCampaign.hide();
 
             
             setTimeout(function() {
@@ -624,8 +626,8 @@ function verificarCampos() {
 });
 
         // Cerrar el modal 
-        var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-        offcanvasAddUser.hide();
+        var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
+        offcanvasAddCampaign.hide();
     }
 
 
@@ -752,7 +754,7 @@ function verificarCamposEdit() {
     .then(data => {
         console.log('Respuesta del servidor:', data);
 
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
         offcanvasEditUser.hide();
         setTimeout(function() {
             alert('Usuario editado exitosamente.');
@@ -775,34 +777,29 @@ function verificarCamposEdit() {
     offcanvasEditUser.hide();
 }
 </script>
-
-
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-    <h4>Listado de Usuarios</h4>
-    <button type="button" class="btn btn-secondary" id="btnAdd">Añadir</button>
+      <h4>Listado de Campañas</h4>
+      <button type="button" class="btn btn-secondary" id="btnAddCampaign">Añadir</button>
   </div>
-  
+
   <div class="table-responsive text-nowrap">
-    <table class="table">
-      <thead class="table-light">
-        <tr>
-          <th>Nombre</th>
-          <th>Correo Electronico</th>
-          <th>Tipo de Sangre</th>
-          <th>Fecha de Nacimiento</th>
-          <th>Genero</th>
-          <th>Donador</th>
-          <th>CURP</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <!-- Asegúrate de tener un tbody con el ID 'tablaUsuariosBody' -->
-      <tbody class="table-border-bottom-0" id="tablaUsuariosBody">
-        <!-- Aquí puedes tener filas predefinidas si lo deseas -->
-        
-      </tbody>
-    </table>
+      <table class="table">
+          <thead class="table-light">
+              <tr>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Tipo</th>
+                  <th>Fecha de Inicio</th>
+                  <th>Fecha de Fin</th>
+                  <th>Acciones</th>
+              </tr>
+          </thead>
+          <!-- Asegúrate de tener un tbody con el ID 'tablaCampanasBody' -->
+          <tbody class="table-border-bottom-0" id="tablaCampanasBody">
+              <!-- Aquí puedes tener filas predefinidas si lo deseas -->
+          </tbody>
+      </table>
   </div>
 </div>
 <!-- Bootstrap Table with Header - Light -->
@@ -897,98 +894,53 @@ function verificarCamposEdit() {
 </div>
 
 
-<!-- ---------------------------------------------------------Modal Añadir Usuarios---------------------------------------------------------- -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddUser" aria-labelledby="offcanvasAddUserLabel">
-    <div class="offcanvas-header">
-      <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Usuario</h5>
+<!-- Modal Añadir Campañas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
+  <div class="offcanvas-header">
+      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Campaña</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
+  </div>
 
-    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-      <form class="add-new-user pt-0" id="addNewUserForm" onsubmit="return false">
+  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+      <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
 
-
-      <div class="mb-3">
-    <label class="form-label" for="add-Nombres">Nombres</label>
-    <input type="text" id="add-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
-    <div id="mensajeErrorLetrasNombres" style="color: red;"></div>
-</div>
-
-<div class="mb-3">
-    <label class="form-label" for="add-Apellidos">Apellidos</label>
-    <input type="text" id="add-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)" />
-    <div id="mensajeErrorLetrasApellidos" style="color: red;"></div>
-</div>
-
-        <div class="mb-3">
-          <label class="form-label" for="add-correoElectronico">Correo Electrónico</label>
-          <input type="text" id="add-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronico()" />
-          <div id="mensajeErrorCorreo" style="color: red;"></div>
-      </div>
-
-      <div class="mb-3">
-      <label class="form-label" for="add-contrasena">Contraseña</label>
-      <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
-      <div id="mensajeErrorContrasena" style="color: red;"></div>
-     </div>
-
-        <div class="mb-3">
-    <label class="form-label" for="add-fechaNacimiento">Fecha de Nacimiento</label>
-    <div class="col-md-10">
-        <input class="form-control" type="date" value="" id="html5-date-input" oninput="validarFechaNacimiento()" min='1900-01-01' max='2023-12-31' />
-        <div id="mensajeErrorFecha" style="color: red;"></div>
-    </div>
-</div>
-
-        <div class="mb-3">
-          <label class="form-label" for="add-genero">Género</label>
-          <select id="add-genero" class="form-select">
-            <option selected disabled value="">Opciones...</option>
-            <option value="Hombre">Hombre</option>
-            <option value="Mujer">Mujer</option>
-          </select>
-        </div>
-
-        
           <div class="mb-3">
-              <label class="form-label" for="add-curp">CURP</label>
-              <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurp()"/>
-              <div id="mensajeErrorCurp" style="color: red;"></div>              
+              <label class="form-label" for="add-nombreCampaña">Nombre de la Campaña</label>
+              <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribir Nombre de la Campaña" aria-label="Nombre de la Campaña" />
           </div>
 
+          <div class="mb-3">
+              <label class="form-label" for="add-descripcionCampaña">Descripción de la Campaña</label>
+              <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Descripción de la Campaña" aria-label="Descripción de la Campaña" />
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label" for="add-tipoSangre">Tipo de Sangre</label>
-          <select id="add-tipoSangre" class="form-select">
-            <option selected disabled value="">Opciones...</option>
-            <option value="A+">A+</option>
-            <option value="O+">O+</option>
-            <option value="B+">B+</option>
-            <option value="AB+">AB+</option>
-            <option value="A-">A-</option>
-            <option value="O-">O-</option>
-            <option value="B-">B-</option>
-            <option value="AB-">AB-</option>
-          </select>
-        </div>
+          <div class="mb-3">
+              <label class="form-label" for="add-tipoCampaña">Tipo de Campaña</label>
+              <select id="add-tipoCampaña" class="form-select">
+                  <option selected disabled value="">Opciones...</option>
+                  <option value="Plaquetas">Plaquetas</option>
+                  <option value="Sangre">Sangre</option>
+              </select>
+          </div>
 
-        <div class="mb-3">
-                <label class="form-label" for="add-donador">Donador</label>
-                <select id="add-donador" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Si">Si</option>
-                    <option value="No">No</option>
-                </select>
-            </div>
+          <div class="mb-3">
+              <label class="form-label" for="add-fechaInicio">Fecha de Inicio</label>
+              <div class="col-md-10">
+                  <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" />
+              </div>
+          </div>
 
-        <button type="submit" id="btnAdd" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCampos()">Confirmar</button>
-        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+          <div class="mb-3">
+              <label class="form-label" for="add-donacionesRequeridas">Donaciones Requeridas</label>
+              <input type="number" id="add-donacionesRequeridas" class="form-control" placeholder="Número de Donaciones Requeridas" aria-label="Donaciones Requeridas" />
+          </div>
+
+          <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
       </form>
-    </div>
   </div>
 </div>
 
-</div>
                       <!-- / Content -->
 
           
@@ -1068,10 +1020,10 @@ function verificarCamposEdit() {
 
 
   <script>
-  var btnAdd = document.getElementById('btnAdd');
-  var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-  btnAdd.addEventListener('click', function () {
-    offcanvasAddUser.show();
+  var btnAddCampaign = document.getElementById('btnAddCampaign');
+  var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
+  btnAddCampaign.addEventListener('click', function () {
+    offcanvasAddCampaign.show();
   });
 </script>
 
