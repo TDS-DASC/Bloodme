@@ -341,7 +341,7 @@
   </div>
 
   <!-- Revenue Growth -->
-  <div class="col-xl-4 col-md-6 mb-4">
+  {{-- <div class="col-xl-4 col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-header d-flex justify-content-between">
         <div class="card-title mb-0">
@@ -532,7 +532,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
 
 
  
@@ -541,6 +541,61 @@
           </div>
           <!-- / Content -->
 
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+      let donadoresCount = 0;
+      let usersCount = 0;
+    
+      // Espera a que el DOM esté listo
+      $(document).ready(function () {
+        // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
+        $.ajax({
+          url: 'http://127.0.0.1:8000/api/users/',
+          method: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            if (response.users) {
+              usersCount = response.users.length;
+    
+              donadoresCount = response.users.filter(user => user.donator === 1).length;
+    
+              // Llama a la función drawChart después de actualizar los valores
+              drawChart();
+            } else {
+              console.error('Error al obtener la lista de usuarios.');
+            }
+          },
+          error: function () {
+            console.error('Error en la solicitud AJAX.');
+          }
+        });
+      });
+    
+      google.charts.load('current', { 'packages': ['corechart'] });
+      google.charts.setOnLoadCallback(drawChart);
+    
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Users', usersCount],
+          ['Donors', donadoresCount],
+        ]);
+    
+        var options = {
+          title: 'Datos generales de los usuarios',
+          is3D: true,
+          slices: {
+            0: { color: '#f94561' },
+            1: { color: '#00c8fd' }
+          }
+        };
+    
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+    
+        chart.draw(data, options);
+      }
+    </script>
+    <div id="piechart_3d" style="width: 48%; height: 500px;"></div>
           
           
 
