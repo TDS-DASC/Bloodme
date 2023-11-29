@@ -20,7 +20,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Administrador | Unidades</title>
+    <title>PROXIMAMENTE </title>
 
     
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
@@ -233,7 +233,7 @@ function editarCampana(campaignId) {
 
   
   <div class="app-brand demo ">
-    <a href="index.html" class="app-brand-link">
+    <a href="{{ route('adminDashboardRuta') }}" class="app-brand-link">
       <span class="app-brand-logo demo">
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
             <img src="../../images/logo.png" alt="Logo de BLOODME" style="width: 130%; height: auto;">
@@ -390,29 +390,7 @@ function editarCampana(campaignId) {
               <li>
                 <div class="dropdown-divider"></div>
               </li>
-              <li>
-                <a class="dropdown-item" href="pages-profile-user.html">
-                  <i class="ti ti-user-check me-2 ti-sm"></i>
-                  <span class="align-middle">Mi Perfil</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-account-settings-account.html">
-                  <i class="ti ti-settings me-2 ti-sm"></i>
-                  <span class="align-middle">Editar Perfil</span>
-                </a>
-              </li>
-
-              <li>
-                <a class="dropdown-item" href="pages-faq.html">
-                  <i class="ti ti-help me-2 ti-sm"></i>
-                  <span class="align-middle">Mis Campañas</span>
-                </a>
-              </li>
-              
-              <li>
-                <div class="dropdown-divider"></div>
-              </li>
+             
               
              
              
@@ -779,7 +757,7 @@ function verificarCamposEdit() {
 </script>
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-      <h4>Listado de Campañas</h4>
+      <h4>PROXIMAMENTE </h4>
       <button type="button" class="btn btn-secondary" id="btnAddCampaign">Añadir</button>
   </div>
 

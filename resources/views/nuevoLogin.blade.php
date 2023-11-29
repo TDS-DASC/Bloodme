@@ -121,7 +121,7 @@
         <div class="card-body">
          <!-- Logo -->
           <div class="app-brand justify-content-center mb-4 mt-2">
-              <a href="index.html" class="app-brand-link gap-2 d-flex flex-column align-items-center">
+              <a class="app-brand-link gap-2 d-flex flex-column align-items-center">
                   <img src="../../images/logo.png" alt="Logo" class="mb-2" width="110" height="90">
                   <span class="app-brand-text demo text-danger fw-bold mb-2">BLOODME</span>
               </a>

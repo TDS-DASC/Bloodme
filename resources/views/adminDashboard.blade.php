@@ -95,7 +95,7 @@
 
   
   <div class="app-brand demo ">
-    <a href="index.html" class="app-brand-link">
+    <a href="{{ route('adminDashboardRuta') }}" class="app-brand-link">
     <span class="app-brand-logo demo">
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
             <img src="../../images/logo.png" alt="Logo de BLOODME" style="width: 130%; height: auto;">
