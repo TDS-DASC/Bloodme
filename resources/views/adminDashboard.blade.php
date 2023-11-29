@@ -135,18 +135,29 @@
     </ul>
 
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminDonantesRutas') }}" class="menu-link">
+      <span class="menu-header-text">Administrar Donantes</span>
+      </a>
+    </ul>
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="{{ route('adminCitasRutas') }}" class="menu-link">
+      <span class="menu-header-text">Administrar Citas</span>
+      </a>
+    </ul>
+
+    <ul style="margin-left: 12px; margin-top:20px">
+      <a href="{{ route('adminCampañasRutas') }}" class="menu-link">
       <span class="menu-header-text">Administrar Campañas</span>
       </a>
     </ul>
 
-
     <ul style="margin-left: 12px; margin-top:20px">
-      <a href="" class="menu-link">
+      <a href="{{ route('adminUnidadesRutas') }}" class="menu-link">
       <span class="menu-header-text">Administrar Unidades Medicas</span>
       </a>
     </ul>
-
+  
     
     
    <!-- FIN NAVBAR-->
@@ -214,31 +225,6 @@
               <li>
                 <div class="dropdown-divider"></div>
               </li>
-              <li>
-                <a class="dropdown-item" href="pages-profile-user.html">
-                  <i class="ti ti-user-check me-2 ti-sm"></i>
-                  <span class="align-middle">Mi Perfil</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-account-settings-account.html">
-                  <i class="ti ti-settings me-2 ti-sm"></i>
-                  <span class="align-middle">Editar Perfil</span>
-                </a>
-              </li>
-
-              <li>
-                <a class="dropdown-item" href="pages-faq.html">
-                  <i class="ti ti-help me-2 ti-sm"></i>
-                  <span class="align-middle">Mis Campañas</span>
-                </a>
-              </li>
-              
-              <li>
-                <div class="dropdown-divider"></div>
-              </li>
-              
-             
              
               <li>
                 <a class="dropdown-item" href="{{route('loginHome')}}">
@@ -341,7 +327,7 @@
   </div>
 
   <!-- Revenue Growth -->
-  <div class="col-xl-4 col-md-6 mb-4">
+  {{-- <div class="col-xl-4 col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-header d-flex justify-content-between">
         <div class="card-title mb-0">
@@ -532,16 +518,174 @@
         </div>
       </div>
     </div>
-  </div>
-
-
- 
- 
-
+  </div> --}}
           </div>
           <!-- / Content -->
 
           
+    <!--Gráfica de usuarios-->
+    <!-- Gráfica de usuarios -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
+    <script>
+      let donadoresCount = 0;
+      let usersCount = 0;
+    
+      // Espera a que el DOM esté listo
+      $(document).ready(function () {
+        // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
+        $.ajax({
+          url: 'http://127.0.0.1:8000/api/users/',
+          method: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            if (response.users) {
+              usersCount = response.users.length;
+              donadoresCount = response.users.filter(user => user.donator === 1).length;
+              // Llama a la función drawCharts después de actualizar los valores
+              drawCharts();
+            } else {
+              console.error('Error al obtener la lista de usuarios.');
+            }
+          },
+          error: function () {
+            console.error('Error en la solicitud AJAX.');
+          }
+        });
+      });
+    
+      // Carga la librería de Google Charts y luego llama a drawCharts
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawCharts);
+    
+      function drawCharts() {
+        drawUserChart();
+        drawBloodTypeChart();
+      }
+    
+      function drawUserChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Usuarios', usersCount],
+          ['Donadores', donadoresCount],
+        ]);
+    
+        var options = {
+          title: 'Datos generales de los usuarios',
+          is3D: true,
+          slices: {
+            0: { color: '#f94561' },
+            1: { color: '#00c8fd' }
+          }
+        };
+    
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+    
+        chart.draw(data, options);
+      }
+    </script>
+    <div id="piechart_3d" style="width: 48%; height: 500px;  float: right;"></div>
+
+    
+    <!-- Gráfica de tipos de sangre -->
+<script type="text/javascript">
+  google.charts.load("current", {packages:["corechart"]});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart(data) {
+    var defaultData = [
+      ["Element", "Density", { role: "style" }],
+      ["Copper", 8.94, "#b87333"],
+      ["Silver", 10.49, "silver"],
+      ["Gold", 19.30, "gold"],
+      ["Platinum", 21.45, "color: #e5e4e2"]
+    ];
+
+    data = data || defaultData;
+
+    var chartData = google.visualization.arrayToDataTable(data);
+
+    var view = new google.visualization.DataView(chartData);
+    view.setColumns([0, 1,
+                     { calc: "stringify",
+                       sourceColumn: 1,
+                       type: "string",
+                       role: "annotation" },
+                     2]);
+
+    var options = {
+      title: "Tipos de Sangre",
+      width: 600,
+      height: 400,
+      bar: {groupWidth: "95%"},
+      legend: { position: "none" },
+    };
+
+    var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+    chart.draw(view, options);
+  }
+
+  $(document).ready(function () {
+    // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
+    $.ajax({
+      url: 'http://127.0.0.1:8000/api/users/',
+      method: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        if (response.users) {
+          const tiposSangre = response.users.map(user => user.blood_type);
+          console.log('Tipos de sangre:', tiposSangre);
+
+          // Cuenta la frecuencia de cada tipo de sangre
+          const frecuenciaTiposSangre = contarFrecuencia(tiposSangre);
+
+          // Convierte los datos al formato necesario para la gráfica
+          const data = [["Tipo de Sangre", "Frecuencia", { role: "style" }]];
+          Object.entries(frecuenciaTiposSangre).forEach(([tipo, frecuencia]) => {
+            data.push([tipo, frecuencia, getColorForBloodType(tipo)]);
+          });
+
+          // Llama a drawChart con los datos específicos
+          drawChart(data);
+        } else {
+          console.error('Error al obtener la lista de usuarios.');
+        }
+      },
+      error: function () {
+        console.error('Error en la solicitud AJAX.');
+      }
+    });
+  });
+
+  // Función para contar la frecuencia de elementos en un array
+  function contarFrecuencia(arr) {
+    return arr.reduce((acc, val) => {
+      acc[val] = (acc[val] || 0) + 1;
+      return acc;
+    }, {});
+  }
+
+  // Función para obtener un color para cada tipo de sangre
+  function getColorForBloodType(tipo) {
+    const colores = {
+      "A+": "#FADBD8",
+      "A-": "#F5B7B1",
+      "B+": "#F1948A",
+      "B-": "#EC7063",
+      "AB+": "#E74C3C",
+      "AB-": "#CB4335",
+      "O+": "#B03A2E",
+      "O-": "#943126",
+      // ... agrega más tipos de sangre si es necesario
+    };
+
+    return colores[tipo] || "#F0CC90"; 
+  }
+</script>
+<div id="piechart_3d" style="width: 48%; height: 500px;  float: left"></div>
+<div id="barchart_values" style="width: 48%; height: 500px;"></div>
+
           
 
 <!-- Footer -->
@@ -636,6 +780,9 @@
           
           // Actualiza el contenido del div "donadoresCount" con el número de donadores
           $('#donadoresCount').text(donadoresCount);
+
+          const tiposSangre = response.users.map(user => user.blood_type);
+          console.log('Tipos de sangre:', tiposSangre);
         } else {
           // Maneja el caso en el que la respuesta no fue exitosa
           console.error('Error al obtener la lista de usuarios.');
@@ -680,7 +827,6 @@ $(document).ready(function () {
       method: 'GET', // O el método HTTP correcto
       dataType: 'json',
       success: function (response) {
-        console.log(response);
         // Verifica si la respuesta del backend es exitosa
         if (response.MedicalUnits) { // Cambiado a response.medicalUnits con mayúscula inicial
           // Actualiza el contenido del div "unidadesMedicas" con la longitud del array de unidades médicas

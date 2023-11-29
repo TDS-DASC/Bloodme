@@ -17,6 +17,7 @@ class Campaign extends Model
         'donations_required',
         'current_donations',
         'user_id',
+        'description',
     ];
 
     public function medicalUnits()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -68,7 +69,12 @@ class UserController extends Controller
             return response()->json(['message' => 'User Not found'],404);
         }
 
-        $user -> update($request->all());
+        $userDataExtra = $request->except('password');
+        if ($request->has('password')) {
+            $userDataExtra['password'] = Hash::make($request->input('password'));
+        }
+
+        $user -> update($userDataExtra);
 
         return response()->json(['user' => $user, 'message' => 'Updated user OK'],200);
     }
@@ -76,11 +82,12 @@ class UserController extends Controller
     public function update(Request $request){
         $user = User::find($request->input('id'));
 
-        if(!$user){
-            return response()->json(['message' => 'User Not found'],404);
+        $userDataExtra = $request->except('password');
+        if ($request->has('password')) {
+            $userDataExtra['password'] = Hash::make($request->input('password'));
         }
 
-        $user -> update($request->all());
+        $user -> update($userDataExtra);
 
         return response()->json(['user' => $user, 'message' => 'Updated user OK'],200);
     }

@@ -12,7 +12,10 @@ class CampaignController extends Controller
         $validateData = $request->validate([
            'start_campaign' => 'required',
             'donations_required' => 'required',
-            'user_id' => 'required'
+            'platelets' => 'sometimes',
+            'blood' => 'sometimes',
+            'user_id' => 'required',
+            'description' => 'sometimes'
         ]);
         $campaign = Campaign::create($validateData);
         $campaign->save();
