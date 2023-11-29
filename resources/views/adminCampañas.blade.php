@@ -113,15 +113,15 @@ function renderizarTablaCampanas(campaigns) {
     campaigns.forEach(campaign => {
         var row = tbody.insertRow();
 
-        var cellNombre = row.insertCell(0);  //Aqui cambiar por el ROW al que le pertenece nombre porque 0 es el ID
+        var cellNumero = row.insertCell(0);  //Aqui cambiar por el ROW al que le pertenece nombre porque 0 es el ID
         var cellDescripcion = row.insertCell(1);
         var cellTipo = row.insertCell(2);
         var cellFechaInicio = row.insertCell(3);
         var cellFechaFin = row.insertCell(4);
         var cellAcciones = row.insertCell(5);
 
-        cellNombre.innerText = campaign.id; 
-        cellDescripcion.innerText = 'N/A'; 
+        cellNumero.innerText = campaign.id; 
+        cellDescripcion.innerText = campaign.description || 'N/A';
         cellTipo.innerText = campaign.blood === 1 ? 'Sangre' : 'Plaquetas'; 
         cellFechaInicio.innerText = campaign.start_campaign;
         cellFechaFin.innerText = campaign.end_campaign || 'N/A'; 
@@ -763,7 +763,7 @@ function verificarCamposEdit() {
       <table class="table">
           <thead class="table-light">
               <tr>
-                  <th>Nombre</th>
+                  <th>#</th>
                   <th>Descripción</th>
                   <th>Tipo</th>
                   <th>Fecha de Inicio</th>
