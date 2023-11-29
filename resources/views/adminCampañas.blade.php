@@ -873,7 +873,7 @@ function verificarCamposEdit() {
 <!-- Modal Añadir Campañas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
   <div class="offcanvas-header">
-      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Campaña</h5>
+      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Nueva Campaña</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
@@ -881,8 +881,31 @@ function verificarCamposEdit() {
       <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
 
           <div class="mb-3">
-              <label class="form-label" for="add-nombreCampaña">Nombre de la Campaña</label>
-              <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribir Nombre de la Campaña" aria-label="Nombre de la Campaña" />
+              <label class="form-label" for="add-fechaInicio">Inicio de la Campaña</label>
+              <div class="col-md-10">
+                  <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" />
+              </div>
+          </div>
+
+          <div class="mb-3">
+              <label class="form-label" for="add-fechaFin">Final de la Campaña</label>
+              <div class="col-md-10">
+                  <input class="form-control" type="date" value="" id="add-fechaFin" min="2022-01-01" max="2023-12-31" />
+              </div>
+          </div>
+
+          <div class="mb-3">
+              <label class="form-label" for="add-tipoDonacion">Tipo de Donaciones</label>
+              <select id="add-tipoDonacion" class="form-select">
+                  <option selected disabled value="">Opciones...</option>
+                  <option value="Plaquetas">Plaquetas</option>
+                  <option value="Sangre">Sangre</option>
+              </select>
+          </div>
+
+          <div class="mb-3">
+              <label class="form-label" for="add-unidadesRequeridas">Unidades Requeridas</label>
+              <input type="number" id="add-unidadesRequeridas" class="form-control" placeholder="Número de Unidades Requeridas" aria-label="Unidades Requeridas" />
           </div>
 
           <div class="mb-3">
@@ -891,31 +914,16 @@ function verificarCamposEdit() {
           </div>
 
           <div class="mb-3">
-              <label class="form-label" for="add-tipoCampaña">Tipo de Campaña</label>
-              <select id="add-tipoCampaña" class="form-select">
-                  <option selected disabled value="">Opciones...</option>
-                  <option value="Plaquetas">Plaquetas</option>
-                  <option value="Sangre">Sangre</option>
-              </select>
-          </div>
-
-          <div class="mb-3">
-              <label class="form-label" for="add-fechaInicio">Fecha de Inicio</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" />
-              </div>
-          </div>
-
-          <div class="mb-3">
-              <label class="form-label" for="add-donacionesRequeridas">Donaciones Requeridas</label>
-              <input type="number" id="add-donacionesRequeridas" class="form-control" placeholder="Número de Donaciones Requeridas" aria-label="Donaciones Requeridas" />
-          </div>
+            <label class="form-label" for="add-curpCampaña">CURP de la persona a donar</label>
+            <input type="text" id="add-curpCampaña" class="form-control" placeholder="Escribir CURP de la persona a Donar" aria-label="CURP" />
+         </div>
 
           <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
           <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
       </form>
   </div>
 </div>
+
 
                       <!-- / Content -->
 
