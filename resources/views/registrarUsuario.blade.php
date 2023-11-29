@@ -72,190 +72,7 @@
 
 
 
-  <script>
-  function mostrarErrorLetras(id, mensaje) {
-    var mensajeErrorLetras = document.getElementById(id);
-    if (mensajeErrorLetras) {
-      mensajeErrorLetras.textContent = mensaje;
-    }
-  }
-
-  function validarSoloLetras(event, campoInput) {
-    var charCode = event.which || event.keyCode;
-    var mensajeErrorId = 'mensajeErrorLetras' + campoInput.id.charAt(4);
-
-    if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
-      mostrarErrorLetras(mensajeErrorId, 'Solo se permiten letras (sin espacios, números o caracteres especiales).');
-      return false;
-    }
-
-    mostrarErrorLetras(mensajeErrorId, '');
-    return true;
-  }
-
-  function validarCorreoElectronico() {
-    var inputCorreo = document.getElementById('add-correoElectronico');
-    var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
-
-    var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!regexCorreo.test(inputCorreo.value)) {
-      mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
-      inputCorreo.classList.add('is-invalid');
-    } else {
-      mensajeErrorCorreo.textContent = '';
-      inputCorreo.classList.remove('is-invalid');
-    }
-  }
-
-  function validarCurp() {
-    var curpInput = document.getElementById('add-curp');
-    var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
-
-    if (curpInput.value.length !== 18) {
-      mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres.';
-      curpInput.classList.add('is-invalid');
-    } else {
-      mensajeErrorCurp.innerText = '';
-      curpInput.classList.remove('is-invalid');
-    }
-  }
-
-  function validarContrasena() {
-    var contrasenaInput = document.getElementById('add-contrasena');
-    var mensajeErrorContrasena = document.getElementById('mensajeErrorContrasena');
-
-    if (contrasenaInput.value.length < 6 || contrasenaInput.value.length > 15) {
-      mensajeErrorContrasena.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
-      contrasenaInput.classList.add('is-invalid');
-    } else {
-      mensajeErrorContrasena.textContent = '';
-      contrasenaInput.classList.remove('is-invalid');
-    }
-  }
-
-  function validarFechaNacimiento() {
-    var fechaInput = document.getElementById('html5-date-input');
-    var mensajeErrorFecha = document.getElementById('mensajeErrorFecha');
-
-    var fechaArray = fechaInput.value.split('-');
-    if (fechaArray.length === 3 && fechaArray[0].length > 4) {
-      fechaArray[0] = fechaArray[0].substring(0, 4);
-      fechaInput.value = fechaArray.join('-');
-    }
-
-    var fechaSeleccionada = new Date(fechaInput.value);
-    var fechaMinima = new Date('1900-01-01');
-    var fechaMaxima = new Date('2023-12-31');
-
-    if (fechaSeleccionada < fechaMinima || fechaSeleccionada > fechaMaxima) {
-      mensajeErrorFecha.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
-      fechaInput.classList.add('is-invalid');
-    } else {
-      mensajeErrorFecha.innerText = '';
-      fechaInput.classList.remove('is-invalid');
-    }
-  }
-
-  function validarFormulario() {
-    var formulario = document.getElementById('formAuthentication');
-
-    if (!formulario.checkValidity()) {
-      formulario.reportValidity();
-      return false;
-    }
-
-    return true;
-  }
-
-  function registrarUsuario(event) {
-    event.preventDefault();
-
-    if (!validarFormulario()) {
-      alert('Por favor, completa todos los campos correctamente.');
-      return;
-    }
-
-    var nombres = document.getElementById('add-Nombres').value;
-    var apellidos = document.getElementById('add-Apellidos').value;
-    var correoElectronico = document.getElementById('add-correoElectronico').value;
-    var contrasena = document.getElementById('add-contrasena').value;
-    var tipoSangre = document.getElementById('add-tipoSangre').value;
-    var curp = document.getElementById('add-curp').value;
-    var fechaNacimiento = document.getElementById('html5-date-input').value;
-    var genero = document.getElementById('add-genero').value;
-
-    var userData = {
-      name: nombres,
-      last_name: apellidos,
-      email: correoElectronico,
-      password: contrasena,
-      blood_type: tipoSangre,
-      curp: curp,
-      birthdate: fechaNacimiento,
-      gender: genero
-    };
-
-    fetch('http://127.0.0.1:8000/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(userData)
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Respuesta del servidor:', data);
-
-        var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-        offcanvasAddUser.hide();
-
-        setTimeout(function() {
-          alert('Usuario creado exitosamente.');
-          document.getElementById('add-Nombres').value = '';
-          document.getElementById('add-Apellidos').value = '';
-          document.getElementById('add-correoElectronico').value = '';
-          document.getElementById('add-contrasena').value = '';
-          document.getElementById('add-tipoSangre').value = '';
-          document.getElementById('add-curp').value = '';
-          document.getElementById('html5-date-input').value = '';
-          document.getElementById('add-genero').value = '';
-        }, 300);
-
-        window.location.href = "{{ route('adminDashboardRuta') }}";
-      })
-      .catch(error => {
-        console.error('Error en la solicitud:', error);
-        alert('Error al agregar el usuario: ');
-
-        if (error instanceof SyntaxError && error.message.includes('Unexpected token')) {
-          error.text().then(text => {
-            console.error('Contenido de la respuesta:', text);
-          });
-        }
-      });
-
-      var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-      offcanvasAddUser.hide();
-  }
-
-  document.getElementById('btnAdd').addEventListener('click', function(event) {
-    // Agrega la lógica de verificación de campos aquí
-    validarCorreoElectronico();
-    validarCurp();
-    validarContrasena();
-    validarFechaNacimiento();
-
-    // Luego, si todos los campos son válidos, descomenta la línea siguiente:
-    registrarUsuario(event);
-  });
-
-</script>
+  
 
   <!-- ------------------------------------------Content ------------------------------------------------------------>
 
@@ -268,7 +85,7 @@
         <div class="card-body">
           <!-- Logo -->
           <div class="app-brand justify-content-center mb-4 mt-2">
-              <a href="index.html" class="app-brand-link gap-2 d-flex flex-column align-items-center">
+              <a class="app-brand-link gap-2 d-flex flex-column align-items-center">
                   <img src="../../images/logo.png" alt="Logo" class="mb-2" width="110" height="90">
                   <span class="app-brand-text demo text-danger fw-bold mb-2">BLOODME</span>
               </a>
@@ -290,6 +107,12 @@
               <label class="form-label" for="add-Apellidos">Apellidos</label>
               <input type="text" id="add-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)" />
               <div id="mensajeErrorLetrasApellidos" style="color: red;"></div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="add-correoElectronico">Correo Electrónico</label>
+            <input type="email" id="add-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="Correo Electrónico" onblur="validarCorreoElectronico()" required />
+            <div id="mensajeErrorCorreo" style="color: red;"></div>
           </div>
 
           <div class="mb-3">
@@ -371,9 +194,199 @@
 
 <!-- / Content -->
 
-  
+<script>
+  function mostrarErrorLetras(id, mensaje) {
+    var mensajeErrorLetras = document.getElementById(id);
+    if (mensajeErrorLetras) {
+      mensajeErrorLetras.textContent = mensaje;
+    }
+  }
 
-  
+  function validarSoloLetras(event, campoInput) {
+    var charCode = event.which || event.keyCode;
+    var mensajeErrorId = 'mensajeErrorLetras' + campoInput.id.charAt(4);
+
+    // Permitir solo letras (sin espacios, números o caracteres especiales)
+    if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
+      mostrarErrorLetras(mensajeErrorId, 'Solo se permiten letras (sin espacios, números o caracteres especiales).');
+      return false;
+    }
+    mostrarErrorLetras(mensajeErrorId, '');
+    return true;
+  }
+
+  function validarCurp() {
+    var curpInput = document.getElementById('add-curp');
+    var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
+
+    // Expresión regular para permitir solo letras sin acentos y números
+    var regexCurp = /^[A-Za-z0-9]+$/;
+
+    // Verificar la longitud del CURP
+    if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
+      mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+      curpInput.classList.add('is-invalid');
+    } else {
+      mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+      curpInput.classList.remove('is-invalid');
+    }
+  }
+
+  function validarCorreoElectronico() {
+    var inputCorreo = document.getElementById('add-correoElectronico');
+    var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
+    var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!regexCorreo.test(inputCorreo.value)) {
+      mensajeErrorCorreo.textContent = 'Por favor, ingresa un correo electrónico válido.';
+      inputCorreo.classList.add('is-invalid');
+    } else {
+      mensajeErrorCorreo.textContent = '';
+      inputCorreo.classList.remove('is-invalid');
+    }
+  }
+
+  function validarContrasena() {
+    var contrasenaInput = document.getElementById('add-contrasena');
+    var mensajeErrorContrasena = document.getElementById('mensajeErrorContrasena');
+
+    // Verificar la longitud de la contraseña
+    if (contrasenaInput.value.length < 6 || contrasenaInput.value.length > 15) {
+      mensajeErrorContrasena.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
+      contrasenaInput.classList.add('is-invalid');
+    } else {
+      mensajeErrorContrasena.textContent = '';
+      contrasenaInput.classList.remove('is-invalid');
+    }
+  }
+
+  function validarFechaNacimiento() {
+    var fechaInput = document.getElementById('html5-date-input');
+    var mensajeErrorFecha = document.getElementById('mensajeErrorFecha');
+    var fechaArray = fechaInput.value.split('-');
+    if (fechaArray.length === 3 && fechaArray[0].length > 4) {
+      fechaArray[0] = fechaArray[0].substring(0, 4);
+      fechaInput.value = fechaArray.join('-');
+    }
+
+    var fechaSeleccionada = new Date(fechaInput.value);
+    var fechaMinima = new Date('1900-01-01');
+    var fechaMaxima = new Date('2023-11-27');
+
+    if (fechaSeleccionada < fechaMinima || fechaSeleccionada > fechaMaxima) {
+      mensajeErrorFecha.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
+      fechaInput.classList.add('is-invalid');
+    } else {
+      mensajeErrorFecha.innerText = '';
+      fechaInput.classList.remove('is-invalid');
+    }
+  }
+
+  function verificarCampos() {
+  var formulario = document.getElementById('formAuthentication');
+  if (!formulario.checkValidity()) {
+    formulario.reportValidity();
+    return;
+  }
+
+  // Campos a verificar
+  var campos = [
+    'add-Nombres',
+    'add-Apellidos',
+    'add-correoElectronico',
+    'add-contrasena',
+    'add-tipoSangre',
+    'add-curp',
+    'html5-date-input',
+    'add-genero',
+    'add-donador'
+  ];
+
+  // Obtener y validar valores de los campos
+  var userData = {};
+  for (var i = 0; i < campos.length; i++) {
+    var campoId = campos[i];
+    var valorCampo = obtenerValorCampo(campoId);
+
+    if (valorCampo) {
+      userData[campoId] = valorCampo;
+    } else {
+      console.error('Campo no encontrado o valor nulo:', campoId);
+      return;
+    }
+  }
+
+  // Crear objeto de datos para enviar al servidor
+  var nombres = userData['add-Nombres'];
+  var apellidos = userData['add-Apellidos'];
+  var correoElectronico = userData['add-correoElectronico'];
+  var contrasena = userData['add-contrasena'];
+  var tipoSangre = userData['add-tipoSangre'];
+  var curp = userData['add-curp'];
+  var fechaNacimiento = userData['html5-date-input'];
+  var genero = userData['add-genero'];
+  var donadorValue = userData['add-donador'] === 'Si' ? 1 : 0;
+
+  var userDataToSend = {
+    name: nombres,
+    last_name: apellidos,
+    email: correoElectronico,
+    password: contrasena,
+    blood_type: tipoSangre,
+    curp: curp,
+    birthdate: fechaNacimiento,
+    gender: genero,
+    donator: donadorValue
+  };
+
+  // Realizar la solicitud POST a la API
+  fetch('http://127.0.0.1:8000/api/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userDataToSend)
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // La respuesta exitosa del servidor
+      console.log('Respuesta del servidor:', data);
+
+      setTimeout(function () {
+        alert('Usuario creado exitosamente.');
+
+        // Restablecer valores de los campos a blanco
+        campos.forEach(function(campoId) {
+          document.getElementById(campoId).value = '';
+        });
+      }, 300);
+    })
+    .catch(error => {
+      // Manejar errores en la solicitud
+      console.error('Error en la solicitud:', error);
+      alert('Error al agregar el usuario.');
+
+      // Verificar si hay una respuesta del servidor
+      if (error && error.response && error.response.text) {
+        // Intenta obtener más información sobre la respuesta
+        error.response.text().then(text => {
+          console.error('Contenido de la respuesta:', text);
+        });
+      }
+    });
+}
+
+function obtenerValorCampo(idCampo) {
+  var campo = document.getElementById(idCampo);
+  return campo ? campo.value : null;
+}
+
+</script>
 
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/core.js -->
