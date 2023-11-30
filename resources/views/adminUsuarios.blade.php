@@ -285,13 +285,22 @@ function mostrarDetallesUsuario(userId) {
 </script>
     
 <style>
-    #offcanvasAddUser {
+    #offcanvasAddUser, #offcanvasEditUser {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
         width: 50%;
         height: 550px;
     }
+
+    #offcanvasDetallesUsuario {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        height: 500px;
+    }
+
   </style>
 </head>
 
@@ -843,7 +852,7 @@ function verificarCamposEdit() {
 
 
 <!-- Modal de Detalles del Usuario -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" class="modal" aria-labelledby="offcanvasDetallesUsuarioLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasDetallesUsuarioLabel" class="offcanvas-title">Detalles del Usuario</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -987,7 +996,7 @@ function verificarCamposEdit() {
 </div> -->
 
 <!-- Modal Editar Usuarios -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" class="modal" aria-labelledby="offcanvasEditUserLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
