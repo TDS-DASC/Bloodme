@@ -157,9 +157,7 @@
       <span class="menu-header-text">Administrar Unidades Medicas</span>
       </a>
     </ul>
-  
-    
-    
+
    <!-- FIN NAVBAR-->
 
 
@@ -326,6 +324,21 @@
     </div>
   </div>
 
+  <div class="col-xl-3 col-md-4 col-6 mb-4">
+    <div class="card">
+      <div class="card-header pb-0">
+        <h5 class="card-title mb-0">Donaciones realizadas</h5>
+        <small class="text-muted">Número de donaciones realizadas</small>
+      </div>
+      <div class="card-body">
+        <div id="sessionsLastMonth"></div>
+        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+          <h4 class="mb-0" id="donacionesRealizadas"></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- Revenue Growth -->
   {{-- <div class="col-xl-4 col-md-6 mb-4">
     <div class="card h-100">
@@ -635,8 +648,7 @@
       success: function (response) {
         if (response.users) {
           const tiposSangre = response.users.map(user => user.blood_type);
-          console.log('Tipos de sangre:', tiposSangre);
-
+          
           // Cuenta la frecuencia de cada tipo de sangre
           const frecuenciaTiposSangre = contarFrecuencia(tiposSangre);
 
@@ -782,7 +794,6 @@
           $('#donadoresCount').text(donadoresCount);
 
           const tiposSangre = response.users.map(user => user.blood_type);
-          console.log('Tipos de sangre:', tiposSangre);
         } else {
           // Maneja el caso en el que la respuesta no fue exitosa
           console.error('Error al obtener la lista de usuarios.');
@@ -843,6 +854,29 @@ $(document).ready(function () {
     });
   });
 
+
+  // Espera a que el DOM esté listo
+  $(document).ready(function () {
+    // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
+    $.ajax({
+      url: 'http://127.0.0.1:8000/api/donations/', // Reemplaza con la ruta correcta
+      method: 'GET', // O el método HTTP correcto
+      dataType: 'json',
+      success: function (response) {
+        // Verifica si la respuesta del backend es exitosa
+        if (response) {
+          $('#donacionesRealizadas').text(response.donations.length);
+        } else {
+          // Maneja el caso en el que la respuesta no fue exitosa
+          console.error('Error al obtener la lista de usuarios.');
+        }
+      },
+      error: function () {
+        // Maneja el caso de un error en la solicitud AJAX
+        console.error('Error en la solicitud AJAX.');
+      }
+    });
+  });
   
 </script>
 
