@@ -987,8 +987,125 @@ function verificarCamposEdit() {
 </div>
 
 
-<!-- ---------------------------------------------------------Modal Añadir Usuarios---------------------------------------------------------- -->
+<!-- Modal Añadir Usuarios -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddUser" aria-labelledby="offcanvasAddUserLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Usuario</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="add-new-user pt-0" id="addNewUserForm" onsubmit="return false">
+
+            <div class="row">
+                <!-- Columna 1 -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" for="add-Nombres">Nombres</label>
+                        <input type="text" id="add-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
+                        <div id="mensajeErrorLetrasNombres" style="color: red;"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="add-Apellidos">Apellidos</label>
+                        <input type="text" id="add-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)" />
+                        <div id="mensajeErrorLetrasApellidos" style="color: red;"></div>
+                    </div>
+
+                    <div class="mb-3">
+    <label class="form-label" for="add-fechaNacimiento">Fecha de Nacimiento</label>
+    <div class="col-md-10">
+        <input class="form-control" type="date" value="" id="html5-date-input" oninput="validarFechaNacimiento()" min='1900-01-01' max='2023-12-31' />
+        <div id="mensajeErrorFecha" style="color: red;"></div>
+    </div>
+</div>
+
+
+<div class="mb-3">
+              <label class="form-label" for="add-curp">CURP</label>
+              <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurp()"/>
+              <div id="mensajeErrorCurp" style="color: red;"></div>              
+          </div>
+
+                    <!-- Agrega más inputs a la columna 1 según sea necesario -->
+
+                </div>
+
+                <!-- Columna 2 -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" for="add-correoElectronico">Correo Electrónico</label>
+                        <input type="text" id="add-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronico()" />
+                        <div id="mensajeErrorCorreo" style="color: red;"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="add-contrasena">Contraseña</label>
+                        <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
+                        <div id="mensajeErrorContrasena" style="color: red;"></div>
+                    </div>
+
+                    <div class="mb-3">
+          <label class="form-label" for="add-genero">Género</label>
+          <select id="add-genero" class="form-select">
+            <option selected disabled value="">Opciones...</option>
+            <option value="Hombre">Hombre</option>
+            <option value="Mujer">Mujer</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="add-tipoSangre">Tipo de Sangre</label>
+          <select id="add-tipoSangre" class="form-select">
+            <option selected disabled value="">Opciones...</option>
+            <option value="A+">A+</option>
+            <option value="O+">O+</option>
+            <option value="B+">B+</option>
+            <option value="AB+">AB+</option>
+            <option value="A-">A-</option>
+            <option value="O-">O-</option>
+            <option value="B-">B-</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+
+                    <!-- Agrega más inputs a la columna 2 según sea necesario -->
+
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="add-donador">Donador</label>
+                <select id="add-donador" class="form-select">
+                    <option selected disabled value="">Opciones...</option>
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <!-- Resto de los inputs -->
+
+            <!-- Nueva fila para centrar los botones -->
+            <div class="row">
+                <div class="col-md-12 offset-md-0 text-center">
+                    <button type="submit" id="btnAdd" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCampos()">Confirmar</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- ---------------------------------------------------------Modal Añadir Usuarios---------------------------------------------------------- -->
+<!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddUser" aria-labelledby="offcanvasAddUserLabel">
     <div class="offcanvas-header">
       <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Usuario</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -996,6 +1113,10 @@ function verificarCamposEdit() {
 
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
       <form class="add-new-user pt-0" id="addNewUserForm" onsubmit="return false">
+
+      <div class="row">
+
+      </div>
 
 
       <div class="mb-3">
@@ -1078,7 +1199,7 @@ function verificarCamposEdit() {
   </div>
 </div>
 
-</div>
+</div> -->
 
 
 
