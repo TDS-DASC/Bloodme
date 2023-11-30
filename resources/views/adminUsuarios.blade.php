@@ -842,7 +842,7 @@ function verificarCamposEdit() {
 
 
 
-<!-------------------------- Modal de Detalles del Usuario ------------------------------------------------------------------------->
+<!-- Modal de Detalles del Usuario -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasDetallesUsuarioLabel" class="offcanvas-title">Detalles del Usuario</h5>
@@ -852,64 +852,251 @@ function verificarCamposEdit() {
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
         <form class="detalles-usuario pt-0" id="detallesUsuarioForm" onsubmit="return false">
 
-            <!-- Campo Nombres -->
-            <div class="mb-3">
-                <label for="detalles-Nombres" class="form-label">Nombres:</label>
-                <input type="text" class="form-control" id="detalles-Nombres" readonly>
-            </div>
+            <div class="row">
+                <!-- Columna 1 -->
+                <div class="col-md-6">
+                    <!-- Campo Nombres -->
+                    <div class="mb-3">
+                        <label for="detalles-Nombres" class="form-label">Nombres:</label>
+                        <input type="text" class="form-control" id="detalles-Nombres" readonly>
+                    </div>
 
-            <!-- Campo Apellidos -->
-            <div class="mb-3">
-                <label for="detalles-Apellidos" class="form-label">Apellidos:</label>
-                <input type="text" class="form-control" id="detalles-Apellidos" readonly>
-            </div>
+                    <!-- Campo Apellidos -->
+                    <div class="mb-3">
+                        <label for="detalles-Apellidos" class="form-label">Apellidos:</label>
+                        <input type="text" class="form-control" id="detalles-Apellidos" readonly>
+                    </div>
 
-            <!-- Campo Correo Electrónico -->
-            <div class="mb-3">
-                <label for="detalles-correoElectronico" class="form-label">Correo Electrónico:</label>
-                <input type="email" class="form-control" id="detalles-correoElectronico" readonly>
-            </div>
+                    <!-- Campo Correo Electrónico -->
+                    <div class="mb-3">
+                        <label for="detalles-correoElectronico" class="form-label">Correo Electrónico:</label>
+                        <input type="email" class="form-control" id="detalles-correoElectronico" readonly>
+                    </div>
 
-           
-            <!-- Campo Fecha de Nacimiento -->
-            <div class="mb-3">
-                <label for="detalles-fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
-                <input type="date" class="form-control" id="detalles-fechaNacimiento" readonly>
-            </div>
+                    <!-- Campo Donador -->
+                    <div class="mb-3">
+                      <label for="detalles-donador" class="form-label">Donador:</label>
+                      <input type="text" class="form-control" id="detalles-donador" readonly>
+                    </div>
 
-            <!-- Campo Género -->
-            <div class="mb-3">
-                <label for="detalles-genero" class="form-label">Género:</label>
-                <input type="text" class="form-control" id="detalles-genero" readonly>
-            </div>
 
-            <!-- Campo CURP -->
-            <div class="mb-3">
-                <label for="detalles-curp" class="form-label">CURP:</label>
-                <input type="text" class="form-control" id="detalles-curp" readonly>
-            </div>
 
-            <!-- Campo Tipo de Sangre -->
-            <div class="mb-3">
-                <label for="detalles-tipoSangre" class="form-label">Tipo de Sangre:</label>
-                <input type="text" class="form-control" id="detalles-tipoSangre" readonly>
-            </div>
+                </div>
 
-            <!-- Campo Donador -->
-            <div class="mb-3">
-                <label for="detalles-donador" class="form-label">Donador:</label>
-                <input type="text" class="form-control" id="detalles-donador" readonly>
-            </div>
+                <!-- Columna 2 -->
+                <div class="col-md-6">
+                    <!-- Campo Fecha de Nacimiento -->
+                    <div class="mb-3">
+                        <label for="detalles-fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                        <input type="date" class="form-control" id="detalles-fechaNacimiento" readonly>
+                    </div>
 
+                    <!-- Campo Género -->
+                    <div class="mb-3">
+                        <label for="detalles-genero" class="form-label">Género:</label>
+                        <input type="text" class="form-control" id="detalles-genero" readonly>
+                    </div>
+
+                    <!-- Campo CURP -->
+                    <div class="mb-3">
+                        <label for="detalles-curp" class="form-label">CURP:</label>
+                        <input type="text" class="form-control" id="detalles-curp" readonly>
+                    </div>
+
+                    <!-- Campo Tipo de Sangre -->
+                    <div class="mb-3">
+                        <label for="detalles-tipoSangre" class="form-label">Tipo de Sangre:</label>
+                        <input type="text" class="form-control" id="detalles-tipoSangre" readonly>
+                    </div>
+                </div>
+            </div>
 
             <!-- Botón para cerrar el modal -->
-            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+            <div class="text-center">
+                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+            </div>
         </form>
     </div>
 </div>
 
-<!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->
+
+<!-------------------------- Modal de Detalles del Usuario ------------------------------------------------------------------------->
+<!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasDetallesUsuarioLabel" class="offcanvas-title">Detalles del Usuario</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="detalles-usuario pt-0" id="detallesUsuarioForm" onsubmit="return false"> -->
+
+            <!-- Campo Nombres -->
+            <!-- <div class="mb-3">
+                <label for="detalles-Nombres" class="form-label">Nombres:</label>
+                <input type="text" class="form-control" id="detalles-Nombres" readonly>
+            </div> -->
+
+            <!-- Campo Apellidos -->
+            <!-- <div class="mb-3">
+                <label for="detalles-Apellidos" class="form-label">Apellidos:</label>
+                <input type="text" class="form-control" id="detalles-Apellidos" readonly>
+            </div> -->
+
+            <!-- Campo Correo Electrónico -->
+            <!-- <div class="mb-3">
+                <label for="detalles-correoElectronico" class="form-label">Correo Electrónico:</label>
+                <input type="email" class="form-control" id="detalles-correoElectronico" readonly>
+            </div> -->
+
+           
+            <!-- Campo Fecha de Nacimiento -->
+            <!-- <div class="mb-3">
+                <label for="detalles-fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                <input type="date" class="form-control" id="detalles-fechaNacimiento" readonly>
+            </div> -->
+
+            <!-- Campo Género -->
+            <!-- <div class="mb-3">
+                <label for="detalles-genero" class="form-label">Género:</label>
+                <input type="text" class="form-control" id="detalles-genero" readonly>
+            </div> -->
+
+            <!-- Campo CURP -->
+            <!-- <div class="mb-3">
+                <label for="detalles-curp" class="form-label">CURP:</label>
+                <input type="text" class="form-control" id="detalles-curp" readonly>
+            </div> -->
+
+            <!-- Campo Tipo de Sangre -->
+            <!-- <div class="mb-3">
+                <label for="detalles-tipoSangre" class="form-label">Tipo de Sangre:</label>
+                <input type="text" class="form-control" id="detalles-tipoSangre" readonly>
+            </div> -->
+
+            <!-- Campo Donador -->
+            <!-- <div class="mb-3">
+                <label for="detalles-donador" class="form-label">Donador:</label>
+                <input type="text" class="form-control" id="detalles-donador" readonly>
+            </div> -->
+
+
+            <!-- Botón para cerrar el modal -->
+            <!-- <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+        </form>
+    </div>
+</div> -->
+
+<!-- Modal Editar Usuarios -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="edit-user pt-0" id="editUserForm" onsubmit="return false">
+
+            <div class="row">
+                <!-- Columna 1 -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" for="edit-Nombres">Nombres</label>
+                        <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
+                        <div id="mensajeErrorLetrasNombresEdit" style="color: red;"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="edit-Apellidos">Apellidos</label>
+                        <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)" />
+                        <div id="mensajeErrorLetrasApellidosEdit" style="color: red;"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
+                        <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronicoEdit()" />
+                        <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label" for="edit-curp">CURP</label>
+                        <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurpEdit()" />
+                        <div id="mensajeErrorCurpEdit" style="color: red;"></div>
+                    </div>
+
+                </div>
+
+                <!-- Columna 2 -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" for="edit-contrasena">Contraseña</label>
+                        <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
+                        <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
+                        <div class="col-md-10">
+                            <input class="form-control" type="date" value="" id="edit-html5-date-input" min='1900-01-01' max='2023-12-31' />
+                            <div id="mensajeErrorFechaEdit" style="color: red;"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="edit-genero">Género</label>
+                        <select id="edit-genero" class="form-select">
+                            <option selected disabled value="">Opciones...</option>
+                            <option value="Hombre">Hombre</option>
+                            <option value="Mujer">Mujer</option>
+                        </select>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label" for="edit-tipoSangre">Tipo de Sangre</label>
+                        <select id="edit-tipoSangre" class="form-select">
+                            <option selected disabled value="">Opciones...</option>
+                            <option value="A+">A+</option>
+                            <option value="O+">O+</option>
+                            <option value="B+">B+</option>
+                            <option value="AB+">AB+</option>
+                            <option value="A-">A-</option>
+                            <option value="O-">O-</option>
+                            <option value="B-">B-</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                        <label class="form-label" for="edit-donador">Donador</label>
+                        <select id="edit-donador" class="form-select">
+                            <option selected disabled value="">Opciones...</option>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+            <!-- Botones -->
+            <div class="text-center">
+                <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
+                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->
+<!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -993,7 +1180,7 @@ function verificarCamposEdit() {
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
         </form>
     </div>
-</div>
+</div> -->
 
 
 <!-- Modal Añadir Usuarios -->
