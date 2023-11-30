@@ -127,8 +127,9 @@ function renderizarTablaCampanas(campaigns) {
         cellFechaFin.innerText = campaign.end_campaign || 'N/A'; 
 
         cellAcciones.innerHTML = `
+        <button type="button" class="btn btn-secondary" onclick="mostrarDetallesUsuario(${campaign.id})">Detalles</button>
         <button type="button" class="btn btn-primary" onclick="obtenerDetallesCampana(${campaign.id})">Editar</button>
-        <button type="button" class="btn btn-danger" onclick="eliminarCampana('${campaign.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+        <button type="button" class="btn btn-danger" onclick="eliminarCampana('${campaign.id}')"> Eliminar</button>`;
     });
 }
 
@@ -212,6 +213,65 @@ function editarCampana(campaignId) {
         });
     }
 }
+
+
+
+  //------------------------------------------------ AQUI MUESTRA LOS DETALLES (CAMBAILO A CAMPAÑAS)----------------------------------------
+
+function obtenerDetallesUsuario2(userId) {
+    fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles del usuario. Código de estado: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Respuesta completa de la API:', data);
+
+        // Modifica esta parte según la estructura real de tu respuesta
+        const usuarioId = data.user.id || '';
+        const usuarioNombre = data.user.name || '';
+        const usuarioApellido = data.user.last_name || '';
+        const usuarioEmail = data.user.email || '';
+        
+
+        if (usuarioId && usuarioNombre && usuarioApellido && usuarioEmail) {
+            // Almacena el ID del usuario seleccionado globalmente
+            usuarioSeleccionadoId = usuarioId;
+
+            // Llena los campos del modal con los datos del usuario
+            document.getElementById('detalles-Nombres').value = usuarioNombre;
+            document.getElementById('detalles-Apellidos').value = usuarioApellido;
+            document.getElementById('detalles-correoElectronico').value = usuarioEmail;
+            document.getElementById('detalles-tipoSangre').value = data.user.blood_type || '';
+            document.getElementById('detalles-curp').value = data.user.curp || '';
+            document.getElementById('detalles-fechaNacimiento').value = data.user.birthdate || '';
+            document.getElementById('detalles-genero').value = data.user.gender || '';
+            document.getElementById('detalles-donador').value = data.user.donator ? 'Sí' : 'No';
+
+        }  
+    })
+    .catch(error => {
+        console.error('Error al obtener los detalles del usuario:', error);
+        alert('Error al obtener los detalles del usuario.');
+    });
+}
+
+function mostrarDetallesUsuario(userId) {
+    // Obtener y mostrar detalles del usuario en el modal offcanvasDetallesUsuario
+    obtenerDetallesUsuario2(userId);
+
+    // Mostrar el modal de detalles
+    var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
+    offcanvasDetallesUsuario.show();
+}
+
+
+  //------------------------------------------------ AQUI TERMINA ----------------------------------------
+
 </script>
     
 </head>
@@ -756,7 +816,7 @@ function verificarCamposEdit() {
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
       <h4>Listado de Campañas</h4>
-      <button type="button" class="btn btn-secondary" id="btnAddCampaign">Añadir</button>
+      <button type="button" class="btn btn-success" id="btnAddCampaign">Añadir</button>
   </div>
 
   <div class="table-responsive text-nowrap">
@@ -780,6 +840,75 @@ function verificarCamposEdit() {
 </div>
 <!-- Bootstrap Table with Header - Light -->
 
+
+
+
+
+<!-------------------------- Modal de Detalles del Usuario ------------------------------------------------------------------------->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasDetallesUsuarioLabel" class="offcanvas-title">Detalles del Usuario</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="detalles-usuario pt-0" id="detallesUsuarioForm" onsubmit="return false">
+
+            <!-- Campo Nombres -->
+            <div class="mb-3">
+                <label for="detalles-Nombres" class="form-label">Nombres:</label>
+                <input type="text" class="form-control" id="detalles-Nombres" readonly>
+            </div>
+
+            <!-- Campo Apellidos -->
+            <div class="mb-3">
+                <label for="detalles-Apellidos" class="form-label">Apellidos:</label>
+                <input type="text" class="form-control" id="detalles-Apellidos" readonly>
+            </div>
+
+            <!-- Campo Correo Electrónico -->
+            <div class="mb-3">
+                <label for="detalles-correoElectronico" class="form-label">Correo Electrónico:</label>
+                <input type="email" class="form-control" id="detalles-correoElectronico" readonly>
+            </div>
+
+           
+            <!-- Campo Fecha de Nacimiento -->
+            <div class="mb-3">
+                <label for="detalles-fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                <input type="date" class="form-control" id="detalles-fechaNacimiento" readonly>
+            </div>
+
+            <!-- Campo Género -->
+            <div class="mb-3">
+                <label for="detalles-genero" class="form-label">Género:</label>
+                <input type="text" class="form-control" id="detalles-genero" readonly>
+            </div>
+
+            <!-- Campo CURP -->
+            <div class="mb-3">
+                <label for="detalles-curp" class="form-label">CURP:</label>
+                <input type="text" class="form-control" id="detalles-curp" readonly>
+            </div>
+
+            <!-- Campo Tipo de Sangre -->
+            <div class="mb-3">
+                <label for="detalles-tipoSangre" class="form-label">Tipo de Sangre:</label>
+                <input type="text" class="form-control" id="detalles-tipoSangre" readonly>
+            </div>
+
+            <!-- Campo Donador -->
+            <div class="mb-3">
+                <label for="detalles-donador" class="form-label">Donador:</label>
+                <input type="text" class="form-control" id="detalles-donador" readonly>
+            </div>
+
+
+            <!-- Botón para cerrar el modal -->
+            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+        </form>
+    </div>
+</div>
 
 
 <!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->

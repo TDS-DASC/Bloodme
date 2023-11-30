@@ -117,30 +117,27 @@ function renderizarTablaUsuarios(usuarios) {
         var cellNombre = row.insertCell(0);
         var cellCorreo = row.insertCell(1);
         var cellTipoSangre = row.insertCell(2);
-        var cellFechaNacimiento = row.insertCell(3);
-        var cellGenero = row.insertCell(4);
-        var cellDonador = row.insertCell(5);
-        var cellCURP = row.insertCell(6);
-        var cellAcciones = row.insertCell(7);
+        var cellGenero = row.insertCell(3);
+        var cellDonador = row.insertCell(4);
+        var cellAcciones = row.insertCell(5);
 
         cellNombre.innerText = usuario.name + ' ' + usuario.last_name;
         cellCorreo.innerText = usuario.email;
         cellTipoSangre.innerText = usuario.blood_type;
-        cellFechaNacimiento.innerText = usuario.birthdate;
         cellGenero.innerText = usuario.gender;
         cellDonador.innerText = usuario.donator === 1 ? 'Si' : 'No';
-        cellCURP.innerText = usuario.curp;
+       
        
 
         cellAcciones.innerHTML = `
+        <button type="button" class="btn btn-secondary" onclick="mostrarDetallesUsuario(${usuario.id})">Detalles</button>
         <button type="button" class="btn btn-primary" onclick="obtenerDetallesUsuario(${usuario.id})">Editar</button>
-        <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+        <button type="button" class="btn btn-danger" onclick="eliminarUsuario('${usuario.id}')"> Eliminar</button>`;
     });
 }
 
 let usuarioSeleccionadoId = null;
 
-// Función para obtener y mostrar los detalles del usuario en el modal de edición
 function obtenerDetallesUsuario(userId) {
     fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
         method: 'GET'
@@ -172,9 +169,19 @@ function obtenerDetallesUsuario(userId) {
             document.getElementById('edit-curp').value = data.user.curp || '';
             document.getElementById('edit-html5-date-input').value = data.user.birthdate || '';
             document.getElementById('edit-genero').value = data.user.gender || '';
-            document.getElementById('edit-donador').value = data.user.gender || '';
+            
+            // Asegurarse de que el valor de donador se maneje adecuadamente
+            const donadorValue = data.user.donator ? 'Si' : 'No';
+            
+            // Seleccionar la opción correspondiente en el elemento select
+            const editDonadorSelect = document.getElementById('edit-donador');
+            for (let i = 0; i < editDonadorSelect.options.length; i++) {
+                if (editDonadorSelect.options[i].value === donadorValue) {
+                    editDonadorSelect.selectedIndex = i;
+                    break;
+                }
+            }
 
-            // Mostrar el modal de edición
             var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
             offcanvasEditUser.show();
         } else {
@@ -187,18 +194,22 @@ function obtenerDetallesUsuario(userId) {
     });
 }
 
-// Función para abrir el modal de edición al hacer clic en el botón de editar
 function editarUsuario(userId) {
     obtenerDetallesUsuario(userId);
 }
 
-// Asigna el evento de clic al botón de editar para abrir el modal de edición
+
+
+
 document.getElementById('btnEdit').addEventListener('click', function() {
         console.log("Soy el botón editar");
         verificarCamposEdit();
     });
 
-    function eliminarUsuario(usuarioId) {
+
+
+// FUNCION ELIMINAR
+function eliminarUsuario(usuarioId) {
     if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
         fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
             method: 'DELETE'
@@ -211,8 +222,6 @@ document.getElementById('btnEdit').addEventListener('click', function() {
         })
         .then(data => {
             console.log('Usuario eliminado exitosamente:', data);
-
-            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
             cargarYMostrarUsuarios();
         })
         .catch(error => {
@@ -220,6 +229,57 @@ document.getElementById('btnEdit').addEventListener('click', function() {
             alert('Error al eliminar el usuario.');
         });
     }
+}
+
+function obtenerDetallesUsuario2(userId) {
+    fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles del usuario. Código de estado: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Respuesta completa de la API:', data);
+
+        // Modifica esta parte según la estructura real de tu respuesta
+        const usuarioId = data.user.id || '';
+        const usuarioNombre = data.user.name || '';
+        const usuarioApellido = data.user.last_name || '';
+        const usuarioEmail = data.user.email || '';
+        
+
+        if (usuarioId && usuarioNombre && usuarioApellido && usuarioEmail) {
+            // Almacena el ID del usuario seleccionado globalmente
+            usuarioSeleccionadoId = usuarioId;
+
+            // Llena los campos del modal con los datos del usuario
+            document.getElementById('detalles-Nombres').value = usuarioNombre;
+            document.getElementById('detalles-Apellidos').value = usuarioApellido;
+            document.getElementById('detalles-correoElectronico').value = usuarioEmail;
+            document.getElementById('detalles-tipoSangre').value = data.user.blood_type || '';
+            document.getElementById('detalles-curp').value = data.user.curp || '';
+            document.getElementById('detalles-fechaNacimiento').value = data.user.birthdate || '';
+            document.getElementById('detalles-genero').value = data.user.gender || '';
+            document.getElementById('detalles-donador').value = data.user.donator ? 'Sí' : 'No';
+
+        }  
+    })
+    .catch(error => {
+        console.error('Error al obtener los detalles del usuario:', error);
+        alert('Error al obtener los detalles del usuario.');
+    });
+}
+
+function mostrarDetallesUsuario(userId) {
+    // Obtener y mostrar detalles del usuario en el modal offcanvasDetallesUsuario
+    obtenerDetallesUsuario2(userId);
+
+    // Mostrar el modal de detalles
+    var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
+    offcanvasDetallesUsuario.show();
 }
 
 </script>
@@ -735,13 +795,17 @@ function verificarCamposEdit() {
     var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
     offcanvasEditUser.hide();
 }
+
+
+
+    // -------------------------AQUI EMPIEZA PARA VER DETALLES-----------------------------------------
 </script>
 
 
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h4>Listado de Usuarios</h4>
-    <button type="button" class="btn btn-secondary" id="btnAdd">Añadir</button>
+    <button type="button" class="btn btn-success" id="btnAdd">Añadir</button>
   </div>
   
   <div class="table-responsive text-nowrap">
@@ -751,10 +815,8 @@ function verificarCamposEdit() {
           <th>Nombre</th>
           <th>Correo Electronico</th>
           <th>Tipo de Sangre</th>
-          <th>Fecha de Nacimiento</th>
           <th>Genero</th>
           <th>Donador</th>
-          <th>CURP</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -769,6 +831,73 @@ function verificarCamposEdit() {
 <!-- Bootstrap Table with Header - Light -->
 
 
+
+
+<!-------------------------- Modal de Detalles del Usuario ------------------------------------------------------------------------->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasDetallesUsuarioLabel" class="offcanvas-title">Detalles del Usuario</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="detalles-usuario pt-0" id="detallesUsuarioForm" onsubmit="return false">
+
+            <!-- Campo Nombres -->
+            <div class="mb-3">
+                <label for="detalles-Nombres" class="form-label">Nombres:</label>
+                <input type="text" class="form-control" id="detalles-Nombres" readonly>
+            </div>
+
+            <!-- Campo Apellidos -->
+            <div class="mb-3">
+                <label for="detalles-Apellidos" class="form-label">Apellidos:</label>
+                <input type="text" class="form-control" id="detalles-Apellidos" readonly>
+            </div>
+
+            <!-- Campo Correo Electrónico -->
+            <div class="mb-3">
+                <label for="detalles-correoElectronico" class="form-label">Correo Electrónico:</label>
+                <input type="email" class="form-control" id="detalles-correoElectronico" readonly>
+            </div>
+
+           
+            <!-- Campo Fecha de Nacimiento -->
+            <div class="mb-3">
+                <label for="detalles-fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                <input type="date" class="form-control" id="detalles-fechaNacimiento" readonly>
+            </div>
+
+            <!-- Campo Género -->
+            <div class="mb-3">
+                <label for="detalles-genero" class="form-label">Género:</label>
+                <input type="text" class="form-control" id="detalles-genero" readonly>
+            </div>
+
+            <!-- Campo CURP -->
+            <div class="mb-3">
+                <label for="detalles-curp" class="form-label">CURP:</label>
+                <input type="text" class="form-control" id="detalles-curp" readonly>
+            </div>
+
+            <!-- Campo Tipo de Sangre -->
+            <div class="mb-3">
+                <label for="detalles-tipoSangre" class="form-label">Tipo de Sangre:</label>
+                <input type="text" class="form-control" id="detalles-tipoSangre" readonly>
+            </div>
+
+            <!-- Campo Donador -->
+            <div class="mb-3">
+                <label for="detalles-donador" class="form-label">Donador:</label>
+                <input type="text" class="form-control" id="detalles-donador" readonly>
+            </div>
+
+
+            <!-- Botón para cerrar el modal -->
+            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+        </form>
+    </div>
+</div>
 
 <!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
@@ -950,6 +1079,9 @@ function verificarCamposEdit() {
 </div>
 
 </div>
+
+
+
                       <!-- / Content -->
 
           

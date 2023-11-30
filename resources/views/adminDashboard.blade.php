@@ -713,7 +713,6 @@
       </div>
       <div class="d-none d-lg-inline-block">
         
-        <a href="https://themeforest.net/licenses/standard" class="footer-link me-4" target="_blank">AQUI PONER UN FOOTER SI QUEREMOS</a>
        
       </div>
     </div>
