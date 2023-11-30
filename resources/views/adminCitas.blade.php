@@ -20,7 +20,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>PROXIMAMENTE </title>
+    <title>Administrador | citas</title>
 
     
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
@@ -757,7 +757,7 @@ function verificarCamposEdit() {
 </script>
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-      <h4>PROXIMAMENTE </h4>
+      <h4>Lista de citas</h4>
       <button type="button" class="btn btn-secondary" id="btnAddCampaign">Añadir</button>
   </div>
 
@@ -875,42 +875,49 @@ function verificarCamposEdit() {
 <!-- Modal Añadir Campañas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
   <div class="offcanvas-header">
-      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Campaña</h5>
+      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Citas</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
   <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
       <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
 
+        <div class="mb-3">
+          <label class="form-label" for="add-nombreCampaña">Nombre del donador</label>
+          <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribir tu nombre" aria-label="Nombre de la donador" />
+        </div>
+
           <div class="mb-3">
               <label class="form-label" for="add-nombreCampaña">Nombre de la Campaña</label>
               <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribir Nombre de la Campaña" aria-label="Nombre de la Campaña" />
           </div>
 
-          <div class="mb-3">
+          {{-- <div class="mb-3">
               <label class="form-label" for="add-descripcionCampaña">Descripción de la Campaña</label>
               <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Descripción de la Campaña" aria-label="Descripción de la Campaña" />
-          </div>
+          </div> --}}
 
-          <div class="mb-3">
+          {{-- <div class="mb-3">
               <label class="form-label" for="add-tipoCampaña">Tipo de Campaña</label>
               <select id="add-tipoCampaña" class="form-select">
                   <option selected disabled value="">Opciones...</option>
                   <option value="Plaquetas">Plaquetas</option>
                   <option value="Sangre">Sangre</option>
               </select>
-          </div>
+          </div> --}}
 
           <div class="mb-3">
-              <label class="form-label" for="add-fechaInicio">Fecha de Inicio</label>
+              <label class="form-label" for="add-fechaInicio">Fecha de la donación</label>
               <div class="col-md-10">
                   <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" />
               </div>
           </div>
 
           <div class="mb-3">
-              <label class="form-label" for="add-donacionesRequeridas">Donaciones Requeridas</label>
-              <input type="number" id="add-donacionesRequeridas" class="form-control" placeholder="Número de Donaciones Requeridas" aria-label="Donaciones Requeridas" />
+              <label class="form-label" for="add-fechaInicio">Nombre del receptor</label>
+              <div class="col-md-10">
+                <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribe el nombre del receptor" aria-label="Nombre del receptor" />
+              </div>
           </div>
 
           <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
