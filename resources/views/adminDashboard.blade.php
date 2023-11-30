@@ -263,7 +263,7 @@
 
   <!-- Sales last year -->
   <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card">
+    <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Usuarios</h5>
         <small class="text-muted">Número de usuarios</small>
@@ -280,7 +280,7 @@
 
   <!-- Sessions Last month -->
   <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card">
+    <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Donadores</h5>
         <small class="text-muted">Número de donadores</small>
@@ -296,7 +296,7 @@
 
   <!-- Total Profit -->
   <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card">
+    <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Campañas activas</h5>
         <small class="text-muted">Número de campañas activas</small>
@@ -312,7 +312,7 @@
 
     <!-- Total Sales -->
     <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card">
+    <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Unidades médicas</h5>
         <small class="text-muted">Número de unidades médicas</small>
