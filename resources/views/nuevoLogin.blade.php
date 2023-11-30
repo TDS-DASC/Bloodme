@@ -216,11 +216,9 @@
         password: password
       },
       success: function (response) {
-        console.log(response);
 
         // Verifica si la propiedad 'user' existe en la respuesta
         if (response.user) {
-          alert("Inicio de sesión exitoso");
           window.location.href = '/admin';
         } else {
           document.getElementById('email').style.outline = '1px solid #f93a57';
