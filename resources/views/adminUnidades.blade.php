@@ -129,42 +129,21 @@
 
     let unidadSeleccionadaId = null;
 
-    function obtenerDetallesUnidad(unitId) {
-        fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`, {
-            method: 'GET'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al obtener los detalles de la unidad médica. Código de estado: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Respuesta completa de la API:', data);
-
-            const unit = data.MedicalUnit || {};
-            const unitId = unit.id || '';
-            const unitName = unit.name || '';
-            const unitUrlGmaps = unit.urlGmaps || '';
-
-            if (unitId && unitName) {
-                unidadSeleccionadaId = unitId;
-
-                document.getElementById('edit-IdUnidad').value = unitId;
-                document.getElementById('edit-NombreUnidad').value = unitName;
-                document.getElementById('edit-UrlGmaps').value = unitUrlGmaps || '';
-
-                var offcanvasEditUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUnit'));
-                offcanvasEditUnit.show();
-            } else {
-                throw new Error('Formato de respuesta inesperado. Datos incompletos de la unidad médica.');
-            }
-        })
-        .catch(error => {
-            console.error('Error al obtener los detalles de la unidad médica:', error);
-            alert('Error al obtener los detalles de la unidad médica.');
-        });
+    async function obtenerDetallesUnidad(id) {
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/medunit/${id}`);
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles de la unidad médica. Código de estado: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Detalles de la unidad médica:', data);
+        // Realizar acciones adicionales con los detalles obtenidos si es necesario
+    } catch (error) {
+        console.error('Error al obtener los detalles de la unidad médica:', error);
+        // Manejar el error según tus necesidades
+        alert('Error al obtener los detalles de la unidad médica.');
     }
+}
 
     document.getElementById('btnEdit').addEventListener('click', function () {
         console.log("Soy el botón editar");
@@ -634,70 +613,56 @@ function validarFechaNacimientoEdit() {
     }
 }
 
-function verificarCamposEdit() {
-        // Obtener el formulario
-        var formulario = document.getElementById('editUserForm');
+function verificarCamposEditMedicalUnit() {
+    // Obtener el formulario
+    var formulario = document.getElementById('editMedicalUnitForm');
 
-        // Verificar la validez del formulario
-        if (!formulario.checkValidity()) {
-            // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
-            formulario.reportValidity();
-            return;
-        }
+    // Verificar la validez del formulario
+    if (!formulario.checkValidity()) {
+        // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
+        formulario.reportValidity();
+        return;
+    }
 
-        // Obtener valores de los campos
-        var nombres = document.getElementById('edit-Nombres').value;
-        var apellidos = document.getElementById('edit-Apellidos').value;
-        var correoElectronico = document.getElementById('edit-correoElectronico').value;
-        var contrasena = document.getElementById('edit-contrasena').value;
-        var tipoSangre = document.getElementById('edit-tipoSangre').value;
-        var curp = document.getElementById('edit-curp').value;
-        var fechaNacimiento = document.getElementById('edit-html5-date-input').value;
-        var genero = document.getElementById('edit-genero').value;
-        var donador = document.getElementById('edit-donador').value;
-        var donadorValue = donador === 'Si' ? 1 : 0;
-       
+    // Obtener valores de los campos de la unidad médica
+    var nombreUnidadMedica = document.getElementById('edit-nombreUnidadMedica').value;
+    var urlGmaps = document.getElementById('edit-urlGmaps').value;
 
-        // Crear objeto de datos para enviar al servidor
-        var editedUserData = {
-          name: nombres,
-          last_name: apellidos,
-          email: correoElectronico,
-          password: contrasena,
-          blood_type: tipoSangre,
-          curp: curp,
-          birthdate: fechaNacimiento,
-          gender: genero,
-          donator:donadorValue
-        };
+    // Crear objeto de datos para enviar al servidor
+    var editedMedicalUnitData = {
+        name: nombreUnidadMedica,
+        urlGmaps: urlGmaps
+    };
 
-          fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(editedUserData)
-          })
+    // Obtener el ID de la unidad médica seleccionada de alguna manera (por ejemplo, mediante una variable global)
+    var unidadMedicaSeleccionadaId = obtenerIdUnidadMedicaSeleccionada();
+
+    // Realizar la solicitud PUT a la API de unidades médicas
+    fetch('http://127.0.0.1:8000/api/medunit/' + unidadMedicaSeleccionadaId, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editedMedicalUnitData)
+    })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
+            throw new Error('Error al editar la unidad médica. Código de estado: ' + response.status);
         }
         return response.json(); 
     })
     .then(data => {
-        console.log('Respuesta del servidor:', data);
+        console.log('Respuesta del servidor (Unidad Médica):', data);
 
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddMedicalUnit'));
-        offcanvasEditUser.hide();
+        var offcanvasEditMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
+        offcanvasEditMedicalUnit.hide();
         setTimeout(function() {
-            alert('Usuario editado exitosamente.');
-
+            alert('Unidad médica editada exitosamente.');
         }, 300);
-       
     })
     .catch(error => {
-        console.error('Error en la solicitud de edición:', error);
-        alert('Error al editar el usuario.');
+        console.error('Error en la solicitud de edición de unidad médica:', error);
+        alert('Error al editar la unidad médica.');
 
         if (error && error.response && error.response.text) {
             // Intenta obtener más información sobre la respuesta
@@ -706,8 +671,12 @@ function verificarCamposEdit() {
             });
         }
     });
-    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
-    offcanvasEditUser.hide();
+}
+
+// Función para obtener el ID de la unidad médica seleccionada (puedes ajustarla según tu lógica)
+function obtenerIdUnidadMedicaSeleccionada() {
+    // Supongamos que tienes una variable global llamada unidadMedicaSeleccionadaId
+    return unidadMedicaSeleccionadaId;
 }
 </script>
 <div class="card">
@@ -736,93 +705,31 @@ function verificarCamposEdit() {
 
 
 
-<!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
+<!-- Modal Editar Unidades Médicas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditMedicalUnit" aria-labelledby="offcanvasEditMedicalUnitLabel">
     <div class="offcanvas-header">
-        <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
+        <h5 id="offcanvasEditMedicalUnitLabel" class="offcanvas-title">Editar Unidad Médica</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-        <form class="edit-user pt-0" id="editUserForm" onsubmit="return false">
+        <form class="edit-medical-unit pt-0" id="editMedicalUnitForm" onsubmit="return false">
 
             <div class="mb-3">
-                <label class="form-label" for="edit-Nombres">Nombres</label>
-                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
-                <div id="mensajeErrorLetrasNombresEdit" style="color: red;"></div>
+                <label class="form-label" for="edit-nombreUnidadMedica">Nombre de la Unidad Médica</label>
+                <input type="text" id="edit-nombreUnidadMedica" class="form-control" placeholder="Escribir Nombre de la Unidad Médica" aria-label="Nombre de la Unidad Médica" />
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="edit-Apellidos">Apellidos</label>
-                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)"  />
-                <div id="mensajeErrorLetrasApellidosEdit" style="color: red;"></div>
+                <label class="form-label" for="edit-urlGmaps">Escribir Url del Mapa</label>
+                <input type="text" id="edit-urlGmaps" class="form-control" placeholder="Escribir Url del Mapa" aria-label="Url de la Unidad Médica" />
             </div>
 
-            <div class="mb-3">
-              <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
-              <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronicoEdit()" />
-              <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
-          </div>
-          
-            <div class="mb-3">
-              <label class="form-label" for="edit-contrasena">Contraseña</label>
-              <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
-              <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="edit-html5-date-input"  min='1900-01-01' max='2023-12-31' />
-                  <div id="mensajeErrorFechaEdit" style="color: red;"></div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-genero">Género</label>
-                <select id="edit-genero" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label" for="edit-curp">CURP</label>
-              <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP"  onblur="validarCurpEdit()" />
-              <div id="mensajeErrorCurpEdit" style="color: red;"></div>
-          </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-tipoSangre">Tipo de Sangre</label>
-                <select id="edit-tipoSangre" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="A+">A+</option>
-                    <option value="O+">O+</option>
-                    <option value="B+">B+</option>
-                    <option value="AB+">AB+</option>
-                    <option value="A-">A-</option>
-                    <option value="O-">O-</option>
-                    <option value="B-">B-</option>
-                    <option value="AB-">AB-</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-donador">Donador</label>
-                <select id="edit-donador" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Si">Si</option>
-                    <option value="No">No</option>
-                </select>
-            </div>
-
-            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
+            <button type="submit" id="btnEditMedicalUnit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEditMedicalUnit()">Guardar Cambios</button>
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
         </form>
     </div>
 </div>
-
 
   <!-- Modal Añadir Unidades Medicas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddMedicalUnit" aria-labelledby="offcanvasAddMedicalUnitLabel">
