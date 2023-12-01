@@ -868,8 +868,45 @@ function verificarCamposEdit() {
 </div>
 
 
-<!-- Modal Añadir Campañas -->
+  <!-- Modal Añadir Unidades Medicas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Unidad Medica</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+    <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
+
+      <div class="mb-3">
+        <label class="form-label" for="add-nombreCampaña">Nombre de la Unidad Medica</label>
+        <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribir Nombre de la Unidad Medica" aria-label="Nombre de la Unidad Medica" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="add-descripcionCampaña">Url de la Unidad Medica</label>
+        <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Url de la Unidad Medica" aria-label="Url de la Unidad Medica" />
+      </div>
+
+      <div class="text-center">
+        <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- Modal Añadir Campañas -->
+<!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
   <div class="offcanvas-header">
       <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Campaña</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -907,13 +944,13 @@ function verificarCamposEdit() {
           <div class="mb-3">
               <label class="form-label" for="add-donacionesRequeridas">Donaciones Requeridas</label>
               <input type="number" id="add-donacionesRequeridas" class="form-control" placeholder="Número de Donaciones Requeridas" aria-label="Donaciones Requeridas" />
-          </div>
+          </div> -->
 
-          <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
+          <!-- <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
           <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
       </form>
   </div>
-</div>
+</div> -->
 
                       <!-- / Content -->
 
