@@ -79,143 +79,123 @@
 
 
 <script>
-        window.onload = function () {
-    cargarYMostrarCampanas();
-};
+    window.onload = function () {
+        cargarYMostrarUnidades();
+    };
 
-function cargarYMostrarCampanas() {
-    fetch('http://127.0.0.1:8000/api/campaigns/')
+    function cargarYMostrarUnidades() {
+        fetch('http://127.0.0.1:8000/api/medunits/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener la lista de unidades médicas. Código de estado: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.MedicalUnits && Array.isArray(data.MedicalUnits)) {
+                    renderizarTablaUnidadesMedicas(data.MedicalUnits);
+                } else {
+                    throw new Error('Formato de respuesta inesperado. Se esperaba un campo "MedicalUnits" de tipo array.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar unidades médicas:', error);
+            });
+    }
+
+    function renderizarTablaUnidadesMedicas(units) {
+        var tbody = document.getElementById('tablaUnidadesMedicasBody');
+        if (!tbody) {
+            console.error('Elemento tbody no encontrado.');
+            return;
+        }
+        tbody.innerHTML = '';
+
+        units.forEach(unit => {
+            var row = tbody.insertRow();
+
+            var cellNombre = row.insertCell(0);
+            var cellUrlGmaps = row.insertCell(1);
+            var cellAcciones = row.insertCell(2);
+
+            cellNombre.innerText = unit.name;
+            cellUrlGmaps.innerText = unit.urlGmaps || 'N/A';
+
+            cellAcciones.innerHTML = `
+                <button type="button" class="btn btn-primary" onclick="obtenerDetallesUnidad(${unit.id})">Editar</button>
+                <button type="button" class="btn btn-danger" onclick="eliminarUnidad('${unit.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+        });
+    }
+
+    let unidadSeleccionadaId = null;
+
+    function obtenerDetallesUnidad(unitId) {
+        fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`, {
+            method: 'GET'
+        })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al obtener la lista de campañas. Código de estado: ' + response.status);
+                throw new Error(`Error al obtener los detalles de la unidad médica. Código de estado: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            if (data.Campaigns && Array.isArray(data.Campaigns)) {
-                renderizarTablaCampanas(data.Campaigns);
+            console.log('Respuesta completa de la API:', data);
+
+            const unit = data.MedicalUnit || {};
+            const unitId = unit.id || '';
+            const unitName = unit.name || '';
+            const unitUrlGmaps = unit.urlGmaps || '';
+
+            if (unitId && unitName) {
+                unidadSeleccionadaId = unitId;
+
+                document.getElementById('edit-IdUnidad').value = unitId;
+                document.getElementById('edit-NombreUnidad').value = unitName;
+                document.getElementById('edit-UrlGmaps').value = unitUrlGmaps || '';
+
+                var offcanvasEditUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUnit'));
+                offcanvasEditUnit.show();
             } else {
-                throw new Error('Formato de respuesta inesperado. Se esperaba un campo "Campaigns" de tipo array.');
+                throw new Error('Formato de respuesta inesperado. Datos incompletos de la unidad médica.');
             }
         })
         .catch(error => {
-            console.error('Error al cargar campañas:', error);
+            console.error('Error al obtener los detalles de la unidad médica:', error);
+            alert('Error al obtener los detalles de la unidad médica.');
         });
-}
-function renderizarTablaCampanas(campaigns) {
-    var tbody = document.getElementById('tablaCampanasBody');
-    if (!tbody) {
-        console.error('Elemento tbody no encontrado.');
-        return;
     }
-    tbody.innerHTML = '';
 
-    campaigns.forEach(campaign => {
-        var row = tbody.insertRow();
-
-        var cellNombre = row.insertCell(0);  //Aqui cambiar por el ROW al que le pertenece nombre porque 0 es el ID
-        var cellDescripcion = row.insertCell(1);
-        var cellTipo = row.insertCell(2);
-        var cellFechaInicio = row.insertCell(3);
-        var cellFechaFin = row.insertCell(4);
-        var cellAcciones = row.insertCell(5);
-
-        cellNombre.innerText = campaign.id; 
-        cellDescripcion.innerText = 'N/A'; 
-        cellTipo.innerText = campaign.blood === 1 ? 'Sangre' : 'Plaquetas'; 
-        cellFechaInicio.innerText = campaign.start_campaign;
-        cellFechaFin.innerText = campaign.end_campaign || 'N/A'; 
-
-        cellAcciones.innerHTML = `
-        <button type="button" class="btn btn-primary" onclick="obtenerDetallesCampana(${campaign.id})">Editar</button>
-        <button type="button" class="btn btn-danger" onclick="eliminarCampana('${campaign.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
-    });
-}
-
-let usuarioSeleccionadoId = null;
-
-function obtenerDetallesCampana(campaignId) {
-    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
-        method: 'GET'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Respuesta completa de la API:', data);
-
-        // Modifica esta parte según la estructura real de tu respuesta
-        const campaign = data.Campaign || {};
-        const campaignId = campaign.id || '';
-        const campaignStartDate = campaign.start_campaign || '';
-        const campaignEndDate = campaign.end_campaign || '';
-
-        if (campaignId && campaignStartDate) {
-            // Almacena el ID de la campaña seleccionada globalmente
-            campaignSeleccionadaId = campaignId;
-
-            // Rellenar campos del formulario de edición
-            document.getElementById('edit-IdCampaña').value = campaignId;
-            document.getElementById('edit-FechaInicioCampaña').value = campaignStartDate;
-            document.getElementById('edit-FechaFinCampaña').value = campaignEndDate || '';
-
-            // Mostrar el modal de edición
-            var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
-            offcanvasEditCampaign.show();
-        } else {
-            throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
-        }
-    })
-    .catch(error => {
-        console.error('Error al obtener los detalles de la campaña:', error);
-        alert('Error al obtener los detalles de la campaña.');
-    });
-}
-
-
-
-
-// Función para abrir el modal de edición al hacer clic en el botón de editar
-function editarCampana(campaignId) {
-    ObtenerDetallesCampana(campaignId);
-}
-
-// Asigna el evento de clic al botón de editar para abrir el modal de edición
-  document.getElementById('btnEdit').addEventListener('click', function() {
+    document.getElementById('btnEdit').addEventListener('click', function () {
         console.log("Soy el botón editar");
         verificarCamposEdit();
     });
 
-    function eliminarUsuario(usuarioId) {
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
-            method: 'DELETE'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Usuario eliminado exitosamente:', data);
-
-            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
-            cargarYMostrarCampanas();
-        })
-        .catch(error => {
-            console.error('Error al eliminar el usuario:', error);
-            alert('Error al eliminar el usuario.');
-        });
+    function eliminarUnidad(unitId) {
+        if (confirm('¿Estás seguro de que quieres eliminar esta unidad médica?')) {
+            fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error al eliminar la unidad médica. Código de estado: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Unidad médica eliminada exitosamente:', data);
+                cargarYMostrarUnidades();
+            })
+            .catch(error => {
+                console.error('Error al eliminar la unidad médica:', error);
+                alert('Error al eliminar la unidad médica.');
+            });
+        }
     }
-}
 </script>
 
 <style>
-  #offcanvasAddCampaign{
+  #offcanvasAddMedicalUnit{
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -434,7 +414,7 @@ function editarCampana(campaignId) {
 
 
             <!-- ---------------------------------------Users List Table ----------------------------->
-        
+        <!-- validaciones de los modales -->
 
 <script>
   function mostrarErrorLetras(id, mensaje) {
@@ -523,96 +503,65 @@ function editarCampana(campaignId) {
     }
 }
 
-function verificarCampos() {
-        var formulario = document.getElementById('addNewUserForm');
-        if (!formulario.checkValidity()) {
-            formulario.reportValidity();
-            return;
+function verificarCamposMedicalUnits() {
+    var formulario = document.getElementById('addNewMedicalUnit');
+    if (!formulario.checkValidity()) {
+        formulario.reportValidity();
+        return;
+    }
+
+    // Obtener valores de los campos de la unidad médica
+    var nombreUnidadMedica = document.getElementById('add-nombreUnidadMedica').value;
+    var urlGmaps = document.getElementById('add-urlGmaps').value;
+
+    // Crear objeto de datos para enviar al servidor
+    var medicalUnitData = {
+        name: nombreUnidadMedica,
+        urlGmaps: urlGmaps
+    };
+
+    // Realizar la solicitud POST a la API de unidades médicas
+    fetch('http://127.0.0.1:8000/api/medunit/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(medicalUnitData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al agregar la unidad médica. Código de estado: ' + response.status);
         }
+        return response.json(); 
+    })
+    .then(data => {
+        // La respuesta exitosa del servidor
+        console.log('Respuesta del servidor (Unidad Médica):', data);
 
-        // Obtener valores de los campos
-        var nombres = document.getElementById('add-Nombres').value;
-        var apellidos = document.getElementById('add-Apellidos').value;
-        var correoElectronico = document.getElementById('add-correoElectronico').value;
-        var contrasena = document.getElementById('add-contrasena').value;
-        var tipoSangre = document.getElementById('add-tipoSangre').value;
-        var curp = document.getElementById('add-curp').value;
-        var fechaNacimiento = document.getElementById('html5-date-input').value;
-        var genero = document.getElementById('add-genero').value;
-       
-        var donador = document.getElementById('add-donador').value;
-        var donadorValue = donador === 'Si' ? 1 : 0;
+        // Restablecer valores de los campos a blanco
+        document.getElementById('add-nombreUnidadMedica').value = '';
+        document.getElementById('add-urlGmaps').value = '';
 
-        
-        // Crear objeto de datos para enviar al servidor
-        var userData = {
-            name: nombres,
-            last_name: apellidos,
-            email: correoElectronico,
-            password: contrasena,
-            blood_type: tipoSangre,
-            curp: curp,
-            birthdate: fechaNacimiento,
-            gender: genero,
-            donator: donadorValue
-        };
-
-        // Realizar la solicitud POST a la API
-        fetch('http://127.0.0.1:8000/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
-            }
-            return response.json(); 
-        })
-        .then(data => {
-            // La respuesta exitosa del servidor
-            console.log('Respuesta del servidor:', data);
-
-            var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-            offcanvasAddCampaign.hide();
-
-            
-            setTimeout(function() {
-                alert('Usuario creado exitosamente.');
-
-                 // Restablecer valores de los campos a blanco
-        document.getElementById('add-Nombres').value = '';
-        document.getElementById('add-Apellidos').value = '';
-        document.getElementById('add-correoElectronico').value = '';
-        document.getElementById('add-contrasena').value = '';
-        document.getElementById('add-tipoSangre').value = '';
-        document.getElementById('add-curp').value = '';
-        document.getElementById('html5-date-input').value = '';
-        document.getElementById('add-genero').value = '';
-        document.getElementById('add-donador').value = '';
-        
-            }, 300);
-        })
-        .catch(error => {
+        alert('Unidad médica creada exitosamente.');
+    })
+    .catch(error => {
     // Manejar errores en la solicitud
     console.error('Error en la solicitud:', error);
-    alert('Error al agregar el usuario.');
 
     // Verificar si hay una respuesta del servidor
-    if (error && error.response && error.response.text) {
-        // Intenta obtener más información sobre la respuesta
+    if (error && error.response) {
         error.response.text().then(text => {
             console.error('Contenido de la respuesta:', text);
         });
     }
+
+    alert('Error al agregar la unidad médica.');
 });
 
-        // Cerrar el modal 
-        var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-        offcanvasAddCampaign.hide();
-    }
+    // Cerrar el modal 
+    var offcanvasAddMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasAddMedicalUnit'));
+    offcanvasAddMedicalUnit.hide();
+}
 
 
     // -------------------------AQUI TERMINA EL AÑADIR Y COMIENZA EL EDITAR-----------------------------------------
@@ -738,7 +687,7 @@ function verificarCamposEdit() {
     .then(data => {
         console.log('Respuesta del servidor:', data);
 
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
+        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddMedicalUnit'));
         offcanvasEditUser.hide();
         setTimeout(function() {
             alert('Usuario editado exitosamente.');
@@ -764,7 +713,7 @@ function verificarCamposEdit() {
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
       <h4>Lista de unidades médicas</h4>
-      <button type="button" class="btn btn-secondary" id="btnAddCampaign">Añadir</button>
+      <button type="button" class="btn btn-secondary" id="btnAddMedicalUnit">Añadir</button>
   </div>
 
   <div class="table-responsive text-nowrap">
@@ -772,15 +721,12 @@ function verificarCamposEdit() {
           <thead class="table-light">
               <tr>
                   <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Tipo</th>
-                  <th>Fecha de Inicio</th>
-                  <th>Fecha de Fin</th>
+                  <th>URL</th>
                   <th>Acciones</th>
               </tr>
           </thead>
           <!-- Asegúrate de tener un tbody con el ID 'tablaCampanasBody' -->
-          <tbody class="table-border-bottom-0" id="tablaCampanasBody">
+          <tbody class="table-border-bottom-0" id="tablaUnidadesMedicasBody">
               <!-- Aquí puedes tener filas predefinidas si lo deseas -->
           </tbody>
       </table>
@@ -879,27 +825,27 @@ function verificarCamposEdit() {
 
 
   <!-- Modal Añadir Unidades Medicas -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddMedicalUnit" aria-labelledby="offcanvasAddMedicalUnitLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Unidad Medica</h5>
+    <h5 id="offcanvasAddMedicalUnitLabel" class="offcanvas-title">Unidad Medica</h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
   <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-    <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
+    <form class="add-new-campaign pt-0" id="addNewMedicalUnit" onsubmit="return false">
 
       <div class="mb-3">
-        <label class="form-label" for="add-nombreCampaña">Nombre de la Unidad Medica</label>
-        <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribir Nombre de la Unidad Medica" aria-label="Nombre de la Unidad Medica" />
+        <label class="form-label" for="add-nombreUnidadMedica">Nombre de la Unidad Medica</label>
+        <input type="text" id="add-nombreUnidadMedica" class="form-control" placeholder="Escribir Nombre de la Unidad Medica" aria-label="Nombre de la Unidad Medica" />
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="add-descripcionCampaña">Url de la Unidad Medica</label>
-        <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Url de la Unidad Medica" aria-label="Url de la Unidad Medica" />
+        <label class="form-label" for="add-urlGmaps">Escribir Url del Mapa</label>
+        <input type="text" id="add-urlGmaps" class="form-control" placeholder="Escribir Url del Mapa" aria-label="Url de la Unidad Medica" />
       </div>
 
       <div class="text-center">
-        <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
+        <button type="submit" id="btnAddMedicalUnit" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposMedicalUnits()">Confirmar</button>
         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
       </div>
 
@@ -916,9 +862,9 @@ function verificarCamposEdit() {
 
 
 <!-- Modal Añadir Campañas -->
-<!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
+<!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddMedicalUnit" aria-labelledby="offcanvasAddMedicalUnitLabel">
   <div class="offcanvas-header">
-      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Campaña</h5>
+      <h5 id="offcanvasAddMedicalUnitLabel" class="offcanvas-title">Campaña</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
@@ -1041,10 +987,10 @@ function verificarCamposEdit() {
 
 
   <script>
-  var btnAddCampaign = document.getElementById('btnAddCampaign');
-  var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-  btnAddCampaign.addEventListener('click', function () {
-    offcanvasAddCampaign.show();
+  var btnAddMedicalUnit = document.getElementById('btnAddMedicalUnit');
+  var offcanvasAddMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasAddMedicalUnit'));
+  btnAddMedicalUnit.addEventListener('click', function () {
+    offcanvasAddMedicalUnit.show();
   });
 </script>
 
