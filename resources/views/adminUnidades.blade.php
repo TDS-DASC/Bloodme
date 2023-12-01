@@ -20,7 +20,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>PROXIMAMENTE </title>
+    <title>Administrador | Unidades médicas</title>
 
     
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
@@ -213,6 +213,16 @@ function editarCampana(campaignId) {
     }
 }
 </script>
+
+<style>
+  #offcanvasAddCampaign{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 300px;
+  }
+</style>
     
 </head>
 
@@ -753,7 +763,7 @@ function verificarCamposEdit() {
 </script>
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-      <h4>PROXIMAMENTE </h4>
+      <h4>Lista de unidades médicas</h4>
       <button type="button" class="btn btn-secondary" id="btnAddCampaign">Añadir</button>
   </div>
 
