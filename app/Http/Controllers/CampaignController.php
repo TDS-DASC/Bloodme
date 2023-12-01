@@ -11,6 +11,7 @@ class CampaignController extends Controller
     public function create(Request $request){
         $validateData = $request->validate([
            'start_campaign' => 'required',
+           'end_campaign' => 'sometimes',
             'donations_required' => 'required',
             'platelets' => 'sometimes',
             'blood' => 'sometimes',
