@@ -31,11 +31,11 @@ Route::get('/adminCampañas', function () {
 Route::get('/adminCitas', function () {
     return view('adminCitas');
 })->name('adminCitasRutas');
-
+/*
 Route::get('/adminDonantes', function () {
     return view('adminDonantes');
 })->name('adminDonantesRutas');
-
+*/
 Route::get('/adminUnidades', function () {
     return view('adminUnidades');
 })->name('adminUnidadesRutas');

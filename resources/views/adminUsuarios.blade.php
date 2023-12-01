@@ -360,11 +360,7 @@ function mostrarDetallesUsuario(userId) {
       </a>
     </ul>
 
-    <ul style="margin-left: 12px; margin-top:20px">
-      <a href="{{ route('adminDonantesRutas') }}" class="menu-link">
-      <span class="menu-header-text">Administrar Donantes</span>
-      </a>
-    </ul>
+
 
     <ul style="margin-left: 12px; margin-top:20px">
       <a href="{{ route('adminCitasRutas') }}" class="menu-link">
