@@ -79,114 +79,114 @@
 
 
 <script>
-        window.onload = function () {
-    cargarYMostrarCampanas();
-};
-
-function cargarYMostrarCampanas() {
-    fetch('http://127.0.0.1:8000/api/campaigns/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al obtener la lista de campañas. Código de estado: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.Campaigns && Array.isArray(data.Campaigns)) {
-                renderizarTablaCampanas(data.Campaigns);
-            } else {
-                throw new Error('Formato de respuesta inesperado. Se esperaba un campo "Campaigns" de tipo array.');
-            }
-        })
-        .catch(error => {
-            console.error('Error al cargar campañas:', error);
-        });
-}
-function renderizarTablaCampanas(campaigns) {
-    var tbody = document.getElementById('tablaCampanasBody');
+ window.onload = function () {
+        cargarYMostrarCitas();
+    };
+    function cargarYMostrarCitas() {
+        fetch('http://127.0.0.1:8000/api/donationsdate/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener la lista de citas. Código de estado: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.donationDates && Array.isArray(data.donationDates)) {
+                    renderizarTablaCitas(data.donationDates);
+                } else {
+                    throw new Error('Formato de respuesta inesperado. Se esperaba un campo "donationDates" de tipo array.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar citas:', error);
+            });
+    }
+    function renderizarTablaCitas(citas) {
+    var tbody = document.getElementById('tablaCitasBody');
     if (!tbody) {
         console.error('Elemento tbody no encontrado.');
         return;
     }
     tbody.innerHTML = '';
 
-    campaigns.forEach(campaign => {
+    citas.forEach(cita => {
         var row = tbody.insertRow();
 
-        var cellNombre = row.insertCell(0);  //Aqui cambiar por el ROW al que le pertenece nombre porque 0 es el ID
-        var cellDescripcion = row.insertCell(1);
-        var cellTipo = row.insertCell(2);
-        var cellFechaInicio = row.insertCell(3);
-        var cellFechaFin = row.insertCell(4);
+        var cellUserId = row.insertCell(0);
+        var cellCampaignId = row.insertCell(1);
+        var cellDateDonation = row.insertCell(2);
+        var cellNombreReceptor = row.insertCell(3);
+        var cellMedicalUnitId = row.insertCell(4);
         var cellAcciones = row.insertCell(5);
 
-        cellNombre.innerText = campaign.id; 
-        cellDescripcion.innerText = 'N/A'; 
-        cellTipo.innerText = campaign.blood === 1 ? 'Sangre' : 'Plaquetas'; 
-        cellFechaInicio.innerText = campaign.start_campaign;
-        cellFechaFin.innerText = campaign.end_campaign || 'N/A'; 
+        cellUserId.innerText = cita.user_id || 'N/A';
+        cellCampaignId.innerText = cita.campaign_id || 'N/A';
+        cellDateDonation.innerText = cita.date_donation || 'N/A';
+        cellNombreReceptor.innerText = cita.nombre_receptor || 'N/A';
+        cellMedicalUnitId.innerText = cita.medical_unit_id || 'N/A';
 
         cellAcciones.innerHTML = `
-        <button type="button" class="btn btn-primary" onclick="obtenerDetallesCampana(${campaign.id})">Editar</button>
-        <button type="button" class="btn btn-danger" onclick="eliminarCampana('${campaign.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+            <button type="button" class="btn btn-primary" onclick="obtenerDetallesCita(${cita.id})">Editar</button>
+            <button type="button" class="btn btn-danger" onclick="eliminarCita('${cita.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
     });
 }
 
 let usuarioSeleccionadoId = null;
 
-function obtenerDetallesCampana(campaignId) {
-    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
-        method: 'GET'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Respuesta completa de la API:', data);
+function obtenerDetallesCita(citaId) {
+        fetch(`http://127.0.0.1:8000/api/donationdate/${citaId}`, {
+            method: 'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener los detalles de la cita. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Respuesta completa de la API:', data);
 
-        // Modifica esta parte según la estructura real de tu respuesta
-        const campaign = data.Campaign || {};
-        const campaignId = campaign.id || '';
-        const campaignStartDate = campaign.start_campaign || '';
-        const campaignEndDate = campaign.end_campaign || '';
+            // Modifica esta parte según la estructura real de tu respuesta
+            const cita = data.donationDate || {};
+            const citaId = cita.id || '';
+            const citaFechaInicio = cita.date_donation || '';
+            const citaFechaFin = '';  // Necesitas obtener esta información de tu API
 
-        if (campaignId && campaignStartDate) {
-            // Almacena el ID de la campaña seleccionada globalmente
-            campaignSeleccionadaId = campaignId;
+            if (citaId && citaFechaInicio) {
+                // Almacena el ID de la cita seleccionada globalmente
+                usuarioSeleccionadoId = citaId;
 
-            // Rellenar campos del formulario de edición
-            document.getElementById('edit-IdCampaña').value = campaignId;
-            document.getElementById('edit-FechaInicioCampaña').value = campaignStartDate;
-            document.getElementById('edit-FechaFinCampaña').value = campaignEndDate || '';
+                // Rellenar campos del formulario de edición
+                document.getElementById('edit-IdCita').value = citaId;
+                document.getElementById('edit-FechaInicioCita').value = citaFechaInicio;
+                document.getElementById('edit-FechaFinCita').value = citaFechaFin || '';
 
-            // Mostrar el modal de edición
-            var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
-            offcanvasEditCampaign.show();
-        } else {
-            throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
-        }
-    })
-    .catch(error => {
-        console.error('Error al obtener los detalles de la campaña:', error);
-        alert('Error al obtener los detalles de la campaña.');
-    });
-}
+                // Mostrar el modal de edición
+                var offcanvasEditCita = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCita'));
+                offcanvasEditCita.show();
+            } else {
+                throw new Error('Formato de respuesta inesperado. Datos incompletos de la cita.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener los detalles de la cita:', error);
+            alert('Error al obtener los detalles de la cita.');
+        });
+    }
+
 
 
 
 
 // Función para abrir el modal de edición al hacer clic en el botón de editar
-function editarCampana(campaignId) {
-    ObtenerDetallesCampana(campaignId);
-}
+function editarCita(citaId) {
+        obtenerDetallesCita(citaId);
+    }
 
 // Asigna el evento de clic al botón de editar para abrir el modal de edición
-  document.getElementById('btnEdit').addEventListener('click', function() {
-        console.log("Soy el botón editar");
-        verificarCamposEdit();
+document.getElementById('btnAddCampaign').addEventListener('click', function() {
+        var offcanvasAddCita = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCita'));
+        offcanvasAddCita.show();
     });
 
     function eliminarUsuario(usuarioId) {
@@ -761,16 +761,16 @@ function verificarCamposEdit() {
       <table class="table">
           <thead class="table-light">
               <tr>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Tipo</th>
-                  <th>Fecha de Inicio</th>
-                  <th>Fecha de Fin</th>
+                  <th>ID Usuario</th>
+                  <th>ID Campaña</th>
+                  <th>Fecha de Donación</th>
+                  <th>Nombre del Receptor</th>
+                  <th>ID Unidad Médica</th>
                   <th>Acciones</th>
               </tr>
           </thead>
-          <!-- Asegúrate de tener un tbody con el ID 'tablaCampanasBody' -->
-          <tbody class="table-border-bottom-0" id="tablaCampanasBody">
+          <!-- Asegúrate de tener un tbody con el ID 'tablaCitasBody' -->
+          <tbody class="table-border-bottom-0" id="tablaCitasBody">
               <!-- Aquí puedes tener filas predefinidas si lo deseas -->
           </tbody>
       </table>
