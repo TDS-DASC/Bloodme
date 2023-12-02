@@ -152,7 +152,7 @@
 
     function eliminarUnidad(unitId) {
         if (confirm('¿Estás seguro de que quieres eliminar esta unidad médica?')) {
-            fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`, {
+            fetch(`http://127.0.0.1:8000/api/medunits/${unitId}`, {
                 method: 'DELETE'
             })
             .then(response => {
@@ -573,7 +573,7 @@ function verificarCamposMedicalUnits() {
     function validarCurpEdit() {
     var curpInputEdit = document.getElementById('edit-curp');
     var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
-
+date
     curpInputEdit.value = curpInputEdit.value.toUpperCase();
 
     // Expresión regular para permitir solo letras sin acentos y números
