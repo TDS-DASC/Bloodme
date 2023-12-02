@@ -129,6 +129,7 @@
             <button type="button" class="btn btn-primary" onclick="obtenerDetallesCita(${cita.id})">Editar</button>
             <button type="button" class="btn btn-danger" onclick="eliminarCita('${cita.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
     });
+
 }
 
 let usuarioSeleccionadoId = null;
@@ -212,6 +213,16 @@ function eliminarCita(citaId) {
     }
 }
 </script>
+
+<style>
+  #offcanvasAddCampaign{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 320px;
+  }
+</style>
     
 </head>
 
@@ -877,43 +888,50 @@ function verificarCamposEdit() {
   <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
       <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
 
-        <div class="mb-3">
-          <label class="form-label" for="add-nombre">Nombre/CURP del Receptor</label>
-          <input type="text" id="add-nombre" class="form-control" placeholder="Escribir tu nombre" aria-label="Nombre del receptor" />
+        <div class="row mb-3">
+          <div class="col">
+            <label class="form-label" for="add-nombre">Nombre/CURP del Receptor</label>
+            <input type="text" id="add-nombre" class="form-control" placeholder="Escribir tu nombre" aria-label="Nombre del receptor" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="add-idCampaña">Id de la campaña</label>
+            <select id="add-idCampaña" class="form-select">
+                <option selected disabled value="">Opciones...</option>
+                <option value="Plaquetas">1</option>
+                <option value="Sangre">2</option>
+            </select>
+        </div>
         </div>
 
-         
-          <div class="mb-3">
-              <label class="form-label" for="add-idCampaña">Id de la campaña</label>
-              <select id="add-idCampaña" class="form-select">
-                  <option selected disabled value="">Opciones...</option>
-                  <option value="Plaquetas">1</option>
-                  <option value="Sangre">2</option>
-              </select>
-          </div> 
-
-          <div class="mb-3">
+        <div class="row mb-3">
+          <div class="col-md-6">
               <label class="form-label" for="add-idUnidad">Id de la unidad medica</label>
               <select id="add-idUnidad" class="form-select">
                   <option selected disabled value="">Opciones...</option>
                   <option value="Plaquetas">1</option>
                   <option value="Sangre">2</option>
               </select>
-          </div> 
-
-          <div class="mb-3">
-              <label class="form-label" for="add-fechaDonacion">Fecha de la donación</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" />
-              </div>
           </div>
+          <div class="col">
+            <label class="form-label" for="add-fechaDonacion">Fecha de la donación</label>
+            <div class="col-md-10">
+                <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" />
+            </div>
+          </div>
+        </div>
 
-
-          <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+        <div class="row text-center mt-4">
+          <div class="col">
+            <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
+            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+          </div>
+        </div>
       </form>
   </div>
 </div>
+
+
 
                       <!-- / Content -->
 

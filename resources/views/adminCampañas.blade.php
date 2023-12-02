@@ -850,7 +850,7 @@ function verificarCamposEdit() {
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasDetallesUsuarioLabel" class="offcanvas-title">Detalles del Usuario</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
@@ -1074,7 +1074,7 @@ function verificarCamposEdit() {
         top: 50%;
         transform: translate(-50%, -50%);
         width: 50%;
-        height: 550px;
+        height: 400px;
     }
 </style>
 
