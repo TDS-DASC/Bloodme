@@ -133,47 +133,46 @@ function renderizarTablaCampanas(campaigns) {
     });
 }
 
-let usuarioSeleccionadoId = null;
+let campaignSeleccionadaId = null;
 
+// Función para obtener detalles de la campaña
 function obtenerDetallesCampana(campaignId) {
-    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
-        method: 'GET'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Respuesta completa de la API:', data);
+    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Respuesta completa de la API:', data);
 
-        // Modifica esta parte según la estructura real de tu respuesta
-        const campaign = data.Campaign || {};
-        const campaignId = campaign.id || '';
-        const campaignStartDate = campaign.start_campaign || '';
-        const campaignEndDate = campaign.end_campaign || '';
+            // Modifica esta parte según la estructura real de tu respuesta
+            const campaign = data.Campaign || {};
+            const campaignId = campaign.id || '';
+            const campaignStartDate = campaign.start_campaign || '';
+            const campaignEndDate = campaign.end_campaign || '';
 
-        if (campaignId && campaignStartDate) {
-            // Almacena el ID de la campaña seleccionada globalmente
-            campaignSeleccionadaId = campaignId;
+            if (campaignId && campaignStartDate) {
+                // Almacena el ID de la campaña seleccionada globalmente
+                campaignSeleccionadaId = campaignId;
 
-            // Rellenar campos del formulario de edición
-            document.getElementById('edit-IdCampaña').value = campaignId;
-            document.getElementById('edit-FechaInicioCampaña').value = campaignStartDate;
-            document.getElementById('edit-FechaFinCampaña').value = campaignEndDate || '';
+                // Rellenar campos del formulario de edición
+                document.getElementById('edit-IdCampaña').value = campaignId;
+                document.getElementById('edit-FechaInicioCampaña').value = campaignStartDate;
+                document.getElementById('edit-FechaFinCampaña').value = campaignEndDate || '';
 
-            // Mostrar el modal de edición
-            var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
-            offcanvasEditCampaign.show();
-        } else {
-            throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
-        }
-    })
-    .catch(error => {
-        console.error('Error al obtener los detalles de la campaña:', error);
-        alert('Error al obtener los detalles de la campaña.');
-    });
+                // Mostrar el modal de edición
+                var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
+                offcanvasEditCampaign.show();
+            } else {
+                throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener los detalles de la campaña:', error);
+            alert('Error al obtener los detalles de la campaña.');
+        });
 }
 
 
@@ -181,14 +180,14 @@ function obtenerDetallesCampana(campaignId) {
 
 // Función para abrir el modal de edición al hacer clic en el botón de editar
 function editarCampana(campaignId) {
-    ObtenerDetallesCampana(campaignId);
+    obtenerDetallesCampana(campaignId);
 }
 
 // Asigna el evento de clic al botón de editar para abrir el modal de edición
-  document.getElementById('btnEdit').addEventListener('click', function() {
-        console.log("Soy el botón editar");
-        verificarCamposEdit();
-    });
+document.getElementById('btnEdit').addEventListener('click', function () {
+    console.log("Soy el botón editar");
+    verificarCamposEdit();
+});
 
     document.getElementById('btnAddCampaign').addEventListener('click', function() {
         console.log("Soy el botón Añadir");
@@ -913,88 +912,34 @@ function verificarCamposEdit() {
 </div>
 
 
-<!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
+<!-- Modal Editar Campaña -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditCampaign" aria-labelledby="offcanvasEditCampaignLabel">
     <div class="offcanvas-header">
-        <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
+        <h5 id="offcanvasEditCampaignLabel" class="offcanvas-title">Editar Campaña</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-        <form class="edit-user pt-0" id="editUserForm" onsubmit="return false">
+        <form class="edit-campaign pt-0" id="editCampaignForm" onsubmit="return false">
 
             <div class="mb-3">
-                <label class="form-label" for="edit-Nombres">Nombres</label>
-                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
-                <div id="mensajeErrorLetrasNombresEdit" style="color: red;"></div>
+                <label class="form-label" for="edit-IdCampaña">ID de la Campaña</label>
+                <input type="text" id="edit-IdCampaña" class="form-control" readonly />
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="edit-Apellidos">Apellidos</label>
-                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)"  />
-                <div id="mensajeErrorLetrasApellidosEdit" style="color: red;"></div>
+                <label class="form-label" for="edit-FechaInicioCampaña">Fecha de Inicio</label>
+                <input type="date" id="edit-FechaInicioCampaña" class="form-control" />
             </div>
 
             <div class="mb-3">
-              <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
-              <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronicoEdit()" />
-              <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
-          </div>
-          
-            <div class="mb-3">
-              <label class="form-label" for="edit-contrasena">Contraseña</label>
-              <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
-              <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
+                <label class="form-label" for="edit-FechaFinCampaña">Fecha de Fin</label>
+                <input type="date" id="edit-FechaFinCampaña" class="form-control" />
             </div>
 
-            <div class="mb-3">
-              <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="edit-html5-date-input"  min='1900-01-01' max='2023-12-31' />
-                  <div id="mensajeErrorFechaEdit" style="color: red;"></div>
-              </div>
-            </div>
+            <!-- Otros campos que desees editar -->
 
-            <div class="mb-3">
-                <label class="form-label" for="edit-genero">Género</label>
-                <select id="edit-genero" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label" for="edit-curp">CURP</label>
-              <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP"  onblur="validarCurpEdit()" />
-              <div id="mensajeErrorCurpEdit" style="color: red;"></div>
-          </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-tipoSangre">Tipo de Sangre</label>
-                <select id="edit-tipoSangre" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="A+">A+</option>
-                    <option value="O+">O+</option>
-                    <option value="B+">B+</option>
-                    <option value="AB+">AB+</option>
-                    <option value="A-">A-</option>
-                    <option value="O-">O-</option>
-                    <option value="B-">B-</option>
-                    <option value="AB-">AB-</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-donador">Donador</label>
-                <select id="edit-donador" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Si">Si</option>
-                    <option value="No">No</option>
-                </select>
-            </div>
-
-            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
+            <button type="submit" id="btnGuardarCambios" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="guardarCambios()">Guardar Cambios</button>
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
         </form>
     </div>
