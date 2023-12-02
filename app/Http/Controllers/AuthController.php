@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Laravel\Passport\HasApiTokens;
@@ -35,7 +36,7 @@ class AuthController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        $accessToken = $user->createToken('authToken')->accessToken;
+        $accessToken = $user->createToken('authToken')->plainTextToken;
         return response(['user' => $user, 'access_token' => $accessToken]);
     }
 
@@ -50,21 +51,17 @@ class AuthController extends Controller
         }
 
         //CHECAR MAS TARDE CREATE TOKEN ._____.
-       $accessToken = auth()->user()->createToken('authToken')->accessToken;
+       //$accessToken = auth()->user()->createToken('authToken')->accessToken;
+       //$user = Auth::user();
+       $user = User::where('email',$loginData['email'])->first();
+       $accessToken = $user->createToken('authToken')->plainTextToken;
 
-       $user = Auth::user();
 
        return response(['user' => $user, 'access_token' => $accessToken]);
+    }
 
-      // return response(['message' => 'fuckingLogin']);
-      // $accessToken = $user->createToken('authToken')->accessToken;
-        //$credentials = $request->only('email', 'password');
-        //if(auth()->attempt($credentials)) {
-      //      $user = auth()->user();
-    //        $accessToken = $user->createToken('authToken')->accessToken;
-
-  //          return response(['user' => $user, 'access_token' => $accessToken]);
-//        }
-      //  return response(['message' => 'Credenciales invalidas'], 401);
+    public function logout(Request $request){
+        auth()->user()->tokens()->delete();
+        return['message'=>'logged out user'];
     }
 }

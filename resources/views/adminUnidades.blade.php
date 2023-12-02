@@ -573,7 +573,7 @@ function verificarCamposMedicalUnits() {
     function validarCurpEdit() {
     var curpInputEdit = document.getElementById('edit-curp');
     var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
-
+date
     curpInputEdit.value = curpInputEdit.value.toUpperCase();
 
     // Expresión regular para permitir solo letras sin acentos y números
