@@ -134,40 +134,36 @@
 let unidadMedicaSeleccionadaId = null;
 
 function obtenerDetallesUnidad(unitId) {
-  fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`)
+    fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`, {
+        method: 'GET'
+    })
     .then(response => {
-      if (!response.ok) {
-        throw new Error(`Error al obtener los detalles de la unidad médica. Código de estado: ${response.status}`);
-      }
-      return response.json();
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles de la unidad médica. Código de estado: ${response.status}`);
+        }
+        return response.json();
     })
     .then(data => {
-      console.log('Respuesta completa de la API:', data);
+        const unit = data.MedicalUnit || {};
+        const unitId = unit.id || '';
+        const unitName = unit.name || '';
+        const unitUrlGmaps = unit.urlGmaps || '';
 
-      // Modifica esta parte según la estructura real de tu respuesta
-      const unidadMedicaId = data.id || '';
-      const nombreUnidadMedica = data.name || '';
-      const urlGmaps = data.urlGmaps || '';
+        if (unitId && unitName) {
+            // Llenar los campos del formulario de edición con los detalles de la unidad médica
+            document.getElementById('edit-nombreUnidadMedica').value = unitName;
+            document.getElementById('edit-urlGmaps').value = unitUrlGmaps || '';
 
-      if (unidadMedicaId) {
-        // Almacena el ID de la unidad médica seleccionada globalmente
-        unidadMedicaSeleccionadaId = unidadMedicaId;
-
-        // Rellenar campos del formulario de edición
-        document.getElementById('edit-nombreUnidadMedica').value = nombreUnidadMedica || '';
-        document.getElementById('edit-urlGmaps').value = urlGmaps || '';
-
-        var offcanvasEditMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
-        offcanvasEditMedicalUnit.show();
-      } else {
-        // Si la respuesta no tiene el formato esperado, puedes manejarlo de otra manera o simplemente mostrar una alerta
-        console.error('Formato de respuesta inesperado. Datos incompletos de la unidad médica.');
-        alert('Error al obtener los detalles de la unidad médica. Datos incompletos o formato incorrecto.');
-      }
+            // Abrir el modal de edición
+            var offcanvasEditMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
+            offcanvasEditMedicalUnit.show();
+        } else {
+            throw new Error('Formato de respuesta inesperado. Datos incompletos de la unidad médica.');
+        }
     })
     .catch(error => {
-      console.error('Error al obtener los detalles de la unidad médica:', error);
-      alert('Error al obtener los detalles de la unidad médica.');
+        console.error('Error al obtener los detalles de la unidad médica:', error);
+        alert('Error al obtener los detalles de la unidad médica.');
     });
 }
 
@@ -686,16 +682,26 @@ function verificarCamposEditMedicalUnit() {
         }, 300);
     })
     .catch(error => {
-        console.error('Error en la solicitud de edición de unidad médica:', error);
-        alert('Error al editar la unidad médica.');
+    console.error('Error en la solicitud de edición de unidad médica:', error);
 
-        if (error && error.response && error.response.text) {
-            // Intenta obtener más información sobre la respuesta
+    if (error && error.response) {
+        console.error('Código de estado:', error.response.status);
+
+        if (error.response.headers.get('Content-Type').indexOf('application/json') !== -1) {
+            // Si la respuesta es de tipo JSON, intenta obtener el cuerpo de la respuesta
+            error.response.json().then(data => {
+                console.error('Contenido de la respuesta:', data);
+            });
+        } else {
+            // Si la respuesta no es de tipo JSON, intenta obtener el texto de la respuesta
             error.response.text().then(text => {
                 console.error('Contenido de la respuesta:', text);
             });
         }
-    });
+    }
+
+    alert('Error al editar la unidad médica. Consulta la consola para obtener más detalles.');
+});
 }
 
 // Función para obtener el ID de la unidad médica seleccionada (puedes ajustarla según tu lógica)
