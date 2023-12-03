@@ -103,54 +103,79 @@
             });
     }
 
-    function renderizarTablaUnidadesMedicas(units) {
-        var tbody = document.getElementById('tablaUnidadesMedicasBody');
-        if (!tbody) {
-            console.error('Elemento tbody no encontrado.');
-            return;
-        }
-        tbody.innerHTML = '';
-
-        units.forEach(unit => {
-            var row = tbody.insertRow();
-
-            var cellNombre = row.insertCell(0);
-            var cellUrlGmaps = row.insertCell(1);
-            var cellAcciones = row.insertCell(2);
-
-            cellNombre.innerText = unit.name;
-            cellUrlGmaps.innerText = unit.urlGmaps || 'N/A';
-
-            cellAcciones.innerHTML = `
-                <button type="button" class="btn btn-primary" onclick="obtenerDetallesUnidad(${unit.id})">Editar</button>
-                <button type="button" class="btn btn-danger" onclick="eliminarUnidad('${unit.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
-        });
+  function renderizarTablaUnidadesMedicas(units) {
+    var tbody = document.getElementById('tablaUnidadesMedicasBody');
+    if (!tbody) {
+        console.error('Elemento tbody no encontrado.');
+        return;
     }
+    tbody.innerHTML = '';
 
-    let unidadSeleccionadaId = null;
+    units.forEach(unit => {
+        var row = tbody.insertRow();
 
-    async function obtenerDetallesUnidad(id) {
-    try {
-        const response = await fetch(`http://127.0.0.1:8000/api/medunit/${id}`);
-        if (!response.ok) {
-            throw new Error(`Error al obtener los detalles de la unidad médica. Código de estado: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log('Detalles de la unidad médica:', data);
-        // Realizar acciones adicionales con los detalles obtenidos si es necesario
-    } catch (error) {
-        console.error('Error al obtener los detalles de la unidad médica:', error);
-        // Manejar el error según tus necesidades
-        alert('Error al obtener los detalles de la unidad médica.');
-    }
+        var cellNombre = row.insertCell(0);
+        var cellUrlGmaps = row.insertCell(1);
+        var cellAcciones = row.insertCell(2);
+
+        cellNombre.innerText = unit.name;
+        
+        // Truncar el URL a los primeros 10 caracteres y agregar tres puntos suspensivos
+        var truncatedUrl = unit.urlGmaps ? (unit.urlGmaps.length > 10 ? unit.urlGmaps.substring(0, 50) + '...' : unit.urlGmaps) : 'N/A';
+        cellUrlGmaps.innerText = truncatedUrl;
+
+        cellAcciones.innerHTML = `
+            <button type="button" class="btn btn-secondary" onclick="mostrarDetallesUnidad(${unit.id})">Detalles</button>
+            <button type="button" class="btn btn-primary" onclick="obtenerDetallesUnidad(${unit.id})">Editar</button>
+            <button type="button" class="btn btn-danger" onclick="eliminarUnidad('${unit.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+    });
 }
 
-    document.getElementById('btnEdit').addEventListener('click', function () {
-        console.log("Soy el botón editar");
-        verificarCamposEdit();
-    });
+let unidadMedicaSeleccionadaId = null;
 
-    function eliminarUnidad(unitId) {
+function obtenerDetallesUnidad(unitId) {
+  fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error al obtener los detalles de la unidad médica. Código de estado: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Respuesta completa de la API:', data);
+
+      // Modifica esta parte según la estructura real de tu respuesta
+      const unidadMedicaId = data.id || '';
+      const nombreUnidadMedica = data.name || '';
+      const urlGmaps = data.urlGmaps || '';
+
+      if (unidadMedicaId) {
+        // Almacena el ID de la unidad médica seleccionada globalmente
+        unidadMedicaSeleccionadaId = unidadMedicaId;
+
+        // Rellenar campos del formulario de edición
+        document.getElementById('edit-nombreUnidadMedica').value = nombreUnidadMedica || '';
+        document.getElementById('edit-urlGmaps').value = urlGmaps || '';
+
+        var offcanvasEditMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
+        offcanvasEditMedicalUnit.show();
+      } else {
+        // Si la respuesta no tiene el formato esperado, puedes manejarlo de otra manera o simplemente mostrar una alerta
+        console.error('Formato de respuesta inesperado. Datos incompletos de la unidad médica.');
+        alert('Error al obtener los detalles de la unidad médica. Datos incompletos o formato incorrecto.');
+      }
+    })
+    .catch(error => {
+      console.error('Error al obtener los detalles de la unidad médica:', error);
+      alert('Error al obtener los detalles de la unidad médica.');
+    });
+}
+
+function editarUnidadMedica(unitId) {
+  obtenerDetallesUnidad(unitId);
+}
+
+function eliminarUnidad(unitId) {
         if (confirm('¿Estás seguro de que quieres eliminar esta unidad médica?')) {
             fetch(`http://127.0.0.1:8000/api/medunits/${unitId}`, {
                 method: 'DELETE'
@@ -731,10 +756,11 @@ function obtenerIdUnidadMedicaSeleccionada() {
     </div>
 </div>
 
+
   <!-- Modal Añadir Unidades Medicas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddMedicalUnit" aria-labelledby="offcanvasAddMedicalUnitLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasAddMedicalUnitLabel" class="offcanvas-title">Unidad Medica</h5>
+    <h5 id="offcanvasAddMedicalUnitLabel" class="offcanvas-title">Añadir Unidad Medica</h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
@@ -743,7 +769,7 @@ function obtenerIdUnidadMedicaSeleccionada() {
 
       <div class="mb-3">
         <label class="form-label" for="add-nombreUnidadMedica">Nombre de la Unidad Medica</label>
-        <input type="text" id="add-nombreUnidadMedica" class="form-control" placeholder="Escribir Nombre de la Unidad Medica" aria-label="Nombre de la Unidad Medica" />
+        <input type="text" id="add-nombreUnidadMedica" class="form-control" placeholder="Escribir Nombre de la Unidad Medica" aria-label="Nombre de la Unidad Medica" onkeypress="return validarSoloLetras(event, this)" />
       </div>
 
       <div class="mb-3">
