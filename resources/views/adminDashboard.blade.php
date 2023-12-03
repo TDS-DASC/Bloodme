@@ -319,20 +319,7 @@
     </div>
   </div>
 
-  <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card">
-      <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Donaciones realizadas</h5>
-        <small class="text-muted">Número de donaciones realizadas</small>
-      </div>
-      <div class="card-body">
-        <div id="sessionsLastMonth"></div>
-        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0" id="donacionesRealizadas"></h4>
-        </div>
-      </div>
-    </div>
-  </div>
+  
   
   <!-- Revenue Growth -->
   {{-- <div class="col-xl-4 col-md-6 mb-4">
@@ -531,11 +518,80 @@
           <!-- / Content -->
 
           
-    <!--Gráfica de usuarios-->
-    <!-- Gráfica de usuarios -->
+    <!--Gráfica de unidades médicas y donaciones-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
+    <script type="text/javascript">
+      // Variables para almacenar datos
+      let donaciones = 0;
+      let unidadesCount = 0;
+  
+      // Espera a que el DOM esté listo
+      $(document).ready(function () {
+        // Realiza una solicitud AJAX al backend para obtener la lista de donaciones
+        $.ajax({
+          url: 'http://127.0.0.1:8000/api/donations/',
+          method: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            if (response.donations) {
+              donaciones = response.donations.length;
+              drawComparisonChart(); // Llama a la función de dibujo después de obtener los datos
+            } else {
+              console.error('Error al obtener la lista de donaciones.');
+            }
+          },
+          error: function () {
+            console.error('Error en la solicitud AJAX para donaciones.');
+          }
+        });
+  
+        // Realiza una solicitud AJAX al backend para obtener la lista de unidades médicas
+        $.ajax({
+          url: 'http://127.0.0.1:8000/api/medunits/',
+          method: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            if (response.MedicalUnits) {
+              unidadesCount = response.MedicalUnits.length;
+              drawComparisonChart(); // Llama a la función de dibujo después de obtener los datos
+            } else {
+              console.error('Error al obtener las unidades médicas.');
+            }
+          },
+          error: function () {
+            console.error('Error en la solicitud AJAX para unidades médicas.');
+          }
+        });
+      });
+  
+      // Carga Google Charts y llama a la función de dibujo después de cargar
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawComparisonChart);
+  
+      // Función para dibujar la gráfica de comparación
+      function drawComparisonChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Count'],
+          ['Unidades Médicas', unidadesCount],
+          ['Donaciones', donaciones],
+        ]);
+  
+        var options = {
+          title: 'Comparación entre Unidades Médicas y Donaciones',
+          slices: {
+            0: { color: '#f94561' },
+            1: { color: '#00c8fd' }
+          },
+        };
+  
+        var chart = new google.visualization.PieChart(document.getElementById('comparisonChart'));
+        chart.draw(data, options);
+      }
+    </script>
+    
+    <!--Gráfica de usuarios y donadores-->
     <script>
       let donadoresCount = 0;
       let usersCount = 0;
@@ -569,7 +625,6 @@
     
       function drawCharts() {
         drawUserChart();
-        drawBloodTypeChart();
       }
     
       function drawUserChart() {
@@ -594,6 +649,8 @@
       }
     </script>
     <div id="piechart_3d" style="width: 48%; height: 500px;  float: right;"></div>
+    <div id="comparisonChart" style="width: 600px; height: 500px;"></div>
+
 
     
     <!-- Gráfica de tipos de sangre -->
@@ -610,7 +667,7 @@
     //   ["Platinum", 21.45, "color: #e5e4e2"]
     // ];
 
-    data = data || defaultData;
+    // data = data || defaultData;
 
     var chartData = google.visualization.arrayToDataTable(data);
 
@@ -690,10 +747,26 @@
     return colores[tipo] || "#F0CC90"; 
   }
 </script>
-<div id="piechart_3d" style="width: 48%; height: 500px;  float: left"></div>
-<div id="barchart_values" style="width: 48%; height: 500px;"></div>
+{{-- <div id="piechart_3d" style="width: 48%; height: 500px;  float: left"></div> --}}
+<div class="d-flex flex-row">
+  <div id="barchart_values" style="width: 48%; height: 500px;" class="mt-5"></div>
 
-          
+  <div class="col-xl-3 col-md-4 col-6 mt-5 ms-5">
+    <div class="card">
+      <div class="card-header pb-0">
+        <h5 class="card-title mb-0">Donaciones realizadas</h5>
+        <small class="text-muted">Número de donaciones realizadas</small>
+      </div>
+      <div class="card-body">
+        <div id="sessionsLastMonth"></div>
+        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+          <h4 class="mb-0" id="donacionesRealizadas"></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Footer -->
 <footer class="content-footer footer bg-footer-theme">
