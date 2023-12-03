@@ -194,26 +194,26 @@ document.getElementById('btnEdit').addEventListener('click', function () {
         verificarCamposCampaign();
     });
 
-    function eliminarUsuario(usuarioId) {
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
+    function eliminarCampana(campañaId) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta campaña?')) {
+        fetch(`http://127.0.0.1:8000/api/campaigns/${campañaId}`, {
             method: 'DELETE'
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
+                throw new Error(`Error al eliminar la campaña. Código de estado: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('Usuario eliminado exitosamente:', data);
+            console.log('Campaña eliminada exitosamente:', data);
 
-            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
-            cargarYMostrarCampanas();
+            // Vuelve a cargar y mostrar la lista de campañas después de eliminar
+            cargarYMostrarCampañas();
         })
         .catch(error => {
-            console.error('Error al eliminar el usuario:', error);
-            alert('Error al eliminar el usuario.');
+            console.error('Error al eliminar la campaña:', error);
+            alert('Error al eliminar la campaña.');
         });
     }
 }
@@ -222,58 +222,56 @@ document.getElementById('btnEdit').addEventListener('click', function () {
 
   //------------------------------------------------ AQUI MUESTRA LOS DETALLES (CAMBAILO A CAMPAÑAS)----------------------------------------
 
-function obtenerDetallesUsuario2(userId) {
-    fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
-        method: 'GET'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error al obtener los detalles del usuario. Código de estado: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Respuesta completa de la API:', data);
+  function obtenerDetallesUsuario2(campaignId) {
+    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Respuesta completa de la API:', data);
 
-        // Modifica esta parte según la estructura real de tu respuesta
-        const usuarioId = data.user.id || '';
-        const usuarioNombre = data.user.name || '';
-        const usuarioApellido = data.user.last_name || '';
-        const usuarioEmail = data.user.email || '';
+           
+            const campaignStartDate = data.start_campaign || '';
+            const campaignEndDate = data.end_campaign || '';
+            const tipoSangreRequerido = data.blood || '';
+            const donacionesRequeridas = data.donatios_required || '';
+            const donacionesActuales = data.current_donations || '';
+   
+
+            if (campaignStartDate ) {
+                // Llena los campos del modal con los datos de la campaña
+              
+                document.getElementById('detalles-inicioCampaña').value = campaignStartDate;
+                document.getElementById('detalles-finCampaña').value = campaignEndDate;
+                document.getElementById('detalles-tipoSangreRequerido').value = tipoSangreRequerido;
+                document.getElementById('detalles-donacionesRequeridas').value = donacionesRequeridas;
+                document.getElementById('detalles-donacionesActuales').value = donacionesActuales;
         
 
-        if (usuarioId && usuarioNombre && usuarioApellido && usuarioEmail) {
-            // Almacena el ID del usuario seleccionado globalmente
-            usuarioSeleccionadoId = usuarioId;
-
-            // Llena los campos del modal con los datos del usuario
-            document.getElementById('detalles-Nombres').value = usuarioNombre;
-            document.getElementById('detalles-Apellidos').value = usuarioApellido;
-            document.getElementById('detalles-correoElectronico').value = usuarioEmail;
-            document.getElementById('detalles-tipoSangre').value = data.user.blood_type || '';
-            document.getElementById('detalles-curp').value = data.user.curp || '';
-            document.getElementById('detalles-fechaNacimiento').value = data.user.birthdate || '';
-            document.getElementById('detalles-genero').value = data.user.gender || '';
-            document.getElementById('detalles-donador').value = data.user.donator ? 'Sí' : 'No';
-
-        }  
-    })
-    .catch(error => {
-        console.error('Error al obtener los detalles del usuario:', error);
-        alert('Error al obtener los detalles del usuario.');
-    });
+                // Mostrar el modal de detalles
+                var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
+                offcanvasDetallesUsuario.show();
+            } else {
+                throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener los detalles de la campaña:', error);
+            alert('Error al obtener los detalles de la campaña.');
+        });
 }
 
-function mostrarDetallesUsuario(userId) {
-    // Obtener y mostrar detalles del usuario en el modal offcanvasDetallesUsuario
-    obtenerDetallesUsuario2(userId);
+function mostrarDetallesUsuario(campaignId) {
+    // Obtener y mostrar detalles de la campaña en el modal offcanvasDetallesUsuario
+    obtenerDetallesUsuario2(campaignId);
 
-    // Mostrar el modal de detalles
-    var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
+     // Mostrar el modal de detalles
+     var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
     offcanvasDetallesUsuario.show();
 }
-
-
   //------------------------------------------------ AQUI TERMINA ----------------------------------------
 
 </script>
@@ -855,53 +853,46 @@ function verificarCamposEdit() {
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
         <form class="detalles-usuario pt-0" id="detallesUsuarioForm" onsubmit="return false">
 
-            <!-- Campo Nombres -->
-            <div class="mb-3">
-                <label for="detalles-Nombres" class="form-label">Nombres:</label>
-                <input type="text" class="form-control" id="detalles-Nombres" readonly>
+           <!-- Campo ID de la Campaña -->
+           <div class="mb-3">
+                <label for="detalles-idCampaña" class="form-label">ID de la Campaña:</label>
+                <input type="text" class="form-control" id="detalles-idCampaña" readonly>
             </div>
 
-            <!-- Campo Apellidos -->
+            <!-- Campo Inicio de la Campaña -->
             <div class="mb-3">
-                <label for="detalles-Apellidos" class="form-label">Apellidos:</label>
-                <input type="text" class="form-control" id="detalles-Apellidos" readonly>
+                <label for="detalles-inicioCampaña" class="form-label">Inicio de la Campaña:</label>
+                <input type="date" class="form-control" id="detalles-inicioCampaña" readonly>
             </div>
 
-            <!-- Campo Correo Electrónico -->
+            <!-- Campo Fin de la Campaña -->
             <div class="mb-3">
-                <label for="detalles-correoElectronico" class="form-label">Correo Electrónico:</label>
-                <input type="email" class="form-control" id="detalles-correoElectronico" readonly>
+                <label for="detalles-finCampaña" class="form-label">Fin de la Campaña:</label>
+                <input type="date" class="form-control" id="detalles-finCampaña" readonly>
             </div>
 
-           
-            <!-- Campo Fecha de Nacimiento -->
+            <!-- Campo Tipo de Sangre Requerido -->
             <div class="mb-3">
-                <label for="detalles-fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
-                <input type="date" class="form-control" id="detalles-fechaNacimiento" readonly>
+                <label for="detalles-tipoSangreRequerido" class="form-label">Tipo de Sangre Requerido:</label>
+                <input type="text" class="form-control" id="detalles-tipoSangreRequerido" readonly>
             </div>
 
-            <!-- Campo Género -->
+            <!-- Campo Donaciones Requeridas -->
             <div class="mb-3">
-                <label for="detalles-genero" class="form-label">Género:</label>
-                <input type="text" class="form-control" id="detalles-genero" readonly>
+                <label for="detalles-donacionesRequeridas" class="form-label">Donaciones Requeridas:</label>
+                <input type="number" class="form-control" id="detalles-donacionesRequeridas" readonly>
             </div>
 
-            <!-- Campo CURP -->
+            <!-- Campo Donaciones Actuales -->
             <div class="mb-3">
-                <label for="detalles-curp" class="form-label">CURP:</label>
-                <input type="text" class="form-control" id="detalles-curp" readonly>
+                <label for="detalles-donacionesActuales" class="form-label">Donaciones Actuales:</label>
+                <input type="number" class="form-control" id="detalles-donacionesActuales" readonly>
             </div>
 
-            <!-- Campo Tipo de Sangre -->
+            <!-- Campo Tipo de Donación -->
             <div class="mb-3">
-                <label for="detalles-tipoSangre" class="form-label">Tipo de Sangre:</label>
-                <input type="text" class="form-control" id="detalles-tipoSangre" readonly>
-            </div>
-
-            <!-- Campo Donador -->
-            <div class="mb-3">
-                <label for="detalles-donador" class="form-label">Donador:</label>
-                <input type="text" class="form-control" id="detalles-donador" readonly>
+                <label for="detalles-tipoDonacion" class="form-label">Tipo de Donación:</label>
+                <input type="text" class="form-control" id="detalles-tipoDonacion" readonly>
             </div>
 
 
