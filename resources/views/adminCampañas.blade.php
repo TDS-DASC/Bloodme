@@ -585,6 +585,21 @@ function mostrarDetallesUsuario(campaignId) {
     return true;
 }
 
+
+
+function validarUnidadesRequeridas() {
+    var inputUnidades = document.getElementById('add-unidadesRequeridas');
+    var errorUnidades = document.getElementById('error-unidadesRequeridas');
+
+    var unidades = parseFloat(inputUnidades.value);
+
+    if (unidades <= 0 || isNaN(unidades)) {
+        errorUnidades.textContent = 'Ingrese un valor válido mayor a cero.';
+    } else {
+        errorUnidades.textContent = '';
+    }
+}
+
 function verificarCamposCampaign() {
     var formulario = document.getElementById('addNewCampaignForm');
     if (!formulario.checkValidity()) {
@@ -969,7 +984,8 @@ function verificarCamposEdit() {
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label" for="add-unidadesRequeridas">Unidades Requeridas</label>
-                        <input type="number" id="add-unidadesRequeridas" class="form-control" placeholder="Número de Unidades Requeridas" aria-label="Unidades Requeridas" />
+                        <input type="number" id="add-unidadesRequeridas" class="form-control" placeholder="Número de Unidades Requeridas" aria-label="Unidades Requeridas" onblur="validarUnidadesRequeridas()" />
+                        <div id="error-unidadesRequeridas" class="text-danger"></div>
                     </div>
 
                     <div class="mb-3">
