@@ -943,67 +943,64 @@ function verificarCamposEdit() {
 
 <!-- Modal Añadir Campañas -->
 <div class="offcanvas offcanvas-end modal-dialog-centered" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
-    <div class="offcanvas-header">
+    <div class="offcanvas-header d-flex justify-space-between w-100">
         <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Nueva Campaña</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+    
 
-    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100 w-100">
         <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
             <div class="row">
-                <!-- Columna 1 -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label" for="add-fechaInicio">Inicio de la Campaña</label>
-                        <div class="col-md-10">
-                            <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
-                            <div id="mensajeErrorFechaInicio" class="text-danger"></div> <!-- Nuevo div para mensaje de error -->
-                        </div>
-                    </div>
-                
-                    <div class="mb-3">
-                        <label class="form-label" for="add-fechaFin">Final de la Campaña</label>
-                        <div class="col-md-10">
-                            <input class="form-control" type="date" value="" id="add-fechaFin" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
-                            <div id="mensajeErrorFechaFin" class="text-danger"></div> <!-- Nuevo div para mensaje de error -->
-                        </div>
-                    </div>
+                <!-- Fila 1 -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="add-fechaInicio">Inicio de la Campaña</label>
+                    <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
+                    <div id="mensajeErrorFechaInicio" class="text-danger"></div>
                 </div>
 
-                    <div class="mb-3">
-                        <label class="form-label" for="add-tipoDonacion">Tipo de Donaciones</label>
-                        <select id="add-tipoDonacion" class="form-select">
-                            <option selected disabled value="">Opciones...</option>
-                            <option value="Plaquetas">Plaquetas</option>
-                            <option value="Sangre">Sangre</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Columna 2 -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label" for="add-unidadesRequeridas">Unidades Requeridas</label>
-                        <input type="number" id="add-unidadesRequeridas" class="form-control" placeholder="Número de Unidades Requeridas" aria-label="Unidades Requeridas" onblur="validarUnidadesRequeridas()" />
-                        <div id="error-unidadesRequeridas" class="text-danger"></div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" for="add-descripcionCampaña">Descripción de la Campaña</label>
-                        <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Descripción de la Campaña" aria-label="Descripción de la Campaña" />
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" for="add-curpCampaña">CURP de la persona a donar</label>
-                        <input type="text" id="add-curpCampaña" class="form-control" placeholder="Escribir CURP de la persona a Donar" aria-label="CURP" onblur="validarCurp()" />
-                        <div id="mensajeErrorCurp" style="color: red;"></div>
-                    </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="add-fechaFin">Final de la Campaña</label>
+                    <input class="form-control" type="date" value="" id="add-fechaFin" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
+                    <div id="mensajeErrorFechaFin" class="text-danger"></div>
                 </div>
             </div>
 
             <div class="row">
-                <!-- Nueva fila para centrar los botones -->
-                <div class="col-md-12 offset-md-0 text-center">
+                <!-- Fila 2 -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="add-tipoDonacion">Tipo de Donaciones</label>
+                    <select id="add-tipoDonacion" class="form-select">
+                        <option selected disabled value="">Opciones...</option>
+                        <option value="Plaquetas">Plaquetas</option>
+                        <option value="Sangre">Sangre</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="add-unidadesRequeridas">Unidades Requeridas</label>
+                    <input type="number" id="add-unidadesRequeridas" class="form-control" placeholder="Número de Unidades Requeridas" aria-label="Unidades Requeridas" onblur="validarUnidadesRequeridas()" />
+                    <div id="error-unidadesRequeridas" class="text-danger"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Fila 3 -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="add-descripcionCampaña">Descripción de la Campaña</label>
+                    <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Descripción de la Campaña" aria-label="Descripción de la Campaña" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="add-curpCampaña">CURP de la persona a donar</label>
+                    <input type="text" id="add-curpCampaña" class="form-control" placeholder="Escribir CURP de la persona a Donar" aria-label="CURP" onblur="validarCurp()" />
+                    <div id="mensajeErrorCurp" style="color: red;"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Fila 4 (Botones) -->
+                <div class="col-md-12 text-center">
                     <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
                     <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
                 </div>
@@ -1011,6 +1008,7 @@ function verificarCamposEdit() {
         </form>
     </div>
 </div>
+
 
 <style>
     #offcanvasAddCampaign {
