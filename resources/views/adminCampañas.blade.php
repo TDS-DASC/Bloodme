@@ -175,7 +175,27 @@ function obtenerDetallesCampana(campaignId) {
         });
 }
 
+function validarCurp() {
+    var curpInput = document.getElementById('add-curpCampaña');
+    var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
+    // Verificar si el elemento 'curpInput' existe antes de acceder a su propiedad 'value'
+    if (curpInput) {
+        // Expresión regular para permitir solo letras sin acentos y números
+        var regexCurp = /^[A-Za-z0-9]+$/;
+
+        // Verificar la longitud del CURP
+        if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
+            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+            curpInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+            curpInput.classList.remove('is-invalid');
+        }
+    } else {
+        console.error('El elemento con ID "add-curpCampaña" no existe.');
+    }
+}
 
 
 // Función para abrir el modal de edición al hacer clic en el botón de editar
@@ -508,22 +528,7 @@ function mostrarDetallesUsuario(userId) {
         return true;
     }
 
-    function validarCurp() {
-    var curpInput = document.getElementById('add-curp');
-    var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
-    // Expresión regular para permitir solo letras sin acentos y números
-    var regexCurp = /^[A-Za-z0-9]+$/;
-
-    // Verificar la longitud del CURP
-    if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
-        mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
-        curpInput.classList.add('is-invalid');
-    } else {
-        mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
-        curpInput.classList.remove('is-invalid');
-    }
-  }
 
     function validarCorreoElectronico() {
         var inputCorreo = document.getElementById('add-correoElectronico');
@@ -552,26 +557,34 @@ function mostrarDetallesUsuario(userId) {
             contrasenaInput.classList.remove('is-invalid');
         }
     }
-    function validarFechaNacimiento() {
-    var fechaInput = document.getElementById('html5-date-input');
-    var mensajeErrorFecha = document.getElementById('mensajeErrorFecha');
-    var fechaArray = fechaInput.value.split('-');
-    if (fechaArray.length === 3 && fechaArray[0].length > 4) {
-        fechaArray[0] = fechaArray[0].substring(0, 4);
-        fechaInput.value = fechaArray.join('-');
+    function validarFechas() {
+    var fechaInicioInput = document.getElementById('add-fechaInicio');
+    var fechaFinInput = document.getElementById('add-fechaFin');
+    var mensajeErrorFechaInicio = document.getElementById('mensajeErrorFechaInicio');
+    var mensajeErrorFechaFin = document.getElementById('mensajeErrorFechaFin');
+
+    // Obtener valores de las fechas
+    var fechaInicio = new Date(fechaInicioInput.value);
+    var fechaFin = new Date(fechaFinInput.value);
+
+    // Restablecer los mensajes de error
+    mensajeErrorFechaInicio.textContent = '';
+    mensajeErrorFechaFin.textContent = '';
+
+    // Validar si la fecha de fin es anterior a la fecha de inicio
+    if (fechaFin < fechaInicio) {
+        mensajeErrorFechaInicio.textContent = 'La fecha de fin no puede ser anterior a la fecha de inicio.';
+        return false;
     }
 
-    var fechaSeleccionada = new Date(fechaInput.value);
-    var fechaMinima = new Date('1900-01-01');
-    var fechaMaxima = new Date('2023-11-27');
-
-    if (fechaSeleccionada < fechaMinima || fechaSeleccionada > fechaMaxima) {
-        mensajeErrorFecha.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
-        fechaInput.classList.add('is-invalid');
-    } else {
-        mensajeErrorFecha.innerText = '';
-        fechaInput.classList.remove('is-invalid');
+    // Validar si la diferencia es menor a una semana (en milisegundos)
+    if ((fechaFin - fechaInicio) < (7 * 24 * 60 * 60 * 1000)) {
+        mensajeErrorFechaFin.textContent = 'La diferencia entre la fecha de inicio y fin debe ser de al menos una semana.';
+        return false;
     }
+
+    // Si las validaciones pasan, todo está bien
+    return true;
 }
 
 function verificarCamposCampaign() {
@@ -669,34 +682,10 @@ function verificarCamposCampaign() {
 
 
     // -------------------------AQUI TERMINA EL AÑADIR Y COMIENZA EL EDITAR-----------------------------------------
-    function validarCorreoElectronicoEdit() {
-        var inputCorreoEdit = document.getElementById('edit-correoElectronico');
-        var mensajeErrorCorreoEdit = document.getElementById('mensajeErrorCorreoEdit');
-        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!regexCorreo.test(inputCorreoEdit.value)) {
-            mensajeErrorCorreoEdit.textContent = 'Por favor, ingresa un correo electrónico válido.';
-            inputCorreoEdit.classList.add('is-invalid');
-        } else {
-            mensajeErrorCorreoEdit.textContent = '';
-            inputCorreoEdit.classList.remove('is-invalid');
-        }
-    }
-
-    function validarContrasenaEdit() {
-        var contrasenaInputEdit = document.getElementById('edit-contrasena');
-        var mensajeErrorContrasenaEdit = document.getElementById('mensajeErrorContrasenaEdit');
-        if (contrasenaInputEdit.value.length < 6 || contrasenaInputEdit.value.length > 15) {
-            mensajeErrorContrasenaEdit.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
-            contrasenaInputEdit.classList.add('is-invalid');
-        } else {
-            mensajeErrorContrasenaEdit.textContent = '';
-            contrasenaInputEdit.classList.remove('is-invalid');
-        }
-    }
 
     function validarCurpEdit() {
-    var curpInputEdit = document.getElementById('edit-curp');
+    var curpInputEdit = document.getElementById('detalles-curp');
     var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
 
     curpInputEdit.value = curpInputEdit.value.toUpperCase();
@@ -712,7 +701,6 @@ function verificarCamposCampaign() {
         curpInputEdit.classList.remove('is-invalid');
     }
 }
-
 function validarFechaNacimientoEdit() {
     function validarFechaNacimientoEdit() {
         var fechaInputEdit = document.getElementById('edit-html5-date-input');
@@ -755,7 +743,7 @@ function verificarCamposEdit() {
         var correoElectronico = document.getElementById('edit-correoElectronico').value;
         var contrasena = document.getElementById('edit-contrasena').value;
         var tipoSangre = document.getElementById('edit-tipoSangre').value;
-        var curp = document.getElementById('edit-curp').value;
+        var curp = document.getElementById('detalles-curp').value;
         var fechaNacimiento = document.getElementById('edit-html5-date-input').value;
         var genero = document.getElementById('edit-genero').value;
         var donador = document.getElementById('edit-donador').value;
@@ -962,16 +950,19 @@ function verificarCamposEdit() {
                     <div class="mb-3">
                         <label class="form-label" for="add-fechaInicio">Inicio de la Campaña</label>
                         <div class="col-md-10">
-                            <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" />
+                            <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
+                            <div id="mensajeErrorFechaInicio" class="text-danger"></div> <!-- Nuevo div para mensaje de error -->
                         </div>
                     </div>
-
+                
                     <div class="mb-3">
                         <label class="form-label" for="add-fechaFin">Final de la Campaña</label>
                         <div class="col-md-10">
-                            <input class="form-control" type="date" value="" id="add-fechaFin" min="2022-01-01" max="2023-12-31" />
+                            <input class="form-control" type="date" value="" id="add-fechaFin" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
+                            <div id="mensajeErrorFechaFin" class="text-danger"></div> <!-- Nuevo div para mensaje de error -->
                         </div>
                     </div>
+                </div>
 
                     <div class="mb-3">
                         <label class="form-label" for="add-tipoDonacion">Tipo de Donaciones</label>
@@ -997,7 +988,8 @@ function verificarCamposEdit() {
 
                     <div class="mb-3">
                         <label class="form-label" for="add-curpCampaña">CURP de la persona a donar</label>
-                        <input type="text" id="add-curpCampaña" class="form-control" placeholder="Escribir CURP de la persona a Donar" aria-label="CURP" />
+                        <input type="text" id="add-curpCampaña" class="form-control" placeholder="Escribir CURP de la persona a Donar" aria-label="CURP" onblur="validarCurp()" />
+                        <div id="mensajeErrorCurp" style="color: red;"></div>
                     </div>
                 </div>
             </div>
