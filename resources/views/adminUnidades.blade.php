@@ -150,6 +150,9 @@ function obtenerDetallesUnidad(unitId) {
         const unitUrlGmaps = unit.urlGmaps || '';
 
         if (unitId && unitName) {
+
+          unidadMedicaSeleccionadaId = unitId;
+
             // Llenar los campos del formulario de edición con los detalles de la unidad médica
             document.getElementById('edit-nombreUnidadMedica').value = unitName;
             document.getElementById('edit-urlGmaps').value = unitUrlGmaps || '';
@@ -635,80 +638,65 @@ function validarFechaNacimientoEdit() {
 }
 
 function verificarCamposEditMedicalUnit() {
-    // Obtener el formulario
-    var formulario = document.getElementById('editMedicalUnitForm');
+      // Obtener el formulario
+      var formulario = document.getElementById('editMedicalUnitForm');
+      // Verificar la validez del formulario
+      if (!formulario.checkValidity()) {
+          // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
+          formulario.reportValidity();
+          return;
+      }
 
-    // Verificar la validez del formulario
-    if (!formulario.checkValidity()) {
-        // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
-        formulario.reportValidity();
-        return;
-    }
+      // Obtener valores de los campos
+      var nombreUnidadMedica = document.getElementById('edit-nombreUnidadMedica').value;
+      var urlGmaps = document.getElementById('edit-urlGmaps').value;
 
-    // Obtener valores de los campos de la unidad médica
-    var nombreUnidadMedica = document.getElementById('edit-nombreUnidadMedica').value;
-    var urlGmaps = document.getElementById('edit-urlGmaps').value;
-
-    // Crear objeto de datos para enviar al servidor
-    var editedMedicalUnitData = {
+      // Crear objeto de datos para enviar al servidor
+      var editedUserData = {
         name: nombreUnidadMedica,
         urlGmaps: urlGmaps
-    };
+      };
 
-    // Obtener el ID de la unidad médica seleccionada de alguna manera (por ejemplo, mediante una variable global)
-    var unidadMedicaSeleccionadaId = obtenerIdUnidadMedicaSeleccionada();
+      fetch('http://127.0.0.1:8000/api/medunits/' +  unidadMedicaSeleccionadaId, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(editedUserData)
+        })
+      .then(response => {
+      if (!response.ok) {
+          throw new Error('Error al editar: ' + response.status);
+      }
+      return response.json(); 
+      })
+      .then(data => {
+      console.log('Respuesta del servidor:', data);
 
-    // Realizar la solicitud PUT a la API de unidades médicas
-    fetch('http://127.0.0.1:8000/api/medunit/' + unidadMedicaSeleccionadaId, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(editedMedicalUnitData)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al editar la unidad médica. Código de estado: ' + response.status);
-        }
-        return response.json(); 
-    })
-    .then(data => {
-        console.log('Respuesta del servidor (Unidad Médica):', data);
+      var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
+      offcanvasEditUser.hide();
+      setTimeout(function() {
+          alert('Usuario editado exitosamente.');
 
-        var offcanvasEditMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
-        offcanvasEditMedicalUnit.hide();
-        setTimeout(function() {
-            alert('Unidad médica editada exitosamente.');
-        }, 300);
-    })
-    .catch(error => {
-    console.error('Error en la solicitud de edición de unidad médica:', error);
+      }, 300);
 
-    if (error && error.response) {
-        console.error('Código de estado:', error.response.status);
+      })
+      .catch(error => {
+      console.error('Error en la solicitud de edición:', error);
+      alert('Error al editar el usuario.');
 
-        if (error.response.headers.get('Content-Type').indexOf('application/json') !== -1) {
-            // Si la respuesta es de tipo JSON, intenta obtener el cuerpo de la respuesta
-            error.response.json().then(data => {
-                console.error('Contenido de la respuesta:', data);
-            });
-        } else {
-            // Si la respuesta no es de tipo JSON, intenta obtener el texto de la respuesta
-            error.response.text().then(text => {
-                console.error('Contenido de la respuesta:', text);
-            });
-        }
-    }
-
-    alert('Error al editar la unidad médica. Consulta la consola para obtener más detalles.');
-});
+      if (error && error.response && error.response.text) {
+          // Intenta obtener más información sobre la respuesta
+          error.response.text().then(text => {
+              console.error('Contenido de la respuesta:', text);
+          });
+      }
+      });
+      var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
+      offcanvasEditUser.hide();
 }
 
-// Función para obtener el ID de la unidad médica seleccionada (puedes ajustarla según tu lógica)
-function obtenerIdUnidadMedicaSeleccionada() {
-    // Supongamos que tienes una variable global llamada unidadMedicaSeleccionadaId
-    return unidadMedicaSeleccionadaId;
-}
+
 </script>
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
