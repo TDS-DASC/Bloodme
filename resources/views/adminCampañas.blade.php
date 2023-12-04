@@ -926,7 +926,7 @@ function verificarCamposEdit() {
 
 
 
-<!-------------------------- Modal de Detalles del Usuario ------------------------------------------------------------------------->
+<!-- Modal de Detalles del Usuario -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasDetallesUsuarioLabel" class="offcanvas-title">Detalles del Usuario</h5>
@@ -935,55 +935,65 @@ function verificarCamposEdit() {
 
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
         <form class="detalles-usuario pt-0" id="detallesUsuarioForm" onsubmit="return false">
+            <div class="row">
+                <!-- Columna 1 -->
+                <div class="col-md-6">
+                    <!-- Campo ID de la Campaña -->
+                    <div class="mb-3">
+                        <label for="detalles-idCampaña" class="form-label">ID de la Campaña:</label>
+                        <input type="text" class="form-control" id="detalles-idCampaña" readonly>
+                    </div>
 
-           <!-- Campo ID de la Campaña -->
-           <div class="mb-3">
-                <label for="detalles-idCampaña" class="form-label">ID de la Campaña:</label>
-                <input type="text" class="form-control" id="detalles-idCampaña" readonly>
+                    <!-- Campo Inicio de la Campaña -->
+                    <div class="mb-3">
+                        <label for="detalles-inicioCampaña" class="form-label">Inicio de la Campaña:</label>
+                        <input type="date" class="form-control" id="detalles-inicioCampaña" readonly>
+                    </div>
+
+                    <!-- Campo Fin de la Campaña -->
+                    <div class="mb-3">
+                        <label for="detalles-finCampaña" class="form-label">Fin de la Campaña:</label>
+                        <input type="date" class="form-control" id="detalles-finCampaña" readonly>
+                    </div>
+                </div>
+
+                <!-- Columna 2 -->
+                <div class="col-md-6">
+                    <!-- Campo Tipo de Sangre Requerido -->
+                    <div class="mb-3">
+                        <label for="detalles-tipoSangreRequerido" class="form-label">Tipo de Sangre Requerido:</label>
+                        <input type="text" class="form-control" id="detalles-tipoSangreRequerido" readonly>
+                    </div>
+
+                    <!-- Campo Donaciones Requeridas -->
+                    <div class="mb-3">
+                        <label for="detalles-donacionesRequeridas" class="form-label">Donaciones Requeridas:</label>
+                        <input type="number" class="form-control" id="detalles-donacionesRequeridas" readonly>
+                    </div>
+
+                    <!-- Campo Donaciones Actuales -->
+                    <div class="mb-3">
+                        <label for="detalles-donacionesActuales" class="form-label">Donaciones Actuales:</label>
+                        <input type="number" class="form-control" id="detalles-donacionesActuales" readonly>
+                    </div>
+                </div>
+                                    <!-- Campo Tipo de Donación -->
+                                    <div class="mb-3">
+                        <label for="detalles-tipoDonacion" class="form-label">Tipo de Donación:</label>
+                        <input type="text" class="form-control" id="detalles-tipoDonacion" readonly>
+                    </div>
             </div>
-
-            <!-- Campo Inicio de la Campaña -->
-            <div class="mb-3">
-                <label for="detalles-inicioCampaña" class="form-label">Inicio de la Campaña:</label>
-                <input type="date" class="form-control" id="detalles-inicioCampaña" readonly>
-            </div>
-
-            <!-- Campo Fin de la Campaña -->
-            <div class="mb-3">
-                <label for="detalles-finCampaña" class="form-label">Fin de la Campaña:</label>
-                <input type="date" class="form-control" id="detalles-finCampaña" readonly>
-            </div>
-
-            <!-- Campo Tipo de Sangre Requerido -->
-            <div class="mb-3">
-                <label for="detalles-tipoSangreRequerido" class="form-label">Tipo de Sangre Requerido:</label>
-                <input type="text" class="form-control" id="detalles-tipoSangreRequerido" readonly>
-            </div>
-
-            <!-- Campo Donaciones Requeridas -->
-            <div class="mb-3">
-                <label for="detalles-donacionesRequeridas" class="form-label">Donaciones Requeridas:</label>
-                <input type="number" class="form-control" id="detalles-donacionesRequeridas" readonly>
-            </div>
-
-            <!-- Campo Donaciones Actuales -->
-            <div class="mb-3">
-                <label for="detalles-donacionesActuales" class="form-label">Donaciones Actuales:</label>
-                <input type="number" class="form-control" id="detalles-donacionesActuales" readonly>
-            </div>
-
-            <!-- Campo Tipo de Donación -->
-            <div class="mb-3">
-                <label for="detalles-tipoDonacion" class="form-label">Tipo de Donación:</label>
-                <input type="text" class="form-control" id="detalles-tipoDonacion" readonly>
-            </div>
-
 
             <!-- Botón para cerrar el modal -->
-            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+                </div>
+            </div>
         </form>
     </div>
 </div>
+
 
 
 <!-- Modal Editar Campaña -->
@@ -1028,6 +1038,9 @@ function verificarCamposEdit() {
         </form>
     </div>
 </div>
+
+
+
 <!-- Modal Añadir Campañas -->
 <div class="offcanvas offcanvas-end modal-dialog-centered" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
     <div class="offcanvas-header">
@@ -1101,6 +1114,16 @@ function verificarCamposEdit() {
 
 <style>
     #offcanvasAddCampaign {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        height: 400px;
+    }
+</style>
+
+<style>
+    #offcanvasDetallesUsuario {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
