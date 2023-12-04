@@ -246,7 +246,7 @@ function eliminarUnidad(unitId) {
 </script>
 
 <style>
-  #offcanvasAddMedicalUnit{
+  #offcanvasAddMedicalUnit, #offcanvasEditMedicalUnit{
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
