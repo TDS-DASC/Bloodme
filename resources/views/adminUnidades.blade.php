@@ -253,6 +253,14 @@ function eliminarUnidad(unitId) {
     width: 50%;
     height: 300px;
   }
+
+  #offcanvasDetallesMedicalUnit{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 400px;
+  }
 </style>
     
 </head>
@@ -625,7 +633,7 @@ function verificarCamposMedicalUnits() {
         // Restablecer valores de los campos a blanco
         document.getElementById('add-nombreUnidadMedica').value = '';
         document.getElementById('add-urlGmaps').value = '';
-
+        
         alert('Unidad médica creada exitosamente.');
     })
     .catch(error => {
@@ -870,25 +878,27 @@ function verificarCamposEditMedicalUnits() {
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
         <form class="Detalles-medical-unit pt-0" id="DetallesMedicalUnitForm" onsubmit="return false">
 
-        <div class="mb-3">
-            <label class="form-label" for="Detalles-idUnidadMedica">ID de la Unidad Médica</label>
-            <input type="text" id="Detalles-idUnidadMedica" class="form-control" readonly />
-        </div>
-
-              <div class="mb-3">
-                  <label class="form-label" for="Detalles-nombreUnidadMedica">Nombre de la Unidad Médica</label>
-                  <input type="text" id="Detalles-nombreUnidadMedica" class="form-control" readonly />
+          <div class="w-100">
+              <div class="mb-3" style="display: inline-block; width: 49%">
+                <label class="form-label" for="Detalles-idUnidadMedica">ID de la Unidad Médica</label>
+                <input type="text" id="Detalles-idUnidadMedica" class="form-control" readonly />
               </div>
 
-              <div class="mb-3">
+                <div class="mb-3 ms-2" style="display: inline-block; width: 49%">
+                    <label class="form-label" for="Detalles-nombreUnidadMedica">Nombre de la Unidad Médica</label>
+                    <input type="text" id="Detalles-nombreUnidadMedica" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="w-100">
+                <div class="mb-3" style="display: inline-block; width: 49%">
                   <label class="form-label" for="Detalles-urlGmaps">Url del Mapa</label>
                   <input type="text" id="Detalles-urlGmaps" class="form-control" readonly />
-              </div>
-
-              <div class="mb-3">
+                </div>
+                <div class="mb-3 ms-2" style="display: inline-block; width: 49%">
                   <label class="form-label" for="Detalles-creada">Fecha de Creación</label>
                   <input type="text" id="Detalles-creada" class="form-control" readonly />
-              </div>
+                </div>
+            </div>
 
               <div class="mb-3">
                   <label class="form-label" for="Detalles-actualizada">Fecha de Actualización</label>
