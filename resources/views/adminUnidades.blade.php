@@ -594,7 +594,7 @@ function eliminarUnidad(unitId) {
         fechaInput.classList.remove('is-invalid');
     }
 }
-
+var offcanvasAddMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasAddMedicalUnit'));
 function verificarCamposMedicalUnits() {
     var formulario = document.getElementById('addNewMedicalUnit');
     if (!formulario.checkValidity()) {
@@ -635,6 +635,7 @@ function verificarCamposMedicalUnits() {
         document.getElementById('add-urlGmaps').value = '';
         
         alert('Unidad médica creada exitosamente.');
+        offcanvasAddMedicalUnit.hide();
     })
     .catch(error => {
     // Manejar errores en la solicitud
@@ -651,8 +652,8 @@ function verificarCamposMedicalUnits() {
 });
 
     // Cerrar el modal 
-    var offcanvasAddMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasAddMedicalUnit'));
-    offcanvasAddMedicalUnit.hide();
+    // var offcanvasAddMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasAddMedicalUnit'));
+    // offcanvasAddMedicalUnit.hide();
 }
 
 
@@ -726,6 +727,8 @@ function validarFechaNacimientoEdit() {
     }
 }
 
+
+
 function verificarCamposEditMedicalUnits() {
     // Obtener los valores de los campos
     var nombreUnidadMedica = document.getElementById('edit-nombreUnidadMedica').value;
@@ -763,9 +766,8 @@ function verificarCamposEditMedicalUnits() {
 
         var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
         offcanvasEditUser.hide();
-        setTimeout(function() {
-            alert('Usuario editado exitosamente.');
-        }, 300);
+
+        alert('Usuario editado exitosamente.');
     })
     .catch(error => {
         console.error('Error en la solicitud de edición:', error);
@@ -779,6 +781,7 @@ function verificarCamposEditMedicalUnits() {
         }
     });
 }
+
 
 
 </script>
