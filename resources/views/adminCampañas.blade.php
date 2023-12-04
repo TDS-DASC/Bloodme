@@ -599,14 +599,28 @@ function validarFechasEdit() {
     mensajeErrorFechaInicio.textContent = '';
     mensajeErrorFechaFin.textContent = '';
 
+    // Obtener la fecha actual
+    var fechaActual = new Date();
+
+    // Calcular la fecha permitida hasta 6 meses en el futuro
+    var fechaPermitida = new Date();
+    fechaPermitida.setMonth(fechaPermitida.getMonth() + 6);
+
+// Validar si la fecha de inicio es mayor a 6 meses a partir de la fecha actual
+if (fechaInicio > fechaPermitida) {
+    mensajeErrorFechaInicio.textContent = 'La fecha de inicio no puede ser mayor a 6 meses a partir de la fecha actual.';
+} else if ((fechaInicio - fechaActual) < (7 * 24 * 60 * 60 * 1000)) {
+    mensajeErrorFechaInicio.textContent = 'La fecha de inicio no puede ser una semana anterior a la fecha actual.';
+}
+
     // Validar si la fecha de fin es anterior a la fecha de inicio
     if (fechaFin < fechaInicio) {
         mensajeErrorFechaInicio.textContent = 'La fecha de fin no puede ser anterior a la fecha de inicio.';
     }
 
-    // Validar si la diferencia es menor a una semana (en milisegundos)
-    if ((fechaFin - fechaInicio) < (7 * 24 * 60 * 60 * 1000)) {
-        mensajeErrorFechaFin.textContent = 'La diferencia entre la fecha de inicio y fin debe ser de al menos una semana.';
+    // Validar si la diferencia es menor a un día (en milisegundos)
+    if ((fechaFin - fechaInicio) < (24 * 60 * 60 * 1000)) {
+        mensajeErrorFechaFin.textContent = 'La diferencia entre la fecha de inicio y fin debe ser de al menos un día.';
     }
 
     // Validar que no se pueda escribir más de 4 números en la parte del año
@@ -634,6 +648,7 @@ function validarFechasEdit() {
     // Si las validaciones pasan, todo está bien
     return true;
 }
+
 
 
 
