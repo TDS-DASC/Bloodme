@@ -295,6 +295,16 @@ function mostrarDetallesUsuario(campaignId) {
   //------------------------------------------------ AQUI TERMINA ----------------------------------------
 
 </script>
+
+<style>
+    #offcanvasEditCampaign{
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        height: 350px;
+    }
+</style>
     
 </head>
 
@@ -831,12 +841,10 @@ function verificarCamposEdit() {
     .then(data => {
         console.log('Respuesta del servidor:', data);
 
-        var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
-        offcanvasEditCampaign.hide();
-        setTimeout(function() {
+        var modalElement = document.getElementById('offcanvasEditCampaign');
+        var modal = bootstrap.Offcanvas.getInstance(modalElement);
+        modal.hide();
             alert('Campaña editada exitosamente.');
-
-        }, 300);
        
     })
     .catch(error => {
@@ -850,8 +858,8 @@ function verificarCamposEdit() {
             });
         }
     });
-    var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
-    offcanvasEditCampaign.hide();
+    // var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
+    // offcanvasEditCampaign.hide();
 }
 </script>
 <div class="card">
@@ -954,28 +962,36 @@ function verificarCamposEdit() {
 
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
         <form class="edit-campaign pt-0" id="editCampaignForm" onsubmit="return false">
+            <div>
+                <!-- Contenedor para el primer par de etiqueta y campo de entrada -->
+                <div class="mb-3" style="width: 45%; display: inline-block;">
+                    <label class="form-label" for="edit-FechaInicioCampaña">Fecha de Inicio</label>
+                    <input type="date" id="edit-FechaInicioCampaña" class="form-control" onchange="validarFechasEdit()" />
+                    <div>
+                        <span id="mensajeErrorFechaInicio"></span>
+                    </div>
+                </div>
+            
+                <!-- Contenedor para el segundo par de etiqueta y campo de entrada -->
+                <div class="mb-3 ms-5" style="width: 45%; display: inline-block;">
+                    <label class="form-label" for="edit-FechaFinCampaña">Fecha de Fin</label>
+                    <input type="date" id="edit-FechaFinCampaña" class="form-control" onchange="validarFechasEdit()" />
+                    <div>
+                        <span id="mensajeErrorFechaFin"></span>
+                    </div>
+                </div>
+            </div>
 
             <div class="mb-3">
                 <label class="form-label" for="edit-IdCampaña">ID de la Campaña</label>
                 <input type="text" id="edit-IdCampaña" class="form-control" readonly />
             </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-FechaInicioCampaña">Fecha de Inicio</label>
-                <input type="date" id="edit-FechaInicioCampaña" class="form-control" onchange="validarFechasEdit()" />
-                <span id="mensajeErrorFechaInicio"></span>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-FechaFinCampaña">Fecha de Fin</label>
-                <input type="date" id="edit-FechaFinCampaña" class="form-control" onchange="validarFechasEdit()" />
-                <span id="mensajeErrorFechaFin"></span>
-            </div>
-
             <!-- Otros campos que desees editar -->
 
-            <button type="submit" id="btnGuardarCambios" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
-            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+            <div class="w-100 d-flex justify-content-center mt-3">
+                <button type="submit" id="btnGuardarCambios" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()" data-bs-dismiss="offcanvas">Guardar Cambios</button>
+                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+            </div>
         </form>
     </div>
 </div>
