@@ -585,6 +585,60 @@ function mostrarDetallesUsuario(campaignId) {
     return true;
 }
 
+function validarFechasEdit() {
+    var fechaInicioInput = document.getElementById('edit-FechaInicioCampaña');
+    var fechaFinInput = document.getElementById('edit-FechaFinCampaña');
+    var mensajeErrorFechaInicio = document.getElementById('mensajeErrorFechaInicio');
+    var mensajeErrorFechaFin = document.getElementById('mensajeErrorFechaFin');
+
+    // Obtener valores de las fechas
+    var fechaInicio = new Date(fechaInicioInput.value);
+    var fechaFin = new Date(fechaFinInput.value);
+
+    // Restablecer los mensajes de error
+    mensajeErrorFechaInicio.textContent = '';
+    mensajeErrorFechaFin.textContent = '';
+
+    // Validar si la fecha de fin es anterior a la fecha de inicio
+    if (fechaFin < fechaInicio) {
+        mensajeErrorFechaInicio.textContent = 'La fecha de fin no puede ser anterior a la fecha de inicio.';
+    }
+
+    // Validar si la diferencia es menor a una semana (en milisegundos)
+    if ((fechaFin - fechaInicio) < (7 * 24 * 60 * 60 * 1000)) {
+        mensajeErrorFechaFin.textContent = 'La diferencia entre la fecha de inicio y fin debe ser de al menos una semana.';
+    }
+
+    // Validar que no se pueda escribir más de 4 números en la parte del año
+    var fechaArrayInicio = fechaInicioInput.value.split('-');
+    if (fechaArrayInicio.length === 3 && fechaArrayInicio[0].length > 4) {
+        fechaArrayInicio[0] = fechaArrayInicio[0].substring(0, 4);
+        fechaInicioInput.value = fechaArrayInicio.join('-');
+    }
+
+    var fechaArrayFin = fechaFinInput.value.split('-');
+    if (fechaArrayFin.length === 3 && fechaArrayFin[0].length > 4) {
+        fechaArrayFin[0] = fechaArrayFin[0].substring(0, 4);
+        fechaFinInput.value = fechaArrayFin.join('-');
+    }
+
+    // Cambiar el color del texto a rojo si hay mensajes de error
+    if (mensajeErrorFechaInicio.textContent) {
+        mensajeErrorFechaInicio.style.color = 'red';
+    }
+
+    if (mensajeErrorFechaFin.textContent) {
+        mensajeErrorFechaFin.style.color = 'red';
+    }
+
+    // Si las validaciones pasan, todo está bien
+    return true;
+}
+
+
+
+
+
 
 
 function validarUnidadesRequeridas() {
@@ -749,7 +803,7 @@ function verificarCamposEdit() {
         formulario.reportValidity();
         return;
     }
-
+    
     // Obtener valores de los campos
     var idCampaña = document.getElementById('edit-IdCampaña').value;
     var fechaInicio = document.getElementById('edit-FechaInicioCampaña').value;
@@ -908,12 +962,14 @@ function verificarCamposEdit() {
 
             <div class="mb-3">
                 <label class="form-label" for="edit-FechaInicioCampaña">Fecha de Inicio</label>
-                <input type="date" id="edit-FechaInicioCampaña" class="form-control" />
+                <input type="date" id="edit-FechaInicioCampaña" class="form-control" onchange="validarFechasEdit()" />
+                <span id="mensajeErrorFechaInicio"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="edit-FechaFinCampaña">Fecha de Fin</label>
-                <input type="date" id="edit-FechaFinCampaña" class="form-control" />
+                <input type="date" id="edit-FechaFinCampaña" class="form-control" onchange="validarFechasEdit()" />
+                <span id="mensajeErrorFechaFin"></span>
             </div>
 
             <!-- Otros campos que desees editar -->
@@ -923,9 +979,6 @@ function verificarCamposEdit() {
         </form>
     </div>
 </div>
-
-
-
 <!-- Modal Añadir Campañas -->
 <div class="offcanvas offcanvas-end modal-dialog-centered" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
     <div class="offcanvas-header">
