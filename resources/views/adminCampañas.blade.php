@@ -295,6 +295,16 @@ function mostrarDetallesUsuario(campaignId) {
   //------------------------------------------------ AQUI TERMINA ----------------------------------------
 
 </script>
+
+<style>
+    #offcanvasEditCampaign{
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        height: 300px;
+    }
+</style>
     
 </head>
 
@@ -916,14 +926,16 @@ function verificarCamposEdit() {
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
         <form class="edit-campaign pt-0" id="editCampaignForm" onsubmit="return false">
 
-            <div class="mb-3">
-                <label class="form-label" for="edit-IdCampaña">ID de la Campaña</label>
-                <input type="text" id="edit-IdCampaña" class="form-control" readonly />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-FechaInicioCampaña">Fecha de Inicio</label>
-                <input type="date" id="edit-FechaInicioCampaña" class="form-control" />
+            <div class="w-100">
+                <div class="mb-3 w-50" style="display: inline-block">
+                    <label class="form-label" for="edit-IdCampaña">ID de la Campaña</label>
+                    <input type="text" id="edit-IdCampaña" class="form-control" readonly />
+                </div>
+    
+                <div class="mb-3" style="display: inline-block; width: 48%">
+                    <label class="form-label" for="edit-FechaInicioCampaña">Fecha de Inicio</label>
+                    <input type="date" id="edit-FechaInicioCampaña" class="form-control w-100" />
+                </div>
             </div>
 
             <div class="mb-3">
