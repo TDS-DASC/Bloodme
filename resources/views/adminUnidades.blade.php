@@ -764,8 +764,10 @@ function verificarCamposEditMedicalUnits() {
     .then(data => {
         console.log('Respuesta del servidor:', data);
 
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
-        offcanvasEditUser.hide();
+        // Ocultar el modal directamente
+        var modalElement = document.getElementById('offcanvasEditMedicalUnit');
+        var modal = bootstrap.Offcanvas.getInstance(modalElement);
+        modal.hide();
 
         alert('Usuario editado exitosamente.');
     })
@@ -831,7 +833,7 @@ function verificarCamposEditMedicalUnits() {
               <div id="mensajeError" style="color: red;"></div>
           </div>
                       
-            <button type="submit" id="btnEditMedicalUnit" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposEditMedicalUnits()">Confirmar</button>
+          <button type="submit" id="btnEditMedicalUnit" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposEditMedicalUnits()" data-bs-dismiss="offcanvas">Confirmar</button>
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
         </form>
     </div>
