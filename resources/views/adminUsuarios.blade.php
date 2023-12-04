@@ -710,7 +710,7 @@ function verificarCampos() {
 }
 
 function validarFechaNacimientoEdit() {
-    function validarFechaNacimientoEdit() {
+    
         var fechaInputEdit = document.getElementById('edit-html5-date-input');
         var mensajeErrorFechaEdit = document.getElementById('mensajeErrorFechaEdit');
         var fechaArrayEdit = fechaInputEdit.value.split('-');
@@ -732,7 +732,7 @@ function validarFechaNacimientoEdit() {
             fechaInputEdit.classList.remove('is-invalid');
         }
     }
-}
+
 
 function verificarCamposEdit() {
         // Obtener el formulario
@@ -977,7 +977,7 @@ function verificarCamposEdit() {
                     <div class="mb-3">
                         <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
                         <div class="col-md-10">
-                            <input class="form-control" type="date" value="" id="edit-html5-date-input" min='1900-01-01' max='2023-12-31' />
+                            <input class="form-control" type="date" value="" id="edit-html5-date-input" min='1900-01-01' max='2023-12-31' onblur="validarFechaNacimientoEdit()" />
                             <div id="mensajeErrorFechaEdit" style="color: red;"></div>
                         </div>
                     </div>
