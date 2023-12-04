@@ -125,7 +125,7 @@
         cellUrlGmaps.innerText = truncatedUrl;
 
         cellAcciones.innerHTML = `
-            <button type="button" class="btn btn-secondary" onclick="mostrarDetallesUnidad(${unit.id})">Detalles</button>
+            <button type="button" class="btn btn-secondary" onclick="obtenerDetallesUnidad2(${unit.id})">Detalles</button>
             <button type="button" class="btn btn-primary" onclick="obtenerDetallesUnidad(${unit.id})">Editar</button>
             <button type="button" class="btn btn-danger" onclick="eliminarUnidad('${unit.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
     });
@@ -173,6 +173,54 @@ function obtenerDetallesUnidad(unitId) {
 function editarUnidadMedica(unitId) {
   obtenerDetallesUnidad(unitId);
 }
+
+//detalles
+
+function obtenerDetallesUnidad2(unitId) {
+    fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles de la unidad médica. Código de estado: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const unit = data.MedicalUnit || {};
+        const unitId = unit.id || '';           //id
+        const unitName = unit.name || '';
+        const unitUrlGmaps = unit.urlGmaps || '';
+        const creada = unit.created_at|| '';
+        const actualizada = unit.updated_at|| '';
+
+        if (unitId && unitName) {
+
+          unidadMedicaSeleccionadaId = unitId;
+
+            // Llenar los campos del formulario de edición con los detalles de la unidad médica
+            document.getElementById('Detalles-idUnidadMedica').value = unitId;
+            document.getElementById('Detalles-nombreUnidadMedica').value = unitName;
+            document.getElementById('Detalles-urlGmaps').value = unitUrlGmaps || '';
+            document.getElementById('Detalles-creada').value = creada.substring(0, 10);
+        document.getElementById('Detalles-actualizada').value = actualizada.substring(0, 10);
+            // Abrir el modal de edición
+            var offcanvasDetallesMedicalUnit = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesMedicalUnit'));
+            offcanvasDetallesMedicalUnit.show();
+        } else {
+            throw new Error('Formato de respuesta inesperado. Datos incompletos de la unidad médica.');
+        }
+    })
+    .catch(error => {
+        console.error('Error al obtener los detalles de la unidad médica:', error);
+        alert('Error al obtener los detalles de la unidad médica.');
+    });
+}
+
+function editarUnidadMedica(unitId) {
+  obtenerDetallesUnidad2(unitId);
+}
+
 
 function eliminarUnidad(unitId) {
         if (confirm('¿Estás seguro de que quieres eliminar esta unidad médica?')) {
@@ -420,6 +468,39 @@ function eliminarUnidad(unitId) {
         <!-- validaciones de los modales -->
 
 <script>
+ 
+ function validarUrl2() {
+    // Obtener el valor del campo de entrada
+    var urlGmaps = document.getElementById('edit-urlGmaps').value;
+    
+    // Obtener el elemento del mensaje de error
+    var mensajeError = document.getElementById('mensajeError');
+
+    // Verificar si la URL comienza con "http" y tiene al menos 15 caracteres
+    if (urlGmaps.length >= 15 && urlGmaps.startsWith('http')) {
+        // La URL es válida
+        mensajeError.textContent = ''; // Limpiar el mensaje de error
+    } else {
+        // La URL no cumple con los requisitos, mostrar el mensaje de error
+        mensajeError.textContent = 'La URL debe comenzar con "http" y tener al menos 15 caracteres.';
+        // Puedes también restablecer el valor del campo o realizar otras acciones según tu caso
+        document.getElementById('edit-urlGmaps').value = '';
+    }
+}
+
+ function validarUrl(inputId, mensajeErrorId) {
+    var urlGmaps = document.getElementById(inputId).value;
+
+    var mensajeError = document.getElementById(mensajeErrorId);
+
+    if (urlGmaps.length >= 15 && urlGmaps.startsWith('http')) {
+        mensajeError.textContent = ''; // Limpiar el mensaje de error
+    } else {
+        mensajeError.textContent = 'La URL debe comenzar con "http" y tener al menos 15 caracteres.';
+        document.getElementById(inputId).value = '';
+    }
+}
+
   function mostrarErrorLetras(id, mensaje) {
         var mensajeErrorLetras = document.getElementById(id);
         if (mensajeErrorLetras) {
@@ -595,22 +676,22 @@ function verificarCamposMedicalUnits() {
     }
 
     function validarCurpEdit() {
-    var curpInputEdit = document.getElementById('edit-curp');
-    var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
-date
-    curpInputEdit.value = curpInputEdit.value.toUpperCase();
+        var curpInputEdit = document.getElementById('edit-curp');
+        var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
+        date
+        curpInputEdit.value = curpInputEdit.value.toUpperCase();
 
-    // Expresión regular para permitir solo letras sin acentos y números
-    var regexCurp = /^[A-Z0-9]+$/;
+        // Expresión regular para permitir solo letras sin acentos y números
+        var regexCurp = /^[A-Z0-9]+$/;
 
-    if (curpInputEdit.value.length !== 18 || !regexCurp.test(curpInputEdit.value)) {
-        mensajeErrorCurpEdit.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
-        curpInputEdit.classList.add('is-invalid');
-    } else {
-        mensajeErrorCurpEdit.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
-        curpInputEdit.classList.remove('is-invalid');
+        if (curpInputEdit.value.length !== 18 || !regexCurp.test(curpInputEdit.value)) {
+            mensajeErrorCurpEdit.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+            curpInputEdit.classList.add('is-invalid');
+        } else {
+            mensajeErrorCurpEdit.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+            curpInputEdit.classList.remove('is-invalid');
+        }
     }
-}
 
 function validarFechaNacimientoEdit() {
     function validarFechaNacimientoEdit() {
@@ -637,63 +718,58 @@ function validarFechaNacimientoEdit() {
     }
 }
 
-function verificarCamposEditMedicalUnit() {
-      // Obtener el formulario
-      var formulario = document.getElementById('editMedicalUnitForm');
-      // Verificar la validez del formulario
-      if (!formulario.checkValidity()) {
-          // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
-          formulario.reportValidity();
-          return;
-      }
+function verificarCamposEditMedicalUnits() {
+    // Obtener los valores de los campos
+    var nombreUnidadMedica = document.getElementById('edit-nombreUnidadMedica').value;
+    var urlGmaps = document.getElementById('edit-urlGmaps').value;
 
-      // Obtener valores de los campos
-      var nombreUnidadMedica = document.getElementById('edit-nombreUnidadMedica').value;
-      var urlGmaps = document.getElementById('edit-urlGmaps').value;
+    // Verificar si los campos están llenos
+    if (!nombreUnidadMedica || !urlGmaps) {
+        // Mostrar un mensaje de error o realizar acciones según tus necesidades
+        alert('Todos los campos deben estar llenos.');
+        return;
+    }
 
-      // Crear objeto de datos para enviar al servidor
-      var editedUserData = {
+    // Crear objeto de datos para enviar al servidor
+    var editedUserData = {
         name: nombreUnidadMedica,
         urlGmaps: urlGmaps
-      };
+    };
 
-      fetch('http://127.0.0.1:8000/api/medunits/' +  unidadMedicaSeleccionadaId, {
-          method: 'PUT',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(editedUserData)
-        })
-      .then(response => {
-      if (!response.ok) {
-          throw new Error('Error al editar: ' + response.status);
-      }
-      return response.json(); 
-      })
-      .then(data => {
-      console.log('Respuesta del servidor:', data);
+    // Realizar la solicitud PUT a la API de unidades médicas
+    fetch('http://127.0.0.1:8000/api/medunits/' + unidadMedicaSeleccionadaId, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editedUserData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al editar: ' + response.status);
+        }
+        return response.json(); 
+    })
+    .then(data => {
+        console.log('Respuesta del servidor:', data);
 
-      var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
-      offcanvasEditUser.hide();
-      setTimeout(function() {
-          alert('Usuario editado exitosamente.');
+        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
+        offcanvasEditUser.hide();
+        setTimeout(function() {
+            alert('Usuario editado exitosamente.');
+        }, 300);
+    })
+    .catch(error => {
+        console.error('Error en la solicitud de edición:', error);
+        alert('Error al editar el usuario.');
 
-      }, 300);
-
-      })
-      .catch(error => {
-      console.error('Error en la solicitud de edición:', error);
-      alert('Error al editar el usuario.');
-
-      if (error && error.response && error.response.text) {
-          // Intenta obtener más información sobre la respuesta
-          error.response.text().then(text => {
-              console.error('Contenido de la respuesta:', text);
-          });
-      }
-      });
-      var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditMedicalUnit'));
-      offcanvasEditUser.hide();
+        if (error && error.response && error.response.text) {
+            // Intenta obtener más información sobre la respuesta
+            error.response.text().then(text => {
+                console.error('Contenido de la respuesta:', text);
+            });
+        }
+    });
 }
 
 
@@ -701,7 +777,7 @@ function verificarCamposEditMedicalUnit() {
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
       <h4>Lista de unidades médicas</h4>
-      <button type="button" class="btn btn-secondary" id="btnAddMedicalUnit">Añadir</button>
+      <button type="button" class="btn btn-success" id="btnAddMedicalUnit">Añadir</button>
   </div>
 
   <div class="table-responsive text-nowrap">
@@ -736,15 +812,15 @@ function verificarCamposEditMedicalUnit() {
 
             <div class="mb-3">
                 <label class="form-label" for="edit-nombreUnidadMedica">Nombre de la Unidad Médica</label>
-                <input type="text" id="edit-nombreUnidadMedica" class="form-control" placeholder="Escribir Nombre de la Unidad Médica" aria-label="Nombre de la Unidad Médica" />
+                <input type="text" id="edit-nombreUnidadMedica" class="form-control" placeholder="Escribir Nombre de la Unidad Médica" aria-label="Nombre de la Unidad Médica" onkeypress="return validarSoloLetras(event, this)"/>
             </div>
-
             <div class="mb-3">
-                <label class="form-label" for="edit-urlGmaps">Escribir Url del Mapa</label>
-                <input type="text" id="edit-urlGmaps" class="form-control" placeholder="Escribir Url del Mapa" aria-label="Url de la Unidad Médica" />
-            </div>
-
-            <button type="submit" id="btnEditMedicalUnit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEditMedicalUnit()">Guardar Cambios</button>
+              <label class="form-label" for="edit-urlGmaps">Escribir Url del Mapa</label>
+              <input type="text" id="edit-urlGmaps" class="form-control" placeholder="Escribir Url del Mapa" aria-label="Url de la Unidad Médica" onblur="validarUrl2()" />
+              <div id="mensajeError" style="color: red;"></div>
+          </div>
+                      
+            <button type="submit" id="btnEditMedicalUnit" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposEditMedicalUnits()">Confirmar</button>
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
         </form>
     </div>
@@ -768,8 +844,9 @@ function verificarCamposEditMedicalUnit() {
 
       <div class="mb-3">
         <label class="form-label" for="add-urlGmaps">Escribir Url del Mapa</label>
-        <input type="text" id="add-urlGmaps" class="form-control" placeholder="Escribir Url del Mapa" aria-label="Url de la Unidad Medica" />
-      </div>
+        <input type="text" id="add-urlGmaps" class="form-control" placeholder="Escribir Url del Mapa" aria-label="Url de la Unidad Medica" onblur="validarUrl('add-urlGmaps', 'mensajeErrorAdd')" />
+<div id="mensajeErrorAdd" style="color: red;"></div>
+    </div>
 
       <div class="text-center">
         <button type="submit" id="btnAddMedicalUnit" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposMedicalUnits()">Confirmar</button>
@@ -783,59 +860,51 @@ function verificarCamposEditMedicalUnit() {
 
 
 
+<!-- Modal Detalles Unidades Médicas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesMedicalUnit" aria-labelledby="offcanvasDetallesMedicalUnitLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasDetallesMedicalUnitLabel" class="offcanvas-title">Detalles Unidad Médica</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
 
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="Detalles-medical-unit pt-0" id="DetallesMedicalUnitForm" onsubmit="return false">
 
+        <div class="mb-3">
+            <label class="form-label" for="Detalles-idUnidadMedica">ID de la Unidad Médica</label>
+            <input type="text" id="Detalles-idUnidadMedica" class="form-control" readonly />
+        </div>
 
-
-
-<!-- Modal Añadir Campañas -->
-<!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddMedicalUnit" aria-labelledby="offcanvasAddMedicalUnitLabel">
-  <div class="offcanvas-header">
-      <h5 id="offcanvasAddMedicalUnitLabel" class="offcanvas-title">Campaña</h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-
-  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-      <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
-
-          <div class="mb-3">
-              <label class="form-label" for="add-nombreCampaña">Nombre de la Campaña</label>
-              <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribir Nombre de la Campaña" aria-label="Nombre de la Campaña" />
-          </div>
-
-          <div class="mb-3">
-              <label class="form-label" for="add-descripcionCampaña">Descripción de la Campaña</label>
-              <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Descripción de la Campaña" aria-label="Descripción de la Campaña" />
-          </div>
-
-          <div class="mb-3">
-              <label class="form-label" for="add-tipoCampaña">Tipo de Campaña</label>
-              <select id="add-tipoCampaña" class="form-select">
-                  <option selected disabled value="">Opciones...</option>
-                  <option value="Plaquetas">Plaquetas</option>
-                  <option value="Sangre">Sangre</option>
-              </select>
-          </div>
-
-          <div class="mb-3">
-              <label class="form-label" for="add-fechaInicio">Fecha de Inicio</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" />
+              <div class="mb-3">
+                  <label class="form-label" for="Detalles-nombreUnidadMedica">Nombre de la Unidad Médica</label>
+                  <input type="text" id="Detalles-nombreUnidadMedica" class="form-control" readonly />
               </div>
-          </div>
 
-          <div class="mb-3">
-              <label class="form-label" for="add-donacionesRequeridas">Donaciones Requeridas</label>
-              <input type="number" id="add-donacionesRequeridas" class="form-control" placeholder="Número de Donaciones Requeridas" aria-label="Donaciones Requeridas" />
-          </div> -->
+              <div class="mb-3">
+                  <label class="form-label" for="Detalles-urlGmaps">Url del Mapa</label>
+                  <input type="text" id="Detalles-urlGmaps" class="form-control" readonly />
+              </div>
 
-          <!-- <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
-      </form>
-  </div>
-</div> -->
+              <div class="mb-3">
+                  <label class="form-label" for="Detalles-creada">Fecha de Creación</label>
+                  <input type="text" id="Detalles-creada" class="form-control" readonly />
+              </div>
 
-                      <!-- / Content -->
+              <div class="mb-3">
+                  <label class="form-label" for="Detalles-actualizada">Fecha de Actualización</label>
+                  <input type="text" id="Detalles-actualizada" class="form-control" readonly />
+              </div>
+
+           <!-- Botón para cerrar el modal -->
+           <div class="text-center">
+                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
 
           
           
