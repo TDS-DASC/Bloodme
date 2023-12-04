@@ -572,6 +572,7 @@ function mostrarDetallesUsuario(userId) {
     }
 }
 
+var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
 function verificarCampos() {
         var formulario = document.getElementById('addNewUserForm');
         if (!formulario.checkValidity()) {
@@ -624,11 +625,11 @@ function verificarCampos() {
             // La respuesta exitosa del servidor
             console.log('Respuesta del servidor:', data);
 
-            var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-            offcanvasAddUser.hide();
+            
+            
 
             
-            setTimeout(function() {
+           
                 alert('Usuario creado exitosamente.');
 
                  // Restablecer valores de los campos a blanco
@@ -642,7 +643,8 @@ function verificarCampos() {
         document.getElementById('add-genero').value = '';
         document.getElementById('add-donador').value = '';
         
-            }, 300);
+        offcanvasAddUser.hide();
+   
         })
         .catch(error => {
     // Manejar errores en la solicitud
@@ -659,8 +661,8 @@ function verificarCampos() {
 });
 
         // Cerrar el modal 
-        var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
-        offcanvasAddUser.hide();
+        // var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        // offcanvasAddUser.hide();
     }
 
 
@@ -787,12 +789,14 @@ function verificarCamposEdit() {
     .then(data => {
         console.log('Respuesta del servidor:', data);
 
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
+        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
         offcanvasEditUser.hide();
-        setTimeout(function() {
-            alert('Usuario editado exitosamente.');
-
-        }, 300);
+        
+        var modalElement = document.getElementById('offcanvasEditUser');
+        var modal = bootstrap.Offcanvas.getInstance(modalElement);
+        modal.hide();
+        
+        alert('Usuario editado exitosamente')
        
     })
     .catch(error => {
@@ -1020,7 +1024,7 @@ function verificarCamposEdit() {
 
             <!-- Botones -->
             <div class="text-center">
-                <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
+                <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()" data-bs-dismiss="offcanvas">Guardar Cambios</button>
                 <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
             </div>
         </form>
