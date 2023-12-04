@@ -127,7 +127,7 @@ function renderizarTablaCampanas(campaigns) {
         cellFechaFin.innerText = campaign.end_campaign || 'N/A'; 
 
         cellAcciones.innerHTML = `
-        <button type="button" class="btn btn-secondary" onclick="mostrarDetallesUsuario(${campaign.id})">Detalles</button>
+        <button type="button" class="btn btn-secondary" onclick="obtenerDetallesCampaña(${campaign.id})">Detalles</button>
         <button type="button" class="btn btn-primary" onclick="obtenerDetallesCampana(${campaign.id})">Editar</button>
         <button type="button" class="btn btn-danger" onclick="eliminarCampana('${campaign.id}')"> Eliminar</button>`;
     });
@@ -135,7 +135,6 @@ function renderizarTablaCampanas(campaigns) {
 
 let campaignSeleccionadaId = null;
 
-// Función para obtener detalles de la campaña
 function obtenerDetallesCampana(campaignId) {
     fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`)
         .then(response => {
@@ -147,17 +146,14 @@ function obtenerDetallesCampana(campaignId) {
         .then(data => {
             console.log('Respuesta completa de la API:', data);
 
-            // Modifica esta parte según la estructura real de tu respuesta
             const campaign = data.Campaign || {};
             const campaignId = campaign.id || '';
             const campaignStartDate = campaign.start_campaign || '';
             const campaignEndDate = campaign.end_campaign || '';
 
             if (campaignId && campaignStartDate) {
-                // Almacena el ID de la campaña seleccionada globalmente
                 campaignSeleccionadaId = campaignId;
 
-                // Rellenar campos del formulario de edición
                 document.getElementById('edit-IdCampaña').value = campaignId;
                 document.getElementById('edit-FechaInicioCampaña').value = campaignStartDate;
                 document.getElementById('edit-FechaFinCampaña').value = campaignEndDate || '';
@@ -175,21 +171,65 @@ function obtenerDetallesCampana(campaignId) {
         });
 }
 
+function obtenerDetallesCampaña(campaignId) {
+    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const campaign = data.Campaign || {};
+        const campaignId = campaign.id || '';
+        const inicioCampaña = campaign.start_campaign || '';
+        const finCampaña = campaign.end_campaign || '';
+        const tipoSangreRequerido = campaign.blood || '';
+        const donacionesRequeridas = campaign.donations_required || '';
+        const donacionesActuales = campaign.current_donations || '';
+        const tipoDonacion = campaign.description || '';
+
+        if (campaignId) {
+            campaignSeleccionadaId = campaignId;
+
+            document.getElementById('detalles-idCampaña').value = campaignId;
+            document.getElementById('detalles-inicioCampaña').value = inicioCampaña;
+            document.getElementById('detalles-finCampaña').value = finCampaña;
+            document.getElementById('detalles-tipoSangreRequerido').value = tipoSangreRequerido;
+            document.getElementById('detalles-donacionesRequeridas').value = donacionesRequeridas;
+            document.getElementById('detalles-donacionesActuales').value = donacionesActuales;
+            document.getElementById('detalles-tipoDonacion').value = tipoDonacion;
+
+            var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
+            offcanvasDetallesUsuario.show();
+        } else {
+            throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
+        }
+    })
+    .catch(error => {
+        console.error('Error al obtener los detalles de la campaña:', error);
+        alert('Error al obtener los detalles de la campaña.');
+    });
+}
+
+function editarCampaña(campaignId) {
+    obtenerDetallesCampaña(campaignId);
+}
+
 function validarCurp() {
     var curpInput = document.getElementById('add-curpCampaña');
     var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
-    // Verificar si el elemento 'curpInput' existe antes de acceder a su propiedad 'value'
     if (curpInput) {
-        // Expresión regular para permitir solo letras sin acentos y números
         var regexCurp = /^[A-Za-z0-9]+$/;
 
-        // Verificar la longitud del CURP
         if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
             mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
             curpInput.classList.add('is-invalid');
         } else {
-            mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+            mensajeErrorCurp.innerText = ''; 
             curpInput.classList.remove('is-invalid');
         }
     } else {
@@ -198,16 +238,10 @@ function validarCurp() {
 }
 
 
-// Función para abrir el modal de edición al hacer clic en el botón de editar
 function editarCampana(campaignId) {
     obtenerDetallesCampana(campaignId);
 }
-/*
-// Asigna el evento de clic al botón de editar para abrir el modal de edición
-document.getElementById('btnAddCampaign').addEventListener('click', function () {
-    console.log("Soy el botón editar");
-    verificarCamposEdit();
-});*/
+
 
     document.getElementById('btnAddCampaign').addEventListener('click', function() {
         console.log("Soy el botón Añadir");
@@ -228,7 +262,6 @@ document.getElementById('btnAddCampaign').addEventListener('click', function () 
         .then(data => {
             console.log('Campaña eliminada exitosamente:', data);
 
-            // Vuelve a cargar y mostrar la lista de campañas después de eliminar
             cargarYMostrarCampañas();
         })
         .catch(error => {
