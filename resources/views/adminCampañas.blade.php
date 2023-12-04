@@ -712,6 +712,8 @@ function validarUnidadesRequeridas() {
     }
 }
 
+var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
+
 function verificarCamposCampaign() {
     var formulario = document.getElementById('addNewCampaignForm');
     if (!formulario.checkValidity()) {
@@ -765,10 +767,10 @@ function verificarCamposCampaign() {
                     // La respuesta exitosa del servidor
                     console.log('Respuesta del servidor:', data);
 
-                    var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-                    offcanvasAddCampaign.hide();
+                    
+                    
 
-                    setTimeout(function() {
+                    
                         alert('Campaña creada exitosamente.');
 
                         // Restablecer valores de los campos a blanco
@@ -778,7 +780,8 @@ function verificarCamposCampaign() {
                         document.getElementById('add-unidadesRequeridas').value = '';
                         document.getElementById('add-descripcionCampaña').value = '';
                         document.getElementById('add-curpCampaña').value = '';
-                    }, 300);
+
+                        offcanvasAddCampaign.hide();
                 })
                 .catch(error => {
                     // Manejar errores en la solicitud
@@ -1058,7 +1061,7 @@ function verificarCamposEdit() {
 
 <!-- Modal Añadir Campañas -->
 <div class="offcanvas offcanvas-end modal-dialog-centered" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
-    <div class="offcanvas-header">
+    <div class="offcanvas-header d-flex justify-content-between w-100">
         <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Nueva Campaña</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -1067,25 +1070,30 @@ function verificarCamposEdit() {
         <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
             <div class="row">
                 <!-- Columna 1 -->
-                <div class="col-md-6">
-                    <div class="mb-3">
+                <div>
+                    
+                </div>
+                <div class="col-12 col-md-6 w-100">
+                    <div class="mb-3" style="display: inline-block; width: 48%">
                         <label class="form-label" for="add-fechaInicio">Inicio de la Campaña</label>
-                        <div class="col-md-10">
-                            <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
+                        <div class="col-md-10 w-100">
+                            <input class="form-control w-100" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
                             <div id="mensajeErrorFechaInicio" class="text-danger"></div> <!-- Nuevo div para mensaje de error -->
                         </div>
                     </div>
                 
-                    <div class="mb-3">
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
                         <label class="form-label" for="add-fechaFin">Final de la Campaña</label>
-                        <div class="col-md-10">
-                            <input class="form-control" type="date" value="" id="add-fechaFin" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
+                        <div class="col-md-10 w-100">
+                            <input class="form-control" style="width: 100%" type="date" value="" id="add-fechaFin" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
                             <div id="mensajeErrorFechaFin" class="text-danger"></div> <!-- Nuevo div para mensaje de error -->
                         </div>
                     </div>
                 </div>
 
-                    <div class="mb-3">
+
+                <div class="col-12">
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
                         <label class="form-label" for="add-tipoDonacion">Tipo de Donaciones</label>
                         <select id="add-tipoDonacion" class="form-select">
                             <option selected disabled value="">Opciones...</option>
@@ -1093,22 +1101,24 @@ function verificarCamposEdit() {
                             <option value="Sangre">Sangre</option>
                         </select>
                     </div>
-                </div>
-
-                <!-- Columna 2 -->
-                <div class="col-md-6">
-                    <div class="mb-3">
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
                         <label class="form-label" for="add-unidadesRequeridas">Unidades Requeridas</label>
                         <input type="number" id="add-unidadesRequeridas" class="form-control" placeholder="Número de Unidades Requeridas" aria-label="Unidades Requeridas" onblur="validarUnidadesRequeridas()" />
                         <div id="error-unidadesRequeridas" class="text-danger"></div>
                     </div>
+                </div>
 
-                    <div class="mb-3">
+                
+
+                <!-- Columna 2 -->
+                <div class="col-12 col-md-6 w-100">
+
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
                         <label class="form-label" for="add-descripcionCampaña">Descripción de la Campaña</label>
                         <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Descripción de la Campaña" aria-label="Descripción de la Campaña" />
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
                         <label class="form-label" for="add-curpCampaña">CURP de la persona a donar</label>
                         <input type="text" id="add-curpCampaña" class="form-control" placeholder="Escribir CURP de la persona a Donar" aria-label="CURP" onblur="validarCurp()" />
                         <div id="mensajeErrorCurp" style="color: red;"></div>
@@ -1143,7 +1153,7 @@ function verificarCamposEdit() {
         top: 50%;
         transform: translate(-50%, -50%);
         width: 50%;
-        height: 400px;
+        height: 450px;
     }
 </style>
 
