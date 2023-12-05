@@ -65,7 +65,17 @@
     <!-- Page CSS -->
     
     <!--jquery-->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Incluir date-fns (para manejar fechas) -->
+<script src="https://cdn.skypack.dev/date-fns@2.22.1"></script>
+
+<!-- Incluir flatpickr (para el selector de fechas) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+
+
+
 
 
    
@@ -766,6 +776,82 @@
     </div>
   </div>
 </div>
+
+
+
+<div id="calendarioContainer"></div>
+
+<script>
+  const calendarioContainer = document.getElementById('calendarioContainer');
+
+  const formatFechaDonacion = (fechaDonacion) => {
+    const fecha = new Date(fechaDonacion);
+    const año = fecha.getFullYear();
+    const mes = fecha.getMonth() + 1;
+    const dia = fecha.getDate();
+    return `${año}-${mes < 10 ? '0' : ''}${mes}-${dia < 10 ? '0' : ''}${dia}`;
+  };
+
+  const aplicarEstilos = (fechasMarcadas, instance) => {
+    // Obtener todos los elementos de día en el calendario, independientemente del mes actual
+    const dayElements = instance.daysContainer.querySelectorAll('.flatpickr-day');
+
+    // Remover la clase de estilo de todos los días
+    dayElements.forEach(dayElement => {
+      dayElement.classList.remove('donation-day');
+    });
+
+    // Aplicar la clase de estilo solo a las fechas marcadas
+    dayElements.forEach(dayElement => {
+      const fechaElemento = formatFechaDonacion(dayElement.getAttribute('aria-label'));
+      const debeMarcar = fechasMarcadas.includes(fechaElemento);
+
+      if (debeMarcar) {
+        dayElement.classList.add('donation-day');
+      }
+    });
+  };
+
+  const opcionesFlatpickr = {
+    inline: true,
+    onChange: function (selectedDates, dateStr, instance) {
+      fetch('http://127.0.0.1:8000/api/donationsdate/')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al obtener la lista de citas. Código de estado: ' + response.status);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.donationDates) {
+            const fechasMarcadas = data.donationDates.map(fechaDonacion => formatFechaDonacion(fechaDonacion.date_donation));
+            aplicarEstilos(fechasMarcadas, instance);
+          } else {
+            throw new Error('Formato de respuesta inesperado. Se esperaba un campo "donationDates" de tipo array.');
+          }
+        })
+        .catch(error => {
+          console.error('Error al cargar citas:', error);
+        });
+    }
+  };
+
+  const calendario = flatpickr(calendarioContainer, opcionesFlatpickr);
+</script>
+
+<style>
+  .donation-day {
+    background-color: red !important;
+    color: white !important;
+  }
+</style>
+
+
+
+
+
+
+
 
 
 <!-- Footer -->
