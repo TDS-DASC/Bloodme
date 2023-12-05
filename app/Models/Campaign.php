@@ -28,4 +28,8 @@ class Campaign extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function childs(){
+        return $this->hasMany(CampaignMedicalUnit::class);
+    }
 }
