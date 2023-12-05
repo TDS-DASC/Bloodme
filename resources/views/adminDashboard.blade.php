@@ -786,6 +786,8 @@
 
   const formatFechaDonacion = (fechaDonacion) => {
     const fecha = new Date(fechaDonacion);
+    // Ajustar a la zona horaria local
+    fecha.setMinutes(fecha.getMinutes() - fecha.getTimezoneOffset());
     const año = fecha.getFullYear();
     const mes = fecha.getMonth() + 1;
     const dia = fecha.getDate();
@@ -814,7 +816,8 @@
 
   const opcionesFlatpickr = {
     inline: true,
-    onChange: function (selectedDates, dateStr, instance) {
+    onReady: function (selectedDates, dateStr, instance) {
+      // Llamar a la función aplicarEstilos cuando el calendario esté listo
       fetch('http://127.0.0.1:8000/api/donationsdate/')
         .then(response => {
           if (!response.ok) {
@@ -833,6 +836,30 @@
         .catch(error => {
           console.error('Error al cargar citas:', error);
         });
+    },
+    onChange: function (selectedDates, dateStr, instance) {
+      // Llamar a la función aplicarEstilos cuando cambia la fecha seleccionada
+      fetch('http://127.0.0.1:8000/api/donationsdate/')
+        .then(response => response.json())
+        .then(data => {
+          const fechasMarcadas = data.donationDates.map(fechaDonacion => formatFechaDonacion(fechaDonacion.date_donation));
+          aplicarEstilos(fechasMarcadas, instance);
+        })
+        .catch(error => {
+          console.error('Error al cargar citas:', error);
+        });
+    },
+    onMonthChange: function (selectedDates, dateStr, instance) {
+      // Llamar a la función aplicarEstilos cuando cambia el mes
+      fetch('http://127.0.0.1:8000/api/donationsdate/')
+        .then(response => response.json())
+        .then(data => {
+          const fechasMarcadas = data.donationDates.map(fechaDonacion => formatFechaDonacion(fechaDonacion.date_donation));
+          aplicarEstilos(fechasMarcadas, instance);
+        })
+        .catch(error => {
+          console.error('Error al cargar citas:', error);
+        });
     }
   };
 
@@ -845,11 +872,6 @@
     color: white !important;
   }
 </style>
-
-
-
-
-
 
 
 
