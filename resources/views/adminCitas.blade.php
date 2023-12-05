@@ -523,96 +523,114 @@ function eliminarCita(citaId) {
     }
 }
 
-function verificarCampos() {
-        var formulario = document.getElementById('addNewUserForm');
-        if (!formulario.checkValidity()) {
-            formulario.reportValidity();
-            return;
-        }
+function verificarCamposCitas() {
+    var formulario = document.getElementById('addNewCampaignForm');
+    if (!formulario.checkValidity()) {
+        formulario.reportValidity();
+        return;
+    }
 
-        // Obtener valores de los campos
-        var nombres = document.getElementById('add-Nombres').value;
-        var apellidos = document.getElementById('add-Apellidos').value;
-        var correoElectronico = document.getElementById('add-correoElectronico').value;
-        var contrasena = document.getElementById('add-contrasena').value;
-        var tipoSangre = document.getElementById('add-tipoSangre').value;
-        var curp = document.getElementById('add-curp').value;
-        var fechaNacimiento = document.getElementById('html5-date-input').value;
-        var genero = document.getElementById('add-genero').value;
-       
-        var donador = document.getElementById('add-donador').value;
-        var donadorValue = donador === 'Si' ? 1 : 0;
+    // Obtener valores de los campos
+    var curpReceptor = document.getElementById('add-curpReceptor').value;
+    var curpDonante = document.getElementById('add-curpDonante').value;
+    var fechaDonacion = document.getElementById('add-fechaDonacion').value;
+    var idCampaña = document.getElementById('add-idCampaña').value;
+    var idUnidad = document.getElementById('add-idUnidad').value;
+    var receptorNombre;  // Variable para almacenar el nombre del receptor
 
-        
-        // Crear objeto de datos para enviar al servidor
-        var userData = {
-            name: nombres,
-            last_name: apellidos,
-            email: correoElectronico,
-            password: contrasena,
-            blood_type: tipoSangre,
-            curp: curp,
-            birthdate: fechaNacimiento,
-            gender: genero,
-            donator: donadorValue
-        };
+    // Obtener el ID del receptor a través de la API
+    var curpReceptorEndpoint = 'http://127.0.0.1:8000/api/users/curp/' + curpReceptor;
+    fetch(curpReceptorEndpoint)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener datos del receptor. Código de estado: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.users && data.users.length > 0) {
+                // Se encontró al menos un usuario con el CURP del receptor
+                var receptorId = data.users[0].id;
+                // Obtener el nombre del receptor
+                receptorNombre = data.users[0].name;
 
-        // Realizar la solicitud POST a la API
-        fetch('http://127.0.0.1:8000/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
+                if (!receptorNombre) {
+                    throw new Error('El nombre del receptor no está definido.');
+                }
+
+                // Obtener el ID del donante a través de la API
+                var curpDonanteEndpoint = 'http://127.0.0.1:8000/api/users/curp/' + curpDonante;
+                return fetch(curpDonanteEndpoint);
+            } else {
+                // No se encontraron usuarios con el CURP del receptor
+                throw new Error('No se encontró un usuario con el CURP del receptor proporcionado.');
+            }
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
+                throw new Error('Error al obtener datos del donante. Código de estado: ' + response.status);
             }
-            return response.json(); 
+            return response.json();
+        })
+        .then(data => {
+            if (data.users && data.users.length > 0) {
+                // Se encontró al menos un usuario con el CURP del donante
+                var donanteId = data.users[0].id;
+
+                // Crear objeto de datos para enviar al servidor
+                var citaData = {
+                    user_id: donanteId,
+                    campaign_id: idCampaña,
+                    date_donation: fechaDonacion,
+                    nombre_receptor: receptorNombre,  // Utilizando el nombre obtenido del receptor
+                    medical_unit_id: idUnidad
+                };
+
+                // Imprimir el objeto JSON en la consola
+                console.log('Objeto JSON a enviar:', citaData);
+
+                // Realizar la solicitud POST a la API de citas
+                return fetch('http://127.0.0.1:8000/api/donationdate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(citaData)
+                });
+            } else {
+                // No se encontraron usuarios con el CURP del donante
+                throw new Error('No se encontró un usuario con el CURP del donante proporcionado.');
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al agregar la cita. Código de estado: ' + response.status);
+            }
+            return response.json();
         })
         .then(data => {
             // La respuesta exitosa del servidor
             console.log('Respuesta del servidor:', data);
 
-            var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
+            alert('Cita creada exitosamente.');
+
+            // Restablecer valores de los campos a blanco
+            document.getElementById('add-curpReceptor').value = '';
+            document.getElementById('add-curpDonante').value = '';
+            document.getElementById('add-fechaDonacion').value = '';
+            document.getElementById('add-idCampaña').value = '';
+            document.getElementById('add-idUnidad').value = '';
+
             offcanvasAddCampaign.hide();
-
-            
-            setTimeout(function() {
-                alert('Usuario creado exitosamente.');
-
-                 // Restablecer valores de los campos a blanco
-        document.getElementById('add-Nombres').value = '';
-        document.getElementById('add-Apellidos').value = '';
-        document.getElementById('add-correoElectronico').value = '';
-        document.getElementById('add-contrasena').value = '';
-        document.getElementById('add-tipoSangre').value = '';
-        document.getElementById('add-curp').value = '';
-        document.getElementById('html5-date-input').value = '';
-        document.getElementById('add-genero').value = '';
-        document.getElementById('add-donador').value = '';
-        
-            }, 300);
         })
         .catch(error => {
-    // Manejar errores en la solicitud
-    console.error('Error en la solicitud:', error);
-    alert('Error al agregar el usuario.');
-
-    // Verificar si hay una respuesta del servidor
-    if (error && error.response && error.response.text) {
-        // Intenta obtener más información sobre la respuesta
-        error.response.text().then(text => {
-            console.error('Contenido de la respuesta:', text);
+            // Manejar errores en la solicitud
+            console.error('Error al procesar la solicitud:', error);
+            alert('Error al agregar la cita. Detalles: ' + error.message);
         });
-    }
-});
+}
 
-        // Cerrar el modal 
-        var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-        offcanvasAddCampaign.hide();
-    }
+
 
 
     // -------------------------AQUI TERMINA EL AÑADIR Y COMIENZA EL EDITAR-----------------------------------------
@@ -878,7 +896,7 @@ function verificarCamposEdit() {
 </div>
 
 
-<!------------------------------------ -----------------Modal Añadir Campañas ------------------------------------------------------->
+<!------------------------------------ -----------------Modal Añadir Citas ------------------------------------------------------->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
   <div class="offcanvas-header">
       <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Citas</h5>
@@ -890,16 +908,16 @@ function verificarCamposEdit() {
 
         <div class="row mb-3">
           <div class="col">
-            <label class="form-label" for="add-nombre">Nombre/CURP del Receptor</label>
-            <input type="text" id="add-nombre" class="form-control" placeholder="Escribir tu nombre" aria-label="Nombre del receptor" />
+            <label class="form-label" for="add-curpReceptor">CURP del Receptor</label>
+            <input type="text" id="add-curpReceptor" class="form-control" placeholder="Escribir Curp" aria-label="Nombre del receptor" />
           </div>
 
           <div class="col-md-6">
             <label class="form-label" for="add-idCampaña">Id de la campaña</label>
             <select id="add-idCampaña" class="form-select">
                 <option selected disabled value="">Opciones...</option>
-                <option value="Plaquetas">1</option>
-                <option value="Sangre">2</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
             </select>
         </div>
         </div>
@@ -909,8 +927,8 @@ function verificarCamposEdit() {
               <label class="form-label" for="add-idUnidad">Id de la unidad medica</label>
               <select id="add-idUnidad" class="form-select">
                   <option selected disabled value="">Opciones...</option>
-                  <option value="Plaquetas">1</option>
-                  <option value="Sangre">2</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
               </select>
           </div>
           <div class="col">
@@ -921,9 +939,17 @@ function verificarCamposEdit() {
           </div>
         </div>
 
+        <!-- Nuevo campo para el CURP del donante -->
+        <div class="row mb-3">
+          <div class="col">
+            <label class="form-label" for="add-curpDonante">CURP del Donante</label>
+            <input type="text" id="add-curpDonante" class="form-control" placeholder="Escribir el CURP del donante" aria-label="CURP del donante" />
+          </div>
+        </div>
+
         <div class="row text-center mt-4">
           <div class="col">
-            <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
+            <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCitas()">Confirmar</button>
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
           </div>
         </div>
