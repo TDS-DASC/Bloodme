@@ -758,10 +758,16 @@
   }
 </script>
 {{-- <div id="piechart_3d" style="width: 48%; height: 500px;  float: left"></div> --}}
-<div class="d-flex flex-row">
-  <div id="barchart_values" style="width: 48%; height: 500px;" class="mt-5"></div>
 
-  <div class="col-xl-3 col-md-4 col-6 mt-5 ms-5">
+<div class="row">
+  <div id="barchart_values" class="col-6 mt-5" style="margin-bottom: -390px;"></div>
+  <div id="calendarioContainer" class="col-6 mt-5" style="margin-left: 150px;"></div>
+</div>
+
+<div class="d-flex flex-row"> 
+
+
+   <!-- <div class="col-xl-3 col-md-4 col-6 mt-5 ms-5">
     <div class="card">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Donaciones realizadas</h5>
@@ -775,11 +781,11 @@
       </div>
     </div>
   </div>
-</div>
+</div>  -->
 
 
 
-<div id="calendarioContainer"></div>
+<!-- <div id="calendarioContainer"></div> -->
 
 <script>
   const calendarioContainer = document.getElementById('calendarioContainer');
@@ -877,7 +883,7 @@
 
 
 <!-- Footer -->
-<footer class="content-footer footer bg-footer-theme">
+ <footer class="content-footer footer bg-footer-theme">
   <div class="container-xxl">
     <div class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
       <div>
