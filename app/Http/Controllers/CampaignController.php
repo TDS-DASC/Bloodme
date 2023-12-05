@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\DonationDate;
+use App\Models\Donation;
+use App\Models\CampaignMedicalUnit;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Campaign;
 
@@ -61,7 +65,22 @@ class CampaignController extends Controller
             return response()->json(['message' => 'Campaign Not found'],404);
         }
 
-        $campaign -> delete();
+        DB::beginTransaction();
+        try {
+            CampaignMedicalUnit::where('campaign_id', $id)->delete();
+            DonationDate::where('campaign_id', $id)->delete();
+            Donation::where('campaign_id', $id)->delete();
+
+            $campaign -> delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Deleted Campaign OK'],200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Campaign not Deleted ERROR ' . $e->getMessage()], 500);
+        }
+
 
         return response()->json(['Campaign' => $campaign, 'message' => 'Deleted Campaign OK'],200);
     }
@@ -74,7 +93,21 @@ class CampaignController extends Controller
             return response()->json(['message' => 'Campaign Not found'],404);
         }
 
-        $campaign -> delete();
+        DB::beginTransaction();
+        try {
+            CampaignMedicalUnit::where('campaign_id', $request->input('id'))->delete();
+            DonationDate::where('campaign_id', $request->input('id'))->delete();
+            Donation::where('campaign_id', $request->input('id'))->delete();
+
+            $campaign -> delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Deleted Campaign OK'],200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Campaign not Deleted ERROR ' . $e->getMessage()], 500);
+        }
 
         return response()->json(['Campaign' => $campaign, 'message' => 'Deleted Campaign OK'],200);
     }
@@ -102,4 +135,5 @@ class CampaignController extends Controller
 
         return response()->json(['Campaign' => $campaign, 'message' => 'Updated Campaign OK'],200);
     }
+
 }
