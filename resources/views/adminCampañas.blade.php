@@ -170,6 +170,9 @@ function obtenerDetallesCampana(campaignId) {
             alert('Error al obtener los detalles de la campaña.');
         });
 }
+
+
+
 function obtenerDetallesCampaña(campaignId) {
     fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
         method: 'GET'
@@ -191,29 +194,45 @@ function obtenerDetallesCampaña(campaignId) {
         const tipoDonacion = campaign.description || '';
         const userId = campaign.user_id || '';
 
-        if (campaignId) {
-            campaignSeleccionadaId = campaignId;
+        // Hacer una solicitud adicional para obtener el CURP del receptor
+        return fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
+            method: 'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener los detalles del usuario. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(userData => {
+            const curpReceptor = userData.user.curp || '';
 
-            document.getElementById('detalles-idCampaña').value = campaignId;
-            document.getElementById('detalles-inicioCampaña').value = inicioCampaña;
-            document.getElementById('detalles-finCampaña').value = finCampaña;
-            document.getElementById('detalles-tipoSangreRequerido').value = tipoSangreRequerido;
-            document.getElementById('detalles-donacionesRequeridas').value = donacionesRequeridas;
-            document.getElementById('detalles-donacionesActuales').value = donacionesActuales;
-            document.getElementById('detalles-tipoDonacion').value = tipoDonacion;
-            document.getElementById('detalles-userId').value = userId;
+            if (campaignId) {
+                campaignSeleccionadaId = campaignId;
 
-            var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
-            offcanvasDetallesUsuario.show();
-        } else {
-            throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
-        }
+                document.getElementById('detalles-idCampaña').value = campaignId;
+                document.getElementById('detalles-inicioCampaña').value = inicioCampaña;
+                document.getElementById('detalles-finCampaña').value = finCampaña;
+                document.getElementById('detalles-tipoSangreRequerido').value = tipoSangreRequerido;
+                document.getElementById('detalles-donacionesRequeridas').value = donacionesRequeridas;
+                document.getElementById('detalles-donacionesActuales').value = donacionesActuales;
+                document.getElementById('detalles-tipoDonacion').value = tipoDonacion;
+                document.getElementById('detalles-userId').value = userId;
+                document.getElementById('detalles-curpReceptor').value = curpReceptor;
+
+                var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
+                offcanvasDetallesUsuario.show();
+            } else {
+                throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
+            }
+        });
     })
     .catch(error => {
         console.error('Error al obtener los detalles de la campaña:', error);
         alert('Error al obtener los detalles de la campaña.');
     });
 }
+
 
 function editarCampaña(campaignId) {
     obtenerDetallesCampaña(campaignId);
@@ -271,62 +290,6 @@ function editarCampana(campaignId) {
         });
     }
 }
-
-
-
-  //------------------------------------------------ AQUI MUESTRA LOS DETALLES (CAMBAILO A CAMPAÑAS)----------------------------------------
-
-  function obtenerDetallesUsuario2(campaignId) {
-    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Respuesta completa de la API:', data);
-
-           
-            const campaignStartDate = data.start_campaign || '';
-            const campaignEndDate = data.end_campaign || '';
-            const tipoSangreRequerido = data.blood || '';
-            const donacionesRequeridas = data.donatios_required || '';
-            const donacionesActuales = data.current_donations || '';
-   
-
-            if (campaignStartDate ) {
-                // Llena los campos del modal con los datos de la campaña
-              
-                document.getElementById('detalles-inicioCampaña').value = campaignStartDate;
-                document.getElementById('detalles-finCampaña').value = campaignEndDate;
-                document.getElementById('detalles-tipoSangreRequerido').value = tipoSangreRequerido;
-                document.getElementById('detalles-donacionesRequeridas').value = donacionesRequeridas;
-                document.getElementById('detalles-donacionesActuales').value = donacionesActuales;
-        
-
-                // Mostrar el modal de detalles
-                var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
-                offcanvasDetallesUsuario.show();
-            } else {
-                throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
-            }
-        })
-        .catch(error => {
-            console.error('Error al obtener los detalles de la campaña:', error);
-            alert('Error al obtener los detalles de la campaña.');
-        });
-}
-
-function mostrarDetallesUsuario(campaignId) {
-    // Obtener y mostrar detalles de la campaña en el modal offcanvasDetallesUsuario
-    obtenerDetallesUsuario2(campaignId);
-
-     // Mostrar el modal de detalles
-     var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
-    offcanvasDetallesUsuario.show();
-}
-  //------------------------------------------------ AQUI TERMINA ----------------------------------------
 
 </script>
 
@@ -1008,6 +971,14 @@ function verificarCamposEdit() {
                      <div class="mb-3">
                         <label for="detalles-donacionesRequeridas" class="form-label">Donaciones Requeridas:</label>
                         <input type="number" class="form-control" id="detalles-donacionesRequeridas" readonly>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                     <!-- Campo Donaciones Requeridas -->
+                     <div class="mb-3">
+                        <label for="detalles-curpReceptor" class="form-label">CURP del Receptor</label>
+                        <input type="text" class="form-control" id="detalles-curpReceptor" readonly>
                     </div>
                 </div>
             </div>
