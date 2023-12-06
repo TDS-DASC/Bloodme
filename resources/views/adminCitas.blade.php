@@ -321,6 +321,14 @@ function eliminarCita(citaId) {
     top: 50%;
     transform: translate(-50%, -50%);
     width: 50%;
+    height: 390px;
+  }
+
+  #offcanvasEditCita{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
     height: 320px;
   }
 </style>
@@ -931,8 +939,10 @@ function verificarCamposEdit() {
               </div>
           </div>
 
-          <button type="submit" id="btnEditCita" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="editarCita()">Guardar Cambios</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+          <div class="d-flex justify-content-center">
+            <button type="submit" id="btnEditCita" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="editarCita()">Guardar Cambios</button>
+            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+          </div>
       </form>
   </div>
 </div>

@@ -833,8 +833,10 @@ function verificarCamposEditMedicalUnits() {
               <div id="mensajeError" style="color: red;"></div>
           </div>
                       
-          <button type="submit" id="btnEditMedicalUnit" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposEditMedicalUnits()" data-bs-dismiss="offcanvas">Confirmar</button>
+          <div class="d-flex justify-content-center">
+            <button type="submit" id="btnEditMedicalUnit" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposEditMedicalUnits()" data-bs-dismiss="offcanvas">Confirmar</button>
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+          </div>
         </form>
     </div>
 </div>
