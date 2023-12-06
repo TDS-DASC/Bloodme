@@ -132,6 +132,62 @@
 
 }
 
+// Función para cargar dinámicamente las opciones de campañas
+function cargarOpcionesCampañas() {
+    fetch('http://127.0.0.1:8000/api/campaigns')
+        .then(response => response.json())
+        .then(data => {
+            var selectCampaña = document.getElementById('add-idCampaña');
+            selectCampaña.innerHTML = '<option selected disabled value="">Opciones...</option>';
+            
+            // Verificar si "Campaigns" existe y es un arreglo
+            if (data.Campaigns && Array.isArray(data.Campaigns)) {
+                data.Campaigns.forEach(campaign => {
+                    var option = document.createElement('option');
+                    option.value = campaign.id;
+                    option.textContent = campaign.id;
+                    selectCampaña.appendChild(option);
+                });
+            } else {
+                console.error('Error: La lista de campañas no es válida.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener la lista de campañas:', error);
+        });
+}
+
+// Función para cargar dinámicamente las opciones de unidades médicas
+function cargarOpcionesUnidadesMedicas() {
+    fetch('http://127.0.0.1:8000/api/medunits/')
+        .then(response => response.json())
+        .then(data => {
+            var selectUnidad = document.getElementById('add-idUnidad');
+            selectUnidad.innerHTML = '<option selected disabled value="">Opciones...</option>';
+            
+            // Verificar si "MedicalUnits" existe y es un arreglo
+            if (data.MedicalUnits && Array.isArray(data.MedicalUnits)) {
+                data.MedicalUnits.forEach(unit => {
+                    var option = document.createElement('option');
+                    option.value = unit.id;
+                    option.textContent = unit.id;
+                    selectUnidad.appendChild(option);
+                });
+            } else {
+                console.error('Error: La lista de unidades médicas no es válida.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener la lista de unidades médicas:', error);
+        });
+}
+
+// Llamadas a las funciones de carga al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    cargarOpcionesCampañas();
+    cargarOpcionesUnidadesMedicas();
+});
+
 let usuarioSeleccionadoId = null;
 
 function obtenerDetallesCita(citaId) {
@@ -895,7 +951,6 @@ function verificarCamposEdit() {
     </div>
 </div>
 
-
 <!------------------------------------ -----------------Modal Añadir Citas ------------------------------------------------------->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
   <div class="offcanvas-header">
@@ -916,8 +971,7 @@ function verificarCamposEdit() {
             <label class="form-label" for="add-idCampaña">Id de la campaña</label>
             <select id="add-idCampaña" class="form-select">
                 <option selected disabled value="">Opciones...</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
+                <!-- Opciones de campañas se cargarán dinámicamente aquí -->
             </select>
         </div>
         </div>
@@ -927,8 +981,7 @@ function verificarCamposEdit() {
               <label class="form-label" for="add-idUnidad">Id de la unidad medica</label>
               <select id="add-idUnidad" class="form-select">
                   <option selected disabled value="">Opciones...</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
+                  <!-- Opciones de unidades médicas se cargarán dinámicamente aquí -->
               </select>
           </div>
           <div class="col">
@@ -956,8 +1009,6 @@ function verificarCamposEdit() {
       </form>
   </div>
 </div>
-
-
 
                       <!-- / Content -->
 
