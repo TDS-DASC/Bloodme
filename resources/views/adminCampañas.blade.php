@@ -170,7 +170,6 @@ function obtenerDetallesCampana(campaignId) {
             alert('Error al obtener los detalles de la campaña.');
         });
 }
-
 function obtenerDetallesCampaña(campaignId) {
     fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
         method: 'GET'
@@ -190,6 +189,7 @@ function obtenerDetallesCampaña(campaignId) {
         const donacionesRequeridas = campaign.donations_required || '';
         const donacionesActuales = campaign.current_donations || '';
         const tipoDonacion = campaign.description || '';
+        const userId = campaign.user_id || '';
 
         if (campaignId) {
             campaignSeleccionadaId = campaignId;
@@ -201,6 +201,7 @@ function obtenerDetallesCampaña(campaignId) {
             document.getElementById('detalles-donacionesRequeridas').value = donacionesRequeridas;
             document.getElementById('detalles-donacionesActuales').value = donacionesActuales;
             document.getElementById('detalles-tipoDonacion').value = tipoDonacion;
+            document.getElementById('detalles-userId').value = userId;
 
             var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
             offcanvasDetallesUsuario.show();
@@ -940,10 +941,6 @@ function verificarCamposEdit() {
 </div>
 <!-- Bootstrap Table with Header - Light -->
 
-
-
-
-
 <!-- Modal de Detalles del Usuario -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
     <div class="offcanvas-header">
@@ -977,16 +974,16 @@ function verificarCamposEdit() {
 
                 <!-- Columna 2 -->
                 <div class="col-md-6">
+
+
+                <div class="mb-3">
+                        <label for="detalles-userId" class="form-label">ID del Receptor:</label>
+                        <input type="text" class="form-control" id="detalles-userId" readonly>
+                    </div>
                     <!-- Campo Tipo de Sangre Requerido -->
                     <div class="mb-3">
                         <label for="detalles-tipoSangreRequerido" class="form-label">Tipo de Sangre Requerido:</label>
                         <input type="text" class="form-control" id="detalles-tipoSangreRequerido" readonly>
-                    </div>
-
-                    <!-- Campo Donaciones Requeridas -->
-                    <div class="mb-3">
-                        <label for="detalles-donacionesRequeridas" class="form-label">Donaciones Requeridas:</label>
-                        <input type="number" class="form-control" id="detalles-donacionesRequeridas" readonly>
                     </div>
 
                     <!-- Campo Donaciones Actuales -->
@@ -995,11 +992,24 @@ function verificarCamposEdit() {
                         <input type="number" class="form-control" id="detalles-donacionesActuales" readonly>
                     </div>
                 </div>
-                                    <!-- Campo Tipo de Donación -->
-                                    <div class="mb-3">
+
+                <!-- Columna 3 -->
+                <div class="col-md-6">
+                    <!-- Campo Tipo de Donación -->
+                    <div class="mb-3">
                         <label for="detalles-tipoDonacion" class="form-label">Tipo de Donación:</label>
                         <input type="text" class="form-control" id="detalles-tipoDonacion" readonly>
                     </div>
+                </div>
+
+                <!-- Columna 4 -->
+                <div class="col-md-6">
+                     <!-- Campo Donaciones Requeridas -->
+                     <div class="mb-3">
+                        <label for="detalles-donacionesRequeridas" class="form-label">Donaciones Requeridas:</label>
+                        <input type="number" class="form-control" id="detalles-donacionesRequeridas" readonly>
+                    </div>
+                </div>
             </div>
 
             <!-- Botón para cerrar el modal -->
@@ -1011,7 +1021,6 @@ function verificarCamposEdit() {
         </form>
     </div>
 </div>
-
 
 
 <!-- Modal Editar Campaña -->
