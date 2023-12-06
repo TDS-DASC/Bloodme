@@ -188,7 +188,7 @@ function obtenerDetallesCampaña(campaignId) {
         const campaignId = campaign.id || '';
         const inicioCampaña = campaign.start_campaign || '';
         const finCampaña = campaign.end_campaign || '';
-        const tipoSangreRequerido = campaign.blood || '';
+        const tipoSangreRequerido = campaign.blood === 1 ? 'Plaquetas': 'Sangre' ;
         const donacionesRequeridas = campaign.donations_required || '';
         const donacionesActuales = campaign.current_donations || '';
         const tipoDonacion = campaign.description || '';
