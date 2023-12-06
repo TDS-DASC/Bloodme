@@ -191,60 +191,105 @@ document.addEventListener('DOMContentLoaded', function() {
 let usuarioSeleccionadoId = null;
 
 function obtenerDetallesCita(citaId) {
-        fetch(`http://127.0.0.1:8000/api/donationdate/${citaId}`, {
-            method: 'GET'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al obtener los detalles de la cita. Código de estado: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Respuesta completa de la API:', data);
+    fetch(`http://127.0.0.1:8000/api/donationdate/${citaId}`, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles de la cita. Código de estado: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Respuesta completa de la API:', data);
 
-            // Modifica esta parte según la estructura real de tu respuesta
-            const cita = data.donationDate || {};
-            const citaId = cita.id || '';
-            const citaFechaInicio = cita.date_donation || '';
-            const citaFechaFin = '';  // Necesitas obtener esta información de tu API
+        const cita = data.donationDate || {};
+        const citaId = cita.id || '';
+        const citaFechaInicio = cita.date_donation || '';
 
-            if (citaId && citaFechaInicio) {
-                // Almacena el ID de la cita seleccionada globalmente
-                usuarioSeleccionadoId = citaId;
+        if (citaId && citaFechaInicio) {
+            // Almacena el ID de la cita seleccionada globalmente
+            citaSeleccionadaId = citaId;
 
-                // Rellenar campos del formulario de edición
-                document.getElementById('edit-IdCita').value = citaId;
-                document.getElementById('edit-FechaInicioCita').value = citaFechaInicio;
-                document.getElementById('edit-FechaFinCita').value = citaFechaFin || '';
+            // Rellenar campos del formulario de edición
+            document.getElementById('edit-IdCita').value = citaId;
+            document.getElementById('edit-FechaInicioCita').value = citaFechaInicio;
 
-                // Mostrar el modal de edición
-                var offcanvasEditCita = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCita'));
-                offcanvasEditCita.show();
-            } else {
-                throw new Error('Formato de respuesta inesperado. Datos incompletos de la cita.');
-            }
-        })
-        .catch(error => {
-            console.error('Error al obtener los detalles de la cita:', error);
-            alert('Error al obtener los detalles de la cita.');
-        });
-    }
-
-
-
-
-
-// Función para abrir el modal de edición al hacer clic en el botón de editar
-function editarCita(citaId) {
-        obtenerDetallesCita(citaId);
-    }
-
-// Asigna el evento de clic al botón de editar para abrir el modal de edición
-document.getElementById('btnAddCampaign').addEventListener('click', function() {
-        var offcanvasAddCita = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCita'));
-        offcanvasAddCita.show();
+            // Mostrar el modal de edición
+            var offcanvasEditCita = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCita'));
+            offcanvasEditCita.show();
+        } else {
+            throw new Error('Formato de respuesta inesperado. Datos incompletos de la cita.');
+        }
+    })
+    .catch(error => {
+        console.error('Error al obtener los detalles de la cita:', error);
+        alert(`Error al obtener los detalles de la cita. Detalles: ${error.message}`);
     });
+}
+
+
+
+//EDITAR
+
+function editarCita() {
+    // Obtener valores de los campos
+    var nuevaFechaDonacion = document.getElementById('edit-FechaInicioCita').value;
+
+    // Validar que se haya seleccionado una cita
+    if (!citaSeleccionadaId) {
+        alert('Error: No se ha seleccionado una cita para editar.');
+        return;
+    }
+
+    // Realizar la solicitud PUT a la API para actualizar la fecha de donación
+    fetch(`http://127.0.0.1:8000/api/donationsdate/${citaSeleccionadaId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ date_donation: nuevaFechaDonacion })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al actualizar la fecha de donación. Código de estado: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // La respuesta exitosa del servidor
+        console.log('Respuesta del servidor:', data);
+
+        alert('Fecha de donación actualizada exitosamente.');
+
+        // Cerrar el modal de edición
+        var offcanvasEditCita = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCita'));
+        offcanvasEditCita.hide();
+    })
+    .catch(error => {
+        // Manejar errores en la solicitud
+        console.error('Error al procesar la solicitud:', error);
+        alert('Error al actualizar la fecha de donación. Detalles: ' + error.message);
+    });
+}
+
+
+
+var citaSeleccionadaId;
+
+// Función para abrir el modal de edición y obtener detalles de la cita
+function editarCitaModal(citaId) {
+    // Almacena el ID de la cita seleccionada globalmente
+    citaSeleccionadaId = citaId;
+
+    // Implementa la lógica para obtener los detalles de la cita según el ID
+    obtenerDetallesCita(citaId);
+
+    // Muestra el modal de edición
+    var offcanvasEditCita = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCita'));
+    offcanvasEditCita.show();
+}
+
 
   // FUNCION ELIMINAR CITA
 function eliminarCita(citaId) {
@@ -863,92 +908,33 @@ function verificarCamposEdit() {
 <!-- Bootstrap Table with Header - Light -->
 
 
+<!-- Modal Editar Cita -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditCita" aria-labelledby="offcanvasEditCitaLabel">
+  <div class="offcanvas-header">
+      <h5 id="offcanvasEditCitaLabel" class="offcanvas-title">Editar Cita</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
 
-<!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
-    <div class="offcanvas-header">
-        <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
+  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+      <form class="edit-cita pt-0" id="editCitaForm" onsubmit="return false">
 
-    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-        <form class="edit-user pt-0" id="editUserForm" onsubmit="return false">
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-Nombres">Nombres</label>
-                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
-                <div id="mensajeErrorLetrasNombresEdit" style="color: red;"></div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-Apellidos">Apellidos</label>
-                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)"  />
-                <div id="mensajeErrorLetrasApellidosEdit" style="color: red;"></div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
-              <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronicoEdit()" />
-              <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
+          <div class="mb-3">
+              <label class="form-label" for="edit-IdCita">ID de la Cita</label>
+              <input type="text" id="edit-IdCita" class="form-control" placeholder="ID de la Cita" aria-label="ID de la Cita" readonly />
           </div>
-          
-            <div class="mb-3">
-              <label class="form-label" for="edit-contrasena">Contraseña</label>
-              <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
-              <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
-            </div>
 
-            <div class="mb-3">
-              <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
+          <div class="mb-3">
+              <label class="form-label" for="edit-FechaInicioCita">Fecha de Donación</label>
               <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="edit-html5-date-input"  min='1900-01-01' max='2023-12-31' />
+                  <input class="form-control" type="date" value="" id="edit-FechaInicioCita" />
                   <div id="mensajeErrorFechaEdit" style="color: red;"></div>
               </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-genero">Género</label>
-                <select id="edit-genero" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label" for="edit-curp">CURP</label>
-              <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP"  onblur="validarCurpEdit()" />
-              <div id="mensajeErrorCurpEdit" style="color: red;"></div>
           </div>
 
-            <div class="mb-3">
-                <label class="form-label" for="edit-tipoSangre">Tipo de Sangre</label>
-                <select id="edit-tipoSangre" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="A+">A+</option>
-                    <option value="O+">O+</option>
-                    <option value="B+">B+</option>
-                    <option value="AB+">AB+</option>
-                    <option value="A-">A-</option>
-                    <option value="O-">O-</option>
-                    <option value="B-">B-</option>
-                    <option value="AB-">AB-</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-donador">Donador</label>
-                <select id="edit-donador" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Si">Si</option>
-                    <option value="No">No</option>
-                </select>
-            </div>
-
-            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
-            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
-        </form>
-    </div>
+          <button type="submit" id="btnEditCita" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="editarCita()">Guardar Cambios</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+      </form>
+  </div>
 </div>
 
 <!------------------------------------ -----------------Modal Añadir Citas ------------------------------------------------------->
