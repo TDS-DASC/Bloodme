@@ -316,6 +316,89 @@ function editarCita() {
         alert('Error al actualizar la fecha de donación. Detalles: ' + error.message);
     });
 }
+
+function verificarCamposCitas() {
+    var formulario = document.getElementById('addNewCampaignForm');
+    if (!formulario.checkValidity()) {
+        formulario.reportValidity();
+        return;
+    }
+
+    // Obtener valores de los campos
+    var idCampaña = document.getElementById('add-idCampaña').value;
+    var nuevaFechaDonacion = document.getElementById('add-fechaDonacion').value;
+
+    // Realizar la solicitud para obtener los datos de la campaña
+    fetch(`http://127.0.0.1:8000/api/campaign/${idCampaña}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener detalles de la campaña. Código de estado: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.Campaign && data.Campaign.start_campaign && data.Campaign.end_campaign) {
+                var startCampaign = new Date(data.Campaign.start_campaign);
+                var endCampaign = new Date(data.Campaign.end_campaign);
+
+                // Validar si la nueva fecha de donación está fuera del rango de la campaña
+                if (nuevaFechaDonacion < startCampaign || nuevaFechaDonacion > endCampaign) {
+                    document.getElementById('mensajeErrorFechaAdd').textContent = 'La fecha de donación debe estar dentro del rango de la campaña.';
+                } else {
+                    // Si la validación pasa, puedes ejecutar la lógica para agregar la cita
+                    agregarCita();
+                }
+            } else {
+                throw new Error('La estructura de la respuesta de la API no es la esperada.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener detalles de la campaña:', error);
+            document.getElementById('mensajeErrorFechaAdd').textContent = 'Error al obtener detalles de la campaña.';
+        });
+}
+
+
+function validarFechaAñadir() {
+    var fechaInicioInput = document.getElementById('add-fechaDonacion');
+    var mensajeErrorFechaAdd = document.getElementById('mensajeErrorFechaAdd');
+
+    // Obtener la fecha actual
+    var fechaActual = new Date();
+
+    // Obtener la fecha de donación ingresada por el usuario
+    var nuevaFechaDonacion = new Date(fechaInicioInput.value);
+
+    // Calcular la fecha que está 6 meses en el futuro
+    var seisMesesEnElFuturo = new Date();
+    seisMesesEnElFuturo.setMonth(seisMesesEnElFuturo.getMonth() + 6);
+
+    // Calcular la fecha de ayer
+    var ayer = new Date();
+    ayer.setDate(ayer.getDate() - 1);
+
+    // Restablecer el mensaje de error
+    mensajeErrorFechaAdd.textContent = '';
+
+    // Validar si la nueva fecha de donación está entre ayer y 6 meses en el futuro
+    if (nuevaFechaDonacion < ayer || nuevaFechaDonacion > seisMesesEnElFuturo) {
+        document.getElementById('btnAddCampaign').disabled = true;
+    } else {
+        // Habilitar el botón si la fecha es válida
+        document.getElementById('btnAddCampaign').disabled = false;
+    }
+}
+
+
+
+
+// Función auxiliar para obtener la fecha actual más 6 meses
+function seisMesesEnElFuturo() {
+    var fecha = new Date();
+    fecha.setMonth(fecha.getMonth() + 6);
+    return fecha;
+}
+
 function validarFechaEdicion() {
     var fechaInicioInput = document.getElementById('edit-FechaInicioCita');
     var mensajeErrorFechaEdit = document.getElementById('mensajeErrorFechaEdit');
@@ -358,7 +441,8 @@ function validarFechaEdicion() {
             var endCampaign = new Date(campaignData.Campaign.end_campaign);
 
             // Obtener la fecha de donación ingresada por el usuario
-            var nuevaFechaDonacion = new Date(fechaInicioInput.value);
+            var nuevaFechaDonacion = fechaInicioInput.valueAsDate;
+            console.log('Fecha de donación ingresada:', nuevaFechaDonacion);
 
             // Restablecer el mensaje de error
             mensajeErrorFechaEdit.textContent = '';
@@ -895,111 +979,12 @@ function verificarCamposCitas() {
     }
 }
 
-function validarFechaNacimientoEdit() {
-    function validarFechaNacimientoEdit() {
-        var fechaInputEdit = document.getElementById('edit-html5-date-input');
-        var mensajeErrorFechaEdit = document.getElementById('mensajeErrorFechaEdit');
-        var fechaArrayEdit = fechaInputEdit.value.split('-');
-        if (fechaArrayEdit.length === 3 && fechaArrayEdit[0].length > 4) {
-            fechaArrayEdit[0] = fechaArrayEdit[0].substring(0, 4);
-            fechaInputEdit.value = fechaArrayEdit.join('-');
-        }
 
-        // Verifica si la fecha está dentro del rango deseado
-        var fechaSeleccionadaEdit = new Date(fechaInputEdit.value);
-        var fechaMinimaEdit = new Date('1900-01-01');
-        var fechaMaximaEdit = new Date('2023-12-31');
-
-        if (fechaSeleccionadaEdit < fechaMinimaEdit || fechaSeleccionadaEdit > fechaMaximaEdit) {
-            mensajeErrorFechaEdit.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
-            fechaInputEdit.classList.add('is-invalid');
-        } else {
-            mensajeErrorFechaEdit.innerText = '';
-            fechaInputEdit.classList.remove('is-invalid');
-        }
-    }
-}
-
-function verificarCamposEdit() {
-        // Obtener el formulario
-        var formulario = document.getElementById('editUserForm');
-
-        // Verificar la validez del formulario
-        if (!formulario.checkValidity()) {
-            // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
-            formulario.reportValidity();
-            return;
-        }
-
-        // Obtener valores de los campos
-        var nombres = document.getElementById('edit-Nombres').value;
-        var apellidos = document.getElementById('edit-Apellidos').value;
-        var correoElectronico = document.getElementById('edit-correoElectronico').value;
-        var contrasena = document.getElementById('edit-contrasena').value;
-        var tipoSangre = document.getElementById('edit-tipoSangre').value;
-        var curp = document.getElementById('edit-curp').value;
-        var fechaNacimiento = document.getElementById('edit-html5-date-input').value;
-        var genero = document.getElementById('edit-genero').value;
-        var donador = document.getElementById('edit-donador').value;
-        var donadorValue = donador === 'Si' ? 1 : 0;
-       
-
-        // Crear objeto de datos para enviar al servidor
-        var editedUserData = {
-          name: nombres,
-          last_name: apellidos,
-          email: correoElectronico,
-          password: contrasena,
-          blood_type: tipoSangre,
-          curp: curp,
-          birthdate: fechaNacimiento,
-          gender: genero,
-          donator:donadorValue
-        };
-
-          fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(editedUserData)
-          })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
-        }
-        return response.json(); 
-    })
-    .then(data => {
-        console.log('Respuesta del servidor:', data);
-
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-        offcanvasEditUser.hide();
-        setTimeout(function() {
-            alert('Usuario editado exitosamente.');
-
-        }, 300);
-       
-    })
-    .catch(error => {
-        console.error('Error en la solicitud de edición:', error);
-        alert('Error al editar el usuario.');
-
-        if (error && error.response && error.response.text) {
-            // Intenta obtener más información sobre la respuesta
-            error.response.text().then(text => {
-                console.error('Contenido de la respuesta:', text);
-            });
-        }
-    });
-    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
-    offcanvasEditUser.hide();
-}
 </script>
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
       <h4>Lista de citas</h4>
-      <button type="button" class="btn btn-success" id="btnAddCampaign">Añadir</button>
+      <button type="button" class="btn btn-success" id="btnAddCampaignModal">Añadir</button>
   </div>
 
   <div class="table-responsive text-nowrap">
@@ -1056,57 +1041,60 @@ function verificarCamposEdit() {
 </div>
 <!-- Modal Añadir Citas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
-  <div class="offcanvas-header">
-      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Añadir Cita</h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
+    <div class="offcanvas-header">
+        <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Añadir Cita</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
 
-  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-      <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
-          <div class="row mb-3">
-              <div class="col-md-6">
-                  <label class="form-label" for="add-idCampaña">Id de la campaña</label>
-                  <select id="add-idCampaña" class="form-select">
-                      <option selected disabled value="">Opciones...</option>
-                      <!-- Opciones de campañas se cargarán dinámicamente aquí -->
-                  </select>
-              </div>
-              <div class="col-md-6">
-                  <label class="form-label" for="add-idUnidad">Id de la unidad médica</label>
-                  <select id="add-idUnidad" class="form-select">
-                      <option selected disabled value="">Opciones...</option>
-                      <!-- Opciones de unidades médicas se cargarán dinámicamente aquí -->
-                  </select>
-              </div>
-          </div>
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="add-idCampaña">Id de la campaña</label>
+                    <select id="add-idCampaña" class="form-select">
+                        <option selected disabled value="">Opciones...</option>
+                        <!-- Opciones de campañas se cargarán dinámicamente aquí -->
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="add-idUnidad">Id de la unidad médica</label>
+                    <select id="add-idUnidad" class="form-select">
+                        <option selected disabled value="">Opciones...</option>
+                        <!-- Opciones de unidades médicas se cargarán dinámicamente aquí -->
+                    </select>
+                </div>
+            </div>
 
-          <div class="row mb-3">
-              <div class="col">
-                  <label class="form-label" for="add-fechaDonacion">Fecha de la donación</label>
-                  <div class="col-md-10">
-                      <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" />
-                  </div>
-              </div>
-          </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label" for="add-fechaDonacion">Fecha de la donación</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" onchange="validarFechaAñadir()" />
+                        <div id="mensajeErrorFechaAdd" style="color: red;"></div>
+                    </div>
+                </div>
+            </div>
 
-          <!-- Nuevo campo para el CURP del donante -->
-          <div class="row mb-3">
-              <div class="col">
-                  <label class="form-label" for="add-curpDonante">CURP del Donante</label>
-                  <input type="text" id="add-curpDonante" class="form-control" placeholder="Escribir el CURP del donante" aria-label="CURP del donante"  onblur="validarCurp()" />
-                  <div id="mensajeErrorCurp" style="color: red;"></div>        
-              </div>
-          </div>
+            <!-- Nuevo campo para el CURP del donante -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label" for="add-curpDonante">CURP del Donante</label>
+                    <input type="text" id="add-curpDonante" class="form-control" placeholder="Escribir el CURP del donante" aria-label="CURP del donante" onblur="validarCurp()" />
+                    <div id="mensajeErrorCurp" style="color: red;"></div>
+                </div>
+            </div>
 
-          <div class="row text-center mt-4">
-              <div class="col">
-                  <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCitas()">Confirmar</button>
-                  <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
-              </div>
-          </div>
-      </form>
-  </div>
+            <div class="row text-center mt-4">
+                <div class="col">
+                    <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCitas()">Confirmar</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+
+
                       <!-- MODAL DETALLES -->
 
 
@@ -1250,7 +1238,7 @@ function verificarCamposEdit() {
 
 
   <script>
-  var btnAddCampaign = document.getElementById('btnAddCampaign');
+  var btnAddCampaign = document.getElementById('btnAddCampaignModal');
   var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
   btnAddCampaign.addEventListener('click', function () {
     offcanvasAddCampaign.show();
