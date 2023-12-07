@@ -636,7 +636,7 @@ function eliminarCita(citaId) {
         <!-- HEADER -->
         <div class="navbar-nav align-items-center">
           <div class="nav-item navbar-search-wrapper mb-0">
-              <span class="d-none d-md-inline-block text-muted">ADMINISTRAR USUARIOS</span>
+              <span class="d-none d-md-inline-block text-muted">ADMINISTRAR CITAS</span>
             </a>
           </div>
         </div>
