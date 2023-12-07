@@ -319,6 +319,70 @@ function editarCita() {
         alert('Error al actualizar la fecha de donación. Detalles: ' + error.message);
     });
 }
+function validarFechaEdicion() {
+    var fechaInicioInput = document.getElementById('edit-FechaInicioCita');
+    var mensajeErrorFechaEdit = document.getElementById('mensajeErrorFechaEdit');
+
+    // Obtener el ID de la cita seleccionada
+    var citaId = document.getElementById('edit-IdCita').value;
+
+    // Realizar la solicitud para obtener los detalles de la cita vinculada
+    fetch(`http://127.0.0.1:8000/api/donationdate/${citaId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener los detalles de la cita. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Respuesta de la API al obtener detalles de la cita:', data);
+
+            // Verificar si la estructura de la respuesta es como se espera
+            if (data.donationDate && data.donationDate.campaign_id) {
+                // Obtener la ID de la campaña vinculada
+                var campaignId = data.donationDate.campaign_id;
+
+                // Realizar la solicitud para obtener los detalles de la campaña
+                return fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`);
+            } else {
+                console.error('La estructura de la respuesta de la API no es la esperada:', data);
+                mensajeErrorFechaEdit.textContent = 'Error al obtener detalles de la cita. La respuesta de la API no tiene la estructura esperada.';
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener detalles de la campaña. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(campaignData => {
+            // Obtener la fecha de inicio y fin de la campaña vinculada
+            var startCampaign = new Date(campaignData.Campaign.start_campaign);
+            var endCampaign = new Date(campaignData.Campaign.end_campaign);
+
+            // Obtener la fecha de donación ingresada por el usuario
+            var nuevaFechaDonacion = new Date(fechaInicioInput.value);
+
+            // Restablecer el mensaje de error
+            mensajeErrorFechaEdit.textContent = '';
+
+            // Validar si la nueva fecha de donación está fuera del rango de la campaña
+            if (nuevaFechaDonacion < startCampaign || nuevaFechaDonacion > endCampaign) {
+                mensajeErrorFechaEdit.textContent = 'La fecha de donación debe estar dentro del rango de la campaña.';
+                document.getElementById('btnEditCita').disabled = true;
+            } else {
+                // Habilitar el botón si la fecha es válida
+                document.getElementById('btnEditCita').disabled = false;
+            }
+        })
+        .catch(error => {
+            // Manejar errores en la solicitud
+            console.error('Error al obtener detalles de la cita o la campaña:', error);
+            mensajeErrorFechaEdit.textContent = 'Error al obtener detalles de la cita o la campaña.';
+        });
+}
+
+
 
 
 
@@ -614,7 +678,7 @@ function eliminarCita(citaId) {
     }
 
     function validarCurp() {
-    var curpInput = document.getElementById('add-curp');
+    var curpInput = document.getElementById('add-curpDonante');
     var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
     // Expresión regular para permitir solo letras sin acentos y números
@@ -657,27 +721,7 @@ function eliminarCita(citaId) {
             contrasenaInput.classList.remove('is-invalid');
         }
     }
-    function validarFechaNacimiento() {
-    var fechaInput = document.getElementById('html5-date-input');
-    var mensajeErrorFecha = document.getElementById('mensajeErrorFecha');
-    var fechaArray = fechaInput.value.split('-');
-    if (fechaArray.length === 3 && fechaArray[0].length > 4) {
-        fechaArray[0] = fechaArray[0].substring(0, 4);
-        fechaInput.value = fechaArray.join('-');
-    }
 
-    var fechaSeleccionada = new Date(fechaInput.value);
-    var fechaMinima = new Date('1900-01-01');
-    var fechaMaxima = new Date('2023-11-27');
-
-    if (fechaSeleccionada < fechaMinima || fechaSeleccionada > fechaMaxima) {
-        mensajeErrorFecha.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
-        fechaInput.classList.add('is-invalid');
-    } else {
-        mensajeErrorFecha.innerText = '';
-        fechaInput.classList.remove('is-invalid');
-    }
-}
 
 function verificarCamposCitas() {
     var formulario = document.getElementById('addNewCampaignForm');
@@ -993,12 +1037,12 @@ function verificarCamposEdit() {
           </div>
 
           <div class="mb-3">
-              <label class="form-label" for="edit-FechaInicioCita">Fecha de Donación</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="edit-FechaInicioCita" />
-                  <div id="mensajeErrorFechaEdit" style="color: red;"></div>
-              </div>
-          </div>
+            <label class="form-label" for="edit-FechaInicioCita">Fecha de Donación</label>
+            <div class="col-md-10">
+                <input class="form-control" type="date" value="" id="edit-FechaInicioCita" onchange="validarFechaEdicion()" />
+                <div id="mensajeErrorFechaEdit" style="color: red;"></div>
+            </div>
+        </div>
 
           <div class="d-flex justify-content-center">
             <button type="submit" id="btnEditCita" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="editarCita()">Guardar Cambios</button>
@@ -1037,7 +1081,7 @@ function verificarCamposEdit() {
               <div class="col">
                   <label class="form-label" for="add-fechaDonacion">Fecha de la donación</label>
                   <div class="col-md-10">
-                      <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" />
+                      <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" />                
                   </div>
               </div>
           </div>
@@ -1046,7 +1090,8 @@ function verificarCamposEdit() {
           <div class="row mb-3">
               <div class="col">
                   <label class="form-label" for="add-curpDonante">CURP del Donante</label>
-                  <input type="text" id="add-curpDonante" class="form-control" placeholder="Escribir el CURP del donante" aria-label="CURP del donante" />
+                  <input type="text" id="add-curpDonante" class="form-control" placeholder="Escribir el CURP del donante" aria-label="CURP del donante"  onblur="validarCurp()" />
+                  <div id="mensajeErrorCurp" style="color: red;"></div>        
               </div>
           </div>
 
