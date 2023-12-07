@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             'blood_type' => 'O+',
             'curp' => '4rewr',
             'birthdate' => '2020/10/10',
-            'gender' => 'Helicoptero Apache',
+            'gender' => 'male',
             'donator' => 0,
             'user_type' => 'admin'
         ]);
