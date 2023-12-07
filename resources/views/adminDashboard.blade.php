@@ -73,7 +73,8 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 
-
+<!--fontawesome-->
+<script src="https://kit.fontawesome.com/675de417d6.js" crossorigin="anonymous"></script>
 
 
 
@@ -261,11 +262,96 @@
         
           <div class="container-xxl flex-grow-1 container-p-y">
             
-            
-<div class="row">
+<div class="d-flex flex-direction-row ">
+  <div>
+    <div class="row">
+      <div style="margin-left: 5%">
+        <div id="calendarioContainer" class="col-6 mt-5"></div>
+        <div class="puntito"></div>
+        <p style="display: inline-block; margin-top: 15px;">Día con citas</p>
+      </div>
+    </div>
+  </div>
+  <div style="margin-left: 30%">
+    <div class="row">
+      <div class="col-xl-3 col-md-4 col-6 mb-4 w-50">
+        <div class="card h-100 d-flex flex-column">
+          <div class="card-header pb-0">
+            <h5 class="card-title mb-0">Usuarios</h5>
+            <small class="text-muted">Número de usuarios</small>
+          </div>
+          <div id="salesLastYear"></div>
+          <div class="card-body pt-0">
+            <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+              <h4 class="mb-0">
+                <i class="fa-solid fa-user"></i>
+                <span id="usuariosDiv"></span>
+              </h4>
+              <small class="text-danger"></small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-4 col-6 mb-4 w-50">
+        <div class="card h-100 d-flex flex-column">
+            <div class="card-header pb-0">
+                <h5 class="card-title mb-0">Donadores</h5>
+                <small class="text-muted">Número de donadores</small>
+            </div>
+            <div class="card-body">
+                <div id="sessionsLastMonth"></div>
+                <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+                    <h4>
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                        <span id="donadoresCount"></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-3 col-md-4 col-6 mb-4 w-50">
+        <div class="card h-100 d-flex flex-column">
+            <div class="card-header pb-0">
+                <h5 class="card-title mb-0">Campañas activas</h5>
+                <small class="text-muted">Número de campañas activas</small>
+            </div>
+            <div class="card-body">
+                <div id="sessionsLastMonth"></div>
+                <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+                    <h4>
+                        <i class="fa-solid fa-house"></i>
+                        <span id="campagnasActivas"></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-4 col-6 mb-4 w-50">
+        <div class="card h-100 d-flex flex-column">
+            <div class="card-header pb-0">
+                <h5 class="card-title mb-0">Unidades médicas</h5>
+                <small class="text-muted">Número de unidades médicas</small>
+            </div>
+            <div class="card-body">
+                <div id="sessionsLastMonth"></div>
+                <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+                    <h4>
+                        <i class="fa-solid fa-notes-medical"></i>
+                        <span id="unidadesMedicas"></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>    
+{{-- <div class="row"> --}}
 
   <!-- Sales last year -->
-  <div class="col-xl-3 col-md-4 col-6 mb-4">
+  {{-- <div class="col-xl-3 col-md-4 col-6 mb-4">
     <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Usuarios</h5>
@@ -274,60 +360,79 @@
       <div id="salesLastYear"></div>
       <div class="card-body pt-0">
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 id="usuariosDiv" class="mb-0"></h4>
+          <h4 class="mb-0">
+            <i class="fa-solid fa-user"></i>
+            <span id="usuariosDiv"></span>
+          </h4>
           <small class="text-danger"></small>
         </div>
       </div>
     </div>
-  </div>
+</div> --}}
+
 
   <!-- Sessions Last month -->
-  <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card h-100 d-flex flex-column">
+  <!-- Donadores Count -->
+{{-- <div class="col-xl-3 col-md-4 col-6 mb-4">
+  <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Donadores</h5>
-        <small class="text-muted">Número de donadores</small>
+          <h5 class="card-title mb-0">Donadores</h5>
+          <small class="text-muted">Número de donadores</small>
       </div>
       <div class="card-body">
-        <div id="sessionsLastMonth"></div>
-        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 id="donadoresCount"></h4>
-        </div>
+          <div id="sessionsLastMonth"></div>
+          <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+              <h4>
+                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                  <span id="donadoresCount"></span>
+              </h4>
+          </div>
       </div>
-    </div>
   </div>
+</div> --}}
+
 
   <!-- Total Profit -->
-  <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card h-100 d-flex flex-column">
+  <!-- Campañas Activas -->
+{{-- <div class="col-xl-3 col-md-4 col-6 mb-4">
+  <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Campañas activas</h5>
-        <small class="text-muted">Número de campañas activas</small>
+          <h5 class="card-title mb-0">Campañas activas</h5>
+          <small class="text-muted">Número de campañas activas</small>
       </div>
       <div class="card-body">
-        <div id="sessionsLastMonth"></div>
-        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0" id="campagnasActivas"></h4>
-        </div>
+          <div id="sessionsLastMonth"></div>
+          <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+              <h4>
+                  <i class="fa-solid fa-house"></i>
+                  <span id="campagnasActivas"></span>
+              </h4>
+          </div>
       </div>
-    </div>
   </div>
+</div> --}}
+
 
     <!-- Total Sales -->
-    <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card h-100 d-flex flex-column">
+    <!-- Unidades Médicas -->
+{{-- <div class="col-xl-3 col-md-4 col-6 mb-4">
+  <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Unidades médicas</h5>
-        <small class="text-muted">Número de unidades médicas</small>
+          <h5 class="card-title mb-0">Unidades médicas</h5>
+          <small class="text-muted">Número de unidades médicas</small>
       </div>
       <div class="card-body">
-        <div id="sessionsLastMonth"></div>
-        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0" id="unidadesMedicas"></h4>
-        </div>
+          <div id="sessionsLastMonth"></div>
+          <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+              <h4>
+                  <i class="fa-solid fa-notes-medical"></i>
+                  <span id="unidadesMedicas"></span>
+              </h4>
+          </div>
       </div>
-    </div>
   </div>
+</div> --}}
+
 
   
   
@@ -658,8 +763,12 @@
         chart.draw(data, options);
       }
     </script>
-    <div id="piechart_3d" style="width: 48%; height: 500px;  float: right;"></div>
-    <div id="comparisonChart" style="width: 600px; height: 500px;"></div>
+    <div class="w-100">
+      <div class="row">
+        <div id="piechart_3d" style="width: 48%; height: 500px;  float: right; margin-left: .8em" class="col-6"></div>
+        <div id="comparisonChart" style="width: 600px; height: 500px;" class="col-6"></div>
+      </div>
+    </div>
 
 
     
@@ -759,10 +868,24 @@
 </script>
 {{-- <div id="piechart_3d" style="width: 48%; height: 500px;  float: left"></div> --}}
 
-<div class="row">
+{{-- <div class="row">
   <div id="barchart_values" class="col-6 mt-5" style="margin-bottom: -390px;"></div>
-  <div id="calendarioContainer" class="col-6 mt-5" style="margin-left: 150px;"></div>
-</div>
+  <div style="margin-left:800px; width: auto;">
+    <div id="calendarioContainer" class="col-6 mt-5"></div>
+    <div class="puntito"></div>
+    <p style="display: inline-block; margin-top: 15px;">Día con citas</p>
+  </div>
+</div> --}}
+
+<style>
+  .puntito{
+    background: #fa4062;
+    border-radius: 100%;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+  }
+</style>
 
 <div class="d-flex flex-row"> 
 
@@ -871,10 +994,10 @@
 
   const calendario = flatpickr(calendarioContainer, opcionesFlatpickr);
 </script>
-
+<div id="barchart_values" class="col-6 mt-5" style="margin: -390px auto;"></div>
 <style>
   .donation-day {
-    background-color: red !important;
+    background-color: #fa4062 !important;
     color: white !important;
   }
 </style>
@@ -883,7 +1006,7 @@
 
 
 <!-- Footer -->
- <footer class="content-footer footer bg-footer-theme">
+ {{-- <footer class="content-footer footer bg-footer-theme">
   <div class="container-xxl">
     <div class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
       <div>
@@ -899,7 +1022,7 @@
       </div>
     </div>
   </div>
-</footer>
+</footer> --}}
 <!-- / Footer -->
 
           
