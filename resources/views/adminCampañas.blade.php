@@ -172,7 +172,6 @@ function obtenerDetallesCampana(campaignId) {
 }
 
 
-
 function obtenerDetallesCampaña(campaignId) {
     fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
         method: 'GET'
@@ -206,6 +205,8 @@ function obtenerDetallesCampaña(campaignId) {
         })
         .then(userData => {
             const curpReceptor = userData.user.curp || '';
+            const nombreReceptor = userData.user.name || ''; 
+
 
             if (campaignId) {
                 campaignSeleccionadaId = campaignId;
@@ -219,6 +220,8 @@ function obtenerDetallesCampaña(campaignId) {
                 document.getElementById('detalles-tipoDonacion').value = tipoDonacion;
                 document.getElementById('detalles-userId').value = userId;
                 document.getElementById('detalles-curpReceptor').value = curpReceptor;
+                document.getElementById('detalles-nombreReceptor').value = nombreReceptor;
+
 
                 var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
                 offcanvasDetallesUsuario.show();
@@ -904,7 +907,7 @@ function verificarCamposEdit() {
 </div>
 <!-- Bootstrap Table with Header - Light -->
 
-<!-- Modal de Detalles del Usuario -->
+<!-- Modal de Detalles Campaña -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasDetallesUsuarioLabel" class="offcanvas-title">Detalles del Usuario</h5>
@@ -928,11 +931,11 @@ function verificarCamposEdit() {
                         <input type="date" class="form-control" id="detalles-inicioCampaña" readonly>
                     </div>
 
-                    <!-- Campo Fin de la Campaña -->
                     <div class="mb-3">
-                        <label for="detalles-finCampaña" class="form-label">Fin de la Campaña:</label>
-                        <input type="date" class="form-control" id="detalles-finCampaña" readonly>
+                        <label for="detalles-tipoSangreRequerido" class="form-label">Tipo de Sangre Requerido:</label>
+                        <input type="text" class="form-control" id="detalles-tipoSangreRequerido" readonly>
                     </div>
+                    
                 </div>
 
                 <!-- Columna 2 -->
@@ -944,10 +947,14 @@ function verificarCamposEdit() {
                         <input type="text" class="form-control" id="detalles-userId" readonly>
                     </div>
                     <!-- Campo Tipo de Sangre Requerido -->
+                   
+                    <!-- Campo Fin de la Campaña -->
                     <div class="mb-3">
-                        <label for="detalles-tipoSangreRequerido" class="form-label">Tipo de Sangre Requerido:</label>
-                        <input type="text" class="form-control" id="detalles-tipoSangreRequerido" readonly>
+                        <label for="detalles-finCampaña" class="form-label">Fin de la Campaña:</label>
+                        <input type="date" class="form-control" id="detalles-finCampaña" readonly>
                     </div>
+
+
 
                     <!-- Campo Donaciones Actuales -->
                     <div class="mb-3">
@@ -960,7 +967,7 @@ function verificarCamposEdit() {
                 <div class="col-md-6">
                     <!-- Campo Tipo de Donación -->
                     <div class="mb-3">
-                        <label for="detalles-tipoDonacion" class="form-label">Tipo de Donación:</label>
+                        <label for="detalles-tipoDonacion" class="form-label">Descripción:</label>
                         <input type="text" class="form-control" id="detalles-tipoDonacion" readonly>
                     </div>
                 </div>
@@ -975,8 +982,19 @@ function verificarCamposEdit() {
                 </div>
 
                 <div class="col-md-6">
+
+                <!-- Campo Nombre del Receptor -->
+                <div class="mb-3">
+                        <label for="detalles-nombreReceptor" class="form-label">Nombre del Receptor:</label>
+                        <input type="text" class="form-control" id="detalles-nombreReceptor" readonly>
+                    </div>
                      <!-- Campo Donaciones Requeridas -->
-                     <div class="mb-3">
+                     
+                </div>
+
+                <!-- Columna 5 -->
+                <div class="col-md-6">
+                    <div class="mb-3">
                         <label for="detalles-curpReceptor" class="form-label">CURP del Receptor</label>
                         <input type="text" class="form-control" id="detalles-curpReceptor" readonly>
                     </div>
@@ -992,7 +1010,6 @@ function verificarCamposEdit() {
         </form>
     </div>
 </div>
-
 
 <!-- Modal Editar Campaña -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditCampaign" aria-labelledby="offcanvasEditCampaignLabel">
