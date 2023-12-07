@@ -233,7 +233,6 @@ var elementoIdCita = document.getElementById('detalles-idCita');
 if (elementoIdCita) {
     elementoIdCita.value = citaId;
 }
-
 function obtenerDetalles(citaId) {
   fetch(`http://127.0.0.1:8000/api/donationdate/${citaId}`, {
         method: 'GET'
@@ -252,7 +251,6 @@ function obtenerDetalles(citaId) {
         const fechaDonacion = cita.date_donation || '';
         const nombreReceptor = cita.nombre_receptor || '';
         const medicalUnitId = cita.medical_unit_id || '';
-
         if (citaId) {
             document.getElementById('detalles-idCita').value = citaId;
             document.getElementById('detalles-userId').value = userId;
@@ -260,7 +258,6 @@ function obtenerDetalles(citaId) {
             document.getElementById('detalles-fechaDonacion').value = fechaDonacion;
             document.getElementById('detalles-nombreReceptor').value = nombreReceptor;
             document.getElementById('detalles-medicalUnitId').value = medicalUnitId;
-
             var offcanvasDetallesCita = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesCita'));
             offcanvasDetallesCita.show();
         } else {
@@ -736,6 +733,12 @@ function verificarCamposCitas() {
     var idCampaña = document.getElementById('add-idCampaña').value;
     var idUnidad = document.getElementById('add-idUnidad').value;
 
+    // Validar que los campos obligatorios no estén vacíos
+    if (!curpDonante || !idCampaña || !idUnidad) {
+        alert('Por favor, completa todos los campos obligatorios.');
+        return;
+    }
+
     // Declarar la variable receptorNombre
     var receptorNombre;
 
@@ -1081,7 +1084,7 @@ function verificarCamposEdit() {
               <div class="col">
                   <label class="form-label" for="add-fechaDonacion">Fecha de la donación</label>
                   <div class="col-md-10">
-                      <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" />                
+                      <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" />
                   </div>
               </div>
           </div>
@@ -1104,6 +1107,70 @@ function verificarCamposEdit() {
       </form>
   </div>
 </div>
+                      <!-- MODAL DETALLES -->
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesCita" aria-labelledby="offcanvasDetallesCitaLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasDetallesCitaLabel" class="offcanvas-title">Detalles de la Cita</h5>
+        <button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+  
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="detalles-cita pt-0" id="detallesCitaForm" onsubmit="return false">
+            <div class="row">
+                <!-- Columna 1 -->
+                <div class="col-md-6">
+                    <!-- Campo ID de la Cita -->
+                    <div class="mb-3">
+                        <label for="detalles-idCita" class="form-label">ID de la Cita:</label>
+                        <input type="text" class="form-control" id="detalles-idCita" readonly>
+                    </div>
+  
+                    <!-- Campo ID del Usuario -->
+                    <div class="mb-3">
+                        <label for="detalles-userId" class="form-label">ID del Usuario:</label>
+                        <input type="text" class="form-control" id="detalles-userId" readonly>
+                    </div>
+  
+                    <!-- Campo ID de la Campaña -->
+                    <div class="mb-3">
+                        <label for="detalles-campaignId" class="form-label">ID de la Campaña:</label>
+                        <input type="text" class="form-control" id="detalles-campaignId" readonly>
+                    </div>
+  
+                    <!-- Campo Fecha de Donación -->
+                    <div class="mb-3">
+                        <label for="detalles-fechaDonacion" class="form-label">Fecha de Donación:</label>
+                        <input type="text" class="form-control" id="detalles-fechaDonacion" readonly>
+                    </div>
+                </div>
+  
+                <!-- Columna 2 -->
+                <div class="col-md-6">
+                    <!-- Campo Nombre del Receptor -->
+                    <div class="mb-3">
+                        <label for="detalles-nombreReceptor" class="form-label">Nombre del Receptor:</label>
+                        <input type="text" class="form-control" id="detalles-nombreReceptor" readonly>
+                    </div>
+  
+                    <!-- Campo ID de la Unidad Médica -->
+                    <div class="mb-3">
+                        <label for="detalles-medicalUnitId" class="form-label">ID de la Unidad Médica:</label>
+                        <input type="text" class="form-control" id="detalles-medicalUnitId" readonly>
+                    </div>
+                </div>
+            </div>
+  
+            <!-- Botón para cerrar el modal -->
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
                       <!-- / Content -->
 
           
