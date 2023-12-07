@@ -687,39 +687,53 @@ function verificarCamposCitas() {
     }
 
     // Obtener valores de los campos
-    var curpReceptor = document.getElementById('add-curpReceptor').value;
     var curpDonante = document.getElementById('add-curpDonante').value;
     var fechaDonacion = document.getElementById('add-fechaDonacion').value;
     var idCampaña = document.getElementById('add-idCampaña').value;
     var idUnidad = document.getElementById('add-idUnidad').value;
-    var receptorNombre;  // Variable para almacenar el nombre del receptor
 
-    // Obtener el ID del receptor a través de la API
-    var curpReceptorEndpoint = 'http://127.0.0.1:8000/api/users/curp/' + curpReceptor;
-    fetch(curpReceptorEndpoint)
+    // Declarar la variable receptorNombre
+    var receptorNombre;
+
+    // Realizar la solicitud para obtener los datos de la campaña
+    var campaignEndpoint = 'http://127.0.0.1:8000/api/campaign/' + idCampaña;
+    fetch(campaignEndpoint)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al obtener datos del receptor. Código de estado: ' + response.status);
+                throw new Error('Error al obtener datos de la campaña. Código de estado: ' + response.status);
             }
             return response.json();
         })
         .then(data => {
-            if (data.users && data.users.length > 0) {
-                // Se encontró al menos un usuario con el CURP del receptor
-                var receptorId = data.users[0].id;
-                // Obtener el nombre del receptor
-                receptorNombre = data.users[0].name;
+            if (data.Campaign && data.Campaign.user_id) {
+                // Se obtuvo el ID del usuario (receptor) desde la API de la campaña
+                var receptorId = data.Campaign.user_id;
 
-                if (!receptorNombre) {
-                    throw new Error('El nombre del receptor no está definido.');
-                }
+                // Realizar la solicitud para obtener el nombre del receptor
+                var userEndpoint = 'http://127.0.0.1:8000/api/user/' + receptorId;
+                return fetch(userEndpoint);
+            } else {
+                // La respuesta de la campaña no incluyó el ID del usuario (receptor)
+                throw new Error('La respuesta de la campaña no incluyó el ID del usuario (receptor).');
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener datos del usuario (receptor). Código de estado: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.user && data.user.name) {
+                // Se obtuvo el nombre del receptor desde la API de usuarios
+                receptorNombre = data.user.name;
 
-                // Obtener el ID del donante a través de la API
+                // Realizar la solicitud para obtener el ID del donante a través de la API
                 var curpDonanteEndpoint = 'http://127.0.0.1:8000/api/users/curp/' + curpDonante;
                 return fetch(curpDonanteEndpoint);
             } else {
-                // No se encontraron usuarios con el CURP del receptor
-                throw new Error('No se encontró un usuario con el CURP del receptor proporcionado.');
+                // La respuesta de la API de usuarios no incluyó el nombre del receptor
+                throw new Error('La respuesta de la API de usuarios no incluyó el nombre del receptor.');
             }
         })
         .then(response => {
@@ -738,8 +752,8 @@ function verificarCamposCitas() {
                     user_id: donanteId,
                     campaign_id: idCampaña,
                     date_donation: fechaDonacion,
-                    nombre_receptor: receptorNombre,  // Utilizando el nombre obtenido del receptor
-                    medical_unit_id: idUnidad
+                    medical_unit_id: idUnidad,
+                    nombre_receptor: receptorNombre  // Utilizando el nombre obtenido del receptor
                 };
 
                 // Imprimir el objeto JSON en la consola
@@ -771,7 +785,6 @@ function verificarCamposCitas() {
             alert('Cita creada exitosamente.');
 
             // Restablecer valores de los campos a blanco
-            document.getElementById('add-curpReceptor').value = '';
             document.getElementById('add-curpDonante').value = '';
             document.getElementById('add-fechaDonacion').value = '';
             document.getElementById('add-idCampaña').value = '';
@@ -785,6 +798,7 @@ function verificarCamposCitas() {
             alert('Error al agregar la cita. Detalles: ' + error.message);
         });
 }
+
 
 
 
@@ -993,128 +1007,58 @@ function verificarCamposEdit() {
       </form>
   </div>
 </div>
-
-<!------------------------------------ -----------------Modal Añadir Citas ------------------------------------------------------->
+<!-- Modal Añadir Citas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
   <div class="offcanvas-header">
-      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Citas</h5>
+      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Añadir Cita</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
   <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
       <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
-
-        <div class="row mb-3">
-          <div class="col">
-            <label class="form-label" for="add-curpReceptor">CURP del Receptor</label>
-            <input type="text" id="add-curpReceptor" class="form-control" placeholder="Escribir Curp" aria-label="Nombre del receptor" />
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label" for="add-idCampaña">Id de la campaña</label>
-            <select id="add-idCampaña" class="form-select">
-                <option selected disabled value="">Opciones...</option>
-                <!-- Opciones de campañas se cargarán dinámicamente aquí -->
-            </select>
-        </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-6">
-              <label class="form-label" for="add-idUnidad">Id de la unidad medica</label>
-              <select id="add-idUnidad" class="form-select">
-                  <option selected disabled value="">Opciones...</option>
-                  <!-- Opciones de unidades médicas se cargarán dinámicamente aquí -->
-              </select>
-          </div>
-          <div class="col">
-            <label class="form-label" for="add-fechaDonacion">Fecha de la donación</label>
-            <div class="col-md-10">
-                <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Nuevo campo para el CURP del donante -->
-        <div class="row mb-3">
-          <div class="col">
-            <label class="form-label" for="add-curpDonante">CURP del Donante</label>
-            <input type="text" id="add-curpDonante" class="form-control" placeholder="Escribir el CURP del donante" aria-label="CURP del donante" />
-          </div>
-        </div>
-
-        <div class="row text-center mt-4">
-          <div class="col">
-            <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCitas()">Confirmar</button>
-            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
-          </div>
-        </div>
-      </form>
-  </div>
-</div>
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesCita" aria-labelledby="offcanvasDetallesCitaLabel">
-  <div class="offcanvas-header">
-      <h5 id="offcanvasDetallesCitaLabel" class="offcanvas-title">Detalles de la Cita</h5>
-      <button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-
-  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-      <form class="detalles-cita pt-0" id="detallesCitaForm" onsubmit="return false">
-          <div class="row">
-              <!-- Columna 1 -->
+          <div class="row mb-3">
               <div class="col-md-6">
-                  <!-- Campo ID de la Cita -->
-                  <div class="mb-3">
-                      <label for="detalles-idCita" class="form-label">ID de la Cita:</label>
-                      <input type="text" class="form-control" id="detalles-idCita" readonly>
-                  </div>
-
-                  <!-- Campo ID del Usuario -->
-                  <div class="mb-3">
-                      <label for="detalles-userId" class="form-label">ID del Usuario:</label>
-                      <input type="text" class="form-control" id="detalles-userId" readonly>
-                  </div>
-
-                  <!-- Campo ID de la Campaña -->
-                  <div class="mb-3">
-                      <label for="detalles-campaignId" class="form-label">ID de la Campaña:</label>
-                      <input type="text" class="form-control" id="detalles-campaignId" readonly>
-                  </div>
-
-                  <!-- Campo Fecha de Donación -->
-                  <div class="mb-3">
-                      <label for="detalles-fechaDonacion" class="form-label">Fecha de Donación:</label>
-                      <input type="text" class="form-control" id="detalles-fechaDonacion" readonly>
-                  </div>
+                  <label class="form-label" for="add-idCampaña">Id de la campaña</label>
+                  <select id="add-idCampaña" class="form-select">
+                      <option selected disabled value="">Opciones...</option>
+                      <!-- Opciones de campañas se cargarán dinámicamente aquí -->
+                  </select>
               </div>
-
-              <!-- Columna 2 -->
               <div class="col-md-6">
-                  <!-- Campo Nombre del Receptor -->
-                  <div class="mb-3">
-                      <label for="detalles-nombreReceptor" class="form-label">Nombre del Receptor:</label>
-                      <input type="text" class="form-control" id="detalles-nombreReceptor" readonly>
-                  </div>
+                  <label class="form-label" for="add-idUnidad">Id de la unidad médica</label>
+                  <select id="add-idUnidad" class="form-select">
+                      <option selected disabled value="">Opciones...</option>
+                      <!-- Opciones de unidades médicas se cargarán dinámicamente aquí -->
+                  </select>
+              </div>
+          </div>
 
-                  <!-- Campo ID de la Unidad Médica -->
-                  <div class="mb-3">
-                      <label for="detalles-medicalUnitId" class="form-label">ID de la Unidad Médica:</label>
-                      <input type="text" class="form-control" id="detalles-medicalUnitId" readonly>
+          <div class="row mb-3">
+              <div class="col">
+                  <label class="form-label" for="add-fechaDonacion">Fecha de la donación</label>
+                  <div class="col-md-10">
+                      <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" />
                   </div>
               </div>
           </div>
 
-          <!-- Botón para cerrar el modal -->
-          <div class="row">
-              <div class="col-md-12 text-center">
-                  <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+          <!-- Nuevo campo para el CURP del donante -->
+          <div class="row mb-3">
+              <div class="col">
+                  <label class="form-label" for="add-curpDonante">CURP del Donante</label>
+                  <input type="text" id="add-curpDonante" class="form-control" placeholder="Escribir el CURP del donante" aria-label="CURP del donante" />
+              </div>
+          </div>
+
+          <div class="row text-center mt-4">
+              <div class="col">
+                  <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCitas()">Confirmar</button>
+                  <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
               </div>
           </div>
       </form>
   </div>
 </div>
-
                       <!-- / Content -->
 
           
