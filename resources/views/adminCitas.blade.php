@@ -128,7 +128,7 @@
         cellAcciones.innerHTML = `
             <button type="button" class="btn btn-secondary" onclick="obtenerDetalles(${cita.id})">Detalles</button>
             <button type="button" class="btn btn-primary" onclick="obtenerDetallesCita(${cita.id})">Editar</button>
-            <button type="button" class="btn btn-danger" onclick="eliminarCita('${cita.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+            <button type="button" class="btn btn-danger" onclick="eliminarCita('${cita.id}')">Eliminar</button>`;
     });
 
 }
@@ -938,7 +938,7 @@ function verificarCamposEdit() {
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
       <h4>Lista de citas</h4>
-      <button type="button" class="btn btn-secondary" id="btnAddCampaign">Añadir</button>
+      <button type="button" class="btn btn-success" id="btnAddCampaign">Añadir</button>
   </div>
 
   <div class="table-responsive text-nowrap">
