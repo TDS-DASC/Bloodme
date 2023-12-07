@@ -263,8 +263,8 @@
           <div class="container-xxl flex-grow-1 container-p-y">
             
 <div class="d-flex flex-direction-row ">
-  <div>
-    <div class="row">
+  <div class="w-40">
+    <div class="row" style="margin-left: 50%">
       <div style="margin-left: 5%">
         <div id="calendarioContainer" class="col-6 mt-5"></div>
         <div class="puntito"></div>
