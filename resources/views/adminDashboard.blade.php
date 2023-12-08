@@ -646,7 +646,7 @@
       $(document).ready(function () {
         // Realiza una solicitud AJAX al backend para obtener la lista de donaciones
         $.ajax({
-          url: 'http://127.0.0.1:8000/api/donations/',
+          url: 'https://bloodprueba.up.railway.app/api/donations/',
           method: 'GET',
           dataType: 'json',
           success: function (response) {
@@ -664,7 +664,7 @@
   
         // Realiza una solicitud AJAX al backend para obtener la lista de unidades médicas
         $.ajax({
-          url: 'http://127.0.0.1:8000/api/medunits/',
+          url: 'https://bloodprueba.up.railway.app/api/medunits/',
           method: 'GET',
           dataType: 'json',
           success: function (response) {
@@ -715,7 +715,7 @@
       $(document).ready(function () {
         // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
         $.ajax({
-          url: 'http://127.0.0.1:8000/api/users/',
+          url: 'https://bloodprueba.up.railway.app/api/users/',
           method: 'GET',
           dataType: 'json',
           success: function (response) {
@@ -814,7 +814,7 @@
   $(document).ready(function () {
     // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
     $.ajax({
-      url: 'http://127.0.0.1:8000/api/users/',
+      url: 'https://bloodprueba.up.railway.app/api/users/',
       method: 'GET',
       dataType: 'json',
       success: function (response) {
@@ -948,7 +948,7 @@
     inline: true,
     onReady: function (selectedDates, dateStr, instance) {
       // Llamar a la función aplicarEstilos cuando el calendario esté listo
-      fetch('http://127.0.0.1:8000/api/donationsdate/')
+      fetch('https://bloodprueba.up.railway.app/api/donationsdate/')
         .then(response => {
           if (!response.ok) {
             throw new Error('Error al obtener la lista de citas. Código de estado: ' + response.status);
@@ -969,7 +969,7 @@
     },
     onChange: function (selectedDates, dateStr, instance) {
       // Llamar a la función aplicarEstilos cuando cambia la fecha seleccionada
-      fetch('http://127.0.0.1:8000/api/donationsdate/')
+      fetch('https://bloodprueba.up.railway.app/api/donationsdate/')
         .then(response => response.json())
         .then(data => {
           const fechasMarcadas = data.donationDates.map(fechaDonacion => formatFechaDonacion(fechaDonacion.date_donation));
@@ -981,7 +981,7 @@
     },
     onMonthChange: function (selectedDates, dateStr, instance) {
       // Llamar a la función aplicarEstilos cuando cambia el mes
-      fetch('http://127.0.0.1:8000/api/donationsdate/')
+      fetch('https://bloodprueba.up.railway.app/api/donationsdate/')
         .then(response => response.json())
         .then(data => {
           const fechasMarcadas = data.donationDates.map(fechaDonacion => formatFechaDonacion(fechaDonacion.date_donation));
@@ -1075,7 +1075,7 @@
   <!-- Page JS -->
   <script src="../../assets/js/dashboards-crm.js"></script>
 
-  <!--http://127.0.0.1:8000/api/users/-->
+  <!--https://bloodprueba.up.railway.app/api/users/-->
   <!-- ... tu código HTML anterior ... -->
 
 <script>
@@ -1083,7 +1083,7 @@
   $(document).ready(function () {
     // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
     $.ajax({
-      url: 'http://127.0.0.1:8000/api/users/', // Reemplaza con la ruta correcta
+      url: 'https://bloodprueba.up.railway.app/api/users/', // Reemplaza con la ruta correcta
       method: 'GET', // O el método HTTP correcto
       dataType: 'json',
       success: function (response) {
@@ -1115,7 +1115,7 @@
   $(document).ready(function () {
   // Realiza una solicitud AJAX al backend para obtener la lista de campañas activas
   $.ajax({
-    url: 'http://127.0.0.1:8000/api/campaigns', // Reemplaza con la ruta correcta
+    url: 'https://bloodprueba.up.railway.app/api/campaigns', // Reemplaza con la ruta correcta
     method: 'GET', // O el método HTTP correcto
     dataType: 'json',
     success: function (response) {
@@ -1139,7 +1139,7 @@
 $(document).ready(function () {
     // Realiza una solicitud AJAX al backend para obtener la lista de unidades médicas
     $.ajax({
-      url: 'http://127.0.0.1:8000/api/medunits', // Reemplaza con la ruta correcta
+      url: 'https://bloodprueba.up.railway.app/api/medunits', // Reemplaza con la ruta correcta
       method: 'GET', // O el método HTTP correcto
       dataType: 'json',
       success: function (response) {
@@ -1164,7 +1164,7 @@ $(document).ready(function () {
   $(document).ready(function () {
     // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
     $.ajax({
-      url: 'http://127.0.0.1:8000/api/donations/', // Reemplaza con la ruta correcta
+      url: 'https://bloodprueba.up.railway.app/api/donations/', // Reemplaza con la ruta correcta
       method: 'GET', // O el método HTTP correcto
       dataType: 'json',
       success: function (response) {

@@ -506,23 +506,26 @@ function mostrarDetallesUsuario(userId) {
         return true;
     }
 
-    function validarCurp() {
+function validarCurp() {
     var curpInput = document.getElementById('add-curp');
     var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
     // Expresión regular para permitir solo letras sin acentos y números
     var regexCurp = /^[A-Za-z0-9]+$/;
 
-    // Verificar la longitud del CURP
+    // Verificar la longitud del CURP y el formato
     if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
         mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
         curpInput.classList.add('is-invalid');
     } else {
-        mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+        // Limpiar el mensaje de error si la longitud y formato son correctos
+        mensajeErrorCurp.innerText = '';
         curpInput.classList.remove('is-invalid');
-    }
-  }
 
+        // Convertir el CURP a mayúsculas
+        curpInput.value = curpInput.value.toUpperCase();
+    }
+}
     function validarCorreoElectronico() {
         var inputCorreo = document.getElementById('add-correoElectronico');
         var mensajeErrorCorreo = document.getElementById('mensajeErrorCorreo');
@@ -697,17 +700,20 @@ function verificarCampos() {
     var curpInputEdit = document.getElementById('edit-curp');
     var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
 
-    curpInputEdit.value = curpInputEdit.value.toUpperCase();
-
     // Expresión regular para permitir solo letras sin acentos y números
     var regexCurp = /^[A-Z0-9]+$/;
 
+    // Verificar la longitud del CURP y el formato
     if (curpInputEdit.value.length !== 18 || !regexCurp.test(curpInputEdit.value)) {
-        mensajeErrorCurpEdit.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+        mensajeErrorCurpEdit.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos escritas en mayusculas.';
         curpInputEdit.classList.add('is-invalid');
     } else {
-        mensajeErrorCurpEdit.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+        // Limpiar el mensaje de error si la longitud y formato son correctos
+        mensajeErrorCurpEdit.innerText = '';
         curpInputEdit.classList.remove('is-invalid');
+
+        // Convertir el CURP a mayúsculas
+        curpInputEdit.value = curpInputEdit.value.toUpperCase();
     }
 }
 
@@ -974,7 +980,7 @@ function verificarCamposEdit() {
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label" for="edit-contrasena">Contraseña</label>
-                        <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
+                        <input type="password" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
                         <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
                     </div>
 
@@ -1089,7 +1095,7 @@ function verificarCamposEdit() {
 
                     <div class="mb-3">
                         <label class="form-label" for="add-contrasena">Contraseña</label>
-                        <input type="text" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
+                        <input type="password" id="add-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasena()" />
                         <div id="mensajeErrorContrasena" style="color: red;"></div>
                     </div>
 
