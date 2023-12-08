@@ -22,14 +22,14 @@
 
     <title>Administrador | Usuarios</title>
 
-    
+
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
     <meta name="keywords" content="dashboard, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5">
     <!-- Canonical SEO -->
     <link rel="canonical" href="https://1.envato.market/vuexy_admin">
     <!-- BOOSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- ? PROD Only: Google Tag Manager (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -37,7 +37,7 @@
       'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
       })(window,document,'script','dataLayer','GTM-5J3LMKC');</script>
     <!-- End Google Tag Manager -->
-    
+
  <!-- Favicon -->
  <link rel="icon" type="image/x-icon" href="../../images/logo.png" />
 
@@ -59,7 +59,7 @@
 <!-- Vendors CSS -->
 <link rel="stylesheet" href="../../assets/vendor/libs/node-waves/node-waves.css" />
 <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-<link rel="stylesheet" href="../../assets/vendor/libs/typeahead-js/typeahead.css" /> 
+<link rel="stylesheet" href="../../assets/vendor/libs/typeahead-js/typeahead.css" />
 <link rel="stylesheet" href="../../assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css">
 <link rel="stylesheet" href="../../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css">
 <link rel="stylesheet" href="../../assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css">
@@ -126,8 +126,8 @@ function renderizarTablaUsuarios(usuarios) {
         cellTipoSangre.innerText = usuario.blood_type;
         cellGenero.innerText = usuario.gender;
         cellDonador.innerText = usuario.donator === 1 ? 'Si' : 'No';
-       
-       
+
+
 
         cellAcciones.innerHTML = `
         <button type="button" class="btn btn-secondary" onclick="mostrarDetallesUsuario(${usuario.id})">Detalles</button>
@@ -169,10 +169,10 @@ function obtenerDetallesUsuario(userId) {
             document.getElementById('edit-curp').value = data.user.curp || '';
             document.getElementById('edit-html5-date-input').value = data.user.birthdate || '';
             document.getElementById('edit-genero').value = data.user.gender || '';
-            
+
             // Asegurarse de que el valor de donador se maneje adecuadamente
             const donadorValue = data.user.donator ? 'Si' : 'No';
-            
+
             // Seleccionar la opción correspondiente en el elemento select
             const editDonadorSelect = document.getElementById('edit-donador');
             for (let i = 0; i < editDonadorSelect.options.length; i++) {
@@ -216,6 +216,10 @@ function eliminarUsuario(usuarioId) {
         })
         .then(response => {
             if (!response.ok) {
+                if(response.status === 409){
+                    throw new Error(`Error, el usuario tiene asignado una campaña o cita. Código de estado: ${response.status}`);
+            }
+                }
                 throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
             }
             return response.json();
@@ -249,7 +253,7 @@ function obtenerDetallesUsuario2(userId) {
         const usuarioNombre = data.user.name || '';
         const usuarioApellido = data.user.last_name || '';
         const usuarioEmail = data.user.email || '';
-        
+
 
         if (usuarioId && usuarioNombre && usuarioApellido && usuarioEmail) {
             // Almacena el ID del usuario seleccionado globalmente
@@ -265,7 +269,7 @@ function obtenerDetallesUsuario2(userId) {
             document.getElementById('detalles-genero').value = data.user.gender || '';
             document.getElementById('detalles-donador').value = data.user.donator ? 'Sí' : 'No';
 
-        }  
+        }
     })
     .catch(error => {
         console.error('Error al obtener los detalles del usuario:', error);
@@ -283,7 +287,7 @@ function mostrarDetallesUsuario(userId) {
 }
 
 </script>
-    
+
 <style>
     #offcanvasAddUser, #offcanvasEditUser {
         left: 50%;
@@ -306,11 +310,11 @@ function mostrarDetallesUsuario(userId) {
 
 <body>
 
-  
+
   <!-- ?PROD Only: Google Tag Manager (noscript) (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5DDHKGP" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
-  
+
   <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar  ">
   <div class="layout-container">
@@ -319,7 +323,7 @@ function mostrarDetallesUsuario(userId) {
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 
-  
+
   <div class="app-brand demo ">
     <a href="{{ route('adminDashboardRuta') }}"  class="app-brand-link">
       <span class="app-brand-logo demo">
@@ -338,12 +342,12 @@ function mostrarDetallesUsuario(userId) {
 
   <div class="menu-inner-shadow"></div>
 
-  
-  
+
+
   <ul class="menu-inner py-1">
 
   <!-- NavBar -->
-    
+
   <li class="menu-header small text-uppercase">
       <span class="menu-header-text">Barra de Navegación</span>
     </li>
@@ -379,36 +383,36 @@ function mostrarDetallesUsuario(userId) {
       <span class="menu-header-text">Administrar Unidades Medicas</span>
       </a>
     </ul>
-  
-    
-    
+
+
+
    <!-- FIN NAVBAR-->
 
 
   </ul>
-  
+
 
 </aside>
 <!-- / Menu -->
 
     <!-- Layout container -->
     <div class="layout-page">
-      
+
 
 <!-- Navbar -->
 
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
-  
+
       <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0   d-xl-none ">
         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
           <i class="ti ti-menu-2 ti-sm"></i>
         </a>
       </div>
-      
+
 
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
 
-        
+
         <!-- HEADER -->
         <div class="navbar-nav align-items-center">
           <div class="nav-item navbar-search-wrapper mb-0">
@@ -417,10 +421,10 @@ function mostrarDetallesUsuario(userId) {
           </div>
         </div>
         <!-- /HEADER -->
-        
+
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
-          
+
 
           <!-- User -->
           <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -448,7 +452,7 @@ function mostrarDetallesUsuario(userId) {
               <li>
                 <div class="dropdown-divider"></div>
               </li>
-           
+
               <li>
                 <a class="dropdown-item" href="{{route('loginHome')}}">
                   <i class="ti ti-logout me-2 ti-sm"></i>
@@ -458,32 +462,32 @@ function mostrarDetallesUsuario(userId) {
             </ul>
           </li>
           <!--/ User -->
-          
+
 
 
         </ul>
       </div>
-      
+
       <!-- Search Small Screens -->
-      
-      
-      
+
+
+
 </nav>
 
 <!-- / Navbar -->
 
-  <!------------------------------------------ AQUI EMPIEZA EL CODIGO --------------------------------------------------------->    
+  <!------------------------------------------ AQUI EMPIEZA EL CODIGO --------------------------------------------------------->
 
       <!-- Content wrapper -->
       <div class="content-wrapper">
 
         <!-- Content -->
-        
+
         <div class="container-xxl flex-grow-1 container-p-y">
 
 
             <!-- ---------------------------------------Users List Table ----------------------------->
-        
+
 
 <script>
   function mostrarErrorLetras(id, mensaje) {
@@ -502,7 +506,7 @@ function mostrarDetallesUsuario(userId) {
             mostrarErrorLetras(mensajeErrorId, 'Solo se permiten letras (sin espacios, números o caracteres especiales).');
             return false;
         }
-        mostrarErrorLetras(mensajeErrorId, ''); 
+        mostrarErrorLetras(mensajeErrorId, '');
         return true;
     }
 
@@ -549,7 +553,7 @@ function validarCurp() {
             mensajeErrorContrasena.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
             contrasenaInput.classList.add('is-invalid');
         } else {
-            mensajeErrorContrasena.textContent = ''; 
+            mensajeErrorContrasena.textContent = '';
             contrasenaInput.classList.remove('is-invalid');
         }
     }
@@ -592,11 +596,11 @@ function verificarCampos() {
         var curp = document.getElementById('add-curp').value;
         var fechaNacimiento = document.getElementById('html5-date-input').value;
         var genero = document.getElementById('add-genero').value;
-       
+
         var donador = document.getElementById('add-donador').value;
         var donadorValue = donador === 'Si' ? 1 : 0;
 
-        
+
         // Crear objeto de datos para enviar al servidor
         var userData = {
             name: nombres,
@@ -622,17 +626,17 @@ function verificarCampos() {
             if (!response.ok) {
                 throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
             }
-            return response.json(); 
+            return response.json();
         })
         .then(data => {
             // La respuesta exitosa del servidor
             console.log('Respuesta del servidor:', data);
 
-            
-            
 
-            
-           
+
+
+
+
                 alert('Usuario creado exitosamente.');
 
                  // Restablecer valores de los campos a blanco
@@ -645,9 +649,9 @@ function verificarCampos() {
         document.getElementById('html5-date-input').value = '';
         document.getElementById('add-genero').value = '';
         document.getElementById('add-donador').value = '';
-        
+
         offcanvasAddUser.hide();
-   
+
         })
         .catch(error => {
     // Manejar errores en la solicitud
@@ -663,7 +667,7 @@ function verificarCampos() {
     }
 });
 
-        // Cerrar el modal 
+        // Cerrar el modal
         // var offcanvasAddUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'));
         // offcanvasAddUser.hide();
     }
@@ -739,7 +743,7 @@ function validarCurpEdit() {
 }
 
 function validarFechaNacimientoEdit() {
-    
+
         var fechaInputEdit = document.getElementById('edit-html5-date-input');
         var mensajeErrorFechaEdit = document.getElementById('mensajeErrorFechaEdit');
         var fechaArrayEdit = fechaInputEdit.value.split('-');
@@ -785,7 +789,7 @@ function verificarCamposEdit() {
         var genero = document.getElementById('edit-genero').value;
         var donador = document.getElementById('edit-donador').value;
         var donadorValue = donador === 'Si' ? 1 : 0;
-       
+
 
         // Crear objeto de datos para enviar al servidor
         var editedUserData = {
@@ -811,20 +815,20 @@ function verificarCamposEdit() {
         if (!response.ok) {
             throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
         }
-        return response.json(); 
+        return response.json();
     })
     .then(data => {
         console.log('Respuesta del servidor:', data);
 
         var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
         offcanvasEditUser.hide();
-        
+
         var modalElement = document.getElementById('offcanvasEditUser');
         var modal = bootstrap.Offcanvas.getInstance(modalElement);
         modal.hide();
-        
+
         alert('Usuario editado exitosamente')
-       
+
     })
     .catch(error => {
         console.error('Error en la solicitud de edición:', error);
@@ -852,7 +856,7 @@ function verificarCamposEdit() {
     <h4>Listado de Usuarios</h4>
     <button type="button" class="btn btn-success" id="btnAdd">Añadir</button>
   </div>
-  
+
   <div class="table-responsive text-nowrap">
     <table class="table">
       <thead class="table-light">
@@ -868,7 +872,7 @@ function verificarCamposEdit() {
       <!-- Asegúrate de tener un tbody con el ID 'tablaUsuariosBody' -->
       <tbody class="table-border-bottom-0" id="tablaUsuariosBody">
         <!-- Aquí puedes tener filas predefinidas si lo deseas -->
-        
+
       </tbody>
     </table>
   </div>
@@ -1100,7 +1104,7 @@ function verificarCamposEdit() {
 <div class="mb-3">
               <label class="form-label" for="add-curp">CURP</label>
               <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurp()"/>
-              <div id="mensajeErrorCurp" style="color: red;"></div>              
+              <div id="mensajeErrorCurp" style="color: red;"></div>
           </div>
 
 
@@ -1177,8 +1181,8 @@ function verificarCamposEdit() {
 
 
 
-          
-          
+
+
 
 <!-- Footer -->
 <footer class="content-footer footer bg-footer-theme">
@@ -1191,11 +1195,11 @@ function verificarCamposEdit() {
         </script>
         , Bloodme <a href="" target="_blank" class="fw-medium"></a>
       </div>
-      
+
     </div>
   </div>
 </footer>
-  
+
 <div class="content-backdrop fade"></div>
         </div>
         <!-- Content wrapper -->
@@ -1203,24 +1207,24 @@ function verificarCamposEdit() {
       <!-- / Layout page -->
     </div>
 
-    
-    
+
+
     <!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
-    
-    
+
+
     <!-- Drag Target Area To SlideIn Menu On Small Screens -->
     <div class="drag-target"></div>
-    
+
   </div>
   <!-- / Layout wrapper -->
 
 
-  
+
 
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/core.js -->
-  
+
   <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
   <script src="../../assets/vendor/libs/popper/popper.js"></script>
   <script src="../../assets/vendor/js/bootstrap.js"></script>
@@ -1230,7 +1234,7 @@ function verificarCamposEdit() {
   <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
   <script src="../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
    <script src="../../assets/vendor/js/menu.js"></script>
-  
+
   <!-- endbuild -->
 
   <!-- Vendors JS -->
@@ -1245,7 +1249,7 @@ function verificarCamposEdit() {
 
   <!-- Main JS -->
   <script src="../../assets/js/main.js"></script>
-  
+
 
   <!-- Page JS -->
   <script src="../../assets/js/app-user-list.js"></script>

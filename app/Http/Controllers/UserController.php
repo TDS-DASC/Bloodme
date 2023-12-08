@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Campaign;
+use App\Models\DonationDate;
 
 class UserController extends Controller
 {
@@ -44,6 +46,13 @@ class UserController extends Controller
             return response()->json(['message' => 'User Not found'],404);
         }
 
+
+        $campañas = Campaign::where('user_id',$id)->get();
+        $campañas = DonationDate::where('user_id',$id)->get();
+        if($campañas){
+            return response()->json(['message' => 'Error, user has a campaing or date'],409);
+        }
+
         $user -> delete();
 
         return response()->json(['user' => $user, 'message' => 'Deleted user OK'],200);
@@ -56,6 +65,13 @@ class UserController extends Controller
         if(!$user){
             return response()->json(['message' => 'User Not found'],404);
         }
+
+        $campañas = Campaign::where('user_id',$request->input('id'))->get();
+        $campañas = DonationDate::where('user_id',$request->input('id'))->get();
+        if($campañas){
+            return response()->json(['message' => 'Error, user has a campaing or date'],401);
+        }
+
 
         $user -> delete();
 
