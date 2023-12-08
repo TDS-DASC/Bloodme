@@ -8,13 +8,13 @@
 
     <title>Registar Nuevo Usuario</title>
 
-    
+
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
     <meta name="keywords" content="dashboard, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5">
     <!-- Canonical SEO -->
     <link rel="canonical" href="https://1.envato.market/vuexy_admin">
-    
-    
+
+
     <!-- ? PROD Only: Google Tag Manager (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -22,7 +22,7 @@
       'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
       })(window,document,'script','dataLayer','GTM-5J3LMKC');</script>
     <!-- End Google Tag Manager -->
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../../images/logo.png" />
 
@@ -37,13 +37,13 @@
     <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icons.css" />
 
     <!-- Core CSS -->
-    
+
     <link rel="stylesheet" href="../../assets/css/demo.css" />
-    
+
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="../../assets/vendor/libs/node-waves/node-waves.css" />
     <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="../../assets/vendor/libs/typeahead-js/typeahead.css" /> 
+    <link rel="stylesheet" href="../../assets/vendor/libs/typeahead-js/typeahead.css" />
     <!-- Vendor -->
 <link rel="stylesheet" href="../../assets/vendor/libs/@form-validation/umd/styles/index.min.css" />
 
@@ -58,21 +58,21 @@
     <script src="../../assets/vendor/js/template-customizer.js"></script>
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="../../assets/js/config.js"></script>
-    
+
 </head>
 
 <body>
 
-  
+
   <!-- ?PROD Only: Google Tag Manager (noscript) (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5DDHKGP" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
-  
 
 
 
 
-  
+
+
 
   <!-- ------------------------------------------Content ------------------------------------------------------------>
 
@@ -139,12 +139,12 @@
           </select>
         </div>
 
-        
+
           <div class="mb-3">
               <label class="form-label" for="add-curp">CURP</label>
               <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurp()"/>
               <div id="mensajeErrorCurp" style="color: red;"></div>
-              
+
           </div>
 
 
@@ -172,7 +172,7 @@
           </select>
         </div>
 
-           
+
         <button type="button" id="btnAdd" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCampos()">Confirmar</button>
 
         </form>
@@ -184,7 +184,7 @@
             </a>
           </p>
 
-          
+
         </div>
       </div>
       <!-- Register Card -->
@@ -219,18 +219,16 @@
     var curpInput = document.getElementById('add-curp');
     var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
-    if (curpInput) {
-        var regexCurp = /^[A-Za-z0-9]+$/;
+    // Expresión regular para permitir solo letras sin acentos y números
+    var regexCurp = /^[A-Za-z0-9]+$/;
 
-        if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
-            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
-            curpInput.classList.add('is-invalid');
-        } else {
-            mensajeErrorCurp.innerText = ''; 
-            curpInput.classList.remove('is-invalid');
-        }
+    // Verificar la longitud del CURP
+    if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
+      mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+      curpInput.classList.add('is-invalid');
     } else {
-        console.error('El elemento con ID "add-curpCampaña" no existe.');
+      mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+      curpInput.classList.remove('is-invalid');
     }
 }
 
@@ -392,7 +390,7 @@ function obtenerValorCampo(idCampo) {
 
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/core.js -->
-  
+
   <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
   <script src="../../assets/vendor/libs/popper/popper.js"></script>
   <script src="../../assets/vendor/js/bootstrap.js"></script>
@@ -402,7 +400,7 @@ function obtenerValorCampo(idCampo) {
   <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
   <script src="../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
    <script src="../../assets/vendor/js/menu.js"></script>
-  
+
   <!-- endbuild -->
 
   <!-- Vendors JS -->
@@ -412,11 +410,11 @@ function obtenerValorCampo(idCampo) {
 
   <!-- Main JS -->
   <script src="../../assets/js/main.js"></script>
-  
+
 
   <!-- Page JS -->
   <script src="../../assets/js/pages-auth.js"></script>
-  
+
 </body>
 
 </html>
