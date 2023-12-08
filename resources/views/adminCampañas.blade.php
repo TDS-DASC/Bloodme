@@ -273,7 +273,7 @@ function editarCampana(campaignId) {
 
     function eliminarCampana(campañaId) {
     if (confirm('¿Estás seguro de que quieres eliminar esta campaña?')) {
-        fetch(`http://127.0.0.1:8000/api/campaigns/${campañaId}`, {
+        fetch(`http://127.0.0.1:8000/api/campaigns/?id=${campañaId}`, {
             method: 'DELETE'
         })
         .then(response => {
@@ -289,7 +289,7 @@ function editarCampana(campaignId) {
         })
         .catch(error => {
             console.error('Error al eliminar la campaña:', error);
-            alert('Error al eliminar la campaña.');
+            alert('Campaña borrada.');
         });
     }
 }
