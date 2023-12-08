@@ -51,7 +51,7 @@ class AuthController extends Controller
         }
 
         //CHECAR MAS TARDE CREATE TOKEN ._____.
-       //$accessToken = auth()->user()hh->createToken('authToken')->accessToken;
+       //$accessToken = auth()->user()->createToken('authToken')->accessToken;
        //$user = Auth::user();
        $user = User::where('email',$loginData['email'])->first();
        $accessToken = $user->createToken('authToken')->plainTextToken;
