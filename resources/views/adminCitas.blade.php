@@ -523,6 +523,14 @@ function eliminarCita(citaId) {
     width: 50%;
     height: 320px;
   }
+
+  #offcanvasDetallesCita{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 380px;
+  }
 </style>
     
 </head>
@@ -1114,41 +1122,42 @@ function verificarCamposCitas() {
                         <label for="detalles-idCita" class="form-label">ID de la Cita:</label>
                         <input type="text" class="form-control" id="detalles-idCita" readonly>
                     </div>
-  
+            
                     <!-- Campo ID del Usuario -->
                     <div class="mb-3">
                         <label for="detalles-userId" class="form-label">ID del Usuario:</label>
                         <input type="text" class="form-control" id="detalles-userId" readonly>
                     </div>
-  
+                </div>
+            
+                <!-- Columna 2 -->
+                <div class="col-md-6">
                     <!-- Campo ID de la Campaña -->
                     <div class="mb-3">
                         <label for="detalles-campaignId" class="form-label">ID de la Campaña:</label>
                         <input type="text" class="form-control" id="detalles-campaignId" readonly>
                     </div>
-  
-                    <!-- Campo Fecha de Donación -->
-                    <div class="mb-3">
-                        <label for="detalles-fechaDonacion" class="form-label">Fecha de Donación:</label>
-                        <input type="text" class="form-control" id="detalles-fechaDonacion" readonly>
-                    </div>
-                </div>
-  
-                <!-- Columna 2 -->
-                <div class="col-md-6">
-                    <!-- Campo Nombre del Receptor -->
-                    <div class="mb-3">
-                        <label for="detalles-nombreReceptor" class="form-label">Nombre del Receptor:</label>
-                        <input type="text" class="form-control" id="detalles-nombreReceptor" readonly>
-                    </div>
-  
+            
                     <!-- Campo ID de la Unidad Médica -->
                     <div class="mb-3">
                         <label for="detalles-medicalUnitId" class="form-label">ID de la Unidad Médica:</label>
                         <input type="text" class="form-control" id="detalles-medicalUnitId" readonly>
                     </div>
                 </div>
+            
+                <!-- Campo Fecha de Donación -->
+                <div class="mb-3 col-md-6">
+                    <label for="detalles-fechaDonacion" class="form-label">Fecha de Donación:</label>
+                    <input type="text" class="form-control" id="detalles-fechaDonacion" readonly>
+                </div>
+            
+                <!-- Campo Nombre del Receptor -->
+                <div class="mb-3 col-md-6">
+                    <label for="detalles-nombreReceptor" class="form-label">Nombre del Receptor:</label>
+                    <input type="text" class="form-control" id="detalles-nombreReceptor" readonly>
+                </div>
             </div>
+            
   
             <!-- Botón para cerrar el modal -->
             <div class="row">
