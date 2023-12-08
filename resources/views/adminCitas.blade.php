@@ -978,7 +978,7 @@ function verificarCamposCitas() {
     var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
 
     // Convertir el CURP a mayúsculas
-    curpInputEdit.value = curpInputEdit.value.toUpperCase();
+ 
 
     // Expresión regular para permitir solo letras sin acentos y números
     var regexCurp = /^[A-Z0-9]+$/;
@@ -991,6 +991,7 @@ function verificarCamposCitas() {
         // Limpiar el mensaje de error si la longitud y formato son correctos
         mensajeErrorCurpEdit.innerText = '';
         curpInputEdit.classList.remove('is-invalid');
+        curpInputEdit.value = curpInputEdit.value.toUpperCase();
     }
 }
 

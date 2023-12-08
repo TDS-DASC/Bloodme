@@ -696,12 +696,33 @@ function verificarCampos() {
         }
     }
 
-    function validarCurpEdit() {
+
+function validarCurp2() {
+    var curpInput = document.getElementById('edit-curp');
+    var mensajeErrorCurp = document.getElementById('mensajeErrorCurpEdit');
+
+    // Expresión regular para permitir solo letras sin acentos y números
+    var regexCurp = /^[A-Za-z0-9]+$/;
+
+    // Verificar la longitud del CURP y el formato
+    if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
+        mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+        curpInput.classList.add('is-invalid');
+    } else {
+        // Limpiar el mensaje de error si la longitud y formato son correctos
+        mensajeErrorCurp.innerText = '';
+        curpInput.classList.remove('is-invalid');
+
+        // Convertir el CURP a mayúsculas
+        curpInput.value = curpInput.value.toUpperCase();
+    }
+}
+function validarCurpEdit() {
     var curpInputEdit = document.getElementById('edit-curp');
     var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
 
     // Expresión regular para permitir solo letras sin acentos y números
-    var regexCurp = /^[A-Z0-9]+$/;
+    var regexCurp = /^[A-Za-z0-9]+$/;
 
     // Verificar la longitud del CURP y el formato
     if (curpInputEdit.value.length !== 18 || !regexCurp.test(curpInputEdit.value)) {
@@ -970,7 +991,7 @@ function verificarCamposEdit() {
 
                     <div class="mb-3">
                         <label class="form-label" for="edit-curp">CURP</label>
-                        <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurpEdit()" />
+                        <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurp2()" />
                         <div id="mensajeErrorCurpEdit" style="color: red;"></div>
                     </div>
 
