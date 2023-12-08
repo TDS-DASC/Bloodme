@@ -142,7 +142,7 @@
         
           <div class="mb-3">
               <label class="form-label" for="add-curp">CURP</label>
-              <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onkeypress="return validarSoloLetras(event, this)"  onblur="validarCurp()"/>
+              <input type="text" id="add-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP" onblur="validarCurp()"/>
               <div id="mensajeErrorCurp" style="color: red;"></div>
               
           </div>
@@ -219,18 +219,20 @@
     var curpInput = document.getElementById('add-curp');
     var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
-    // Expresión regular para permitir solo letras sin acentos y números
-    var regexCurp = /^[A-Za-z0-9]+$/;
+    if (curpInput) {
+        var regexCurp = /^[A-Za-z0-9]+$/;
 
-    // Verificar la longitud del CURP
-    if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
-      mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
-      curpInput.classList.add('is-invalid');
+        if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
+            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+            curpInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorCurp.innerText = ''; 
+            curpInput.classList.remove('is-invalid');
+        }
     } else {
-      mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
-      curpInput.classList.remove('is-invalid');
+        console.error('El elemento con ID "add-curpCampaña" no existe.');
     }
-  }
+}
 
   function validarCorreoElectronico() {
     var inputCorreo = document.getElementById('add-correoElectronico');
