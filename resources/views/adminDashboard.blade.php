@@ -765,8 +765,9 @@
     </script>
     <div class="w-100">
       <div class="row">
-        <div id="piechart_3d" style="width: 48%; height: 500px;  float: right; margin-left: .8em" class="col-6"></div>
-        <div id="comparisonChart" style="width: 600px; height: 500px;" class="col-6"></div>
+        <div id="piechart_3d" style="width: 30%; height: 500px;  float: right; margin-left: .8em" class="col-4"></div>
+        <div id="comparisonChart" style="width: 30%; height: 500px;" class="col-4"></div>
+        <div id="barchart_values" class="col-4"></div>
       </div>
     </div>
 
@@ -800,7 +801,7 @@
 
     var options = {
       title: "Tipos de Sangre",
-      width: 600,
+      width: 450,
       height: 400,
       bar: {groupWidth: "95%"},
       legend: { position: "none" },
@@ -994,7 +995,7 @@
 
   const calendario = flatpickr(calendarioContainer, opcionesFlatpickr);
 </script>
-<div id="barchart_values" class="col-6 mt-5" style="margin: -390px auto;"></div>
+{{-- <div id="barchart_values" class="col-6 mt-5" style="margin: -390px auto;"></div> --}}
 <style>
   .donation-day {
     background-color: #fa4062 !important;
