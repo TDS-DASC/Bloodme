@@ -47,7 +47,7 @@ Route::get('/adminUnidades', function () {
 
 
 Route::get('/', function () {
-    return view('nuevoLogin');
+    return view('index');
 })->name('loginHome'); // LOGIN NUEVO
 
 Route::get('/registrar', function () {
