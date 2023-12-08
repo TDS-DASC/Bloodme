@@ -83,7 +83,7 @@
         cargarYMostrarCitas();
     };
     function cargarYMostrarCitas() {
-        fetch('http://127.0.0.1:8000/api/donationsdate/')
+        fetch('https://bloodprueba.up.railway.app/api/donationsdate/')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al obtener la lista de citas. Código de estado: ' + response.status);
@@ -135,7 +135,7 @@
 
 // Función para cargar dinámicamente las opciones de campañas
 function cargarOpcionesCampañas() {
-    fetch('http://127.0.0.1:8000/api/campaigns')
+    fetch('https://bloodprueba.up.railway.app/api/campaigns')
         .then(response => response.json())
         .then(data => {
             var selectCampaña = document.getElementById('add-idCampaña');
@@ -160,7 +160,7 @@ function cargarOpcionesCampañas() {
 
 // Función para cargar dinámicamente las opciones de unidades médicas
 function cargarOpcionesUnidadesMedicas() {
-    fetch('http://127.0.0.1:8000/api/medunits/')
+    fetch('https://bloodprueba.up.railway.app/api/medunits/')
         .then(response => response.json())
         .then(data => {
             var selectUnidad = document.getElementById('add-idUnidad');
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
 let usuarioSeleccionadoId = null;
 
 function obtenerDetallesCita(citaId) {
-    fetch(`http://127.0.0.1:8000/api/donationdate/${citaId}`, {
+    fetch(`https://bloodprueba.up.railway.app/api/donationdate/${citaId}`, {
         method: 'GET'
     })
     .then(response => {
@@ -234,7 +234,7 @@ if (elementoIdCita) {
     elementoIdCita.value = citaId;
 }
 function obtenerDetalles(citaId) {
-  fetch(`http://127.0.0.1:8000/api/donationdate/${citaId}`, {
+  fetch(`https://bloodprueba.up.railway.app/api/donationdate/${citaId}`, {
         method: 'GET'
     })
     .then(response => {
@@ -287,7 +287,7 @@ function editarCita() {
     }
 
     // Realizar la solicitud PUT a la API para actualizar la fecha de donación
-    fetch(`http://127.0.0.1:8000/api/donationsdate/${citaSeleccionadaId}`, {
+    fetch(`https://bloodprueba.up.railway.app/api/donationsdate/${citaSeleccionadaId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -329,7 +329,7 @@ function verificarCamposCitas() {
     var nuevaFechaDonacion = document.getElementById('add-fechaDonacion').value;
 
     // Realizar la solicitud para obtener los datos de la campaña
-    fetch(`http://127.0.0.1:8000/api/campaign/${idCampaña}`)
+    fetch(`https://bloodprueba.up.railway.app/api/campaign/${idCampaña}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al obtener detalles de la campaña. Código de estado: ' + response.status);
@@ -407,7 +407,7 @@ function validarFechaEdicion() {
     var citaId = document.getElementById('edit-IdCita').value;
 
     // Realizar la solicitud para obtener los detalles de la cita vinculada
-    fetch(`http://127.0.0.1:8000/api/donationdate/${citaId}`)
+    fetch(`https://bloodprueba.up.railway.app/api/donationdate/${citaId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Error al obtener los detalles de la cita. Código de estado: ${response.status}`);
@@ -423,7 +423,7 @@ function validarFechaEdicion() {
                 var campaignId = data.donationDate.campaign_id;
 
                 // Realizar la solicitud para obtener los detalles de la campaña
-                return fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`);
+                return fetch(`https://bloodprueba.up.railway.app/api/campaign/${campaignId}`);
             } else {
                 console.error('La estructura de la respuesta de la API no es la esperada:', data);
                 mensajeErrorFechaEdit.textContent = 'Error al obtener detalles de la cita. La respuesta de la API no tiene la estructura esperada.';
@@ -486,7 +486,7 @@ function editarCitaModal(citaId) {
   // FUNCION ELIMINAR CITA
 function eliminarCita(citaId) {
     if (confirm('¿Estás seguro de que quieres eliminar esta cita?')) {
-        fetch(`http://127.0.0.1:8000/api/donationsdate/${citaId}`, {
+        fetch(`https://bloodprueba.up.railway.app/api/donationsdate/${citaId}`, {
             method: 'DELETE'
         })
         .then(response => {
@@ -835,7 +835,7 @@ function verificarCamposCitas() {
     var receptorNombre;
 
     // Realizar la solicitud para obtener los datos de la campaña
-    var campaignEndpoint = 'http://127.0.0.1:8000/api/campaign/' + idCampaña;
+    var campaignEndpoint = 'https://bloodprueba.up.railway.app/api/campaign/' + idCampaña;
     fetch(campaignEndpoint)
         .then(response => {
             if (!response.ok) {
@@ -849,7 +849,7 @@ function verificarCamposCitas() {
                 var receptorId = data.Campaign.user_id;
 
                 // Realizar la solicitud para obtener el nombre del receptor
-                var userEndpoint = 'http://127.0.0.1:8000/api/user/' + receptorId;
+                var userEndpoint = 'https://bloodprueba.up.railway.app/api/user/' + receptorId;
                 return fetch(userEndpoint);
             } else {
                 // La respuesta de la campaña no incluyó el ID del usuario (receptor)
@@ -868,7 +868,7 @@ function verificarCamposCitas() {
                 receptorNombre = data.user.name;
 
                 // Realizar la solicitud para obtener el ID del donante a través de la API
-                var curpDonanteEndpoint = 'http://127.0.0.1:8000/api/users/curp/' + curpDonante;
+                var curpDonanteEndpoint = 'https://bloodprueba.up.railway.app/api/users/curp/' + curpDonante;
                 return fetch(curpDonanteEndpoint);
             } else {
                 // La respuesta de la API de usuarios no incluyó el nombre del receptor
@@ -899,7 +899,7 @@ function verificarCamposCitas() {
                 console.log('Objeto JSON a enviar:', citaData);
 
                 // Realizar la solicitud POST a la API de citas
-                return fetch('http://127.0.0.1:8000/api/donationdate', {
+                return fetch('https://bloodprueba.up.railway.app/api/donationdate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

@@ -86,7 +86,7 @@
       // Hacer la solicitud a la API
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:8000/api/users/",
+        url: "https://bloodprueba.up.railway.app/api/users/",
         data: {
           email: email,
           password: password
@@ -131,7 +131,7 @@
           <p class="mb-4">Ingresa tus datos para continuar</p>
           <p style="display: none" id="dateIncorrect">Datos incorrectos</p>
 
-          <form id="uniqueFormAuthentication" class="mb-3" action="http://127.0.0.1:8000/api/login" method="POST">
+          <form id="uniqueFormAuthentication" class="mb-3" action="https://bloodprueba.up.railway.app/api/login" method="POST">
             <div class="mb-3">
               <label for="email" class="form-label">Correo Electronico</label>
               <input type="text" class="form-control" id="email" name="email-username" placeholder="Escribir correo electronico" autofocus>
@@ -210,7 +210,7 @@
 
     $.ajax({
       type: "POST",
-      url: "http://127.0.0.1:8000/api/login",
+      url: "https://bloodprueba.up.railway.app/api/login",
       data: {
         email: email,
         password: password

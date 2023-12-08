@@ -84,7 +84,7 @@
 };
 
 function cargarYMostrarUsuarios() {
-    fetch('http://127.0.0.1:8000/api/users/')
+    fetch('https://bloodprueba.up.railway.app/api/users/')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al obtener la lista de usuarios. Código de estado: ' + response.status);
@@ -139,7 +139,7 @@ function renderizarTablaUsuarios(usuarios) {
 let usuarioSeleccionadoId = null;
 
 function obtenerDetallesUsuario(userId) {
-    fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
+    fetch(`https://bloodprueba.up.railway.app/api/user/${userId}`, {
         method: 'GET'
     })
     .then(response => {
@@ -211,7 +211,7 @@ document.getElementById('btnEdit').addEventListener('click', function() {
 // FUNCION ELIMINAR
 function eliminarUsuario(usuarioId) {
     if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
+        fetch(`https://bloodprueba.up.railway.app/api/users/${usuarioId}`, {
             method: 'DELETE'
         })
         .then(response => {
@@ -232,7 +232,7 @@ function eliminarUsuario(usuarioId) {
 }
 
 function obtenerDetallesUsuario2(userId) {
-    fetch(`http://127.0.0.1:8000/api/user/${userId}`, {
+    fetch(`https://bloodprueba.up.railway.app/api/user/${userId}`, {
         method: 'GET'
     })
     .then(response => {
@@ -608,7 +608,7 @@ function verificarCampos() {
         };
 
         // Realizar la solicitud POST a la API
-        fetch('http://127.0.0.1:8000/api/register', {
+        fetch('https://bloodprueba.up.railway.app/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -773,7 +773,7 @@ function verificarCamposEdit() {
           donator:donadorValue
         };
 
-          fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
+          fetch('https://bloodprueba.up.railway.app/api/users/' + usuarioSeleccionadoId, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

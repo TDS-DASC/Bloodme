@@ -84,7 +84,7 @@
     };
 
     function cargarYMostrarUnidades() {
-        fetch('http://127.0.0.1:8000/api/medunits/')
+        fetch('https://bloodprueba.up.railway.app/api/medunits/')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al obtener la lista de unidades médicas. Código de estado: ' + response.status);
@@ -134,7 +134,7 @@
 let unidadMedicaSeleccionadaId = null;
 
 function obtenerDetallesUnidad(unitId) {
-    fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`, {
+    fetch(`https://bloodprueba.up.railway.app/api/medunit/${unitId}`, {
         method: 'GET'
     })
     .then(response => {
@@ -177,7 +177,7 @@ function editarUnidadMedica(unitId) {
 //detalles
 
 function obtenerDetallesUnidad2(unitId) {
-    fetch(`http://127.0.0.1:8000/api/medunit/${unitId}`, {
+    fetch(`https://bloodprueba.up.railway.app/api/medunit/${unitId}`, {
         method: 'GET'
     })
     .then(response => {
@@ -224,7 +224,7 @@ function editarUnidadMedica(unitId) {
 
 function eliminarUnidad(unitId) {
         if (confirm('¿Estás seguro de que quieres eliminar esta unidad médica?')) {
-            fetch(`http://127.0.0.1:8000/api/medunits/${unitId}`, {
+            fetch(`https://bloodprueba.up.railway.app/api/medunits/${unitId}`, {
                 method: 'DELETE'
             })
             .then(response => {
@@ -613,7 +613,7 @@ function verificarCamposMedicalUnits() {
     };
 
     // Realizar la solicitud POST a la API de unidades médicas
-    fetch('http://127.0.0.1:8000/api/medunit/', {
+    fetch('https://bloodprueba.up.railway.app/api/medunit/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -748,7 +748,7 @@ function verificarCamposEditMedicalUnits() {
     };
 
     // Realizar la solicitud PUT a la API de unidades médicas
-    fetch('http://127.0.0.1:8000/api/medunits/' + unidadMedicaSeleccionadaId, {
+    fetch('https://bloodprueba.up.railway.app/api/medunits/' + unidadMedicaSeleccionadaId, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
