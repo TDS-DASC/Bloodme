@@ -20,7 +20,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>PROXIMAMENTE </title>
+    <title>Administrador | citas</title>
 
     
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
@@ -79,140 +79,459 @@
 
 
 <script>
-        window.onload = function () {
-    cargarYMostrarCampanas();
-};
-
-function cargarYMostrarCampanas() {
-    fetch('http://127.0.0.1:8000/api/campaigns/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al obtener la lista de campañas. Código de estado: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.Campaigns && Array.isArray(data.Campaigns)) {
-                renderizarTablaCampanas(data.Campaigns);
-            } else {
-                throw new Error('Formato de respuesta inesperado. Se esperaba un campo "Campaigns" de tipo array.');
-            }
-        })
-        .catch(error => {
-            console.error('Error al cargar campañas:', error);
-        });
-}
-function renderizarTablaCampanas(campaigns) {
-    var tbody = document.getElementById('tablaCampanasBody');
+ window.onload = function () {
+        cargarYMostrarCitas();
+    };
+    function cargarYMostrarCitas() {
+        fetch('https://bloodprueba.up.railway.app/api/donationsdate/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener la lista de citas. Código de estado: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.donationDates && Array.isArray(data.donationDates)) {
+                    renderizarTablaCitas(data.donationDates);
+                } else {
+                    throw new Error('Formato de respuesta inesperado. Se esperaba un campo "donationDates" de tipo array.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar citas:', error);
+            });
+    }
+    function renderizarTablaCitas(citas) {
+    var tbody = document.getElementById('tablaCitasBody');
     if (!tbody) {
         console.error('Elemento tbody no encontrado.');
         return;
     }
     tbody.innerHTML = '';
 
-    campaigns.forEach(campaign => {
+    citas.forEach(cita => {
         var row = tbody.insertRow();
 
-        var cellNombre = row.insertCell(0);  //Aqui cambiar por el ROW al que le pertenece nombre porque 0 es el ID
-        var cellDescripcion = row.insertCell(1);
-        var cellTipo = row.insertCell(2);
-        var cellFechaInicio = row.insertCell(3);
-        var cellFechaFin = row.insertCell(4);
+        var cellUserId = row.insertCell(0);
+        var cellCampaignId = row.insertCell(1);
+        var cellDateDonation = row.insertCell(2);
+        var cellNombreReceptor = row.insertCell(3);
+        var cellMedicalUnitId = row.insertCell(4);
         var cellAcciones = row.insertCell(5);
 
-        cellNombre.innerText = campaign.id; 
-        cellDescripcion.innerText = 'N/A'; 
-        cellTipo.innerText = campaign.blood === 1 ? 'Sangre' : 'Plaquetas'; 
-        cellFechaInicio.innerText = campaign.start_campaign;
-        cellFechaFin.innerText = campaign.end_campaign || 'N/A'; 
+        cellUserId.innerText = cita.user_id || 'N/A';
+        cellCampaignId.innerText = cita.campaign_id || 'N/A';
+        cellDateDonation.innerText = cita.date_donation || 'N/A';
+        cellNombreReceptor.innerText = cita.nombre_receptor || 'N/A';
+        cellMedicalUnitId.innerText = cita.medical_unit_id || 'N/A';
 
         cellAcciones.innerHTML = `
-        <button type="button" class="btn btn-primary" onclick="obtenerDetallesCampana(${campaign.id})">Editar</button>
-        <button type="button" class="btn btn-danger" onclick="eliminarCampana('${campaign.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+            <button type="button" class="btn btn-secondary" onclick="obtenerDetalles(${cita.id})">Detalles</button>
+            <button type="button" class="btn btn-primary" onclick="obtenerDetallesCita(${cita.id})">Editar</button>
+            <button type="button" class="btn btn-danger" onclick="eliminarCita('${cita.id}')">Eliminar</button>`;
     });
+
 }
+
+// Función para cargar dinámicamente las opciones de campañas
+function cargarOpcionesCampañas() {
+    fetch('https://bloodprueba.up.railway.app/api/campaigns')
+        .then(response => response.json())
+        .then(data => {
+            var selectCampaña = document.getElementById('add-idCampaña');
+            selectCampaña.innerHTML = '<option selected disabled value="">Opciones...</option>';
+            
+            // Verificar si "Campaigns" existe y es un arreglo
+            if (data.Campaigns && Array.isArray(data.Campaigns)) {
+                data.Campaigns.forEach(campaign => {
+                    var option = document.createElement('option');
+                    option.value = campaign.id;
+                    option.textContent = campaign.id;
+                    selectCampaña.appendChild(option);
+                });
+            } else {
+                console.error('Error: La lista de campañas no es válida.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener la lista de campañas:', error);
+        });
+}
+
+// Función para cargar dinámicamente las opciones de unidades médicas
+function cargarOpcionesUnidadesMedicas() {
+    fetch('https://bloodprueba.up.railway.app/api/medunits/')
+        .then(response => response.json())
+        .then(data => {
+            var selectUnidad = document.getElementById('add-idUnidad');
+            selectUnidad.innerHTML = '<option selected disabled value="">Opciones...</option>';
+            
+            // Verificar si "MedicalUnits" existe y es un arreglo
+            if (data.MedicalUnits && Array.isArray(data.MedicalUnits)) {
+                data.MedicalUnits.forEach(unit => {
+                    var option = document.createElement('option');
+                    option.value = unit.id;
+                    option.textContent = unit.id;
+                    selectUnidad.appendChild(option);
+                });
+            } else {
+                console.error('Error: La lista de unidades médicas no es válida.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener la lista de unidades médicas:', error);
+        });
+}
+
+// Llamadas a las funciones de carga al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    cargarOpcionesCampañas();
+    cargarOpcionesUnidadesMedicas();
+});
 
 let usuarioSeleccionadoId = null;
 
-function obtenerDetallesCampana(campaignId) {
-    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
+function obtenerDetallesCita(citaId) {
+    fetch(`https://bloodprueba.up.railway.app/api/donationdate/${citaId}`, {
         method: 'GET'
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
+            throw new Error(`Error al obtener los detalles de la cita. Código de estado: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
         console.log('Respuesta completa de la API:', data);
 
-        // Modifica esta parte según la estructura real de tu respuesta
-        const campaign = data.Campaign || {};
-        const campaignId = campaign.id || '';
-        const campaignStartDate = campaign.start_campaign || '';
-        const campaignEndDate = campaign.end_campaign || '';
+        const cita = data.donationDate || {};
+        const citaId = cita.id || '';
+        const citaFechaInicio = cita.date_donation || '';
 
-        if (campaignId && campaignStartDate) {
-            // Almacena el ID de la campaña seleccionada globalmente
-            campaignSeleccionadaId = campaignId;
+        if (citaId && citaFechaInicio) {
+            // Almacena el ID de la cita seleccionada globalmente
+            citaSeleccionadaId = citaId;
 
             // Rellenar campos del formulario de edición
-            document.getElementById('edit-IdCampaña').value = campaignId;
-            document.getElementById('edit-FechaInicioCampaña').value = campaignStartDate;
-            document.getElementById('edit-FechaFinCampaña').value = campaignEndDate || '';
+            document.getElementById('edit-IdCita').value = citaId;
+            document.getElementById('edit-FechaInicioCita').value = citaFechaInicio;
 
             // Mostrar el modal de edición
-            var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
-            offcanvasEditCampaign.show();
+            var offcanvasEditCita = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCita'));
+            offcanvasEditCita.show();
         } else {
-            throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
+            throw new Error('Formato de respuesta inesperado. Datos incompletos de la cita.');
         }
     })
     .catch(error => {
-        console.error('Error al obtener los detalles de la campaña:', error);
-        alert('Error al obtener los detalles de la campaña.');
+        console.error('Error al obtener los detalles de la cita:', error);
+        alert(`Error al obtener los detalles de la cita. Detalles: ${error.message}`);
+    });
+}
+
+var elementoIdCita = document.getElementById('detalles-idCita');
+if (elementoIdCita) {
+    elementoIdCita.value = citaId;
+}
+function obtenerDetalles(citaId) {
+  fetch(`https://bloodprueba.up.railway.app/api/donationdate/${citaId}`, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al obtener los detalles de la cita. Código de estado: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const cita = data.donationDate || {};
+        const citaId = cita.id || '';
+        const userId = cita.user_id || '';
+        const campaignId = cita.campaign_id || '';
+        const fechaDonacion = cita.date_donation || '';
+        const nombreReceptor = cita.nombre_receptor || '';
+        const medicalUnitId = cita.medical_unit_id || '';
+        if (citaId) {
+            document.getElementById('detalles-idCita').value = citaId;
+            document.getElementById('detalles-userId').value = userId;
+            document.getElementById('detalles-campaignId').value = campaignId;
+            document.getElementById('detalles-fechaDonacion').value = fechaDonacion;
+            document.getElementById('detalles-nombreReceptor').value = nombreReceptor;
+            document.getElementById('detalles-medicalUnitId').value = medicalUnitId;
+            var offcanvasDetallesCita = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesCita'));
+            offcanvasDetallesCita.show();
+        } else {
+            throw new Error('Formato de respuesta inesperado. Datos incompletos de la cita.');
+        }
+    })
+    .catch(error => {
+    console.error('Error al obtener los detalles de la cita:', error);
+    alert('Error al obtener los detalles de la cita. Detalles: ' + error.message);
     });
 }
 
 
 
 
-// Función para abrir el modal de edición al hacer clic en el botón de editar
-function editarCampana(campaignId) {
-    ObtenerDetallesCampana(campaignId);
+
+//EDITAR
+
+function editarCita() {
+    // Obtener valores de los campos
+    var nuevaFechaDonacion = document.getElementById('edit-FechaInicioCita').value;
+
+    // Validar que se haya seleccionado una cita
+    if (!citaSeleccionadaId) {
+        alert('Error: No se ha seleccionado una cita para editar.');
+        return;
+    }
+
+    // Realizar la solicitud PUT a la API para actualizar la fecha de donación
+    fetch(`https://bloodprueba.up.railway.app/api/donationsdate/${citaSeleccionadaId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ date_donation: nuevaFechaDonacion })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al actualizar la fecha de donación. Código de estado: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // La respuesta exitosa del servidor
+        console.log('Respuesta del servidor:', data);
+
+        alert('Fecha de donación actualizada exitosamente.');
+
+        // Cerrar el modal de edición
+        var offcanvasEditCita = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCita'));
+        offcanvasEditCita.hide();
+    })
+    .catch(error => {
+        // Manejar errores en la solicitud
+        console.error('Error al procesar la solicitud:', error);
+        alert('Error al actualizar la fecha de donación. Detalles: ' + error.message);
+    });
 }
 
-// Asigna el evento de clic al botón de editar para abrir el modal de edición
-  document.getElementById('btnEdit').addEventListener('click', function() {
-        console.log("Soy el botón editar");
-        verificarCamposEdit();
-    });
+function verificarCamposCitas() {
+    var formulario = document.getElementById('addNewCampaignForm');
+    if (!formulario.checkValidity()) {
+        formulario.reportValidity();
+        return;
+    }
 
-    function eliminarUsuario(usuarioId) {
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
-            method: 'DELETE'
-        })
+    // Obtener valores de los campos
+    var idCampaña = document.getElementById('add-idCampaña').value;
+    var nuevaFechaDonacion = document.getElementById('add-fechaDonacion').value;
+
+    // Realizar la solicitud para obtener los datos de la campaña
+    fetch(`https://bloodprueba.up.railway.app/api/campaign/${idCampaña}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
+                throw new Error('Error al obtener detalles de la campaña. Código de estado: ' + response.status);
             }
             return response.json();
         })
         .then(data => {
-            console.log('Usuario eliminado exitosamente:', data);
+            if (data.Campaign && data.Campaign.start_campaign && data.Campaign.end_campaign) {
+                var startCampaign = new Date(data.Campaign.start_campaign);
+                var endCampaign = new Date(data.Campaign.end_campaign);
 
-            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
-            cargarYMostrarCampanas();
+                // Validar si la nueva fecha de donación está fuera del rango de la campaña
+                if (nuevaFechaDonacion < startCampaign || nuevaFechaDonacion > endCampaign) {
+                    document.getElementById('mensajeErrorFechaAdd').textContent = 'La fecha de donación debe estar dentro del rango de la campaña.';
+                } else {
+                    // Si la validación pasa, puedes ejecutar la lógica para agregar la cita
+                    agregarCita();
+                }
+            } else {
+                throw new Error('La estructura de la respuesta de la API no es la esperada.');
+            }
         })
         .catch(error => {
-            console.error('Error al eliminar el usuario:', error);
-            alert('Error al eliminar el usuario.');
+            console.error('Error al obtener detalles de la campaña:', error);
+            document.getElementById('mensajeErrorFechaAdd').textContent = 'Error al obtener detalles de la campaña.';
+        });
+}
+
+
+function validarFechaAñadir() {
+    var fechaInicioInput = document.getElementById('add-fechaDonacion');
+    var mensajeErrorFechaAdd = document.getElementById('mensajeErrorFechaAdd');
+
+    // Obtener la fecha actual
+    var fechaActual = new Date();
+
+    // Obtener la fecha de donación ingresada por el usuario
+    var nuevaFechaDonacion = new Date(fechaInicioInput.value);
+
+    // Calcular la fecha que está 6 meses en el futuro
+    var seisMesesEnElFuturo = new Date();
+    seisMesesEnElFuturo.setMonth(seisMesesEnElFuturo.getMonth() + 6);
+
+    // Calcular la fecha de ayer
+    var ayer = new Date();
+    ayer.setDate(ayer.getDate() - 1);
+
+    // Restablecer el mensaje de error
+    mensajeErrorFechaAdd.textContent = '';
+
+    // Validar si la nueva fecha de donación está entre ayer y 6 meses en el futuro
+    if (nuevaFechaDonacion < ayer || nuevaFechaDonacion > seisMesesEnElFuturo) {
+        document.getElementById('btnAddCampaign').disabled = true;
+    } else {
+        // Habilitar el botón si la fecha es válida
+        document.getElementById('btnAddCampaign').disabled = false;
+    }
+}
+
+
+
+
+// Función auxiliar para obtener la fecha actual más 6 meses
+function seisMesesEnElFuturo() {
+    var fecha = new Date();
+    fecha.setMonth(fecha.getMonth() + 6);
+    return fecha;
+}
+
+function validarFechaEdicion() {
+    var fechaInicioInput = document.getElementById('edit-FechaInicioCita');
+    var mensajeErrorFechaEdit = document.getElementById('mensajeErrorFechaEdit');
+
+    // Obtener el ID de la cita seleccionada
+    var citaId = document.getElementById('edit-IdCita').value;
+
+    // Realizar la solicitud para obtener los detalles de la cita vinculada
+    fetch(`https://bloodprueba.up.railway.app/api/donationdate/${citaId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener los detalles de la cita. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Respuesta de la API al obtener detalles de la cita:', data);
+
+            // Verificar si la estructura de la respuesta es como se espera
+            if (data.donationDate && data.donationDate.campaign_id) {
+                // Obtener la ID de la campaña vinculada
+                var campaignId = data.donationDate.campaign_id;
+
+                // Realizar la solicitud para obtener los detalles de la campaña
+                return fetch(`https://bloodprueba.up.railway.app/api/campaign/${campaignId}`);
+            } else {
+                console.error('La estructura de la respuesta de la API no es la esperada:', data);
+                mensajeErrorFechaEdit.textContent = 'Error al obtener detalles de la cita. La respuesta de la API no tiene la estructura esperada.';
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener detalles de la campaña. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(campaignData => {
+            // Obtener la fecha de inicio y fin de la campaña vinculada
+            var startCampaign = new Date(campaignData.Campaign.start_campaign);
+            var endCampaign = new Date(campaignData.Campaign.end_campaign);
+
+            // Obtener la fecha de donación ingresada por el usuario
+            var nuevaFechaDonacion = fechaInicioInput.valueAsDate;
+            console.log('Fecha de donación ingresada:', nuevaFechaDonacion);
+
+            // Restablecer el mensaje de error
+            mensajeErrorFechaEdit.textContent = '';
+
+            // Validar si la nueva fecha de donación está fuera del rango de la campaña
+            if (nuevaFechaDonacion < startCampaign || nuevaFechaDonacion > endCampaign) {
+                mensajeErrorFechaEdit.textContent = 'La fecha de donación debe estar dentro del rango de la campaña.';
+                document.getElementById('btnEditCita').disabled = true;
+            } else {
+                // Habilitar el botón si la fecha es válida
+                document.getElementById('btnEditCita').disabled = false;
+            }
+        })
+        .catch(error => {
+            // Manejar errores en la solicitud
+            console.error('Error al obtener detalles de la cita o la campaña:', error);
+            mensajeErrorFechaEdit.textContent = 'Error al obtener detalles de la cita o la campaña.';
+        });
+}
+
+
+
+
+
+var citaSeleccionadaId;
+
+// Función para abrir el modal de edición y obtener detalles de la cita
+function editarCitaModal(citaId) {
+    // Almacena el ID de la cita seleccionada globalmente
+    citaSeleccionadaId = citaId;
+
+    // Implementa la lógica para obtener los detalles de la cita según el ID
+    obtenerDetallesCita(citaId);
+
+    // Muestra el modal de edición
+    var offcanvasEditCita = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCita'));
+    offcanvasEditCita.show();
+}
+
+
+  // FUNCION ELIMINAR CITA
+function eliminarCita(citaId) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta cita?')) {
+        fetch(`https://bloodprueba.up.railway.app/api/donationsdate/${citaId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al eliminar la cita. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Cita eliminada exitosamente:', data);
+            cargarYMostrarCitas(); // Vuelve a cargar y mostrar la lista de citas después de la eliminación
+        })
+        .catch(error => {
+            console.error('Error al eliminar la cita:', error);
+            alert('Error al eliminar la cita.');
         });
     }
 }
 </script>
+
+<style>
+  #offcanvasAddCampaign{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 390px;
+  }
+
+  #offcanvasEditCita{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 320px;
+  }
+
+  #offcanvasDetallesCita{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 380px;
+  }
+</style>
     
 </head>
 
@@ -272,11 +591,7 @@ function editarCampana(campaignId) {
       </a>
     </ul>
 
-    <ul style="margin-left: 12px; margin-top:20px">
-      <a href="{{ route('adminDonantesRutas') }}" class="menu-link">
-      <span class="menu-header-text">Administrar Donantes</span>
-      </a>
-    </ul>
+ 
 
     <ul style="margin-left: 12px; margin-top:20px">
       <a href="{{ route('adminCitasRutas') }}" class="menu-link">
@@ -329,7 +644,7 @@ function editarCampana(campaignId) {
         <!-- HEADER -->
         <div class="navbar-nav align-items-center">
           <div class="nav-item navbar-search-wrapper mb-0">
-              <span class="d-none d-md-inline-block text-muted">ADMINISTRAR USUARIOS</span>
+              <span class="d-none d-md-inline-block text-muted">ADMINISTRAR CITAS</span>
             </a>
           </div>
         </div>
@@ -452,21 +767,25 @@ function editarCampana(campaignId) {
     }
 
     function validarCurp() {
-    var curpInput = document.getElementById('add-curp');
+    var curpInput = document.getElementById('add-curpDonante');
     var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
     // Expresión regular para permitir solo letras sin acentos y números
     var regexCurp = /^[A-Za-z0-9]+$/;
 
-    // Verificar la longitud del CURP
+    // Verificar la longitud del CURP y el formato
     if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
         mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
         curpInput.classList.add('is-invalid');
     } else {
-        mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+        // Limpiar el mensaje de error si la longitud y formato son correctos
+        mensajeErrorCurp.innerText = '';
         curpInput.classList.remove('is-invalid');
+
+        // Convertir el CURP a mayúsculas
+        curpInput.value = curpInput.value.toUpperCase();
     }
-  }
+}
 
     function validarCorreoElectronico() {
         var inputCorreo = document.getElementById('add-correoElectronico');
@@ -495,118 +814,136 @@ function editarCampana(campaignId) {
             contrasenaInput.classList.remove('is-invalid');
         }
     }
-    function validarFechaNacimiento() {
-    var fechaInput = document.getElementById('html5-date-input');
-    var mensajeErrorFecha = document.getElementById('mensajeErrorFecha');
-    var fechaArray = fechaInput.value.split('-');
-    if (fechaArray.length === 3 && fechaArray[0].length > 4) {
-        fechaArray[0] = fechaArray[0].substring(0, 4);
-        fechaInput.value = fechaArray.join('-');
+
+
+function verificarCamposCitas() {
+    var formulario = document.getElementById('addNewCampaignForm');
+    if (!formulario.checkValidity()) {
+        formulario.reportValidity();
+        return;
     }
 
-    var fechaSeleccionada = new Date(fechaInput.value);
-    var fechaMinima = new Date('1900-01-01');
-    var fechaMaxima = new Date('2023-11-27');
+    // Obtener valores de los campos
+    var curpDonante = document.getElementById('add-curpDonante').value;
+    var fechaDonacion = document.getElementById('add-fechaDonacion').value;
+    var idCampaña = document.getElementById('add-idCampaña').value;
+    var idUnidad = document.getElementById('add-idUnidad').value;
 
-    if (fechaSeleccionada < fechaMinima || fechaSeleccionada > fechaMaxima) {
-        mensajeErrorFecha.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
-        fechaInput.classList.add('is-invalid');
-    } else {
-        mensajeErrorFecha.innerText = '';
-        fechaInput.classList.remove('is-invalid');
+    // Validar que los campos obligatorios no estén vacíos
+    if (!curpDonante || !idCampaña || !idUnidad) {
+        alert('Por favor, completa todos los campos obligatorios.');
+        return;
     }
-}
 
-function verificarCampos() {
-        var formulario = document.getElementById('addNewUserForm');
-        if (!formulario.checkValidity()) {
-            formulario.reportValidity();
-            return;
-        }
+    // Declarar la variable receptorNombre
+    var receptorNombre;
 
-        // Obtener valores de los campos
-        var nombres = document.getElementById('add-Nombres').value;
-        var apellidos = document.getElementById('add-Apellidos').value;
-        var correoElectronico = document.getElementById('add-correoElectronico').value;
-        var contrasena = document.getElementById('add-contrasena').value;
-        var tipoSangre = document.getElementById('add-tipoSangre').value;
-        var curp = document.getElementById('add-curp').value;
-        var fechaNacimiento = document.getElementById('html5-date-input').value;
-        var genero = document.getElementById('add-genero').value;
-       
-        var donador = document.getElementById('add-donador').value;
-        var donadorValue = donador === 'Si' ? 1 : 0;
+    // Realizar la solicitud para obtener los datos de la campaña
+    var campaignEndpoint = 'https://bloodprueba.up.railway.app/api/campaign/' + idCampaña;
+    fetch(campaignEndpoint)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener datos de la campaña. Código de estado: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.Campaign && data.Campaign.user_id) {
+                // Se obtuvo el ID del usuario (receptor) desde la API de la campaña
+                var receptorId = data.Campaign.user_id;
 
-        
-        // Crear objeto de datos para enviar al servidor
-        var userData = {
-            name: nombres,
-            last_name: apellidos,
-            email: correoElectronico,
-            password: contrasena,
-            blood_type: tipoSangre,
-            curp: curp,
-            birthdate: fechaNacimiento,
-            gender: genero,
-            donator: donadorValue
-        };
-
-        // Realizar la solicitud POST a la API
-        fetch('http://127.0.0.1:8000/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
+                // Realizar la solicitud para obtener el nombre del receptor
+                var userEndpoint = 'https://bloodprueba.up.railway.app/api/user/' + receptorId;
+                return fetch(userEndpoint);
+            } else {
+                // La respuesta de la campaña no incluyó el ID del usuario (receptor)
+                throw new Error('La respuesta de la campaña no incluyó el ID del usuario (receptor).');
+            }
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
+                throw new Error('Error al obtener datos del usuario (receptor). Código de estado: ' + response.status);
             }
-            return response.json(); 
+            return response.json();
+        })
+        .then(data => {
+            if (data.user && data.user.name) {
+                // Se obtuvo el nombre del receptor desde la API de usuarios
+                receptorNombre = data.user.name;
+
+                // Realizar la solicitud para obtener el ID del donante a través de la API
+                var curpDonanteEndpoint = 'https://bloodprueba.up.railway.app/api/users/curp/' + curpDonante;
+                return fetch(curpDonanteEndpoint);
+            } else {
+                // La respuesta de la API de usuarios no incluyó el nombre del receptor
+                throw new Error('La respuesta de la API de usuarios no incluyó el nombre del receptor.');
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener datos del donante. Código de estado: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.users && data.users.length > 0) {
+                // Se encontró al menos un usuario con el CURP del donante
+                var donanteId = data.users[0].id;
+
+                // Crear objeto de datos para enviar al servidor
+                var citaData = {
+                    user_id: donanteId,
+                    campaign_id: idCampaña,
+                    date_donation: fechaDonacion,
+                    medical_unit_id: idUnidad,
+                    nombre_receptor: receptorNombre  // Utilizando el nombre obtenido del receptor
+                };
+
+                // Imprimir el objeto JSON en la consola
+                console.log('Objeto JSON a enviar:', citaData);
+
+                // Realizar la solicitud POST a la API de citas
+                return fetch('https://bloodprueba.up.railway.app/api/donationdate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(citaData)
+                });
+            } else {
+                // No se encontraron usuarios con el CURP del donante
+                throw new Error('No se encontró un usuario con el CURP del donante proporcionado.');
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al agregar la cita. Código de estado: ' + response.status);
+            }
+            return response.json();
         })
         .then(data => {
             // La respuesta exitosa del servidor
             console.log('Respuesta del servidor:', data);
 
-            var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
+            alert('Cita creada exitosamente.');
+
+            // Restablecer valores de los campos a blanco
+            document.getElementById('add-curpDonante').value = '';
+            document.getElementById('add-fechaDonacion').value = '';
+            document.getElementById('add-idCampaña').value = '';
+            document.getElementById('add-idUnidad').value = '';
+
             offcanvasAddCampaign.hide();
-
-            
-            setTimeout(function() {
-                alert('Usuario creado exitosamente.');
-
-                 // Restablecer valores de los campos a blanco
-        document.getElementById('add-Nombres').value = '';
-        document.getElementById('add-Apellidos').value = '';
-        document.getElementById('add-correoElectronico').value = '';
-        document.getElementById('add-contrasena').value = '';
-        document.getElementById('add-tipoSangre').value = '';
-        document.getElementById('add-curp').value = '';
-        document.getElementById('html5-date-input').value = '';
-        document.getElementById('add-genero').value = '';
-        document.getElementById('add-donador').value = '';
-        
-            }, 300);
         })
         .catch(error => {
-    // Manejar errores en la solicitud
-    console.error('Error en la solicitud:', error);
-    alert('Error al agregar el usuario.');
-
-    // Verificar si hay una respuesta del servidor
-    if (error && error.response && error.response.text) {
-        // Intenta obtener más información sobre la respuesta
-        error.response.text().then(text => {
-            console.error('Contenido de la respuesta:', text);
+            // Manejar errores en la solicitud
+            console.error('Error al procesar la solicitud:', error);
+            alert('Error al agregar la cita. Detalles: ' + error.message);
         });
-    }
-});
+}
 
-        // Cerrar el modal 
-        var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-        offcanvasAddCampaign.hide();
-    }
+
+
 
 
     // -------------------------AQUI TERMINA EL AÑADIR Y COMIENZA EL EDITAR-----------------------------------------
@@ -640,141 +977,46 @@ function verificarCampos() {
     var curpInputEdit = document.getElementById('edit-curp');
     var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
 
-    curpInputEdit.value = curpInputEdit.value.toUpperCase();
+    // Convertir el CURP a mayúsculas
+ 
 
     // Expresión regular para permitir solo letras sin acentos y números
     var regexCurp = /^[A-Z0-9]+$/;
 
+    // Verificar la longitud del CURP y el formato
     if (curpInputEdit.value.length !== 18 || !regexCurp.test(curpInputEdit.value)) {
         mensajeErrorCurpEdit.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
         curpInputEdit.classList.add('is-invalid');
     } else {
-        mensajeErrorCurpEdit.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
+        // Limpiar el mensaje de error si la longitud y formato son correctos
+        mensajeErrorCurpEdit.innerText = '';
         curpInputEdit.classList.remove('is-invalid');
+        curpInputEdit.value = curpInputEdit.value.toUpperCase();
     }
 }
 
-function validarFechaNacimientoEdit() {
-    function validarFechaNacimientoEdit() {
-        var fechaInputEdit = document.getElementById('edit-html5-date-input');
-        var mensajeErrorFechaEdit = document.getElementById('mensajeErrorFechaEdit');
-        var fechaArrayEdit = fechaInputEdit.value.split('-');
-        if (fechaArrayEdit.length === 3 && fechaArrayEdit[0].length > 4) {
-            fechaArrayEdit[0] = fechaArrayEdit[0].substring(0, 4);
-            fechaInputEdit.value = fechaArrayEdit.join('-');
-        }
 
-        // Verifica si la fecha está dentro del rango deseado
-        var fechaSeleccionadaEdit = new Date(fechaInputEdit.value);
-        var fechaMinimaEdit = new Date('1900-01-01');
-        var fechaMaximaEdit = new Date('2023-12-31');
-
-        if (fechaSeleccionadaEdit < fechaMinimaEdit || fechaSeleccionadaEdit > fechaMaximaEdit) {
-            mensajeErrorFechaEdit.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
-            fechaInputEdit.classList.add('is-invalid');
-        } else {
-            mensajeErrorFechaEdit.innerText = '';
-            fechaInputEdit.classList.remove('is-invalid');
-        }
-    }
-}
-
-function verificarCamposEdit() {
-        // Obtener el formulario
-        var formulario = document.getElementById('editUserForm');
-
-        // Verificar la validez del formulario
-        if (!formulario.checkValidity()) {
-            // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
-            formulario.reportValidity();
-            return;
-        }
-
-        // Obtener valores de los campos
-        var nombres = document.getElementById('edit-Nombres').value;
-        var apellidos = document.getElementById('edit-Apellidos').value;
-        var correoElectronico = document.getElementById('edit-correoElectronico').value;
-        var contrasena = document.getElementById('edit-contrasena').value;
-        var tipoSangre = document.getElementById('edit-tipoSangre').value;
-        var curp = document.getElementById('edit-curp').value;
-        var fechaNacimiento = document.getElementById('edit-html5-date-input').value;
-        var genero = document.getElementById('edit-genero').value;
-        var donador = document.getElementById('edit-donador').value;
-        var donadorValue = donador === 'Si' ? 1 : 0;
-       
-
-        // Crear objeto de datos para enviar al servidor
-        var editedUserData = {
-          name: nombres,
-          last_name: apellidos,
-          email: correoElectronico,
-          password: contrasena,
-          blood_type: tipoSangre,
-          curp: curp,
-          birthdate: fechaNacimiento,
-          gender: genero,
-          donator:donadorValue
-        };
-
-          fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(editedUserData)
-          })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
-        }
-        return response.json(); 
-    })
-    .then(data => {
-        console.log('Respuesta del servidor:', data);
-
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-        offcanvasEditUser.hide();
-        setTimeout(function() {
-            alert('Usuario editado exitosamente.');
-
-        }, 300);
-       
-    })
-    .catch(error => {
-        console.error('Error en la solicitud de edición:', error);
-        alert('Error al editar el usuario.');
-
-        if (error && error.response && error.response.text) {
-            // Intenta obtener más información sobre la respuesta
-            error.response.text().then(text => {
-                console.error('Contenido de la respuesta:', text);
-            });
-        }
-    });
-    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
-    offcanvasEditUser.hide();
-}
 </script>
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-      <h4>PROXIMAMENTE </h4>
-      <button type="button" class="btn btn-secondary" id="btnAddCampaign">Añadir</button>
+      <h4>Lista de citas</h4>
+      <button type="button" class="btn btn-success" id="btnAddCampaignModal">Añadir</button>
   </div>
 
   <div class="table-responsive text-nowrap">
       <table class="table">
           <thead class="table-light">
               <tr>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Tipo</th>
-                  <th>Fecha de Inicio</th>
-                  <th>Fecha de Fin</th>
+                  <th>ID Usuario</th>
+                  <th>ID Campaña</th>
+                  <th>Fecha de Donación</th>
+                  <th>Nombre del Receptor</th>
+                  <th>ID Unidad Médica</th>
                   <th>Acciones</th>
               </tr>
           </thead>
-          <!-- Asegúrate de tener un tbody con el ID 'tablaCampanasBody' -->
-          <tbody class="table-border-bottom-0" id="tablaCampanasBody">
+          <!-- Asegúrate de tener un tbody con el ID 'tablaCitasBody' -->
+          <tbody class="table-border-bottom-0" id="tablaCitasBody">
               <!-- Aquí puedes tener filas predefinidas si lo deseas -->
           </tbody>
       </table>
@@ -783,142 +1025,157 @@ function verificarCamposEdit() {
 <!-- Bootstrap Table with Header - Light -->
 
 
+<!-- Modal Editar Cita -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditCita" aria-labelledby="offcanvasEditCitaLabel">
+  <div class="offcanvas-header">
+      <h5 id="offcanvasEditCitaLabel" class="offcanvas-title">Editar Cita</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
 
-<!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
+  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+      <form class="edit-cita pt-0" id="editCitaForm" onsubmit="return false">
+
+          <div class="mb-3">
+              <label class="form-label" for="edit-IdCita">ID de la Cita</label>
+              <input type="text" id="edit-IdCita" class="form-control" placeholder="ID de la Cita" aria-label="ID de la Cita" readonly />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="edit-FechaInicioCita">Fecha de Donación</label>
+            <div class="col-md-10">
+                <input class="form-control" type="date" value="" id="edit-FechaInicioCita" onchange="validarFechaEdicion()" />
+                <div id="mensajeErrorFechaEdit" style="color: red;"></div>
+            </div>
+        </div>
+
+          <div class="d-flex justify-content-center">
+            <button type="submit" id="btnEditCita" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="editarCita()">Guardar Cambios</button>
+            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+          </div>
+      </form>
+  </div>
+</div>
+<!-- Modal Añadir Citas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
     <div class="offcanvas-header">
-        <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
+        <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Añadir Cita</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-        <form class="edit-user pt-0" id="editUserForm" onsubmit="return false">
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-Nombres">Nombres</label>
-                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
-                <div id="mensajeErrorLetrasNombresEdit" style="color: red;"></div>
+        <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="add-idCampaña">Id de la campaña</label>
+                    <select id="add-idCampaña" class="form-select">
+                        <option selected disabled value="">Opciones...</option>
+                        <!-- Opciones de campañas se cargarán dinámicamente aquí -->
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="add-idUnidad">Id de la unidad médica</label>
+                    <select id="add-idUnidad" class="form-select">
+                        <option selected disabled value="">Opciones...</option>
+                        <!-- Opciones de unidades médicas se cargarán dinámicamente aquí -->
+                    </select>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label" for="edit-Apellidos">Apellidos</label>
-                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)"  />
-                <div id="mensajeErrorLetrasApellidosEdit" style="color: red;"></div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label" for="add-fechaDonacion">Fecha de la donación</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="date" value="" id="add-fechaDonacion" min="2023-12-01" max="2024-01-01" onchange="validarFechaAñadir()" />
+                        <div id="mensajeErrorFechaAdd" style="color: red;"></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
-              <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronicoEdit()" />
-              <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
-          </div>
-          
-            <div class="mb-3">
-              <label class="form-label" for="edit-contrasena">Contraseña</label>
-              <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
-              <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
+            <!-- Nuevo campo para el CURP del donante -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label" for="add-curpDonante">CURP del Donante</label>
+                    <input type="text" id="add-curpDonante" class="form-control" placeholder="Escribir el CURP del donante" aria-label="CURP del donante" onblur="validarCurp()" />
+                    <div id="mensajeErrorCurp" style="color: red;"></div>
+                </div>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="edit-html5-date-input"  min='1900-01-01' max='2023-12-31' />
-                  <div id="mensajeErrorFechaEdit" style="color: red;"></div>
-              </div>
+            <div class="row text-center mt-4">
+                <div class="col">
+                    <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCitas()">Confirmar</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-genero">Género</label>
-                <select id="edit-genero" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label" for="edit-curp">CURP</label>
-              <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP"  onblur="validarCurpEdit()" />
-              <div id="mensajeErrorCurpEdit" style="color: red;"></div>
-          </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-tipoSangre">Tipo de Sangre</label>
-                <select id="edit-tipoSangre" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="A+">A+</option>
-                    <option value="O+">O+</option>
-                    <option value="B+">B+</option>
-                    <option value="AB+">AB+</option>
-                    <option value="A-">A-</option>
-                    <option value="O-">O-</option>
-                    <option value="B-">B-</option>
-                    <option value="AB-">AB-</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-donador">Donador</label>
-                <select id="edit-donador" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Si">Si</option>
-                    <option value="No">No</option>
-                </select>
-            </div>
-
-            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
-            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
         </form>
     </div>
 </div>
 
 
-<!-- Modal Añadir Campañas -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
-  <div class="offcanvas-header">
-      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Campaña</h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                      <!-- MODAL DETALLES -->
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesCita" aria-labelledby="offcanvasDetallesCitaLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasDetallesCitaLabel" class="offcanvas-title">Detalles de la Cita</h5>
+        <button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+  
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="detalles-cita pt-0" id="detallesCitaForm" onsubmit="return false">
+            <div class="row">
+                <!-- Columna 1 -->
+                <div class="col-md-6">
+                    <!-- Campo ID de la Cita -->
+                    <div class="mb-3">
+                        <label for="detalles-idCita" class="form-label">ID de la Cita:</label>
+                        <input type="text" class="form-control" id="detalles-idCita" readonly>
+                    </div>
+            
+                    <!-- Campo ID del Usuario -->
+                    <div class="mb-3">
+                        <label for="detalles-userId" class="form-label">ID del Usuario:</label>
+                        <input type="text" class="form-control" id="detalles-userId" readonly>
+                    </div>
+                </div>
+            
+                <!-- Columna 2 -->
+                <div class="col-md-6">
+                    <!-- Campo ID de la Campaña -->
+                    <div class="mb-3">
+                        <label for="detalles-campaignId" class="form-label">ID de la Campaña:</label>
+                        <input type="text" class="form-control" id="detalles-campaignId" readonly>
+                    </div>
+            
+                    <!-- Campo ID de la Unidad Médica -->
+                    <div class="mb-3">
+                        <label for="detalles-medicalUnitId" class="form-label">ID de la Unidad Médica:</label>
+                        <input type="text" class="form-control" id="detalles-medicalUnitId" readonly>
+                    </div>
+                </div>
+            
+                <!-- Campo Fecha de Donación -->
+                <div class="mb-3 col-md-6">
+                    <label for="detalles-fechaDonacion" class="form-label">Fecha de Donación:</label>
+                    <input type="text" class="form-control" id="detalles-fechaDonacion" readonly>
+                </div>
+            
+                <!-- Campo Nombre del Receptor -->
+                <div class="mb-3 col-md-6">
+                    <label for="detalles-nombreReceptor" class="form-label">Nombre del Receptor:</label>
+                    <input type="text" class="form-control" id="detalles-nombreReceptor" readonly>
+                </div>
+            </div>
+            
+  
+            <!-- Botón para cerrar el modal -->
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
   </div>
-
-  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-      <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
-
-          <div class="mb-3">
-              <label class="form-label" for="add-nombreCampaña">Nombre de la Campaña</label>
-              <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribir Nombre de la Campaña" aria-label="Nombre de la Campaña" />
-          </div>
-
-          <div class="mb-3">
-              <label class="form-label" for="add-descripcionCampaña">Descripción de la Campaña</label>
-              <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Descripción de la Campaña" aria-label="Descripción de la Campaña" />
-          </div>
-
-          <div class="mb-3">
-              <label class="form-label" for="add-tipoCampaña">Tipo de Campaña</label>
-              <select id="add-tipoCampaña" class="form-select">
-                  <option selected disabled value="">Opciones...</option>
-                  <option value="Plaquetas">Plaquetas</option>
-                  <option value="Sangre">Sangre</option>
-              </select>
-          </div>
-
-          <div class="mb-3">
-              <label class="form-label" for="add-fechaInicio">Fecha de Inicio</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" />
-              </div>
-          </div>
-
-          <div class="mb-3">
-              <label class="form-label" for="add-donacionesRequeridas">Donaciones Requeridas</label>
-              <input type="number" id="add-donacionesRequeridas" class="form-control" placeholder="Número de Donaciones Requeridas" aria-label="Donaciones Requeridas" />
-          </div>
-
-          <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
-      </form>
-  </div>
-</div>
-
                       <!-- / Content -->
 
           
@@ -998,7 +1255,7 @@ function verificarCamposEdit() {
 
 
   <script>
-  var btnAddCampaign = document.getElementById('btnAddCampaign');
+  var btnAddCampaign = document.getElementById('btnAddCampaignModal');
   var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
   btnAddCampaign.addEventListener('click', function () {
     offcanvasAddCampaign.show();

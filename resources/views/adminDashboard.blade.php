@@ -65,7 +65,18 @@
     <!-- Page CSS -->
     
     <!--jquery-->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Incluir date-fns (para manejar fechas) -->
+<script src="https://cdn.skypack.dev/date-fns@2.22.1"></script>
+
+<!-- Incluir flatpickr (para el selector de fechas) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+<!--fontawesome-->
+<script src="https://kit.fontawesome.com/675de417d6.js" crossorigin="anonymous"></script>
+
+
 
 
    
@@ -134,11 +145,6 @@
       </a>
     </ul>
 
-    <ul style="margin-left: 12px; margin-top:20px">
-      <a href="{{ route('adminDonantesRutas') }}" class="menu-link">
-      <span class="menu-header-text">Administrar Donantes</span>
-      </a>
-    </ul>
 
     <ul style="margin-left: 12px; margin-top:20px">
       <a href="{{ route('adminCitasRutas') }}" class="menu-link">
@@ -157,9 +163,7 @@
       <span class="menu-header-text">Administrar Unidades Medicas</span>
       </a>
     </ul>
-  
-    
-    
+
    <!-- FIN NAVBAR-->
 
 
@@ -258,12 +262,97 @@
         
           <div class="container-xxl flex-grow-1 container-p-y">
             
-            
-<div class="row">
+<div class="d-flex flex-direction-row ">
+  <div class="w-40">
+    <div class="row" style="margin-left: 50%">
+      <div style="margin-left: 5%">
+        <div id="calendarioContainer" class="col-6 mt-5"></div>
+        <div class="puntito"></div>
+        <p style="display: inline-block; margin-top: 15px;">Día con citas</p>
+      </div>
+    </div>
+  </div>
+  <div style="margin-left: 30%">
+    <div class="row">
+      <div class="col-xl-3 col-md-4 col-6 mb-4 w-50">
+        <div class="card h-100 d-flex flex-column">
+          <div class="card-header pb-0">
+            <h5 class="card-title mb-0">Usuarios</h5>
+            <small class="text-muted">Número de usuarios</small>
+          </div>
+          <div id="salesLastYear"></div>
+          <div class="card-body pt-0">
+            <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+              <h4 class="mb-0">
+                <i class="fa-solid fa-user"></i>
+                <span id="usuariosDiv"></span>
+              </h4>
+              <small class="text-danger"></small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-4 col-6 mb-4 w-50">
+        <div class="card h-100 d-flex flex-column">
+            <div class="card-header pb-0">
+                <h5 class="card-title mb-0">Donadores</h5>
+                <small class="text-muted">Número de donadores</small>
+            </div>
+            <div class="card-body">
+                <div id="sessionsLastMonth"></div>
+                <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+                    <h4>
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                        <span id="donadoresCount"></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-3 col-md-4 col-6 mb-4 w-50">
+        <div class="card h-100 d-flex flex-column">
+            <div class="card-header pb-0">
+                <h5 class="card-title mb-0">Campañas activas</h5>
+                <small class="text-muted">Número de campañas activas</small>
+            </div>
+            <div class="card-body">
+                <div id="sessionsLastMonth"></div>
+                <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+                    <h4>
+                        <i class="fa-solid fa-house"></i>
+                        <span id="campagnasActivas"></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-4 col-6 mb-4 w-50">
+        <div class="card h-100 d-flex flex-column">
+            <div class="card-header pb-0">
+                <h5 class="card-title mb-0">Unidades médicas</h5>
+                <small class="text-muted">Número de unidades médicas</small>
+            </div>
+            <div class="card-body">
+                <div id="sessionsLastMonth"></div>
+                <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+                    <h4>
+                        <i class="fa-solid fa-notes-medical"></i>
+                        <span id="unidadesMedicas"></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>    
+{{-- <div class="row"> --}}
 
   <!-- Sales last year -->
-  <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card">
+  {{-- <div class="col-xl-3 col-md-4 col-6 mb-4">
+    <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
         <h5 class="card-title mb-0">Usuarios</h5>
         <small class="text-muted">Número de usuarios</small>
@@ -271,61 +360,82 @@
       <div id="salesLastYear"></div>
       <div class="card-body pt-0">
         <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 id="usuariosDiv" class="mb-0"></h4>
+          <h4 class="mb-0">
+            <i class="fa-solid fa-user"></i>
+            <span id="usuariosDiv"></span>
+          </h4>
           <small class="text-danger"></small>
         </div>
       </div>
     </div>
-  </div>
+</div> --}}
+
 
   <!-- Sessions Last month -->
-  <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card">
+  <!-- Donadores Count -->
+{{-- <div class="col-xl-3 col-md-4 col-6 mb-4">
+  <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Donadores</h5>
-        <small class="text-muted">Número de donadores</small>
+          <h5 class="card-title mb-0">Donadores</h5>
+          <small class="text-muted">Número de donadores</small>
       </div>
       <div class="card-body">
-        <div id="sessionsLastMonth"></div>
-        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 id="donadoresCount"></h4>
-        </div>
+          <div id="sessionsLastMonth"></div>
+          <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+              <h4>
+                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                  <span id="donadoresCount"></span>
+              </h4>
+          </div>
       </div>
-    </div>
   </div>
+</div> --}}
+
 
   <!-- Total Profit -->
-  <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card">
+  <!-- Campañas Activas -->
+{{-- <div class="col-xl-3 col-md-4 col-6 mb-4">
+  <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Campañas activas</h5>
-        <small class="text-muted">Número de campañas activas</small>
+          <h5 class="card-title mb-0">Campañas activas</h5>
+          <small class="text-muted">Número de campañas activas</small>
       </div>
       <div class="card-body">
-        <div id="sessionsLastMonth"></div>
-        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0" id="campagnasActivas"></h4>
-        </div>
+          <div id="sessionsLastMonth"></div>
+          <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+              <h4>
+                  <i class="fa-solid fa-house"></i>
+                  <span id="campagnasActivas"></span>
+              </h4>
+          </div>
       </div>
-    </div>
   </div>
+</div> --}}
+
 
     <!-- Total Sales -->
-    <div class="col-xl-3 col-md-4 col-6 mb-4">
-    <div class="card">
+    <!-- Unidades Médicas -->
+{{-- <div class="col-xl-3 col-md-4 col-6 mb-4">
+  <div class="card h-100 d-flex flex-column">
       <div class="card-header pb-0">
-        <h5 class="card-title mb-0">Unidades médicas</h5>
-        <small class="text-muted">Número de unidades médicas</small>
+          <h5 class="card-title mb-0">Unidades médicas</h5>
+          <small class="text-muted">Número de unidades médicas</small>
       </div>
       <div class="card-body">
-        <div id="sessionsLastMonth"></div>
-        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
-          <h4 class="mb-0" id="unidadesMedicas"></h4>
-        </div>
+          <div id="sessionsLastMonth"></div>
+          <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+              <h4>
+                  <i class="fa-solid fa-notes-medical"></i>
+                  <span id="unidadesMedicas"></span>
+              </h4>
+          </div>
       </div>
-    </div>
   </div>
+</div> --}}
 
+
+  
+  
   <!-- Revenue Growth -->
   {{-- <div class="col-xl-4 col-md-6 mb-4">
     <div class="card h-100">
@@ -523,11 +633,80 @@
           <!-- / Content -->
 
           
-    <!--Gráfica de usuarios-->
-    <!-- Gráfica de usuarios -->
+    <!--Gráfica de unidades médicas y donaciones-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
+    <script type="text/javascript">
+      // Variables para almacenar datos
+      let donaciones = 0;
+      let unidadesCount = 0;
+  
+      // Espera a que el DOM esté listo
+      $(document).ready(function () {
+        // Realiza una solicitud AJAX al backend para obtener la lista de donaciones
+        $.ajax({
+          url: 'http://127.0.0.1:8000/api/donations/',
+          method: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            if (response.donations) {
+              donaciones = response.donations.length;
+              drawComparisonChart(); // Llama a la función de dibujo después de obtener los datos
+            } else {
+              console.error('Error al obtener la lista de donaciones.');
+            }
+          },
+          error: function () {
+            console.error('Error en la solicitud AJAX para donaciones.');
+          }
+        });
+  
+        // Realiza una solicitud AJAX al backend para obtener la lista de unidades médicas
+        $.ajax({
+          url: 'http://127.0.0.1:8000/api/medunits/',
+          method: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            if (response.MedicalUnits) {
+              unidadesCount = response.MedicalUnits.length;
+              drawComparisonChart(); // Llama a la función de dibujo después de obtener los datos
+            } else {
+              console.error('Error al obtener las unidades médicas.');
+            }
+          },
+          error: function () {
+            console.error('Error en la solicitud AJAX para unidades médicas.');
+          }
+        });
+      });
+  
+      // Carga Google Charts y llama a la función de dibujo después de cargar
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawComparisonChart);
+  
+      // Función para dibujar la gráfica de comparación
+      function drawComparisonChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Count'],
+          ['Unidades Médicas', unidadesCount],
+          ['Donaciones', donaciones],
+        ]);
+  
+        var options = {
+          title: 'Comparación entre Unidades Médicas y Donaciones',
+          slices: {
+            0: { color: '#f94561' },
+            1: { color: '#00c8fd' }
+          },
+        };
+  
+        var chart = new google.visualization.PieChart(document.getElementById('comparisonChart'));
+        chart.draw(data, options);
+      }
+    </script>
+    
+    <!--Gráfica de usuarios y donadores-->
     <script>
       let donadoresCount = 0;
       let usersCount = 0;
@@ -561,7 +740,6 @@
     
       function drawCharts() {
         drawUserChart();
-        drawBloodTypeChart();
       }
     
       function drawUserChart() {
@@ -585,7 +763,14 @@
         chart.draw(data, options);
       }
     </script>
-    <div id="piechart_3d" style="width: 48%; height: 500px;  float: right;"></div>
+    <div class="w-100">
+      <div class="row">
+        <div id="piechart_3d" style="width: 30%; height: 500px;  float: right; margin-left: .8em" class="col-4"></div>
+        <div id="comparisonChart" style="width: 30%; height: 500px;" class="col-4"></div>
+        <div id="barchart_values" class="col-4"></div>
+      </div>
+    </div>
+
 
     
     <!-- Gráfica de tipos de sangre -->
@@ -594,15 +779,15 @@
   google.charts.setOnLoadCallback(drawChart);
 
   function drawChart(data) {
-    var defaultData = [
-      ["Element", "Density", { role: "style" }],
-      ["Copper", 8.94, "#b87333"],
-      ["Silver", 10.49, "silver"],
-      ["Gold", 19.30, "gold"],
-      ["Platinum", 21.45, "color: #e5e4e2"]
-    ];
+    // var defaultData = [
+    //   ["Element", "Density", { role: "style" }],
+    //   ["Copper", 8.94, "#b87333"],
+    //   ["Silver", 10.49, "silver"],
+    //   ["Gold", 19.30, "gold"],
+    //   ["Platinum", 21.45, "color: #e5e4e2"]
+    // ];
 
-    data = data || defaultData;
+    // data = data || defaultData;
 
     var chartData = google.visualization.arrayToDataTable(data);
 
@@ -616,7 +801,7 @@
 
     var options = {
       title: "Tipos de Sangre",
-      width: 600,
+      width: 450,
       height: 400,
       bar: {groupWidth: "95%"},
       legend: { position: "none" },
@@ -635,8 +820,7 @@
       success: function (response) {
         if (response.users) {
           const tiposSangre = response.users.map(user => user.blood_type);
-          console.log('Tipos de sangre:', tiposSangre);
-
+          
           // Cuenta la frecuencia de cada tipo de sangre
           const frecuenciaTiposSangre = contarFrecuencia(tiposSangre);
 
@@ -683,13 +867,147 @@
     return colores[tipo] || "#F0CC90"; 
   }
 </script>
-<div id="piechart_3d" style="width: 48%; height: 500px;  float: left"></div>
-<div id="barchart_values" style="width: 48%; height: 500px;"></div>
+{{-- <div id="piechart_3d" style="width: 48%; height: 500px;  float: left"></div> --}}
 
-          
+{{-- <div class="row">
+  <div id="barchart_values" class="col-6 mt-5" style="margin-bottom: -390px;"></div>
+  <div style="margin-left:800px; width: auto;">
+    <div id="calendarioContainer" class="col-6 mt-5"></div>
+    <div class="puntito"></div>
+    <p style="display: inline-block; margin-top: 15px;">Día con citas</p>
+  </div>
+</div> --}}
+
+<style>
+  .puntito{
+    background: #fa4062;
+    border-radius: 100%;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+  }
+</style>
+
+<div class="d-flex flex-row"> 
+
+
+   <!-- <div class="col-xl-3 col-md-4 col-6 mt-5 ms-5">
+    <div class="card">
+      <div class="card-header pb-0">
+        <h5 class="card-title mb-0">Donaciones realizadas</h5>
+        <small class="text-muted">Número de donaciones realizadas</small>
+      </div>
+      <div class="card-body">
+        <div id="sessionsLastMonth"></div>
+        <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+          <h4 class="mb-0" id="donacionesRealizadas"></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  -->
+
+
+
+<!-- <div id="calendarioContainer"></div> -->
+
+<script>
+  const calendarioContainer = document.getElementById('calendarioContainer');
+
+  const formatFechaDonacion = (fechaDonacion) => {
+    const fecha = new Date(fechaDonacion);
+    // Ajustar a la zona horaria local
+    fecha.setMinutes(fecha.getMinutes() - fecha.getTimezoneOffset());
+    const año = fecha.getFullYear();
+    const mes = fecha.getMonth() + 1;
+    const dia = fecha.getDate();
+    return `${año}-${mes < 10 ? '0' : ''}${mes}-${dia < 10 ? '0' : ''}${dia}`;
+  };
+
+  const aplicarEstilos = (fechasMarcadas, instance) => {
+    // Obtener todos los elementos de día en el calendario, independientemente del mes actual
+    const dayElements = instance.daysContainer.querySelectorAll('.flatpickr-day');
+
+    // Remover la clase de estilo de todos los días
+    dayElements.forEach(dayElement => {
+      dayElement.classList.remove('donation-day');
+    });
+
+    // Aplicar la clase de estilo solo a las fechas marcadas
+    dayElements.forEach(dayElement => {
+      const fechaElemento = formatFechaDonacion(dayElement.getAttribute('aria-label'));
+      const debeMarcar = fechasMarcadas.includes(fechaElemento);
+
+      if (debeMarcar) {
+        dayElement.classList.add('donation-day');
+      }
+    });
+  };
+
+  const opcionesFlatpickr = {
+    inline: true,
+    onReady: function (selectedDates, dateStr, instance) {
+      // Llamar a la función aplicarEstilos cuando el calendario esté listo
+      fetch('http://127.0.0.1:8000/api/donationsdate/')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al obtener la lista de citas. Código de estado: ' + response.status);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.donationDates) {
+            const fechasMarcadas = data.donationDates.map(fechaDonacion => formatFechaDonacion(fechaDonacion.date_donation));
+            aplicarEstilos(fechasMarcadas, instance);
+          } else {
+            throw new Error('Formato de respuesta inesperado. Se esperaba un campo "donationDates" de tipo array.');
+          }
+        })
+        .catch(error => {
+          console.error('Error al cargar citas:', error);
+        });
+    },
+    onChange: function (selectedDates, dateStr, instance) {
+      // Llamar a la función aplicarEstilos cuando cambia la fecha seleccionada
+      fetch('http://127.0.0.1:8000/api/donationsdate/')
+        .then(response => response.json())
+        .then(data => {
+          const fechasMarcadas = data.donationDates.map(fechaDonacion => formatFechaDonacion(fechaDonacion.date_donation));
+          aplicarEstilos(fechasMarcadas, instance);
+        })
+        .catch(error => {
+          console.error('Error al cargar citas:', error);
+        });
+    },
+    onMonthChange: function (selectedDates, dateStr, instance) {
+      // Llamar a la función aplicarEstilos cuando cambia el mes
+      fetch('http://127.0.0.1:8000/api/donationsdate/')
+        .then(response => response.json())
+        .then(data => {
+          const fechasMarcadas = data.donationDates.map(fechaDonacion => formatFechaDonacion(fechaDonacion.date_donation));
+          aplicarEstilos(fechasMarcadas, instance);
+        })
+        .catch(error => {
+          console.error('Error al cargar citas:', error);
+        });
+    }
+  };
+
+  const calendario = flatpickr(calendarioContainer, opcionesFlatpickr);
+</script>
+{{-- <div id="barchart_values" class="col-6 mt-5" style="margin: -390px auto;"></div> --}}
+<style>
+  .donation-day {
+    background-color: #fa4062 !important;
+    color: white !important;
+  }
+</style>
+
+
+
 
 <!-- Footer -->
-<footer class="content-footer footer bg-footer-theme">
+ {{-- <footer class="content-footer footer bg-footer-theme">
   <div class="container-xxl">
     <div class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
       <div>
@@ -701,12 +1019,11 @@
       </div>
       <div class="d-none d-lg-inline-block">
         
-        <a href="https://themeforest.net/licenses/standard" class="footer-link me-4" target="_blank">AQUI PONER UN FOOTER SI QUEREMOS</a>
        
       </div>
     </div>
   </div>
-</footer>
+</footer> --}}
 <!-- / Footer -->
 
           
@@ -782,7 +1099,6 @@
           $('#donadoresCount').text(donadoresCount);
 
           const tiposSangre = response.users.map(user => user.blood_type);
-          console.log('Tipos de sangre:', tiposSangre);
         } else {
           // Maneja el caso en el que la respuesta no fue exitosa
           console.error('Error al obtener la lista de usuarios.');
@@ -843,6 +1159,29 @@ $(document).ready(function () {
     });
   });
 
+
+  // Espera a que el DOM esté listo
+  $(document).ready(function () {
+    // Realiza una solicitud AJAX al backend para obtener la lista de usuarios
+    $.ajax({
+      url: 'http://127.0.0.1:8000/api/donations/', // Reemplaza con la ruta correcta
+      method: 'GET', // O el método HTTP correcto
+      dataType: 'json',
+      success: function (response) {
+        // Verifica si la respuesta del backend es exitosa
+        if (response) {
+          $('#donacionesRealizadas').text(response.donations.length);
+        } else {
+          // Maneja el caso en el que la respuesta no fue exitosa
+          console.error('Error al obtener la lista de usuarios.');
+        }
+      },
+      error: function () {
+        // Maneja el caso de un error en la solicitud AJAX
+        console.error('Error en la solicitud AJAX.');
+      }
+    });
+  });
   
 </script>
 

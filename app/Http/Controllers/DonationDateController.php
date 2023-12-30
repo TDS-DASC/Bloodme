@@ -13,7 +13,7 @@ class DonationDateController extends Controller
             'user_id' => 'required',
            'campaign_id' => 'required',
            'date_donation' => 'required',
-           'nombre_receptor' => 'required',
+           'nombre_receptor' => 'sometimes',
            'medical_unit_id' => 'required',
         ]);
         $donation = DonationDate::create($validateData);

@@ -84,7 +84,7 @@
 };
 
 function cargarYMostrarCampanas() {
-    fetch('http://127.0.0.1:8000/api/campaigns/')
+    fetch('https://bloodprueba.up.railway.app/api/campaigns/')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al obtener la lista de campañas. Código de estado: ' + response.status);
@@ -113,29 +113,67 @@ function renderizarTablaCampanas(campaigns) {
     campaigns.forEach(campaign => {
         var row = tbody.insertRow();
 
-        var cellNombre = row.insertCell(0);  //Aqui cambiar por el ROW al que le pertenece nombre porque 0 es el ID
+        var cellNumero = row.insertCell(0);  //Aqui cambiar por el ROW al que le pertenece nombre porque 0 es el ID
         var cellDescripcion = row.insertCell(1);
         var cellTipo = row.insertCell(2);
         var cellFechaInicio = row.insertCell(3);
         var cellFechaFin = row.insertCell(4);
         var cellAcciones = row.insertCell(5);
 
-        cellNombre.innerText = campaign.id; 
-        cellDescripcion.innerText = 'N/A'; 
+        cellNumero.innerText = campaign.id; 
+        cellDescripcion.innerText = campaign.description || 'N/A';
         cellTipo.innerText = campaign.blood === 1 ? 'Sangre' : 'Plaquetas'; 
         cellFechaInicio.innerText = campaign.start_campaign;
         cellFechaFin.innerText = campaign.end_campaign || 'N/A'; 
 
         cellAcciones.innerHTML = `
+        <button type="button" class="btn btn-secondary" onclick="obtenerDetallesCampaña(${campaign.id})">Detalles</button>
         <button type="button" class="btn btn-primary" onclick="obtenerDetallesCampana(${campaign.id})">Editar</button>
-        <button type="button" class="btn btn-danger" onclick="eliminarCampana('${campaign.id}')"><i class="ti ti-trash"></i> Eliminar</button>`;
+        <button type="button" class="btn btn-danger" onclick="eliminarCampana('${campaign.id}')"> Eliminar</button>`;
     });
 }
 
-let usuarioSeleccionadoId = null;
+let campaignSeleccionadaId = null;
 
 function obtenerDetallesCampana(campaignId) {
-    fetch(`http://127.0.0.1:8000/api/campaign/${campaignId}`, {
+    fetch(`https://bloodprueba.up.railway.app/api/campaign/${campaignId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener los detalles de la campaña. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Respuesta completa de la API:', data);
+
+            const campaign = data.Campaign || {};
+            const campaignId = campaign.id || '';
+            const campaignStartDate = campaign.start_campaign || '';
+            const campaignEndDate = campaign.end_campaign || '';
+
+            if (campaignId && campaignStartDate) {
+                campaignSeleccionadaId = campaignId;
+
+                document.getElementById('edit-IdCampaña').value = campaignId;
+                document.getElementById('edit-FechaInicioCampaña').value = campaignStartDate;
+                document.getElementById('edit-FechaFinCampaña').value = campaignEndDate || '';
+
+                // Mostrar el modal de edición
+                var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
+                offcanvasEditCampaign.show();
+            } else {
+                throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener los detalles de la campaña:', error);
+            alert('Error al obtener los detalles de la campaña.');
+        });
+}
+
+
+function obtenerDetallesCampaña(campaignId) {
+    fetch(`https://bloodprueba.up.railway.app/api/campaign/${campaignId}`, {
         method: 'GET'
     })
     .then(response => {
@@ -145,29 +183,52 @@ function obtenerDetallesCampana(campaignId) {
         return response.json();
     })
     .then(data => {
-        console.log('Respuesta completa de la API:', data);
-
-        // Modifica esta parte según la estructura real de tu respuesta
         const campaign = data.Campaign || {};
         const campaignId = campaign.id || '';
-        const campaignStartDate = campaign.start_campaign || '';
-        const campaignEndDate = campaign.end_campaign || '';
+        const inicioCampaña = campaign.start_campaign || '';
+        const finCampaña = campaign.end_campaign || '';
+        const tipoSangreRequerido = campaign.blood === 1 ? 'Plaquetas': 'Sangre' ;
+        const donacionesRequeridas = campaign.donations_required || '';
+        const donacionesActuales = campaign.current_donations || '';
+        const tipoDonacion = campaign.description || '';
+        const userId = campaign.user_id || '';
 
-        if (campaignId && campaignStartDate) {
-            // Almacena el ID de la campaña seleccionada globalmente
-            campaignSeleccionadaId = campaignId;
+        // Hacer una solicitud adicional para obtener el CURP del receptor
+        return fetch(`https://bloodprueba.up.railway.app/api/user/${userId}`, {
+            method: 'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener los detalles del usuario. Código de estado: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(userData => {
+            const curpReceptor = userData.user.curp || '';
+            const nombreReceptor = userData.user.name || ''; 
 
-            // Rellenar campos del formulario de edición
-            document.getElementById('edit-IdCampaña').value = campaignId;
-            document.getElementById('edit-FechaInicioCampaña').value = campaignStartDate;
-            document.getElementById('edit-FechaFinCampaña').value = campaignEndDate || '';
 
-            // Mostrar el modal de edición
-            var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
-            offcanvasEditCampaign.show();
-        } else {
-            throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
-        }
+            if (campaignId) {
+                campaignSeleccionadaId = campaignId;
+
+                document.getElementById('detalles-idCampaña').value = campaignId;
+                document.getElementById('detalles-inicioCampaña').value = inicioCampaña;
+                document.getElementById('detalles-finCampaña').value = finCampaña;
+                document.getElementById('detalles-tipoSangreRequerido').value = tipoSangreRequerido;
+                document.getElementById('detalles-donacionesRequeridas').value = donacionesRequeridas;
+                document.getElementById('detalles-donacionesActuales').value = donacionesActuales;
+                document.getElementById('detalles-tipoDonacion').value = tipoDonacion;
+                document.getElementById('detalles-userId').value = userId;
+                document.getElementById('detalles-curpReceptor').value = curpReceptor;
+                document.getElementById('detalles-nombreReceptor').value = nombreReceptor;
+
+
+                var offcanvasDetallesUsuario = new bootstrap.Offcanvas(document.getElementById('offcanvasDetallesUsuario'));
+                offcanvasDetallesUsuario.show();
+            } else {
+                throw new Error('Formato de respuesta inesperado. Datos incompletos de la campaña.');
+            }
+        });
     })
     .catch(error => {
         console.error('Error al obtener los detalles de la campaña:', error);
@@ -176,43 +237,74 @@ function obtenerDetallesCampana(campaignId) {
 }
 
 
-
-
-// Función para abrir el modal de edición al hacer clic en el botón de editar
-function editarCampana(campaignId) {
-    ObtenerDetallesCampana(campaignId);
+function editarCampaña(campaignId) {
+    obtenerDetallesCampaña(campaignId);
 }
 
-// Asigna el evento de clic al botón de editar para abrir el modal de edición
-  document.getElementById('btnEdit').addEventListener('click', function() {
-        console.log("Soy el botón editar");
-        verificarCamposEdit();
+function validarCurp() {
+    var curpInput = document.getElementById('add-curpCampaña');
+    var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
+
+    if (curpInput) {
+        var regexCurp = /^[A-Za-z0-9]+$/;
+
+        if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
+            mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+            curpInput.classList.add('is-invalid');
+        } else {
+            mensajeErrorCurp.innerText = ''; 
+            curpInput.classList.remove('is-invalid');
+        }
+    } else {
+        console.error('El elemento con ID "add-curpCampaña" no existe.');
+    }
+}
+
+
+function editarCampana(campaignId) {
+    obtenerDetallesCampana(campaignId);
+}
+
+
+    document.getElementById('btnAddCampaign').addEventListener('click', function() {
+        console.log("Soy el botón Añadir");
+        verificarCamposCampaign();
     });
 
-    function eliminarUsuario(usuarioId) {
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-        fetch(`http://127.0.0.1:8000/api/users/${usuarioId}`, {
+    function eliminarCampana(campañaId) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta campaña?')) {
+        fetch(`https://bloodprueba.up.railway.app/api/campaigns/?id=${campañaId}`, {
             method: 'DELETE'
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Error al eliminar el usuario. Código de estado: ${response.status}`);
+                throw new Error(`Error al eliminar la campaña. Código de estado: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('Usuario eliminado exitosamente:', data);
+            console.log('Campaña eliminada exitosamente:', data);
 
-            // Vuelve a cargar y mostrar la lista de usuarios después de eliminar
-            cargarYMostrarCampanas();
+            cargarYMostrarCampañas();
         })
         .catch(error => {
-            console.error('Error al eliminar el usuario:', error);
-            alert('Error al eliminar el usuario.');
+            console.error('Error al eliminar la campaña:', error);
+            alert('Campaña borrada.');
         });
     }
 }
+
 </script>
+
+<style>
+    #offcanvasEditCampaign{
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        height: 350px;
+    }
+</style>
     
 </head>
 
@@ -272,11 +364,6 @@ function editarCampana(campaignId) {
       </a>
     </ul>
 
-    <ul style="margin-left: 12px; margin-top:20px">
-      <a href="{{ route('adminDonantesRutas') }}" class="menu-link">
-      <span class="menu-header-text">Administrar Donantes</span>
-      </a>
-    </ul>
 
     <ul style="margin-left: 12px; margin-top:20px">
       <a href="{{ route('adminCitasRutas') }}" class="menu-link">
@@ -329,7 +416,7 @@ function editarCampana(campaignId) {
         <!-- HEADER -->
         <div class="navbar-nav align-items-center">
           <div class="nav-item navbar-search-wrapper mb-0">
-              <span class="d-none d-md-inline-block text-muted">ADMINISTRAR USUARIOS</span>
+              <span class="d-none d-md-inline-block text-muted">ADMINISTRAR CAMPAÑAS</span>
             </a>
           </div>
         </div>
@@ -449,22 +536,7 @@ function editarCampana(campaignId) {
         return true;
     }
 
-    function validarCurp() {
-    var curpInput = document.getElementById('add-curp');
-    var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
 
-    // Expresión regular para permitir solo letras sin acentos y números
-    var regexCurp = /^[A-Za-z0-9]+$/;
-
-    // Verificar la longitud del CURP
-    if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
-        mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
-        curpInput.classList.add('is-invalid');
-    } else {
-        mensajeErrorCurp.innerText = ''; // Limpiar el mensaje de error si la longitud y formato son correctos
-        curpInput.classList.remove('is-invalid');
-    }
-  }
 
     function validarCorreoElectronico() {
         var inputCorreo = document.getElementById('add-correoElectronico');
@@ -493,149 +565,241 @@ function editarCampana(campaignId) {
             contrasenaInput.classList.remove('is-invalid');
         }
     }
-    function validarFechaNacimiento() {
-    var fechaInput = document.getElementById('html5-date-input');
-    var mensajeErrorFecha = document.getElementById('mensajeErrorFecha');
-    var fechaArray = fechaInput.value.split('-');
-    if (fechaArray.length === 3 && fechaArray[0].length > 4) {
-        fechaArray[0] = fechaArray[0].substring(0, 4);
-        fechaInput.value = fechaArray.join('-');
+    function validarFechas() {
+    var fechaInicioInput = document.getElementById('add-fechaInicio');
+    var fechaFinInput = document.getElementById('add-fechaFin');
+    var mensajeErrorFechaInicio = document.getElementById('mensajeErrorFechaInicio');
+    var mensajeErrorFechaFin = document.getElementById('mensajeErrorFechaFin');
+
+    // Obtener valores de las fechas
+    var fechaInicio = new Date(fechaInicioInput.value);
+    var fechaFin = new Date(fechaFinInput.value);
+
+    // Restablecer los mensajes de error
+    mensajeErrorFechaInicio.textContent = '';
+    mensajeErrorFechaFin.textContent = '';
+
+    // Validar si la fecha de fin es anterior a la fecha de inicio
+    if (fechaFin < fechaInicio) {
+        mensajeErrorFechaInicio.textContent = 'La fecha de fin no puede ser anterior a la fecha de inicio.';
+        return false;
     }
 
-    var fechaSeleccionada = new Date(fechaInput.value);
-    var fechaMinima = new Date('1900-01-01');
-    var fechaMaxima = new Date('2023-11-27');
+    // Validar si la diferencia es menor a una semana (en milisegundos)
+    if ((fechaFin - fechaInicio) < (7 * 24 * 60 * 60 * 1000)) {
+        mensajeErrorFechaFin.textContent = 'La diferencia entre la fecha de inicio y fin debe ser de al menos una semana.';
+        return false;
+    }
 
-    if (fechaSeleccionada < fechaMinima || fechaSeleccionada > fechaMaxima) {
-        mensajeErrorFecha.innerText = 'Por favor, ingresa una fecha entre 1900-01-01 y 2023-12-31.';
-        fechaInput.classList.add('is-invalid');
+    // Si las validaciones pasan, todo está bien
+    return true;
+}
+
+function validarFechasEdit() {
+    var fechaInicioInput = document.getElementById('edit-FechaInicioCampaña');
+    var fechaFinInput = document.getElementById('edit-FechaFinCampaña');
+    var mensajeErrorFechaInicio = document.getElementById('mensajeErrorFechaInicio');
+    var mensajeErrorFechaFin = document.getElementById('mensajeErrorFechaFin');
+
+    // Obtener valores de las fechas
+    var fechaInicio = new Date(fechaInicioInput.value);
+    var fechaFin = new Date(fechaFinInput.value);
+
+    // Restablecer los mensajes de error
+    mensajeErrorFechaInicio.textContent = '';
+    mensajeErrorFechaFin.textContent = '';
+
+    // Obtener la fecha actual
+    var fechaActual = new Date();
+
+    // Calcular la fecha permitida hasta 6 meses en el futuro
+    var fechaPermitida = new Date();
+    fechaPermitida.setMonth(fechaPermitida.getMonth() + 6);
+
+// Validar si la fecha de inicio es mayor a 6 meses a partir de la fecha actual
+if (fechaInicio > fechaPermitida) {
+    mensajeErrorFechaInicio.textContent = 'La fecha de inicio no puede ser mayor a 6 meses a partir de la fecha actual.';
+} else if ((fechaInicio - fechaActual) < (7 * 24 * 60 * 60 * 1000)) {
+    mensajeErrorFechaInicio.textContent = 'La fecha de inicio no puede ser una semana anterior a la fecha actual.';
+}
+
+    // Validar si la fecha de fin es anterior a la fecha de inicio
+    if (fechaFin < fechaInicio) {
+        mensajeErrorFechaInicio.textContent = 'La fecha de fin no puede ser anterior a la fecha de inicio.';
+    }
+
+    // Validar si la diferencia es menor a un día (en milisegundos)
+    if ((fechaFin - fechaInicio) < (24 * 60 * 60 * 1000)) {
+        mensajeErrorFechaFin.textContent = 'La diferencia entre la fecha de inicio y fin debe ser de al menos un día.';
+    }
+
+    // Validar que no se pueda escribir más de 4 números en la parte del año
+    var fechaArrayInicio = fechaInicioInput.value.split('-');
+    if (fechaArrayInicio.length === 3 && fechaArrayInicio[0].length > 4) {
+        fechaArrayInicio[0] = fechaArrayInicio[0].substring(0, 4);
+        fechaInicioInput.value = fechaArrayInicio.join('-');
+    }
+
+    var fechaArrayFin = fechaFinInput.value.split('-');
+    if (fechaArrayFin.length === 3 && fechaArrayFin[0].length > 4) {
+        fechaArrayFin[0] = fechaArrayFin[0].substring(0, 4);
+        fechaFinInput.value = fechaArrayFin.join('-');
+    }
+
+    // Cambiar el color del texto a rojo si hay mensajes de error
+    if (mensajeErrorFechaInicio.textContent) {
+        mensajeErrorFechaInicio.style.color = 'red';
+    }
+
+    if (mensajeErrorFechaFin.textContent) {
+        mensajeErrorFechaFin.style.color = 'red';
+    }
+
+    // Si las validaciones pasan, todo está bien
+    return true;
+}
+
+
+
+
+
+
+
+
+function validarUnidadesRequeridas() {
+    var inputUnidades = document.getElementById('add-unidadesRequeridas');
+    var errorUnidades = document.getElementById('error-unidadesRequeridas');
+
+    var unidades = parseFloat(inputUnidades.value);
+
+    if (unidades <= 0 || isNaN(unidades)) {
+        errorUnidades.textContent = 'Ingrese un valor válido mayor a cero.';
     } else {
-        mensajeErrorFecha.innerText = '';
-        fechaInput.classList.remove('is-invalid');
+        errorUnidades.textContent = '';
     }
 }
 
-function verificarCampos() {
-        var formulario = document.getElementById('addNewUserForm');
-        if (!formulario.checkValidity()) {
-            formulario.reportValidity();
-            return;
-        }
+var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
 
-        // Obtener valores de los campos
-        var nombres = document.getElementById('add-Nombres').value;
-        var apellidos = document.getElementById('add-Apellidos').value;
-        var correoElectronico = document.getElementById('add-correoElectronico').value;
-        var contrasena = document.getElementById('add-contrasena').value;
-        var tipoSangre = document.getElementById('add-tipoSangre').value;
-        var curp = document.getElementById('add-curp').value;
-        var fechaNacimiento = document.getElementById('html5-date-input').value;
-        var genero = document.getElementById('add-genero').value;
-       
-        var donador = document.getElementById('add-donador').value;
-        var donadorValue = donador === 'Si' ? 1 : 0;
+function verificarCamposCampaign() {
+    var formulario = document.getElementById('addNewCampaignForm');
+    if (!formulario.checkValidity()) {
+        formulario.reportValidity();
+        return;
+    }
 
-        
-        // Crear objeto de datos para enviar al servidor
-        var userData = {
-            name: nombres,
-            last_name: apellidos,
-            email: correoElectronico,
-            password: contrasena,
-            blood_type: tipoSangre,
-            curp: curp,
-            birthdate: fechaNacimiento,
-            gender: genero,
-            donator: donadorValue
-        };
+    // Obtener valores de los campos
+    var fechaInicio = document.getElementById('add-fechaInicio').value;
+    var fechaFin = document.getElementById('add-fechaFin').value;
+    var tipoDonacion = document.getElementById('add-tipoDonacion').value;
+    var unidadesRequeridas = document.getElementById('add-unidadesRequeridas').value;
+    var descripcionCampaña = document.getElementById('add-descripcionCampaña').value;
+    var curpCampaña = document.getElementById('add-curpCampaña').value;
 
-        // Realizar la solicitud POST a la API
-        fetch('http://127.0.0.1:8000/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al agregar el usuario. Código de estado: ' + response.status);
-            }
-            return response.json(); 
-        })
+    // Obtener el ID del usuario a través de la API
+    var curpEndpoint = 'https://bloodprueba.up.railway.app/api/users/curp/' + curpCampaña;
+    
+    fetch(curpEndpoint)
+        .then(response => response.json())
         .then(data => {
-            // La respuesta exitosa del servidor
-            console.log('Respuesta del servidor:', data);
+            if (data.users && data.users.length > 0) {
+                // Se encontró al menos un usuario con el CURP
+                var userId = data.users[0].id;
 
-            var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-            offcanvasAddCampaign.hide();
+                // Crear objeto de datos para enviar al servidor
+                var campaignData = {
+                    start_campaign: fechaInicio,
+                    end_campaign: fechaFin,
+                    donations_required: unidadesRequeridas,
+                    blood: tipoDonacion === 'Plaquetas' ? 1 : 2,  // Ajusta el valor según tus necesidades
+                    user_id: userId,
+                    description: descripcionCampaña
+                };
 
-            
-            setTimeout(function() {
-                alert('Usuario creado exitosamente.');
+                // Realizar la solicitud POST a la API de campañas
+                fetch('https://bloodprueba.up.railway.app/api/campaign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(campaignData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al agregar la campaña. Código de estado: ' + response.status);
+                    }
+                    return response.json(); 
+                })
+                .then(data => {
+                    // La respuesta exitosa del servidor
+                    console.log('Respuesta del servidor:', data);
 
-                 // Restablecer valores de los campos a blanco
-        document.getElementById('add-Nombres').value = '';
-        document.getElementById('add-Apellidos').value = '';
-        document.getElementById('add-correoElectronico').value = '';
-        document.getElementById('add-contrasena').value = '';
-        document.getElementById('add-tipoSangre').value = '';
-        document.getElementById('add-curp').value = '';
-        document.getElementById('html5-date-input').value = '';
-        document.getElementById('add-genero').value = '';
-        document.getElementById('add-donador').value = '';
-        
-            }, 300);
+                    
+                    
+
+                    
+                        alert('Campaña creada exitosamente.');
+
+                        // Restablecer valores de los campos a blanco
+                        document.getElementById('add-fechaInicio').value = '';
+                        document.getElementById('add-fechaFin').value = '';
+                        document.getElementById('add-tipoDonacion').value = '';
+                        document.getElementById('add-unidadesRequeridas').value = '';
+                        document.getElementById('add-descripcionCampaña').value = '';
+                        document.getElementById('add-curpCampaña').value = '';
+
+                        offcanvasAddCampaign.hide();
+                })
+                .catch(error => {
+                    // Manejar errores en la solicitud
+                    console.error('Error en la solicitud:', error);
+                    alert('Error al agregar la campaña.');
+
+                    // Verificar si hay una respuesta del servidor
+                    if (error && error.response && error.response.text) {
+                        // Intenta obtener más información sobre la respuesta
+                        error.response.text().then(text => {
+                            console.error('Contenido de la respuesta:', text);
+                        });
+                    }
+                });
+            } else {
+                // No se encontraron usuarios con el CURP
+                alert('No se encontró un usuario con el CURP proporcionado.');
+            }
         })
         .catch(error => {
-    // Manejar errores en la solicitud
-    console.error('Error en la solicitud:', error);
-    alert('Error al agregar el usuario.');
-
-    // Verificar si hay una respuesta del servidor
-    if (error && error.response && error.response.text) {
-        // Intenta obtener más información sobre la respuesta
-        error.response.text().then(text => {
-            console.error('Contenido de la respuesta:', text);
+            console.error('Error al obtener el ID del usuario:', error);
+            alert('Error al obtener el ID del usuario.');
         });
-    }
-});
+}
 
-        // Cerrar el modal 
-        var offcanvasAddCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-        offcanvasAddCampaign.hide();
-    }
 
 
     // -------------------------AQUI TERMINA EL AÑADIR Y COMIENZA EL EDITAR-----------------------------------------
-    function validarCorreoElectronicoEdit() {
-        var inputCorreoEdit = document.getElementById('edit-correoElectronico');
-        var mensajeErrorCorreoEdit = document.getElementById('mensajeErrorCorreoEdit');
-        var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!regexCorreo.test(inputCorreoEdit.value)) {
-            mensajeErrorCorreoEdit.textContent = 'Por favor, ingresa un correo electrónico válido.';
-            inputCorreoEdit.classList.add('is-invalid');
-        } else {
-            mensajeErrorCorreoEdit.textContent = '';
-            inputCorreoEdit.classList.remove('is-invalid');
-        }
+    function validarCurp2() {
+    var curpInput = document.getElementById('add-curpCampaña');
+    var mensajeErrorCurp = document.getElementById('mensajeErrorCurp');
+
+    // Expresión regular para permitir solo letras sin acentos y números
+    var regexCurp = /^[A-Za-z0-9]+$/;
+
+    // Verificar la longitud del CURP y el formato
+    if (curpInput.value.length !== 18 || !regexCurp.test(curpInput.value)) {
+        mensajeErrorCurp.innerText = 'El CURP debe tener exactamente 18 caracteres y solo contener letras y números sin acentos.';
+        curpInput.classList.add('is-invalid');
+    } else {
+        // Limpiar el mensaje de error si la longitud y formato son correctos
+        mensajeErrorCurp.innerText = '';
+        curpInput.classList.remove('is-invalid');
+
+        // Convertir el CURP a mayúsculas
+        curpInput.value = curpInput.value.toUpperCase();
     }
-
-    function validarContrasenaEdit() {
-        var contrasenaInputEdit = document.getElementById('edit-contrasena');
-        var mensajeErrorContrasenaEdit = document.getElementById('mensajeErrorContrasenaEdit');
-        if (contrasenaInputEdit.value.length < 6 || contrasenaInputEdit.value.length > 15) {
-            mensajeErrorContrasenaEdit.textContent = 'La contraseña debe tener entre 6 y 15 caracteres.';
-            contrasenaInputEdit.classList.add('is-invalid');
-        } else {
-            mensajeErrorContrasenaEdit.textContent = '';
-            contrasenaInputEdit.classList.remove('is-invalid');
-        }
-    }
-
+}
     function validarCurpEdit() {
-    var curpInputEdit = document.getElementById('edit-curp');
+    var curpInputEdit = document.getElementById('detalles-curp');
     var mensajeErrorCurpEdit = document.getElementById('mensajeErrorCurpEdit');
 
     curpInputEdit.value = curpInputEdit.value.toUpperCase();
@@ -651,7 +815,6 @@ function verificarCampos() {
         curpInputEdit.classList.remove('is-invalid');
     }
 }
-
 function validarFechaNacimientoEdit() {
     function validarFechaNacimientoEdit() {
         var fechaInputEdit = document.getElementById('edit-html5-date-input');
@@ -678,69 +841,52 @@ function validarFechaNacimientoEdit() {
 }
 
 function verificarCamposEdit() {
-        // Obtener el formulario
-        var formulario = document.getElementById('editUserForm');
+    // Obtener el formulario
+    var formulario = document.getElementById('editCampaignForm');
 
-        // Verificar la validez del formulario
-        if (!formulario.checkValidity()) {
-            // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
-            formulario.reportValidity();
-            return;
-        }
+    // Verificar la validez del formulario
+    if (!formulario.checkValidity()) {
+        // Si el formulario no es válido, mostrar mensajes de error y detener el proceso
+        formulario.reportValidity();
+        return;
+    }
+    
+    // Obtener valores de los campos
+    var idCampaña = document.getElementById('edit-IdCampaña').value;
+    var fechaInicio = document.getElementById('edit-FechaInicioCampaña').value;
+    var fechaFin = document.getElementById('edit-FechaFinCampaña').value;
 
-        // Obtener valores de los campos
-        var nombres = document.getElementById('edit-Nombres').value;
-        var apellidos = document.getElementById('edit-Apellidos').value;
-        var correoElectronico = document.getElementById('edit-correoElectronico').value;
-        var contrasena = document.getElementById('edit-contrasena').value;
-        var tipoSangre = document.getElementById('edit-tipoSangre').value;
-        var curp = document.getElementById('edit-curp').value;
-        var fechaNacimiento = document.getElementById('edit-html5-date-input').value;
-        var genero = document.getElementById('edit-genero').value;
-        var donador = document.getElementById('edit-donador').value;
-        var donadorValue = donador === 'Si' ? 1 : 0;
-       
+    // Crear objeto de datos para enviar al servidor
+    var editedCampaignData = {
+        start_campaign: fechaInicio,
+        end_campaign: fechaFin
+    };
 
-        // Crear objeto de datos para enviar al servidor
-        var editedUserData = {
-          name: nombres,
-          last_name: apellidos,
-          email: correoElectronico,
-          password: contrasena,
-          blood_type: tipoSangre,
-          curp: curp,
-          birthdate: fechaNacimiento,
-          gender: genero,
-          donator:donadorValue
-        };
-
-          fetch('http://127.0.0.1:8000/api/users/' + usuarioSeleccionadoId, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(editedUserData)
-          })
+    fetch('https://bloodprueba.up.railway.app/api/campaigns/?id=' + idCampaña, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editedCampaignData)
+    })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Error al editar el usuario. Código de estado: ' + response.status);
+            throw new Error('Error al editar la campaña. Código de estado: ' + response.status);
         }
         return response.json(); 
     })
     .then(data => {
         console.log('Respuesta del servidor:', data);
 
-        var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasAddCampaign'));
-        offcanvasEditUser.hide();
-        setTimeout(function() {
-            alert('Usuario editado exitosamente.');
-
-        }, 300);
+        var modalElement = document.getElementById('offcanvasEditCampaign');
+        var modal = bootstrap.Offcanvas.getInstance(modalElement);
+        modal.hide();
+            alert('Campaña editada exitosamente.');
        
     })
     .catch(error => {
-        console.error('Error en la solicitud de edición:', error);
-        alert('Error al editar el usuario.');
+        console.error('Error en la solicitud de edición de campaña:', error);
+        alert('Error al editar la campaña.');
 
         if (error && error.response && error.response.text) {
             // Intenta obtener más información sobre la respuesta
@@ -749,21 +895,21 @@ function verificarCamposEdit() {
             });
         }
     });
-    var offcanvasEditUser = new bootstrap.Offcanvas(document.getElementById('offcanvasEditUser'));
-    offcanvasEditUser.hide();
+    // var offcanvasEditCampaign = new bootstrap.Offcanvas(document.getElementById('offcanvasEditCampaign'));
+    // offcanvasEditCampaign.hide();
 }
 </script>
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
       <h4>Listado de Campañas</h4>
-      <button type="button" class="btn btn-secondary" id="btnAddCampaign">Añadir</button>
+      <button type="button" class="btn btn-success" id="btnAddCampaign">Añadir</button>
   </div>
 
   <div class="table-responsive text-nowrap">
       <table class="table">
           <thead class="table-light">
               <tr>
-                  <th>Nombre</th>
+                  <th>#</th>
                   <th>Descripción</th>
                   <th>Tipo</th>
                   <th>Fecha de Inicio</th>
@@ -780,142 +926,253 @@ function verificarCamposEdit() {
 </div>
 <!-- Bootstrap Table with Header - Light -->
 
-
-
-<!----------------------------------------------- Modal Editar Usuarios-------------------------------------------------------------- -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
+<!-- Modal de Detalles Campaña -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDetallesUsuario" aria-labelledby="offcanvasDetallesUsuarioLabel">
     <div class="offcanvas-header">
-        <h5 id="offcanvasEditUserLabel" class="offcanvas-title">Editar Usuario</h5>
+        <h5 id="offcanvasDetallesUsuarioLabel" class="offcanvas-title">Detalles del Usuario</h5>
+        <button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="detalles-usuario pt-0" id="detallesUsuarioForm" onsubmit="return false">
+            <div class="row">
+                <!-- Columna 1 -->
+                <div class="col-md-6">
+                    <!-- Campo ID de la Campaña -->
+                    <div class="mb-3">
+                        <label for="detalles-idCampaña" class="form-label">ID de la Campaña:</label>
+                        <input type="text" class="form-control" id="detalles-idCampaña" readonly>
+                    </div>
+
+                    <!-- Campo Inicio de la Campaña -->
+                    <div class="mb-3">
+                        <label for="detalles-inicioCampaña" class="form-label">Inicio de la Campaña:</label>
+                        <input type="date" class="form-control" id="detalles-inicioCampaña" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="detalles-tipoSangreRequerido" class="form-label">Tipo de Sangre Requerido:</label>
+                        <input type="text" class="form-control" id="detalles-tipoSangreRequerido" readonly>
+                    </div>
+                    
+                </div>
+
+                <!-- Columna 2 -->
+                <div class="col-md-6">
+
+
+                <div class="mb-3">
+                        <label for="detalles-userId" class="form-label">ID del Receptor:</label>
+                        <input type="text" class="form-control" id="detalles-userId" readonly>
+                    </div>
+                    <!-- Campo Tipo de Sangre Requerido -->
+                   
+                    <!-- Campo Fin de la Campaña -->
+                    <div class="mb-3">
+                        <label for="detalles-finCampaña" class="form-label">Fin de la Campaña:</label>
+                        <input type="date" class="form-control" id="detalles-finCampaña" readonly>
+                    </div>
+
+
+
+                    <!-- Campo Donaciones Actuales -->
+                    <div class="mb-3">
+                        <label for="detalles-donacionesActuales" class="form-label">Donaciones Actuales:</label>
+                        <input type="number" class="form-control" id="detalles-donacionesActuales" readonly>
+                    </div>
+                </div>
+
+                <!-- Columna 3 -->
+                <div class="col-md-6">
+                    <!-- Campo Tipo de Donación -->
+                    <div class="mb-3">
+                        <label for="detalles-tipoDonacion" class="form-label">Descripción:</label>
+                        <input type="text" class="form-control" id="detalles-tipoDonacion" readonly>
+                    </div>
+                </div>
+
+                <!-- Columna 4 -->
+                <div class="col-md-6">
+                     <!-- Campo Donaciones Requeridas -->
+                     <div class="mb-3">
+                        <label for="detalles-donacionesRequeridas" class="form-label">Donaciones Requeridas:</label>
+                        <input type="number" class="form-control" id="detalles-donacionesRequeridas" readonly>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+
+                <!-- Campo Nombre del Receptor -->
+                <div class="mb-3">
+                        <label for="detalles-nombreReceptor" class="form-label">Nombre del Receptor:</label>
+                        <input type="text" class="form-control" id="detalles-nombreReceptor" readonly>
+                    </div>
+                     <!-- Campo Donaciones Requeridas -->
+                     
+                </div>
+
+                <!-- Columna 5 -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="detalles-curpReceptor" class="form-label">CURP del Receptor</label>
+                        <input type="text" class="form-control" id="detalles-curpReceptor" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón para cerrar el modal -->
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cerrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Editar Campaña -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditCampaign" aria-labelledby="offcanvasEditCampaignLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasEditCampaignLabel" class="offcanvas-title">Editar Campaña</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
     <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-        <form class="edit-user pt-0" id="editUserForm" onsubmit="return false">
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-Nombres">Nombres</label>
-                <input type="text" id="edit-Nombres" class="form-control" placeholder="Escribir Nombres" aria-label="Nombre Completo" onkeypress="return validarSoloLetras(event, this)" />
-                <div id="mensajeErrorLetrasNombresEdit" style="color: red;"></div>
+        <form class="edit-campaign pt-0" id="editCampaignForm" onsubmit="return false">
+            <div>
+                <!-- Contenedor para el primer par de etiqueta y campo de entrada -->
+                <div class="mb-3" style="width: 45%; display: inline-block;">
+                    <label class="form-label" for="edit-FechaInicioCampaña">Fecha de Inicio</label>
+                    <input type="date" id="edit-FechaInicioCampaña" class="form-control" onchange="validarFechasEdit()" />
+                    <div>
+                        <span id="mensajeErrorFechaInicio"></span>
+                    </div>
+                </div>
+            
+                <!-- Contenedor para el segundo par de etiqueta y campo de entrada -->
+                <div class="mb-3 ms-5" style="width: 45%; display: inline-block;">
+                    <label class="form-label" for="edit-FechaFinCampaña">Fecha de Fin</label>
+                    <input type="date" id="edit-FechaFinCampaña" class="form-control" onchange="validarFechasEdit()" />
+                    <div>
+                        <span id="mensajeErrorFechaFin"></span>
+                    </div>
+                </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="edit-Apellidos">Apellidos</label>
-                <input type="text" id="edit-Apellidos" class="form-control" placeholder="Escribir Apellidos" aria-label="Apellido Completo" onkeypress="return validarSoloLetras(event, this)"  />
-                <div id="mensajeErrorLetrasApellidosEdit" style="color: red;"></div>
+                <label class="form-label" for="edit-IdCampaña">ID de la Campaña</label>
+                <input type="text" id="edit-IdCampaña" class="form-control" readonly />
             </div>
+            <!-- Otros campos que desees editar -->
 
-            <div class="mb-3">
-              <label class="form-label" for="edit-correoElectronico">Correo Electrónico</label>
-              <input type="text" id="edit-correoElectronico" class="form-control" placeholder="Escribir Correo Electrónico" aria-label="john.doe@example.com" onblur="validarCorreoElectronicoEdit()" />
-              <div id="mensajeErrorCorreoEdit" style="color: red;"></div>
-          </div>
-          
-            <div class="mb-3">
-              <label class="form-label" for="edit-contrasena">Contraseña</label>
-              <input type="text" id="edit-contrasena" class="form-control" placeholder="Escribir Contraseña" aria-label="Contraseña" onblur="validarContrasenaEdit()" />
-              <div id="mensajeErrorContrasenaEdit" style="color: red;"></div>
+            <div class="w-100 d-flex justify-content-center mt-3">
+                <button type="submit" id="btnGuardarCambios" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()" data-bs-dismiss="offcanvas">Guardar Cambios</button>
+                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
             </div>
-
-            <div class="mb-3">
-              <label class="form-label" for="edit-fechaNacimiento">Fecha de Nacimiento</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="edit-html5-date-input"  min='1900-01-01' max='2023-12-31' />
-                  <div id="mensajeErrorFechaEdit" style="color: red;"></div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-genero">Género</label>
-                <select id="edit-genero" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label" for="edit-curp">CURP</label>
-              <input type="text" id="edit-curp" class="form-control" placeholder="Escribir CURP" aria-label="CURP"  onblur="validarCurpEdit()" />
-              <div id="mensajeErrorCurpEdit" style="color: red;"></div>
-          </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-tipoSangre">Tipo de Sangre</label>
-                <select id="edit-tipoSangre" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="A+">A+</option>
-                    <option value="O+">O+</option>
-                    <option value="B+">B+</option>
-                    <option value="AB+">AB+</option>
-                    <option value="A-">A-</option>
-                    <option value="O-">O-</option>
-                    <option value="B-">B-</option>
-                    <option value="AB-">AB-</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="edit-donador">Donador</label>
-                <select id="edit-donador" class="form-select">
-                    <option selected disabled value="">Opciones...</option>
-                    <option value="Si">Si</option>
-                    <option value="No">No</option>
-                </select>
-            </div>
-
-            <button type="submit" id="btnEdit" class="btn btn-primary me-sm-3 me-1 data-submit" onclick="verificarCamposEdit()">Guardar Cambios</button>
-            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
         </form>
     </div>
 </div>
 
 
+
 <!-- Modal Añadir Campañas -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
-  <div class="offcanvas-header">
-      <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Campaña</h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
+<div class="offcanvas offcanvas-end modal-dialog-centered" tabindex="-1" id="offcanvasAddCampaign" aria-labelledby="offcanvasAddCampaignLabel">
+    <div class="offcanvas-header d-flex justify-content-between w-100">
+        <h5 id="offcanvasAddCampaignLabel" class="offcanvas-title">Nueva Campaña</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
 
-  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-      <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+        <form class="add-new-campaign pt-0" id="addNewCampaignForm" onsubmit="return false">
+            <div class="row">
+                <!-- Columna 1 -->
+                <div>
+                    
+                </div>
+                <div class="col-12 col-md-6 w-100">
+                    <div class="mb-3" style="display: inline-block; width: 48%">
+                        <label class="form-label" for="add-fechaInicio">Inicio de la Campaña</label>
+                        <div class="col-md-10 w-100">
+                            <input class="form-control w-100" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
+                            <div id="mensajeErrorFechaInicio" class="text-danger"></div> <!-- Nuevo div para mensaje de error -->
+                        </div>
+                    </div>
+                
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
+                        <label class="form-label" for="add-fechaFin">Final de la Campaña</label>
+                        <div class="col-md-10 w-100">
+                            <input class="form-control" style="width: 100%" type="date" value="" id="add-fechaFin" min="2022-01-01" max="2023-12-31" onblur="validarFechas()">
+                            <div id="mensajeErrorFechaFin" class="text-danger"></div> <!-- Nuevo div para mensaje de error -->
+                        </div>
+                    </div>
+                </div>
 
-          <div class="mb-3">
-              <label class="form-label" for="add-nombreCampaña">Nombre de la Campaña</label>
-              <input type="text" id="add-nombreCampaña" class="form-control" placeholder="Escribir Nombre de la Campaña" aria-label="Nombre de la Campaña" />
-          </div>
 
-          <div class="mb-3">
-              <label class="form-label" for="add-descripcionCampaña">Descripción de la Campaña</label>
-              <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Descripción de la Campaña" aria-label="Descripción de la Campaña" />
-          </div>
+                <div class="col-12">
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
+                        <label class="form-label" for="add-tipoDonacion">Tipo de Donaciones</label>
+                        <select id="add-tipoDonacion" class="form-select">
+                            <option selected disabled value="">Opciones...</option>
+                            <option value="Plaquetas">Plaquetas</option>
+                            <option value="Sangre">Sangre</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
+                        <label class="form-label" for="add-unidadesRequeridas">Unidades Requeridas</label>
+                        <input type="number" id="add-unidadesRequeridas" class="form-control" placeholder="Número de Unidades Requeridas" aria-label="Unidades Requeridas" onblur="validarUnidadesRequeridas()" />
+                        <div id="error-unidadesRequeridas" class="text-danger"></div>
+                    </div>
+                </div>
 
-          <div class="mb-3">
-              <label class="form-label" for="add-tipoCampaña">Tipo de Campaña</label>
-              <select id="add-tipoCampaña" class="form-select">
-                  <option selected disabled value="">Opciones...</option>
-                  <option value="Plaquetas">Plaquetas</option>
-                  <option value="Sangre">Sangre</option>
-              </select>
-          </div>
+                
 
-          <div class="mb-3">
-              <label class="form-label" for="add-fechaInicio">Fecha de Inicio</label>
-              <div class="col-md-10">
-                  <input class="form-control" type="date" value="" id="add-fechaInicio" min="2022-01-01" max="2023-12-31" />
-              </div>
-          </div>
+                <!-- Columna 2 -->
+                <div class="col-12 col-md-6 w-100">
 
-          <div class="mb-3">
-              <label class="form-label" for="add-donacionesRequeridas">Donaciones Requeridas</label>
-              <input type="number" id="add-donacionesRequeridas" class="form-control" placeholder="Número de Donaciones Requeridas" aria-label="Donaciones Requeridas" />
-          </div>
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
+                        <label class="form-label" for="add-descripcionCampaña">Descripción de la Campaña</label>
+                        <input type="text" id="add-descripcionCampaña" class="form-control" placeholder="Escribir Descripción de la Campaña" aria-label="Descripción de la Campaña" />
+                    </div>
 
-          <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
-      </form>
-  </div>
+                    <div class="mb-3" style="display: inline-block;  width: 48%">
+                        <label class="form-label" for="add-curpCampaña">CURP de la persona a donar</label>
+                        <input type="text" id="add-curpCampaña" class="form-control" placeholder="Escribir CURP de la persona a Donar" aria-label="CURP" onblur="validarCurp2()" />
+                        <div id="mensajeErrorCurp" style="color: red;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Nueva fila para centrar los botones -->
+                <div class="col-md-12 offset-md-0 text-center">
+                    <button type="submit" id="btnAddCampaign" class="btn btn-danger me-sm-3 me-1 data-submit" onclick="verificarCamposCampaign()">Confirmar</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+
+<style>
+    #offcanvasAddCampaign {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        height: 400px;
+    }
+</style>
+
+<style>
+    #offcanvasDetallesUsuario {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        height: 450px;
+    }
+</style>
+
 
                       <!-- / Content -->
 

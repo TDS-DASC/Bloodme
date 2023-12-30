@@ -21,4 +21,8 @@ class CampaignMedicalUnit extends Model
         'created_at' => 'datetime',
     ];
 
+    public function parent()
+    {
+        return $this->belongsTo(Campaign::class);
+    }
 }

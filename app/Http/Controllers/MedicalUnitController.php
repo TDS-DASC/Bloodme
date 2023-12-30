@@ -11,7 +11,9 @@ class MedicalUnitController extends Controller
     public function create(Request $request){
         $validateData = $request->validate([
            'name' => 'required',
-           'urlGmaps' => 'required'
+           'urlGmaps' => 'required',
+           "multiple_donation" => 'sometimes',
+           "donations_limit_day" => 'sometimes',
         ]);
         $medicalUnit = MedicalUnit::create($validateData);
         $medicalUnit->save();
