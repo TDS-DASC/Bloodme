@@ -12,6 +12,11 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/welcome.vue"),
+  },
 ];
 
 export default routes;
