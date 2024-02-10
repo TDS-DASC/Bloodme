@@ -15,7 +15,17 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("@/views/welcome.vue"),
+    component: () => import("@/views/auth/login.vue"),
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("@/views/auth/register.vue"),
+  },
+  {
+    path: "/:catchAll(.*)",
+    name: "404",
+    component: () => import("@/views/404.vue"),
   },
 ];
 

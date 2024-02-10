@@ -1,18 +1,18 @@
 <template>
   <form @submit.prevent="onSubmit" class="space-y-4">
     <Textinput
-      label="Email"
+      label="Correo Electronico"
       type="email"
-      placeholder="Correo electronico"
+      placeholder="Ingrese su correo electronico"
       name="email"
       v-model="email"
       :error="emailError"
       classInput="h-[48px]"
     />
     <Textinput
-      label="Password"
+      label="Contraseña"
       type="password"
-      placeholder="Contraseña"
+      placeholder="Ingrese su contraseña"
       name="password"
       v-model="password"
       :error="passwordError"
@@ -77,8 +77,8 @@
     setup() {
       // Define a validation schema
       const schema = yup.object({
-        email: yup.string().required("Email is required").email(),
-        password: yup.string().required("Password is required").min(8),
+        email: yup.string().required("El correo electronico es requerido").email(),
+        password: yup.string().required("La contraseña es requerida").min(8),
       });
 
       const toast = useToast();
