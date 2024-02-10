@@ -1,8 +1,7 @@
-<template>
+<template class="">
   <form @submit.prevent="onSubmit" class="space-y-4">
-
-    <div name="form-container" class="w-full ">
-      <div v-if="stepIndex==0">
+    <div name="form-container" class="w-full">
+      <div v-if="stepIndex==0" class="overflow-hidden">
         <Textinput
           label="Nombre*"
           type="text"
@@ -40,7 +39,7 @@
           classInput="h-[48px]"
         />
       </div>
-      <div v-if="false">
+      <div v-if="stepIndex==1">
         <Select
           label="Type of blood*"
           name="bloodType"
@@ -74,7 +73,7 @@
           classInput="h-[48px]"
         />
       </div>
-      <div v-if="false">
+      <div v-if="stepIndex==2">
         <Textinput
           label="Contraseña*"
           type="password"
@@ -130,24 +129,24 @@
       <button class="btn bg-red-500 block text-center text-white"  v-if="stepIndex!=2" @click="stepIndex++">
           Siguiente
       </button>
-      <button class="btn bg-red-500 block text-center text-white"  v-else>
+      <button type="submit" class="btn bg-red-500 block text-center text-white"  v-else>
         Crea tu cuenta
       </button>
     </div>
     
-    <div name="progress-bar"
-      class="flex justify-center gap-12">
-      <div :class="stepClassStorage[0]">
-        <p class="font-bold text-black-900 dark:text-white">1</p>
-      </div>
-      <div :class="stepClassStorage[1]">
-        <p class="font-bold text-black-900 dark:text-white">2</p>
-      </div>
-      <div :class="stepClassStorage[2]">
-        <p class="font-bold text-black-900 dark:text-white">3</p>
-      </div>
-    </div>
   </form>
+  <div name="progress-bar"
+    class="flex justify-center gap-12 mt-5">
+    <div :class="stepClassStorage[0]">
+      <p class="font-bold text-black-900 dark:text-white">1</p>
+    </div>
+    <div :class="stepClassStorage[1]">
+      <p class="font-bold text-black-900 dark:text-white">2</p>
+    </div>
+    <div :class="stepClassStorage[2]">
+      <p class="font-bold text-black-900 dark:text-white">3</p>
+    </div>
+  </div>
 </template>
 <script>
 import Textinput from "@/components/Textinput";

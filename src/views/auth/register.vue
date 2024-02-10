@@ -3,7 +3,7 @@
     <div class="lg-inner-column">
       <div class="right-column relative">
         <div
-          class="inner-content h-full flex flex-col bg-white dark:bg-slate-800"
+          class="inner-content max-h-screen h-full overflow-hidden flex flex-col bg-white dark:bg-slate-800"
         >
           <div class="auth-box h-full flex flex-col justify-center">
             <div class="text-center 2xl:mb-10 mb-5">
