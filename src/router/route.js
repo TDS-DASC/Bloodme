@@ -23,6 +23,11 @@ const routes = [
     component: () => import("@/views/auth/register.vue"),
   },
   {
+    path: "/forgot",
+    name: "forgot",
+    component: () => import("@/views/auth/forgot.vue"),
+  },
+  {
     path: "/:catchAll(.*)",
     name: "404",
     component: () => import("@/views/404.vue"),

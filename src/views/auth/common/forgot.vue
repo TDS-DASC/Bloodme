@@ -3,7 +3,7 @@
     <Textinput
       label="Email"
       type="email"
-      placeholder="Type your email"
+      placeholder="Ingresa tu correo"
       name="emil"
       v-model="email"
       :error="emailError"
@@ -11,7 +11,7 @@
     />
 
     <button type="submit" class="btn btn-dark block w-full text-center">
-      Send recovery email
+      Enviar correo de recuperación
     </button>
   </form>
 </template>
@@ -32,7 +32,7 @@ export default {
   setup() {
     // Define a validation schema
     const schema = yup.object({
-      email: yup.string().required().email(),
+      email: yup.string().required("El correo electronico es requerido").email(),
     });
 
     const { handleSubmit } = useForm({
