@@ -14,13 +14,13 @@
             </div>
             <Signup />
             <div class="relative border-b-[#9AA2AF] border-opacity-[16%] border-b pt-6"></div>
-            <div class="max-w-[215px] mx-auto font-normal text-slate-500 dark:text-slate-400 2xl:mt-12 mt-6 uppercase text-sm">
+            <div class="max-w-[215px] mx-auto font-normal text-slate-500 dark:text-slate-400 2xl:mt-12 mt-6 uppercase text-sm text-center">
               ¿Ya estas registrado?
               <router-link
                 to="/"
                 class="text-slate-900 dark:text-white font-medium hover:underline"
               >
-                Sign In</router-link
+                Inicia Sesión</router-link
               >
             </div>
           </div>
@@ -57,25 +57,25 @@
   </div>
 </template>
 <script>
-import Signup from "./common/Signup";
-import Social from "./common/Social";
-// Image Import
-  import bgauth from "@/assets/images/all-img/bg-auth.jpg";
-  import blooddrop from "@/assets/images/icon/blooddrop.svg";
-  import dasclogo from "@/assets/images/logo/dasclogo.png";
+  import Signup from "./common/Signup";
+  import Social from "./common/Social";
+  // Image Import
+    import bgauth from "@/assets/images/all-img/bg-auth.jpg";
+    import blooddrop from "@/assets/images/icon/blooddrop.svg";
+    import dasclogo from "@/assets/images/logo/dasclogo.png";
 
-export default {
-  data() {
-    return {
-        blooddrop,
-        bgauth,
-        dasclogo,
-    };
-  },
-  components: {
-    Social,
-    Signup,
-  },
-};
+  export default {
+    data() {
+      return {
+          blooddrop,
+          bgauth,
+          dasclogo,
+      };
+    },
+    components: {
+      Social,
+      Signup,
+    },
+  };
 </script>
 <style lang="scss"></style>

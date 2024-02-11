@@ -58,11 +58,14 @@
           <Icon icon="heroicons-outline:eye" v-if="types === 'password'" />
           <Icon icon="heroicons-outline:eye-off" v-else />
         </span>
-
-        <span v-if="error" class="text-danger-500">
+        
+        <span v-if="error && types === 'date'" class="text-danger-500 translate-x-10">
           <Icon icon="heroicons-outline:information-circle" />
         </span>
-
+        <span v-else-if="error" class="text-danger-500">
+          <Icon icon="heroicons-outline:information-circle" />
+        </span>
+        
         <span v-if="validate" class="text-success-500">
           <Icon icon="bi:check-lg" />
         </span>
