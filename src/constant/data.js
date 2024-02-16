@@ -9,9 +9,13 @@ export const menuItems = [
     title: "menu",
   },
   {
-    title: "Dashboard",
+    title: "Inicio",
     icon: "heroicons-outline:home",
     link: "home",
+  },
+  {
+    title: "Hospitales",
+    icon: "heroicons-outline:home",
   },
 ];
 // menuseetins
@@ -23,37 +27,12 @@ export const ProfileMenu = [
     link: "#",
   },
   {
-    label: "Chat",
-    icon: "heroicons-outline:chat",
-    link: "chat",
-  },
-  {
-    label: "Email",
-    icon: "heroicons-outline:mail",
-    link: "email",
-  },
-  {
-    label: "Todo",
-    icon: "heroicons-outline:chip",
-    link: "todo",
-  },
-  {
-    label: "Settings",
+    label: "Ajustes",
     icon: "heroicons-outline:cog",
     link: "#",
   },
   {
-    label: "Price",
-    icon: "heroicons-outline:credit-card",
-    link: "pricing",
-  },
-  {
-    label: "Faq",
-    icon: "heroicons-outline:information-circle",
-    link: "faq",
-  },
-  {
-    label: "Logout",
+    label: "Cerrar sesión",
     icon: "heroicons-outline:login",
     link: "/",
   },
@@ -71,18 +50,6 @@ export const notifications = [
     desc: "Won the monthly best seller badge",
     unread: true,
     image: user2Img,
-    link: "#",
-  },
-  {
-    title: "Revised Order 👋",
-    desc: "Won the monthly best seller badge",
-    image: user3Img,
-    link: "#",
-  },
-  {
-    title: "Brooklyn Simmons",
-    desc: "Added you to Top Secret Project group...",
-    image: user4Img,
     link: "#",
   },
 ];
@@ -103,48 +70,6 @@ export const message = [
     active: false,
     hasnotifaction: false,
     image: user2Img,
-    link: "#",
-  },
-  {
-    title: "Ralph Edwards",
-    desc: "Hi! How are you doing?.....",
-    active: false,
-    hasnotifaction: true,
-    notification_count: 8,
-    image: user3Img,
-    link: "#",
-  },
-  {
-    title: "Cody Fisher",
-    desc: "Hi! How are you doing?.....",
-    active: true,
-    hasnotifaction: false,
-    image: user4Img,
-    link: "#",
-  },
-  {
-    title: "Savannah Nguyen",
-    desc: "Hi! How are you doing?.....",
-    active: false,
-    hasnotifaction: false,
-    image: user2Img,
-    link: "#",
-  },
-  {
-    title: "Ralph Edwards",
-    desc: "Hi! How are you doing?.....",
-    active: false,
-    hasnotifaction: true,
-    notification_count: 8,
-    image: user3Img,
-    link: "#",
-  },
-  {
-    title: "Cody Fisher",
-    desc: "Hi! How are you doing?.....",
-    active: true,
-    hasnotifaction: false,
-    image: user4Img,
     link: "#",
   },
 ];

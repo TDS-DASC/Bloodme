@@ -1,7 +1,12 @@
 <template class="">
-  <form @submit.prevent="onSubmit" class="space-y-4">
+  <form @submit.prevent="onSubmit" class="space-y-4 flex flex-col">
+    <span v-if="!checkbox && submitForm" class="text-red-500 dark:text-slate-400 text-sm leading-6 p-2 text center">
+      Revise por favor todos los campos del formulario correctamente
+    </span>
     <div name="form-container" class="w-full">
-      <div v-if="stepIndex==0" class="overflow-hidden">
+      <div v-if="stepIndex==0">
+        <input 
+            pattern="[^0-9]*" type="text">
         <Textinput
           label="Nombre*"
           type="text"
@@ -12,40 +17,38 @@
           classInput="h-[48px]"
         />
         <Textinput
-          label="Primer apellido*"
+          label="Apellidos*"
           type="text"
-          placeholder="Ingrese su primer apellido"
-          name="firstLastName"
-          v-model="firstLastName"
-          :error="firstLastNameError"
-          classInput="h-[48px]"
-        />
-        <Textinput
-          label="Segundo apellido*"
-          type="text"
-          placeholder="Ingrese su segundo apellido"
-          name="secondLastName"
-          v-model="secondLastName"
-          :error="secondLastNameError"
+          placeholder="Ingrese sus apellidos"
+          name="lastName"
+          v-model="lastName"
+          :error="lastNameError"
           classInput="h-[48px]"
         />
         <Textinput
           label="Alias*"
           type="text"
           placeholder="Ingrese su alias"
-          name="aka"
-          v-model="aka"
-          :error="akaError"
+          name="alias"
+          v-model="alias"
+          :error="aliasError"
           classInput="h-[48px]"
+        />
+        <Select
+          label="Seleccione su sexo*"
+          name="sex"
+          :options="sexOptions"
+          :error="sexError"
+          v-model="sex"
         />
       </div>
       <div v-if="stepIndex==1">
         <Select
-          label="Type of blood*"
-          name="typeOfBlood"
+          label="Tipo de sangre*"
+          name="blood_type"
           :options="bloodTypes"
-          :error="typeOfBloodError"
-          v-model="typeOfBlood"
+          :error="blood_typeError"
+          v-model="blood_type"
         />
         <Textinput
           label="CURP*"
@@ -68,13 +71,25 @@
         <Textinput
           label="Fecha de nacimiento*"
           type="date"
-          name="birthDate"
-          v-model="birthDate"
-          :error="birthDateError"
+          name="birth_date"
+          v-model="birth_date"
+          :error="birth_dateError"
           classInput="h-[48px] mr-3"
         />
       </div>
       <div v-if="stepIndex==2">
+        <Textinput
+          label="Numero de celular*"
+          type="number"
+          placeholder="Ingres su numero celular"
+          name="phone_number"
+          v-model="phone_number"
+          :error="phone_numberError"
+          classInput="h-[48px]"
+        />
+        <span v-if="validPhone" class="text-red-500 dark:text-slate-400 text-sm leading-6 p-2 text center">
+          Ingrese por favor un número válido (6##-####-###)
+        </span>
         <Textinput
           label="Contraseña*"
           type="password"
@@ -89,8 +104,8 @@
           label="Repite la Contraseña*"
           type="password"
           placeholder="Repita su contraseña"
-          name="secondPassword"
-          v-model="secondPassword"
+          name="password_confirmation"
+          v-model="password_confirmation"
           hasicon
           classInput="h-[48px]"
         />
@@ -146,13 +161,13 @@
   </form>
   <div name="progress-bar"
     class="flex justify-center gap-12 mt-5">
-    <div :class="stepClassStorage[0]">
+    <div :class="storageOfStepClass[0]">
       <p class="font-bold">1</p>
     </div>
-    <div :class="stepClassStorage[1]">
+    <div :class="storageOfStepClass[1]">
       <p class="font-bold">2</p>
     </div>
-    <div :class="stepClassStorage[2]">
+    <div :class="storageOfStepClass[2]">
       <p class="font-bold">3</p>
     </div>
   </div>
@@ -163,9 +178,8 @@ import { useField, useForm } from "vee-validate";
 import * as yup from "yup";
 
 import { inject, ref, watch } from "vue";
-import { useRouter } from "vue-router";
-import { useToast } from "vue-toastification";
 import Select from "@/components/Select";
+import axios from "axios";
 
 export default {
   components: {
@@ -174,72 +188,107 @@ export default {
   },
   data() {
     return {
-      /* checkbox: false, */
     };
   },
   setup() {
-    // Define a validation schema
     const schema = yup.object({
       email: yup.string().required("El correo electronico es requerido").email(),
       password: yup.string().required("La contraseña es requerida").min(8),
       name: yup.string().required("El nombre es requerido"),
-      firstLastName: yup.string().required("El primer apellido es requerido"),
-      secondLastName: yup.string().required("El segundo apellido es requerido"),
-      aka: yup.string().required("Su alias es requerido"),
-      typeOfBlood: yup.string().required("Su tipo de sangre es requerido"),
+      lastName: yup.string().required("Sus apellidos son requeridos"),
+      alias: yup.string().required("Su alias es requerido"),
+      blood_type: yup.string().required("Su tipo de sangre es requerido"),
       curp: yup.string().required("Su CURP es requerido"),
-      birthDate: yup.string().required("Su fecha de nacimiento es requerido"),
+      birth_date: yup.string().required("Su fecha de nacimiento es requerido"),
+      sex: yup.string().required("Es obligatorio que escoja su sexo"),
+      phone_number: yup.string().required("Es obligatorio que proporcione su telefono"),
     });
-    const swal = inject("$swal");
-    const router = useRouter();
 
-    // Create a form context with the validation schema
-    const users = [];
     const { handleSubmit } = useForm({
-      validationSchema: schema,
+      validationSchema: schema
     });
-    // No need to define rules for fields
 
-    const { value: email, errorMessage: emailError } = useField("email");
     const { value: name, errorMessage: nameError } = useField("name");
-    const { value: firstLastName, errorMessage: firstLastNameError } = useField("firstLastName");
-    const { value: secondLastName, errorMessage: secondLastNameError } = useField("secondLastName");
-    const { value: aka, errorMessage: akaError } = useField("aka");
-    const { value: typeOfBlood, errorMessage: typeOfBloodError } = useField("typeOfBlood");
+    const { value: lastName, errorMessage: lastNameError } = useField("lastName");
+    const { value: alias, errorMessage: aliasError } = useField("alias");
+    const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
+    const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
+    const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
+    const { value: sex, errorMessage: sexError } = useField("sex");
     const { value: curp, errorMessage: curpError } = useField("curp");
-    const { value: birthDate, errorMessage: birthDateError } = useField("birthDate");
+    const { value: email, errorMessage: emailError } = useField("email");
     const { value: password, errorMessage: passwordError } = useField("password");
-    const { value: secondPassword, errorMessage: secondPasswordError } = useField("secondPassword");
+    const { value: password_confirmation, errorMessage: password_confirmationError } = useField("password_confirmation");
+
+    /* mustRemoveOnceIsDone */
+    axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
+        axios.post('http://127.0.0.1:8000/register', {
+          name: "Kenneth de Guadalupe",
+          lastname: "Quintero Valles",
+          alias: "Kenneth Quintero",
+          birth_date: "2001-12-05",
+          blood_type: "A+",
+          phone_number: "6131051468",
+          sex: "H",
+          curp: "sdfghjqwertyu1234k",
+          email: "kennethgqv@gmail.com",
+          password: "uytjhgmnbuytqwe",
+          password_confirmation: "uytjhgmnbuytqwe",
+          image_url: "placeholder.jpg"
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          console.error('Error in login request:', error);
+        });
+      }).catch(error => {
+        console.error('Error in login token:', error);
+      });
 
     const onSubmit = handleSubmit((values) => {
-      // add value into user array if same email not found
-      if (!users.find((user) => user.email === values.email)) {
-        if(secondPassword.value != password.value){
+        if(password_confirmation.value != password.value){
           console.log("different password");
-          console.log(secondPassword);
+          console.log(password_confirmation);
           console.log(password);
           return;
         }
         if(!checkbox.value)
           return;
-        
-        router.push("/");
-        
-      } else {
+        const newUserForm = [
+          { name: 'name', value: name.value },
+          { name: 'lastName', value: lastName.value },
+          { name: 'alias', value: alias.value },
+          { name: 'birth_date', value: birth_date.value },
+          { name: 'blood_type', value: blood_type.value },
+          { name: 'phone_number', value: phone_number.value },
+          { name: 'sex', value: sex.value },
+          { name: 'curp', value: curp.value },
+          { name: 'email', value: email.value },
+          { name: 'password', value: password.value },
+          { name: 'password_confirmation', value: password_confirmation.value },
+          { name: 'image_url', value: '0'}
+        ];
+          
+        axios.post('http://127.0.0.1:8000/register/', newUserForm).then(response => {
+          console.log(response); 
+          console.log(newUserForm.values);
+        })
+        .catch(error => {
+          console.error('An error occured:', error);
+        });
+
         // use sweetalert 2
-        swal.fire({
+       /*  swal.fire({
           title: "Email already exists",
           text: "Please try another email",
           icon: "error",
           confirmButtonText: "Ok",
-        });
-      }
+        }); */
     });
 
     //Not from the template
     const checkbox = ref(false);
-    const submitForm = ref(false);
-    const passwordDontMatch = ref(false);
     const bloodTypes = ([
       { value: "0", label: "A+" },
       { value: "1", label: "A-" },
@@ -250,26 +299,46 @@ export default {
       { value: "6", label: "O+" },
       { value: "7", label: "O-" }
     ]);
+    const sexOptions = ([
+      { value: "H", label: "Hombre" },
+      { value: "M", label: "Mujer" },
+    ]);
     
-    const stepIndex = ref(0);
     const defaultStepClass = 'py-2 px-4 rounded-full border-solid border-2 border-gray-300 bg-white duration-300 text-slate-300 bg-gray-100 dark:border-gray-400 dark:bg-gray-800 dark:text-slate-400 ';
     const selectedStepClass = 'py-2 px-4 rounded-full border-solid border-2 border-black-900 -translate-y-3 bg-red-100 duration-300 text-black-900 dark:text-black-900 dark:border-black-300 dark:bg-white'
-    const stepClassStorage = ref([selectedStepClass,defaultStepClass,defaultStepClass]);
+    const storageOfStepClass = ref([selectedStepClass,defaultStepClass,defaultStepClass]);
     
-    watch(secondPassword, () => {
-      if(password.value != secondPassword.value)
+    const submitForm = ref(false);
+    watch(submitForm, () => {
+      setTimeout(() => {
+        stepIndex.value = 0;
+      }, 100);
+    });
+
+    const passwordDontMatch = ref(false);
+    watch(password_confirmation, () => {
+      if(password.value != password_confirmation.value)
         passwordDontMatch.value = true;
       else
         passwordDontMatch.value = false;
     });
 
+    const stepIndex = ref(0);
     watch(stepIndex, () => {
       if(stepIndex.value >= 0 && stepIndex.value <= 2){
         const updatedStepClassStorage = ([defaultStepClass,defaultStepClass,defaultStepClass]);
         updatedStepClassStorage[stepIndex.value] = selectedStepClass; 
-        stepClassStorage.value = updatedStepClassStorage; 
+        storageOfStepClass.value = updatedStepClassStorage; 
         return;
       }
+    });
+
+    const validPhone = ref(false);
+    watch(phone_number, () => {
+      if(phone_number.value.length > 10)
+        validPhone.value = true;
+      else 
+        validPhone.value = false;
     });
 
     return {
@@ -277,28 +346,32 @@ export default {
       emailError,
       name,
       nameError,
-      firstLastName,
-      firstLastNameError,
-      secondLastName,
-      secondLastNameError,
+      lastName,
+      lastNameError,
       password,
       passwordError,
-      secondPassword,
-      secondPasswordError,
-      typeOfBlood,
-      typeOfBloodError,
+      password_confirmation,
+      password_confirmationError,
+      blood_type,
+      blood_typeError,
       curp,
       curpError,
-      birthDate,
-      birthDateError,
-      aka,
-      akaError,
+      birth_date,
+      birth_dateError,
+      phone_number,
+      phone_numberError,
+      sex,
+      sexError,
+      alias,
+      aliasError,
       bloodTypes,
-      stepClassStorage,
+      storageOfStepClass,
       stepIndex,
       checkbox,
       submitForm,
+      validPhone,
       passwordDontMatch,
+      sexOptions,
       onSubmit,
     };
   },

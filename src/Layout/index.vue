@@ -1,5 +1,5 @@
 <template>
-  <main class="app-wrapper">
+  <main class="app-wrapper h-screen overflow-hidden">
     <Header :class="window.width > 1280 ? switchHeaderClass() : ''" />
     <!-- end header -->
 
@@ -10,12 +10,13 @@
         window.width > 1280
       "
     />
-    <!-- main sidebar end -->
+
     <Transition name="mobilemenu">
       <mobile-sidebar
         v-if="window.width < 1280 && this.$store.themeSettingsStore.mobielSidebar"
       />
     </Transition>
+    
     <Transition name="overlay-fade">
       <div
         v-if="window.width < 1280 && this.$store.themeSettingsStore.mobielSidebar"
@@ -24,7 +25,6 @@
       ></div>
     </Transition>
     <!-- mobile sidebar -->
-    <Settings />
 
     <div
       class="content-wrapper transition-all duration-150"
@@ -33,15 +33,16 @@
       <div
         class="page-content"
         :class="this.$route.meta.appheight ? 'h-full' : 'page-min-height'"
+        style="padding: 0;"
       >
         <div
-          :class="` transition-all duration-150 ${
+          :class="`transition-all duration-150 ${
             this.$store.themeSettingsStore.cWidth === 'boxed'
               ? 'container mx-auto'
               : 'container-fluid'
           }`"
         >
-          <Breadcrumbs v-if="!this.$route.meta.hide" />
+          <!-- <Breadcrumbs v-if="!this.$route.meta.hide" /> -->
           <router-view v-slot="{ Component }">
             <transition name="router-animation" mode="out-in" appear>
               <component :is="Component"></component>
@@ -52,17 +53,16 @@
     </div>
     <!-- end page content -->
     <FooterMenu v-if="window.width < 768" />
-    <Footer
+    <!-- <Footer
       :class="window.width > 1280 ? switchHeaderClass() : ''"
       v-if="window.width > 768"
-    />
+    /> -->
   </main>
 </template>
 <script>
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Settings from "../components/Settings";
 import Sidebar from "../components/Sidebar/";
 import window from "@/mixins/window";
 import MobileSidebar from "@/components/Sidebar/MobileSidebar.vue";
@@ -74,7 +74,6 @@ export default {
     Header,
     Footer,
     Sidebar,
-    Settings,
     Breadcrumbs,
     FooterMenu,
     MobileSidebar,

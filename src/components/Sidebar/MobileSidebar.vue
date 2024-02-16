@@ -7,18 +7,21 @@
     }   `"
   >
     <div class="logo-segment flex justify-between items-center px-4 py-6">
-      <router-link :to="{ name: 'home' }">
+      <router-link :to="{ name: 'home' }" class="flex text-4xl font-bold text-black-900 align-middle justify-center dark:text-white">
         <img
-          src="@/assets/images/logo/logo.svg"
+          class="w-10"
+          src="@/assets/images/icon/blooddrop.svg"
           alt=""
           v-if="!this.$store.themeSettingsStore.isDark"
         />
 
         <img
-          src="@/assets/images/logo/logo-white.svg"
+          class="w-10"
+          src="@/assets/images/icon/blooddrop.svg"
           alt=""
           v-if="this.$store.themeSettingsStore.isDark"
         />
+        <p>BloodMe</p>
       </router-link>
       <span
         class="cursor-pointer text-slate-900 dark:text-white text-2xl"
@@ -29,29 +32,6 @@
 
     <div class="sidebar-menu px-4 h-[calc(100%-100px)]" data-simplebar>
       <Navmenu :items="menuItems" />
-      <div
-        class="bg-slate-900 mb-[100px] mt-14 p-4 relative text-center rounded-2xl text-white"
-        v-if="!this.$store.themeSettingsStore.sidebarCollasp"
-      >
-        <img
-          src="@/assets/images/svg/rabit.svg"
-          alt=""
-          class="mx-auto relative -mt-[73px]"
-        />
-        <div class="max-w-[160px] mx-auto mt-6">
-          <div class="widget-title">Unlimited Access</div>
-          <div class="text-xs font-light">
-            Upgrade your system to business plan
-          </div>
-        </div>
-        <div class="mt-6">
-          <button
-            class="btn bg-white hover:bg-opacity-80 text-slate-900 btn-sm w-full block"
-          >
-            Upgrade
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </template>

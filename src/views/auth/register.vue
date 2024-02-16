@@ -17,7 +17,7 @@
             <div class="max-w-[215px] mx-auto font-normal text-slate-500 dark:text-slate-400 2xl:mt-12 mt-6 uppercase text-sm text-center">
               ¿Ya estas registrado?
               <router-link
-                to="/"
+                to="/login"
                 class="text-slate-900 dark:text-white font-medium hover:underline"
               >
                 Inicia Sesión</router-link

@@ -68,13 +68,6 @@ export default {
           },
         },
         {
-          label: "Chat",
-          icon: "heroicons-outline:chat",
-          link: () => {
-            this.$router.push("chat");
-          },
-        },
-        {
           label: "Email",
           icon: "heroicons-outline:mail",
           link: () => {
@@ -82,24 +75,10 @@ export default {
           },
         },
         {
-          label: "Todo",
-          icon: "heroicons-outline:clipboard-check",
-          link: () => {
-            this.$router.push("todo");
-          },
-        },
-        {
           label: "Settings",
           icon: "heroicons-outline:cog",
           link: () => {
             this.$router.push("settings");
-          },
-        },
-        {
-          label: "Price",
-          icon: "heroicons-outline:credit-card",
-          link: () => {
-            this.$router.push("pricing");
           },
         },
         {

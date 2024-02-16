@@ -99,6 +99,7 @@
         </ul>
       </Transition>
     </li>
+    <!-- Documentation -->
     <li class="single-sidebar-menu">
       <a
         href="https://dashcode-doc.codeshaper.tech/"
@@ -303,7 +304,7 @@ export default {
 }
 .menu-item-active {
   .menu-link {
-    @apply bg-slate-800 dark:bg-slate-700;
+    @apply bg-red-600 dark:bg-slate-600;
     .icon-box,
     .menu-icon,
     .text-box {

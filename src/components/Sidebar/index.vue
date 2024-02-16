@@ -30,30 +30,36 @@
         
         `"
       >
+      <!-- Blood Me title -->
         <router-link
-          :to="{ name: 'home' }"
+          :to="{ name:  'home' }"
           v-if="
             !this.$store.themeSettingsStore.sidebarCollasp ||
             this.$store.themeSettingsStore.isMouseHovered
           "
         >
-          <img
-            src="@/assets/images/logo/logo.svg"
+          <div class="flex justify-start items-center">
+            <img  
+            src="@/assets/images/icon/blooddrop.svg"
             alt=""
+            class="w-1/5"
             v-if="
-              !this.$store.themeSettingsStore.isDark &&
-              !this.$store.themeSettingsStore.semidark
-            "
-          />
+                !this.$store.themeSettingsStore.isDark &&
+                !this.$store.themeSettingsStore.semidark
+              "
+            />
 
-          <img
-            src="@/assets/images/logo/logo-white.svg"
+            <img
+            src="@/assets/images/icon/blooddrop.svg"
             alt=""
+            class="w-1/5"
             v-if="
-              this.$store.themeSettingsStore.isDark ||
-              this.$store.themeSettingsStore.semidark
-            "
-          />
+                this.$store.themeSettingsStore.isDark ||
+                this.$store.themeSettingsStore.semidark
+                "
+              />
+            <p class="cursor-pointer text-slate-900 dark:text-white text-3xl font-bold">Blood Me</p>
+          </div>
         </router-link>
         <router-link
           :to="{ name: 'home' }"
@@ -62,22 +68,14 @@
             !this.$store.themeSettingsStore.isMouseHovered
           "
         >
-          <img
-            src="@/assets/images/logo/logo-c.svg"
+        <img  
+            src="@/assets/images/icon/blooddrop.svg"
             alt=""
             v-if="
-              !this.$store.themeSettingsStore.isDark &&
-              !this.$store.themeSettingsStore.semidark
-            "
-          />
-          <img
-            src="@/assets/images/logo/logo-c-white.svg"
-            alt=""
-            v-if="
-              this.$store.themeSettingsStore.isDark ||
-              this.$store.themeSettingsStore.semidark
-            "
-          />
+                !this.$store.themeSettingsStore.isDark &&
+                !this.$store.themeSettingsStore.semidark
+              "
+            />
         </router-link>
         <span
           class="cursor-pointer text-slate-900 dark:text-white text-2xl"
@@ -125,7 +123,6 @@
 import { defineComponent } from "vue";
 import { menuItems } from "../../constant/data";
 import Navmenu from "./Navmenu";
-import { gsap } from "gsap";
 import { SimpleBar } from "simplebar-vue3";
 import { ref, onMounted } from "vue";
 

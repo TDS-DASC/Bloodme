@@ -1,13 +1,15 @@
 <template>
   <router-link :to="{ name: 'home' }">
     <img
-      src="@/assets/images/logo/logo.svg"
+      class="w-1/5"
+      src="@/assets/images/icon/blooddrop.svg"
       alt=""
       v-if="!this.$store.themeSettingsStore.isDark"
     />
 
     <img
-      src="@/assets/images/logo/logo-white.svg"
+      class="w-1/5"
+      src="@/assets/images/icon/blooddrop.svg"
       alt=""
       v-if="this.$store.themeSettingsStore.isDark"
     />

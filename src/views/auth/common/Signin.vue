@@ -47,7 +47,7 @@
         >
       </label>
       <router-link
-        to="/forgot-password"
+        to="/forgot"
         class="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium"
         >¿Olvidaste tú contraseña?</router-link
       >
@@ -62,9 +62,7 @@
   import Textinput from "@/components/Textinput";
   import { useField, useForm } from "vee-validate";
   import * as yup from "yup";
-
-  import { useRouter } from "vue-router";
-  import { useToast } from "vue-toastification";
+  import axios from "axios";
   export default {
     components: {
       Textinput,
@@ -75,14 +73,10 @@
       };
     },
     setup() {
-      // Define a validation schema
       const schema = yup.object({
         email: yup.string().required("El correo electronico es requerido").email(),
         password: yup.string().required("La contraseña es requerida").min(8),
       });
-
-      const toast = useToast();
-      const router = useRouter();
 
       const formValues = {
         email: "",
@@ -94,40 +88,71 @@
         initialValues: formValues,
       });
 
-      // No need to define rules for fields
       const { value: email, errorMessage: emailError } = useField("email");
       const { value: password, errorMessage: passwordError } = useField("password");
 
-      const onSubmit = handleSubmit((values) => {
-        let isUser = localStorage.users;
-        isUser = JSON.parse(isUser);
+      /* mustRemoveOnceIsDone */
+      axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
+        axios.post('http://127.0.0.1:8000/login', {
+          email: 'kennethgqv@gmail.com',
+          password: 'uytjhgmnbuytqwe', 
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          console.error('Error in login request:', error);
+        });
+      }).catch(error => {
+        console.error('Error in login token:', error);
+      });
+     
 
-        let userIndex = isUser.findIndex((user) => user.email === values.email);
+      const onSubmit = async function handleSubmit(values){
+        try{
+          await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie')
+          .catch(error => {
+            console.error('Error in login token:', error);
+          });
 
-        if (userIndex > -1) {
-          let activeUser = isUser.find((user) => user.email === values.email);
-          localStorage.setItem("activeUser", JSON.stringify(activeUser));
-
-          if (isUser[userIndex].password === values.password) {
-            router.push("/app/home");
-            toast.success(" Login  successfully", {
-              timeout: 2000,
-            });
-          } else {
-            toast.error(" Password not match ", {
-              timeout: 2000,
-            });
+          await axios.post('http://127.0.0.1:8000/login', {
+            withCredentials: true,
+            email: values.target[0].value,
+            password: values.target[1].value,
+          })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(error => {
+            console.error('Error in login request:', error);
+          });
+        }catch(e){
+          const err = {
+            validation: {},
+            message: null
           }
+        }
+        
+      }
+      /* if (userIndex > -1) {
+        if (isUser[userIndex].password === values.password) {
+          router.push("/app/home");
+          toast.success(" Login  successfully", {
+            timeout: 2000,
+          });
         } else {
-          toast.error(" User not found", {
+          toast.error(" Password not match ", {
             timeout: 2000,
           });
         }
-      });
+      } else {
+        toast.error(" User not found", {
+          timeout: 2000,
+        });
+      } */
 
       return {
         email,
-
         emailError,
         password,
         passwordError,

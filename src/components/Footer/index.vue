@@ -5,17 +5,10 @@
     >
       <div class="grid md:grid-cols-2 grid-cols-1 md:gap-5">
         <div class="text-center ltr:md:text-start rtl:md:text-right text-sm">
-          COPYRIGHT &copy; 2022 DashCode, All rights Reserved
+          Aplicación creada por el Departamento Académico de Sistemas Computacionales
         </div>
         <div class="ltr:md:text-right rtl:md:text-end text-center text-sm">
-          Hand-crafted & Made by
-          <a
-            href="https://codeshaper.net"
-            target="_blank"
-            class="text-primary-500 font-semibold"
-          >
-            Codeshaper
-          </a>
+          
         </div>
       </div>
     </div>

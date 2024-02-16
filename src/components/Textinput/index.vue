@@ -15,22 +15,65 @@
       {{ label }}</label
     >
     <div class="relative" :class="horizontal ? 'flex-1' : ''">
-      <input
-        :type="types"
-        :name="name"
-        :placeholder="placeholder"
-        :class="`${classInput} input-control w-full block focus:outline-none h-[40px] ${
-          hasicon ? 'ltr:pr-10 rtl:pl-10' : ''
-        } `"
-        :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-        :error="error"
-        :id="name"
-        :readonly="isReadonly"
-        :disabled="disabled"
-        :validate="validate"
-        v-if="!isMask"
-      />
+      <div 
+        v-if="types === 'password'">
+        <input
+          :type="types"
+          :name="name"
+          :placeholder="placeholder"
+          :class="`${classInput} input-control w-full block focus:outline-none h-[40px] ${
+            hasicon ? 'ltr:pr-10 rtl:pl-10' : ''
+          } `"
+          :value="modelValue"
+          @input="$emit('update:modelValue', $event.target.value)"
+          :error="error"
+          :id="name"
+          :readonly="isReadonly"
+          :disabled="disabled"
+          :validate="validate"
+          v-if="!isMask"
+          autocomplete="off"
+        />
+      </div>
+      <div 
+        v-if="types === 'text'">
+        <input
+          :type="types"
+          :name="name"
+          :placeholder="placeholder"
+          :class="`${classInput} input-control w-full block focus:outline-none h-[40px] ${
+            hasicon ? 'ltr:pr-10 rtl:pl-10' : ''
+          } `"
+          :value="modelValue"
+          @input="$emit('update:modelValue', $event.target.value)"
+          :error="error"
+          :id="name"
+          :readonly="isReadonly"
+          :disabled="disabled"
+          :validate="validate"
+          v-if="!isMask"
+          autocomplete="off"
+          
+        />
+      </div>
+      <div v-else-if="types !== 'text' && types !=='password'">
+          <input
+          :type="types"
+          :name="name"
+          :placeholder="placeholder"
+          :class="`${classInput} input-control w-full block focus:outline-none h-[40px] ${
+            hasicon ? 'ltr:pr-10 rtl:pl-10' : ''
+          } `"
+          :value="modelValue"
+          @input="$emit('update:modelValue', $event.target.value)"
+          :error="error"
+          :id="name"
+          :readonly="isReadonly"
+          :disabled="disabled"
+          :validate="validate"
+          v-if="!isMask"
+        />
+      </div>
       <cleave
         :class="`${classInput} cleave input-control block w-full focus:outline-none h-[40px] `"
         :name="name"
