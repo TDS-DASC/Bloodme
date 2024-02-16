@@ -1,5 +1,5 @@
 <template>
-  <main class="app-wrapper h-screen overflow-hidden">
+  <main class="app-wrapper h-screen overflow-auto">
     <Header :class="window.width > 1280 ? switchHeaderClass() : ''" />
     <!-- end header -->
 

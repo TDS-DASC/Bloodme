@@ -2,7 +2,7 @@
     <div class="flex bg-gray-200 dark:bg-slate-900 p-4 gap-2" style="height: 91vh;">
       <!-- Citas pendientes -->
       <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit">
-        <div name="header" class="text-center bg-red-600 text-white dark:bg-slate-600 dark:text-white font-semibold text-3xl p-2">
+        <div name="header" class="text-center bg-red-600 text-white dark:bg-slate-600 dark:text-white text-3xl p-1">
           Citas pendientes
         </div>
         <div class="flex items-center pr-2 dark:bg-gray-500">
@@ -138,59 +138,59 @@
 
       <!-- Información del paciente -->
       <div class="flex-auto rounded-md overflow-hidden bg-white dark:bg-slate-400 h-5/6">
-        <div name="header" class="text-center bg-red-600 text-white dark:bg-slate-600 dark:text-white font-semibold text-3xl p-2">
+        <div name="header" class="text-center bg-red-600 text-white dark:bg-slate-600 dark:text-white text-3xl p-1">
           <p>Información del paciente</p>
         </div>
         <div class="py-3 px-2"> 
           <div class="flex gap-4 flex-wrap">
             <div class="flex w-full rounded-md bg-gray-200 overflow-hidden shadow-md">
-              <p class="p-1 bg-red-500 text-white select-none font-semibold dark:bg-slate-600">Nombre/s</p>
+              <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Nombre/s</p>
               <input value="HOLA BUENAS TARDES COMO ESTAS" class="p-1 w-full" disabled>
             </div>
             <div class="flex justify-evenly w-full gap-4">
               <div class="flex items-start rounded-md w-full bg-gray-200 overflow-hidden shadow-md">
-                <p class="p-1 bg-red-500 text-white select-none font-semibold dark:bg-slate-600">Apellido Paterno</p>
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Apellido Paterno</p>
                 <input value="EEEH" class="p-1" disabled>
               </div>
               <div class="flex items-start rounded-md w-full bg-gray-200 overflow-hidden shadow-md">
-                <p class="p-1 bg-red-500 text-white select-none font-semibold dark:bg-slate-600">Apellido Materno</p>
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Apellido Materno</p>
                 <input value="EEEH" class="p-1" disabled>
               </div>
             </div>
             <div class="flex w-full gap-3">
               <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
-                <p class="p-1 bg-red-500 text-white select-none font-semibold dark:bg-slate-600 h-full">CURP</p>
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600 h-full">CURP</p>
                 <input value="LOFE930312HVZLNS06" class="p-1" disabled>
               </div>
               <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
-                <p class="p-1 bg-red-500 text-white select-none font-semibold dark:bg-slate-600  h-full">Tipo de Sangre</p>
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600  h-full">Tipo de Sangre</p>
                 <input value="-A" class="p-1" disabled>
               </div>
               <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
-                <p class="p-1 bg-red-500 text-white select-none font-semibold dark:bg-slate-600  h-full">Fecha de nacimiento</p>
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600  h-full">Fecha de nacimiento</p>
                 <input value="12/20/23" class="p-1" disabled>
               </div>
             </div>
             <div class="flex  gap-4 w-full">
               <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
-                <p class="p-1 bg-red-500 text-white select-none font-semibold dark:bg-slate-600">Alias</p>
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Alias</p>
                 <input value="12/20/23" class="p-1" disabled>
               </div>
               <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md w-1/2">
-                <p class="p-1 bg-red-500 text-white select-none font-semibold dark:bg-slate-600">Causa</p>
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Causa</p>
                 <input value="Para el paciente Alfonso Lopez" class="p-1 w-1/2" disabled>
               </div>
             </div>
           </div>
         </div>
         <div class="flex flex-col gap-4 py-3 px-2">
-          <div class="rounded-xl overflow-hidden">
-            <p class="bg-red-500 dark:bg-slate-600 text-white font-semibold w-fit rounded-tr-xl p-2">Notas de consulta</p>
-            <textarea class="w-full bg-gray-200 p-2 focus:outline-none rounded-tr-xl h-40" style="resize: none;"></textarea>
+          <div class="rounded-xl overflow-hidden p-1">
+            <p class="bg-red-500 dark:bg-slate-600 text-white w-fit rounded-tl-xl rounded-tr-xl p-2">Notas de consulta</p>
+            <textarea class="w-full bg-gray-100 p-2 rounded-tr-xl h-40" style="resize: none;"></textarea>
           </div>
           <div class="flex gap-10 justify-center">
-            <button class="bg-green-500 dark:bg-green-600 px-2 py-1 rounded-md font-semibold text-white hover:bg-green-700">Finalizar consulta</button>
-            <button class="hover:bg-gray-500 bg-gray-400 dark:bg-gray-800 px-2 py-1 rounded-md font-semibold text-white">Marcar ausencia</button>
+            <button class="bg-green-500 dark:bg-green-600 px-2 py-1 rounded-md text-white hover:bg-green-700">Finalizar consulta</button>
+            <button class="hover:bg-gray-500 bg-gray-400 dark:bg-gray-800 px-2 py-1 rounded-md text-white">Marcar ausencia</button>
           </div>
           <div class="flex flex-col gap-2 items-center">
             <p class="">¿Hubo algún problema con el sistema? <span class="font-semibold">Crea un reporte.</span></p>

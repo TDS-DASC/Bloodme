@@ -15,7 +15,18 @@ export const menuItems = [
   },
   {
     title: "Hospitales",
-    icon: "heroicons-outline:home",
+    icon: "solar:hospital-broken",
+    link: "hospitals",
+  },
+  {
+    title: "Campañas",
+    icon: "material-symbols:campaign-outline",
+    link: "campaigns",
+  },
+  {
+    title: "Usuarios",
+    icon: "mdi:users-outline",
+    link: "users",
   },
 ];
 // menuseetins

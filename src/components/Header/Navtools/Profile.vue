@@ -68,13 +68,6 @@ export default {
           },
         },
         {
-          label: "Email",
-          icon: "heroicons-outline:mail",
-          link: () => {
-            this.$router.push("email");
-          },
-        },
-        {
           label: "Settings",
           icon: "heroicons-outline:cog",
           link: () => {

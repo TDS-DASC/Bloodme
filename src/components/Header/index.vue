@@ -52,9 +52,7 @@
         <div
           class="nav-tools flex items-center lg:space-x-6 space-x-3 rtl:space-x-reverse"
         >
-          <LanguageVue />
           <SwitchDark />
-          <Notification v-if="window.width > 768" />
           <Profile v-if="window.width > 768" />
           <handle-mobile-menu v-if="window.width < 768" />
         </div>
@@ -64,13 +62,11 @@
 </template>
 <script>
 import Profile from "./Navtools/Profile.vue";
-import Notification from "./Navtools/Notification.vue";
 import Message from "./Navtools/Message.vue";
 import SwitchDark from "./Navtools/SwitchDark.vue";
 import Mainnav from "./horizental-nav.vue";
 import Icon from "../Icon";
 import SearchModal from "./Navtools/SearchModal.vue";
-import LanguageVue from "./Navtools/Language.vue";
 import Logo from "./Navtools/Logo.vue";
 import MobileLogo from "./Navtools/MobileLogo.vue";
 import window from "@/mixins/window";
@@ -80,12 +76,10 @@ export default {
   mixins: [window],
   components: {
     Profile,
-    Notification,
     Message,
     SwitchDark,
     Mainnav,
     Icon,
-    LanguageVue,
     SearchModal,
     Logo,
     MobileLogo,
