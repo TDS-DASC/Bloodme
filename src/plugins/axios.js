@@ -3,7 +3,9 @@ import store from "../store";
 import router from "../router/index.js";
 
 const axiosClient = axios.create({
-    baseURL: 'http://dashkit-laravel-api/api/'
+    baseURL: 'http://dashkit-laravel-api/api/',
+    withCredentials: true,
+    withXSRFToken: true,
 })
 
 axiosClient.interceptors.request.use(config => {

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col p-4 bg-white">
+  <div class="flex flex-col p-4 bg-white rounded-md dark:bg-slate-800">
       <div
         class="md:flex justify-between pb-6 md:space-y-0 space-y-3 items-center"
       >

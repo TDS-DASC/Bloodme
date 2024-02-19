@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-4 p-2">
-        <!-- <tableAdvanced :tableInformation=tableParams /> -->
+        <tableAdvanced :tableInformation=tableParams />
         <tableAdvanced :tableInformation=secondTableParams />
     </div>
 </template>
@@ -16,40 +16,60 @@
             const tableParams = {
                 title: "Usuarios",
                 rows: 5,
-                columns: {
-                    first: "ID",
-                    second: "name",
-                    third: "alias",
-                    fourth: "blood_type",
-                    fifth: "sex",
-                    sixth: "curp",
-                    seventh: "email",
-                    eighth: "phone"
-                }
-            }
-
-            const secondTableParams = {
-                title: "Administradores",
-                rows: 5,
                 columns: [
                     {
                         label: "ID",
                         field: "id",
                     },
                     {
-                        label: "name",
+                        label: "Nombre",
                         field: "customer",
                     },
                     {
-                        label: "alias",
+                        label: "Alias",
                         field: "quantity",
                     },
                     {
-                        label: "email",
+                        label: "Email",
                         field: "amount",
                     },
                     {
-                        label: "action",
+                        label: "Fecha de nacimiento",
+                        field: "text",
+                    },
+                    {
+                        label: "Tipo de sangre",
+                        field: "text",
+                    },
+                    {
+                        label: "Accion",
+                        field: "action",
+                    },
+                ]
+            }
+
+            const secondTableParams = {
+                title: "Administradores",
+                rows: 5,
+                columns: [
+                {
+                        label: "ID",
+                        field: "id",
+                    },
+                    {
+                        label: "Nombre",
+                        field: "customer",
+                    },
+                    {
+                        label: "Alias",
+                        field: "quantity",
+                    },
+                    {
+                        label: "Email",
+                        field: "amount",
+                    },
+                    {
+                        label: "Accion",
                         field: "action",
                     },
                 ]

@@ -5,8 +5,6 @@
     </span>
     <div name="form-container" class="w-full">
       <div v-if="stepIndex==0">
-        <input 
-            pattern="[^0-9]*" type="text">
         <Textinput
           label="Nombre*"
           type="text"
@@ -179,7 +177,9 @@ import * as yup from "yup";
 
 import { inject, ref, watch } from "vue";
 import Select from "@/components/Select";
-import axios from "axios";
+import axios from "axios"
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
 
 export default {
   components: {
@@ -221,33 +221,37 @@ export default {
     const { value: password_confirmation, errorMessage: password_confirmationError } = useField("password_confirmation");
 
     /* mustRemoveOnceIsDone */
-    axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
-        axios.post('http://127.0.0.1:8000/register', {
-          name: "Kenneth de Guadalupe",
-          lastname: "Quintero Valles",
-          alias: "Kenneth Quintero",
-          birth_date: "2001-12-05",
-          blood_type: "A+",
-          phone_number: "6131051468",
-          sex: "H",
-          curp: "sdfghjqwertyu1234k",
-          email: "kennethgqv@gmail.com",
-          password: "uytjhgmnbuytqwe",
-          password_confirmation: "uytjhgmnbuytqwe",
-          image_url: "placeholder.jpg"
+    axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie')
+    .then(response => {
+      axios.post('http://127.0.0.1:8000/register', {
+          "name": "Kenneth de Guadalupe",
+          "lastname": "Quintero Valles",
+          "alias": "Kenneth Quintero",
+          "birth_date": "2001-12-05",
+          "blood_type": "A+",
+          "phone_number": "6131051468",
+          "sex": "H",
+          "curp": "sdfghjqwertyu1234k",
+          "email": "kennethgqv@gmail.com",
+          "password": "uytjhgmnbuytqwe",
+          "password_confirmation": "uytjhgmnbuytqwe",
+          "image_url": "placeholder.jpg"
         })
-        .then(res => {
-          console.log(res);
+        .then(response => {
+          console.log(response);
+          // Handle the response of the post request here
         })
         .catch(error => {
-          console.error('Error in login request:', error);
+          console.error('Error registering user:', error);
         });
-      }).catch(error => {
-        console.error('Error in login token:', error);
-      });
+    })
+    .catch(error => {
+      console.error('Error fetching CSRF cookie:', error);
+    });
+
 
     const onSubmit = handleSubmit((values) => {
-        if(password_confirmation.value != password.value){
+        i/* f(password_confirmation.value != password.value){
           console.log("different password");
           console.log(password_confirmation);
           console.log(password);
@@ -268,7 +272,7 @@ export default {
           { name: 'password', value: password.value },
           { name: 'password_confirmation', value: password_confirmation.value },
           { name: 'image_url', value: '0'}
-        ];
+        ]; */
           
         axios.post('http://127.0.0.1:8000/register/', newUserForm).then(response => {
           console.log(response); 
@@ -277,14 +281,6 @@ export default {
         .catch(error => {
           console.error('An error occured:', error);
         });
-
-        // use sweetalert 2
-       /*  swal.fire({
-          title: "Email already exists",
-          text: "Please try another email",
-          icon: "error",
-          confirmButtonText: "Ok",
-        }); */
     });
 
     //Not from the template

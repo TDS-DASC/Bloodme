@@ -19,7 +19,6 @@ import router from "./router";
 import VCalendar from "v-calendar";
 import {createPinia} from 'pinia'
 import "v-calendar/dist/style.css";
-
 const pinia = createPinia()
 
 // vue use

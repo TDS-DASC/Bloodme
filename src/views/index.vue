@@ -143,9 +143,15 @@
         </div>
         <div class="py-3 px-2"> 
           <div class="flex gap-4 flex-wrap">
-            <div class="flex w-full rounded-md bg-gray-200 overflow-hidden shadow-md">
-              <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Nombre/s</p>
-              <input value="HOLA BUENAS TARDES COMO ESTAS" class="p-1 w-full" disabled>
+            <div class="flex gap-3 w-full">
+              <div class="flex flex-1 items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Nombre/s</p>
+                <input value="HOLA BUENAS TARDES COMO ESTAS" class="p-1 w-full" disabled>
+              </div>
+              <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600 w-full">Fecha de nacimiento</p>
+                <input value="12/20/23" class="p-1 w-full" disabled>
+              </div>
             </div>
             <div class="flex justify-evenly w-full gap-4">
               <div class="flex items-start rounded-md w-full bg-gray-200 overflow-hidden shadow-md">
@@ -157,25 +163,21 @@
                 <input value="EEEH" class="p-1" disabled>
               </div>
             </div>
-            <div class="flex w-full gap-3">
+            <div class="flex w-full justify-between">
               <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
-                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600 h-full">CURP</p>
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">CURP</p>
                 <input value="LOFE930312HVZLNS06" class="p-1" disabled>
               </div>
-              <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
-                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600  h-full">Tipo de Sangre</p>
-                <input value="-A" class="p-1" disabled>
-              </div>
-              <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
-                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600  h-full">Fecha de nacimiento</p>
-                <input value="12/20/23" class="p-1" disabled>
-              </div>
-            </div>
-            <div class="flex  gap-4 w-full">
               <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
                 <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Alias</p>
                 <input value="12/20/23" class="p-1" disabled>
               </div>
+              <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md">
+                <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Tipo de Sangre</p>
+                <input value="-A" class="p-1" disabled>
+              </div>
+            </div>
+            <div class="flex  gap-4 w-full">
               <div class="flex items-start rounded-md bg-gray-200 overflow-hidden shadow-md w-1/2">
                 <p class="p-1 bg-red-500 text-white select-none dark:bg-slate-600">Causa</p>
                 <input value="Para el paciente Alfonso Lopez" class="p-1 w-1/2" disabled>
