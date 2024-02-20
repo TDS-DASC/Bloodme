@@ -5,6 +5,8 @@
     </span>
     <div name="form-container" class="w-full">
       <div v-if="stepIndex==0">
+        <input 
+            pattern="[^0-9]*" type="text">
         <Textinput
           label="Nombre*"
           type="text"
@@ -177,9 +179,7 @@ import * as yup from "yup";
 
 import { inject, ref, watch } from "vue";
 import Select from "@/components/Select";
-import axios from "axios"
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
+import axios from "axios";
 
 export default {
   components: {
@@ -221,37 +221,33 @@ export default {
     const { value: password_confirmation, errorMessage: password_confirmationError } = useField("password_confirmation");
 
     /* mustRemoveOnceIsDone */
-    axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie')
-    .then(response => {
-      axios.post('http://127.0.0.1:8000/register', {
-          "name": "Kenneth de Guadalupe",
-          "lastname": "Quintero Valles",
-          "alias": "Kenneth Quintero",
-          "birth_date": "2001-12-05",
-          "blood_type": "A+",
-          "phone_number": "6131051468",
-          "sex": "H",
-          "curp": "sdfghjqwertyu1234k",
-          "email": "kennethgqv@gmail.com",
-          "password": "uytjhgmnbuytqwe",
-          "password_confirmation": "uytjhgmnbuytqwe",
-          "image_url": "placeholder.jpg"
+    axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
+        axios.post('http://127.0.0.1:8000/register', {
+          name: "Kenneth de Guadalupe",
+          lastname: "Quintero Valles",
+          alias: "Kenneth Quintero",
+          birth_date: "2001-12-05",
+          blood_type: "A+",
+          phone_number: "6131051468",
+          sex: "H",
+          curp: "sdfghjqwertyu1234k",
+          email: "kennethgqv@gmail.com",
+          password: "uytjhgmnbuytqwe",
+          password_confirmation: "uytjhgmnbuytqwe",
+          image_url: "placeholder.jpg"
         })
-        .then(response => {
-          console.log(response);
-          // Handle the response of the post request here
+        .then(res => {
+          console.log(res);
         })
         .catch(error => {
-          console.error('Error registering user:', error);
+          console.error('Error in login request:', error);
         });
-    })
-    .catch(error => {
-      console.error('Error fetching CSRF cookie:', error);
-    });
-
+      }).catch(error => {
+        console.error('Error in login token:', error);
+      });
 
     const onSubmit = handleSubmit((values) => {
-        i/* f(password_confirmation.value != password.value){
+        if(password_confirmation.value != password.value){
           console.log("different password");
           console.log(password_confirmation);
           console.log(password);
@@ -272,7 +268,7 @@ export default {
           { name: 'password', value: password.value },
           { name: 'password_confirmation', value: password_confirmation.value },
           { name: 'image_url', value: '0'}
-        ]; */
+        ];
           
         axios.post('http://127.0.0.1:8000/register/', newUserForm).then(response => {
           console.log(response); 
@@ -300,10 +296,6 @@ export default {
       { value: "M", label: "Mujer" },
     ]);
     
-    const defaultStepClass = 'py-2 px-4 rounded-full border-solid border-2 border-gray-300 bg-white duration-300 text-slate-300 bg-gray-100 dark:border-gray-400 dark:bg-gray-800 dark:text-slate-400 ';
-    const selectedStepClass = 'py-2 px-4 rounded-full border-solid border-2 border-black-900 -translate-y-3 bg-red-100 duration-300 text-black-900 dark:text-black-900 dark:border-black-300 dark:bg-white'
-    const storageOfStepClass = ref([selectedStepClass,defaultStepClass,defaultStepClass]);
-    
     const submitForm = ref(false);
     watch(submitForm, () => {
       setTimeout(() => {
@@ -319,6 +311,9 @@ export default {
         passwordDontMatch.value = false;
     });
 
+    const defaultStepClass = 'py-2 px-4 rounded-full border-solid border-2 border-gray-300 bg-white duration-300 text-slate-300 bg-gray-100 dark:border-gray-400 dark:bg-gray-800 dark:text-slate-400 ';
+    const selectedStepClass = 'py-2 px-4 rounded-full border-solid border-2 border-black-900 -translate-y-3 bg-red-100 duration-300 text-black-900 dark:text-black-900 dark:border-black-300 dark:bg-white'
+    const storageOfStepClass = ref([selectedStepClass,defaultStepClass,defaultStepClass]);
     const stepIndex = ref(0);
     watch(stepIndex, () => {
       if(stepIndex.value >= 0 && stepIndex.value <= 2){

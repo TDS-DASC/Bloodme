@@ -15,6 +15,9 @@
             const tableParams = {
                 title: "Campañas",
                 rows: 5,
+                urls: [
+                    "campaigns/edit",
+                ],
                 columns: [
                     {
                         label: "ID",

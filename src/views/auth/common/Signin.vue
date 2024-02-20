@@ -133,22 +133,6 @@
         }
         
       }
-      /* if (userIndex > -1) {
-        if (isUser[userIndex].password === values.password) {
-          router.push("/app/home");
-          toast.success(" Login  successfully", {
-            timeout: 2000,
-          });
-        } else {
-          toast.error(" Password not match ", {
-            timeout: 2000,
-          });
-        }
-      } else {
-        toast.error(" User not found", {
-          timeout: 2000,
-        });
-      } */
 
       return {
         email,

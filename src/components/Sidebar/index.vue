@@ -37,6 +37,7 @@
             !this.$store.themeSettingsStore.sidebarCollasp ||
             this.$store.themeSettingsStore.isMouseHovered
           "
+          replace
         >
           <div class="flex justify-start items-center">
             <img  
@@ -62,11 +63,12 @@
           </div>
         </router-link>
         <router-link
-          :to="{ name: 'home' }"
+          :to="'/home'"
           v-if="
             this.$store.themeSettingsStore.sidebarCollasp &&
             !this.$store.themeSettingsStore.isMouseHovered
           "
+          replace
         >
         <img  
             src="@/assets/images/icon/blooddrop.svg"
