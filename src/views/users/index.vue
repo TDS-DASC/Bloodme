@@ -1,8 +1,9 @@
 <template>
     <div class="flex flex-col gap-4 p-2">
         <router-link :to="{ path: '/users/create' }">
-            Crear
+
         </router-link>
+        <RouterView></RouterView>
         <tableAdvanced :tableInformation=tableParams />
         <tableAdvanced :tableInformation=secondTableParams />
     </div>

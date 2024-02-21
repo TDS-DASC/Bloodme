@@ -11,22 +11,67 @@ export const menuItems = [
   {
     title: "Inicio",
     icon: "heroicons-outline:home",
-    link: "home",
+    link: "/home",
   },
   {
     title: "Hospitales",
     icon: "solar:hospital-broken",
-    link: "hospitals",
+    isOpen: true,
+    child: [
+        {
+          childtitle: "Tabla de Hospitales",
+          childlink: "/hospitals/index",
+        },
+        {
+          childtitle: "Crear Hospital",
+          childlink: "/hospitals/create",
+        },
+    ],
   },
   {
     title: "Campañas",
     icon: "material-symbols:campaign-outline",
-    link: "campaigns",
+    isOpen: true,
+    child: [
+        {
+          childtitle: "Tabla de Campañas",
+          childlink: "/campaigns/index",
+        },
+        {
+          childtitle: "Crear campaña",
+          childlink: "/campaigns/create",
+        },
+    ],
   },
   {
     title: "Usuarios",
     icon: "mdi:users-outline",
-    link: "users",
+    isOpen: true,
+    child: [
+        {
+          childtitle: "Tabla de usuarios",
+          childlink: "/users/index",
+        },
+        {
+          childtitle: "Crear usuario",
+          childlink: "/users/create",
+        },
+    ],
+  },
+  {
+    title: "Citas",
+    icon: "icon-park-outline:appointment",
+    isOpen: true,
+    child: [
+        {
+          childtitle: "Tabla de Hospitales",
+          childlink: "/appointments/index",
+        },
+        {
+          childtitle: "Crear Hospital",
+          childlink: "/appointments/create",
+        },
+    ],
   },
 ];
 // menuseetins
@@ -84,6 +129,7 @@ export const message = [
     link: "#",
   },
 ];
+
 
 export const topMenu = [
   {

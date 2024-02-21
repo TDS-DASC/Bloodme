@@ -16,6 +16,7 @@
       <router-link
         :to="`${item.link}`"
         class="menu-link"
+        :replace="true"
         v-if="!item.child && !item.isHeadr"
       >
         <span class="menu-icon" v-if="item.icon">
@@ -73,7 +74,7 @@
             :key="index"
             class="block ltr:pl-4 rtl:pr-4 ltr:pr-1 rtl:-l-1 mb-4 first:mt-4"
           >
-            <router-link :to="ci.childlink" v-slot="{ isActive }">
+            <router-link :to="ci.childlink" v-slot="{ isActive }" :replace="true">
               <span
                 class="text-sm flex space-x-3 rtl:space-x-reverse items-center transition-all duration-150"
                 :class="

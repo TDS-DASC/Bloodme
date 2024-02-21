@@ -42,16 +42,7 @@ app.mount("#app");
 
 import {useThemeSettingsStore} from "@/store/themeSettings";
 const themeSettingsStore = useThemeSettingsStore()
-if (localStorage.users === undefined) {
-    let users = [
-        {
-            name: "dashcode",
-            email: "dashcode@gmail.com",
-            password: "dashcode",
-        },
-    ];
-    localStorage.setItem("users", JSON.stringify(users));
-}
+
 
 // check localStorage theme for dark light bordered
 if (localStorage.theme === "dark") {

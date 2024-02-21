@@ -62,6 +62,7 @@
   import Textinput from "@/components/Textinput";
   import { useField, useForm } from "vee-validate";
   import * as yup from "yup";
+  import axios from "@/plugins/axios";
   export default {
     components: {
       Textinput,

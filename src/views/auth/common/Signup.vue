@@ -179,7 +179,8 @@ import * as yup from "yup";
 
 import { inject, ref, watch } from "vue";
 import Select from "@/components/Select";
-import axios from "axios";
+import axios from "@/plugins/axios";
+
 
 export default {
   components: {
@@ -221,7 +222,26 @@ export default {
     const { value: password_confirmation, errorMessage: password_confirmationError } = useField("password_confirmation");
 
     /* mustRemoveOnceIsDone */
-    axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
+    const baseUrl = "http://127.0.0.1:8000";
+    const trySubmit = handleSubmit(async (values) => {
+      let response = await axios.get(`${baseUrl}/sanctum/csrf-cookie`);
+      response = await axios.post(`${baseUrl}/register`, {
+          name: "Kenneth de Guadalupe",
+          lastname: "Quintero Valles",
+          alias: "Kenneth Quintero",
+          birth_date: "2001-12-05",
+          blood_type: "A+",
+          phone_number: "6131051468", 
+          sex: "H",
+          curp: "sdfghjqwertyu1234k",
+          email: "kennethgqv@gmail.com",
+          password: "uytjhgmnbuytqwe",
+          password_confirmation: "uytjhgmnbuytqwe",
+          image_url: "placeholder.jpg"  
+        });
+    });
+
+    /* axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
         axios.post('http://127.0.0.1:8000/register', {
           name: "Kenneth de Guadalupe",
           lastname: "Quintero Valles",
@@ -240,11 +260,11 @@ export default {
           console.log(res);
         })
         .catch(error => {
-          console.error('Error in login request:', error);
+          console.error('Error in register request:', error);
         });
       }).catch(error => {
-        console.error('Error in login token:', error);
-      });
+        console.error('Error in register token:', error);
+      });    */  
 
     const onSubmit = handleSubmit((values) => {
         if(password_confirmation.value != password.value){
@@ -270,13 +290,7 @@ export default {
           { name: 'image_url', value: '0'}
         ];
           
-        axios.post('http://127.0.0.1:8000/register/', newUserForm).then(response => {
-          console.log(response); 
-          console.log(newUserForm.values);
-        })
-        .catch(error => {
-          console.error('An error occured:', error);
-        });
+        trySubmit();
     });
 
     //Not from the template

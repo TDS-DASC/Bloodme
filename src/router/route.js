@@ -23,14 +23,37 @@ const routes = [
       {
         path: "/users",
         name: "users",
-        component: () => import("@/views/users/index.vue"),
         children: [
           {
-            path: 'create',
+            path: "",
+            name: "routless",
+            component: () => import("@/views/users/index.vue"),
+          },
+          {
+            path: "index",
+            name: "index",
+            component: () => import("@/views/users/index.vue"),
+          },
+          {
+            path: "create",
+            name: "create",
             component: () => import("@/views/users/create.vue"),
+          },
+          {
+            path: "edit",
+            component: () => import("@/views/users/edit.vue"),
+          },
+          {
+            path: ":id/view",
+            component: () => import("@/views/users/view.vue"),
           }
-        ],
+        ],  
       },
+/*       {
+        path: "/users/create",
+        name: "create",
+        component: () => import("@/views/users/create.vue"),
+      }, */
     ],
   },
   {

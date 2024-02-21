@@ -14,7 +14,8 @@ const router = createRouter({
     }
   },
 });
-router.beforeEach((to, from, next) => {
+
+/* router.beforeEach((to, from, next) => {
   const titleText = to.name;
   const words = titleText.split(" ");
   const wordslength = words.length;
@@ -25,7 +26,7 @@ router.beforeEach((to, from, next) => {
   document.title = "Dashcode  - " + words;
 
   next();
-});
+}); */
 
 router.afterEach(() => {
   // Remove initial loading

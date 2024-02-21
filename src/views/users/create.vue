@@ -1,6 +1,6 @@
 <template>
     <div class="p-4">
-        <div class="p-4 bg-white rounded-md">
+        <div class="p-4 bg-white rounded-md dark:bg-slate-800">
             <div class="flex items-center justify-between py-2">
                 <h3>Crear usuario</h3><br>
                 <Select
@@ -10,7 +10,7 @@
                     class="w-1/6"
                 />
             </div>
-            <div class="w-full border-slate-200 border-b-2"></div>
+            <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>
             <form
                 @submit.prevent="onSubmit"
@@ -20,7 +20,7 @@
                     label="Nombre *"
                     type="text"
                     placeholder="Ingrese el nombre"
-                    name="re_special"
+                    name="name"
                     v-model="username"
                     :error="usernameError"
                 />
@@ -28,7 +28,7 @@
                     label="Apellidos"
                     type="text"
                     placeholder="Ingrese sus apellidos"
-                    name="re_special"
+                    name="lastname"
                     v-model="lastname"
                     :error="lastnameError"
                 />
@@ -36,7 +36,7 @@
                     label="Alias"
                     type="text"
                     placeholder="Ingrese el alias"
-                    name="re_special"
+                    name="alias"
                     v-model="alias"
                     :error="aliasError"
                 />
@@ -45,7 +45,7 @@
                     label="Fecha de nacimiento"
                     type="date"
                     placeholder="Fecha de nacimiento"
-                    name="re_special"
+                    name="date"
                     v-model="alphabetic"
                     :error="alphabeticError"
                 />
@@ -54,7 +54,7 @@
                     label="Tipo de sangre"
                     type="text"
                     placeholder="Enter minimum 3 Characters"
-                    name="re_length"
+                    name="bloodtype"
                     v-model="length"
                     :error="lengthError"
                 />
@@ -62,23 +62,23 @@
                     label="Número celular"
                     type="password"
                     placeholder="8+ characters, 1 capitat letter "
-                    name="re_password"
+                    name="phone"
                     v-model="password"
                     :error="passwordError"
                 />
                 <Textinput
                     label="CURP"
-                    type="url"
-                    placeholder="Enter Valid URL"
-                    name="re_url"
-                    v-model="url"
-                    :error="urlError"
+                    type="text"
+                    placeholder="Enter Valid CURP"
+                    name="curp"
+                    v-model="curp"
+                    :error="curpError"
                 />
                 <Textinput
                     label="email"
-                    type="url"
+                    type="email"
                     placeholder="Enter Valid URL"
-                    name="re_url"
+                    name="email"
                     v-model="url"
                     :error="urlError"
                 />
@@ -86,20 +86,20 @@
                     label="password"
                     type="url"
                     placeholder="Enter Valid URL"
-                    name="re_url"
-                    v-model="url"
-                    :error="urlError"
+                    name="password"
+                    v-model="password"
+                    :error="passwordError"
                 />
                 <Select
                     label="blood"
-                    type="url"
                     placeholder="Select your blood type"
+                    v-model="bloodType"
                     :options="bloodTypes"
                     :error="urlError"
                 />
 
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button text="Crear" btnClass="btn-dark"></Button>
+                    <Button type="button" text="Crear" btnClass="btn-dark" @click="createUser()"></Button>
                     <Button text="Cancelar" btnClass="btn-danger"></Button>
                 </div>
             </form>
@@ -158,6 +158,21 @@
                 .required("The Min Character field is required")
                 .min(3),
 
+                curp: yup
+                .string()
+                .required("The Min Character field is required")
+                .min(16),
+
+                email: yup
+                .string()
+                .required("The Min Character field is required")
+                .email(),
+
+                bloodType: yup
+                .string()
+                .required("Please select a bloodType")
+                .email(),
+
                 password: yup.string().required().min(8),
                 url: yup.string().required("The URL field is required").url(),
                 message: yup.string().required("The Message field is required"),
@@ -178,6 +193,9 @@
             const { value: password, errorMessage: passwordError } = useField("password");
             const { value: url, errorMessage: urlError } = useField("url");
             const { value: message, errorMessage: messageError } = useField("message");
+            const { value: curp, errorMessage: curpError } = useField("curp");
+            const { value: email, errorMessage: emailError } = useField("email");
+            const { value: bloodType, errorMessage: bloodTypeError } = useField("email");
 
             const onSubmit = handleSubmit(() => {
                 // console.warn(values.email);
@@ -199,6 +217,11 @@
                 { value: 'O+', label: 'O+' },
                 { value: 'O-', label: 'O-' }
             ];
+
+            function createUser(){
+                console.log("Created user");
+            }
+
             return {
                 message,
                 messageError,
@@ -218,11 +241,18 @@
                 numberError,
                 username,
                 usernameError,
+                email,
+                emailError,
                 alias,
                 aliasError,
+                curp,
+                curpError,
+                bloodType,
+                bloodTypeError,
                 options,
                 bloodTypes,
                 onSubmit,
+                createUser,
             };
         }
     }
