@@ -167,7 +167,7 @@ export default {
         {
           name: "edit",
           icon: "heroicons:pencil-square",
-          direction_name: "users/edit",
+          direction_name: "1",
         },
         {
           name: "delete",
