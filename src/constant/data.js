@@ -16,7 +16,6 @@ export const menuItems = [
   {
     title: "Hospitales",
     icon: "solar:hospital-broken",
-    isOpen: true,
     child: [
         {
           childtitle: "Tabla de Hospitales",
@@ -31,7 +30,6 @@ export const menuItems = [
   {
     title: "Campañas",
     icon: "material-symbols:campaign-outline",
-    isOpen: true,
     child: [
         {
           childtitle: "Tabla de Campañas",
@@ -46,7 +44,6 @@ export const menuItems = [
   {
     title: "Usuarios",
     icon: "mdi:users-outline",
-    isOpen: true,
     child: [
         {
           childtitle: "Tabla de usuarios",
@@ -61,7 +58,6 @@ export const menuItems = [
   {
     title: "Citas",
     icon: "icon-park-outline:appointment",
-    isOpen: true,
     child: [
         {
           childtitle: "Tabla de Hospitales",

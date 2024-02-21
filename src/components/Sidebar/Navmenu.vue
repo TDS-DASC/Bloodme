@@ -3,25 +3,25 @@
     <li
       v-for="(item, i) in items"
       :key="i"
-      :class="`
+      :class="`x
       ${item.child ? 'item-has-children' : ''}
       ${activeSubmenu === i ? 'open' : ''}
-      ${this.$route.name === item.link ? 'menu-item-active' : ''}
       
       `"
       class="single-sidebar-menu"
-    >
+      >
+      <!-- ${this.$route.name === item.link ? 'menu-item-active' : ''} -->
       <!-- ?? single menu with no childred !!  -->
 
       <router-link
         :to="`${item.link}`"
-        class="menu-link"
+        class="menu-link hover:bg-slate-600 rounded-md"
         :replace="true"
         v-if="!item.child && !item.isHeadr"
       >
         <span class="menu-icon" v-if="item.icon">
-          <Icon :icon="item.icon"
-        /></span>
+          <Icon :icon="item.icon"/>
+        </span>
         <div class="text-box" v-if="item.title">{{ item.title }}</div>
       </router-link>
 
@@ -31,7 +31,7 @@
       </div>
       <!-- !!sub menu parent li !! -->
       <div
-        class="menu-link"
+        class="menu-link hover:bg-slate-600 rounded-md"
         v-else
         :class="
           activeSubmenu === i ? 'parent_active not-collapsed' : 'collapsed'

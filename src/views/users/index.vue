@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import tableAdvanced from "../../components/table/advanced/Advanced.vue"
+    import tableAdvanced from "../../components/Table/advanced/Advanced.vue"
     import { ref } from "vue"
     export default{
         components: {

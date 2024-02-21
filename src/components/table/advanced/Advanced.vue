@@ -162,7 +162,7 @@ export default {
         {
           name: "view",
           icon: "heroicons-outline:eye",
-          direction_name: "users/1/view",
+          direction_name: "/users/1/view",
         },
         {
           name: "edit",
