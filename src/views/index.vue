@@ -1,12 +1,12 @@
 <template>
-    <div class="flex bg-gray-200 dark:bg-slate-900 p-4 gap-2" style="height: 91vh;">
+    <div class="flex dark:bg-slate-900 gap-2" style="height: 91vh;">
       <!-- Citas pendientes -->
       <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit">
         <div name="header" class="text-center bg-slate-800 text-white dark:text-white text-3xl p-1">
           Citas pendientes
         </div>
-        <div class="flex items-center pr-2 dark:bg-gray-500">
-          <div class="flex flex-1 items-center m-2 bg-white rounded-xl overflow-hidden">
+        <div class="flex items-center pr-2 dark:bg-gray-500 bg-white">
+          <div class="flex flex-1 items-center m-2 bg-white rounded-xl overflow-hidden border-2 border-black-400 border-solid">
             <Icon icon="material-symbols-light:search" style="font-size: 180%; font-weight: bold; color: gray;"/>
             <input class="p-2 w-full focus:outline-none" placeholder="Buscar...">
           </div>

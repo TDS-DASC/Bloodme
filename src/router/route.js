@@ -31,12 +31,12 @@ const routes = [
           },
           {
             path: "index",
-            name: "index",
+            name: "users",
             component: () => import("@/views/users/index.vue"),
           },
           {
             path: "create",
-            name: "create",
+            name: "users-create",
             component: () => import("@/views/users/create.vue"),
           },
           {

@@ -15,7 +15,7 @@
 
       <router-link
         :to="`${item.link}`"
-        class="menu-link hover:bg-slate-600 rounded-md"
+        class="menu-link rounded-md"
         :replace="true"
         v-if="!item.child && !item.isHeadr"
       >
@@ -31,7 +31,7 @@
       </div>
       <!-- !!sub menu parent li !! -->
       <div
-        class="menu-link hover:bg-slate-600 rounded-md"
+        class="group menu-link hover:dark:bg-slate-700 hover:bg-slate-200 rounded-md"
         v-else
         :class="
           activeSubmenu === i ? 'parent_active not-collapsed' : 'collapsed'

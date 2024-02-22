@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4">
+    <div class="">
         <div class="p-4 bg-white rounded-md dark:bg-slate-800">
             <div class="flex items-center justify-between py-2">
                 <h3>Editar usuario</h3><br>

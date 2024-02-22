@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-4 p-2">
+    <div class="flex flex-col gap-4">
         <router-link :to="{ path: '/users/create' }">
 
         </router-link>

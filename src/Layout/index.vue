@@ -42,12 +42,16 @@
               : 'container-fluid'
           }`"
         >
-          <!-- <Breadcrumbs v-if="!this.$route.meta.hide" /> -->
-          <router-view v-slot="{ Component }">
-            <transition name="router-animation" mode="out-in" appear>
-              <component :is="Component"></component>
-            </transition>
-          </router-view>
+          <div class="flex w-full flex-col p-4">
+            <router-view v-slot="{ Component }">
+              <transition name="router-animation" mode="out-in" appear>
+                <Breadcrumbs v-if="!this.$route.meta.hide" />
+              </transition>
+              <transition name="router-animation" mode="out-in" appear>
+                <component :is="Component"></component>
+              </transition>
+            </router-view>
+          </div>
         </div>
       </div>
     </div>

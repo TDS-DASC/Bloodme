@@ -1,17 +1,6 @@
 <template>
-  <div class="md:mb-6 mb-4 flex space-x-3 rtl:space-x-reverse">
-    <h4
-      v-if="this.$route.name && !this.$route.meta.groupParent"
-      :class="
-        this.$route.meta.groupParent
-          ? 'lg:border-r lg:border-secondary-500'
-          : ''
-      "
-      class="font-medium lg:text-2xl text-xl capitalize text-slate-900 inline-block ltr:pr-4 rtl:pl-4"
-    >
-      {{ this.$route.name.replace("-", " ") }}
-    </h4>
-    <ul class="breadcrumbs" v-if="this.$route.meta.groupParent">
+  <div class="mb-4 flex space-x-3 rtl:space-x-reverse">
+    <ul class="breadcrumbs">
       <li class="text-primary-500">
         <router-link :to="{ name: 'home' }" class="text-lg">
           <Icon icon="heroicons-outline:home" />
@@ -20,22 +9,23 @@
           <Icon icon="heroicons:chevron-right" />
         </span>
       </li>
-      <li class="text-primary-500">
-        <button type="button" class="capitalize">
-          {{ this.$route.meta.groupParent }}
-        </button>
-        <span class="breadcrumbs-icon rtl:transform rtl:rotate-180">
+      <li v-for="(word, index) in $route.name.split('-')" :key="index">
+        <router-link :to="`/${word.toLowerCase()}`" class="capitalize" v-if="word != 'routless'">
+          {{ word }}
+        </router-link>
+        <router-link :to="`${this.$route.fullPath}`" class="capitalize" v-else>
+          {{ $route.fullPath.replace(/\//g, '') }}
+        </router-link>
+        <span v-if="index < $route.name.split('-').length - 1" class="breadcrumbs-icon rtl:transform rtl:rotate-180">
           <Icon icon="heroicons:chevron-right" />
         </span>
-      </li>
-      <li class="capitalize text-slate-500 dark:text-slate-400">
-        {{ this.$route.name.replace("-", " ") }}
       </li>
     </ul>
   </div>
 </template>
 <script>
 import Icon from "@/components/Icon";
+import {watch} from "vue";
   export default {
     components: {
       Icon,
