@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col p-4 bg-white rounded-md dark:bg-slate-800">
+  <div class="flex flex-col p-4 bg-white rounded-md dark:bg-slate-800" v-if="tableData">
       <div
         class="md:flex justify-between pb-6 md:space-y-0 space-y-3 items-center"
       >
@@ -16,7 +16,7 @@
       <vue-good-table
         :columns="columns"
         styleClass=" vgt-table bordered centered"
-        :rows="advancedTable"
+        :rows="tableData"
         :pagination-options="{
           enabled: true,
           perPage: perpage,
@@ -36,7 +36,7 @@
         }"
       >
         <template v-slot:table-row="props">
-          <span v-if="props.column.field == 'customer'" class="flex">
+          <!-- <span v-if="props.column.field == 'customer'" class="flex">
             <span class="w-7 h-7 rounded-full ltr:mr-3 rtl:ml-3 flex-none">
               <img
                 :src="props.row.customer.image"
@@ -46,10 +46,10 @@
             </span>
             <span
               class="text-sm text-slate-600 dark:text-slate-300 capitalize"
-              >{{ props.row.customer.name }}</span
+              >{{ props.row.name }}</span
             >
-          </span>
-          <span v-if="props.column.field == 'order'">
+          </span> -->
+          <!-- <span v-if="props.column.field == 'order'">
             {{ "#" + props.row.order }}
           </span>
           <span
@@ -82,7 +82,8 @@
             >
               {{ props.row.status }}
             </span>
-          </span>
+          </span> -->
+
           <span v-if="props.column.field == 'action'">
             <Dropdown classMenuItems=" w-[140px]">
               <span class="text-xl"
@@ -115,7 +116,7 @@
         <template #pagination-bottom="props">
           <div class="py-4 px-3">
             <Pagination
-              :total="50"
+              :total="tableData.length"
               :current="current"
               :per-page="perpage"
               :pageRange="pageRange"
@@ -140,6 +141,8 @@ import InputGroup from "@/components/InputGroup";
 import Pagination from "@/components/Pagination";
 import { MenuItem } from "@headlessui/vue";
 import { advancedTable } from "../../../constant/basic-tablle-data";
+import axios from "@/plugins/axios"
+import { ref } from "vue" 
 export default {
   components: {
     Pagination,
@@ -150,13 +153,14 @@ export default {
   },
   props: {
     tableInformation: Object,
+    tableData: Object,
   },
   data(props) {
     return {
       advancedTable,
       current: 1,
       perpage: props.tableInformation.rows,
-      pageRange: 5,
+      pageRange: 3,
       searchTerm: "",
       actions: [
         {
@@ -193,7 +197,9 @@ export default {
     };
   },
   setup(props) {
-    console.log(props.tableInformation.columns)
+    
+    return {
+    }
   }
 };
 </script>

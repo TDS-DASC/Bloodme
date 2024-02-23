@@ -41,10 +41,12 @@ const routes = [
           },
           {
             path: ":id",
+            name: "users-edit",
             component: () => import("@/views/users/edit.vue"),
           },
           {
             path: ":id/view",
+            name: "users-view",
             component: () => import("@/views/users/view.vue"),
           }
         ],  

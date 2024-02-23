@@ -41,22 +41,22 @@
         >
           <div class="flex justify-start items-center">
             <img  
-            src="@/assets/images/icon/blooddrop.svg"
-            alt=""
-            class="w-1/5"
-            v-if="
-                !this.$store.themeSettingsStore.isDark &&
-                !this.$store.themeSettingsStore.semidark
+              src="@/assets/images/icon/blooddrop.svg"
+              alt=""
+              class="w-1/5"
+              v-if="
+                  !this.$store.themeSettingsStore.isDark &&
+                  !this.$store.themeSettingsStore.semidark
               "
             />
 
             <img
-            src="@/assets/images/icon/blooddrop.svg"
-            alt=""
-            class="w-1/5"
-            v-if="
-                this.$store.themeSettingsStore.isDark ||
-                this.$store.themeSettingsStore.semidark
+              src="@/assets/images/icon/blooddrop.svg"
+              alt=""
+              class="w-1/5"
+              v-if="
+                  this.$store.themeSettingsStore.isDark ||
+                  this.$store.themeSettingsStore.semidark
                 "
               />
             <p class="cursor-pointer text-slate-900 dark:text-white text-3xl font-bold">Blood Me</p>
@@ -70,12 +70,21 @@
           "
           replace
         >
-        <img  
-            src="@/assets/images/icon/blooddrop.svg"
-            alt=""
-            v-if="
-                !this.$store.themeSettingsStore.isDark &&
-                !this.$store.themeSettingsStore.semidark
+            <!-- <img  
+              src="@/assets/images/icon/blooddrop.svg"
+              alt=""
+              v-if="
+                  !this.$store.themeSettingsStore.isDark &&
+                  !this.$store.themeSettingsStore.semidark
+              "
+            /> -->
+
+            <img  
+              src="@/assets/images/icon/blooddrop.svg"
+              alt=""
+              v-if="
+                  !this.$store.themeSettingsStore.isDark ||
+                  !this.$store.themeSettingsStore.semidark
               "
             />
         </router-link>

@@ -4,20 +4,24 @@
 
         </router-link>
         <RouterView></RouterView>
-        <tableAdvanced :tableInformation=tableParams />
-        <tableAdvanced :tableInformation=secondTableParams />
+        <tableAdvanced :tableInformation=participantsTableParams :tableData=participantsTable />
+        <tableAdvanced :tableInformation=agentsTableParams :tableData=agentsTable />
+        <tableAdvanced :tableInformation=administratorsTableParams :tableData=administratorsTable />
     </div>
 </template>
 
 <script>
     import tableAdvanced from "../../components/Table/advanced"
+    import { ref } from "vue"
+    import axios from "@/plugins/axios"
+    import { useCachedDataStore } from '../../stores/store';
     export default{
         components: {
             tableAdvanced
         },
         setup() {
-            const tableParams = {
-                title: "Usuarios",
+            const participantsTableParams = {
+                title: "Participantes",
                 rows: 5,
                 urls: [
                     "users/create",
@@ -29,23 +33,23 @@
                     },
                     {
                         label: "Nombre",
-                        field: "customer",
+                        field: "name",
                     },
                     {
                         label: "Alias",
-                        field: "quantity",
+                        field: "alias",
                     },
                     {
                         label: "Email",
-                        field: "amount",
+                        field: "email",
                     },
                     {
                         label: "Fecha de nacimiento",
-                        field: "text",
+                        field: "birth_date",
                     },
                     {
                         label: "Tipo de sangre",
-                        field: "text",
+                        field: "blood_type",
                     },
                     {
                         label: "Accion",
@@ -53,8 +57,33 @@
                     },
                 ]
             }
-
-            const secondTableParams = {
+            const agentsTableParams = {
+                title: "Agentes",
+                rows: 5,
+                columns: [
+                {
+                        label: "ID",
+                        field: "id",
+                    },
+                    {
+                        label: "Nombre",
+                        field: "name",
+                    },
+                    {
+                        label: "Alias",
+                        field: "alias",
+                    },
+                    {
+                        label: "Email",
+                        field: "email",
+                    },
+                    {
+                        label: "Accion",
+                        field: "action",
+                    },
+                ]
+            }
+            const administratorsTableParams = {
                 title: "Administradores",
                 rows: 5,
                 columns: [
@@ -64,15 +93,15 @@
                     },
                     {
                         label: "Nombre",
-                        field: "customer",
+                        field: "name",
                     },
                     {
                         label: "Alias",
-                        field: "quantity",
+                        field: "alias",
                     },
                     {
                         label: "Email",
-                        field: "amount",
+                        field: "email",
                     },
                     {
                         label: "Accion",
@@ -80,10 +109,17 @@
                     },
                 ]
             }
+            const { participantsTable, agentsTable, administratorsTable } = useCachedDataStore();
+            useCachedDataStore().fetchData();
+
 
             return {
-                tableParams,
-                secondTableParams
+                participantsTableParams,
+                participantsTable,
+                agentsTable,
+                agentsTableParams,
+                administratorsTable,
+                administratorsTableParams,
             }
         },
     }

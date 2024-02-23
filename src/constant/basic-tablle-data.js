@@ -562,10 +562,6 @@ export const advancedTable = [
   {
     id: 1,
     order: 951,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
     date: "3/26/2022",
     quantity: 13,
     amount: "$1779.53",
@@ -575,10 +571,6 @@ export const advancedTable = [
   {
     id: 2,
     order: 238,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
     date: "2/6/2022",
     quantity: 13,
     amount: "$2215.78",
@@ -588,10 +580,7 @@ export const advancedTable = [
   {
     id: 3,
     order: 339,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "9/6/2021",
     quantity: 1,
     amount: "$3183.60",
@@ -601,10 +590,7 @@ export const advancedTable = [
   {
     id: 4,
     order: 365,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "11/7/2021",
     quantity: 13,
     amount: "$2587.86",
@@ -614,10 +600,7 @@ export const advancedTable = [
   {
     id: 5,
     order: 513,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "5/6/2022",
     quantity: 12,
     amount: "$3840.73",
@@ -627,10 +610,7 @@ export const advancedTable = [
   {
     id: 6,
     order: 534,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "2/14/2022",
     quantity: 12,
     amount: "$4764.18",
@@ -640,10 +620,7 @@ export const advancedTable = [
   {
     id: 7,
     order: 77,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "7/30/2022",
     quantity: 6,
     amount: "$2875.05",
@@ -653,10 +630,7 @@ export const advancedTable = [
   {
     id: 8,
     order: 238,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "6/30/2022",
     quantity: 9,
     amount: "$2491.02",
@@ -666,10 +640,7 @@ export const advancedTable = [
   {
     id: 9,
     order: 886,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "8/9/2022",
     quantity: 8,
     amount: "$3006.95",
@@ -679,10 +650,7 @@ export const advancedTable = [
   {
     id: 10,
     order: 3,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "8/4/2022",
     quantity: 12,
     amount: "$2160.32",
@@ -692,10 +660,7 @@ export const advancedTable = [
   {
     id: 11,
     order: 198,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "4/5/2022",
     quantity: 8,
     amount: "$1272.66",
@@ -705,10 +670,7 @@ export const advancedTable = [
   {
     id: 12,
     order: 829,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "8/9/2022",
     quantity: 2,
     amount: "$4327.86",
@@ -718,10 +680,7 @@ export const advancedTable = [
   {
     id: 13,
     order: 595,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "2/10/2022",
     quantity: 11,
     amount: "$3671.81",
@@ -731,10 +690,7 @@ export const advancedTable = [
   {
     id: 14,
     order: 374,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "2/10/2022",
     quantity: 2,
     amount: "$3401.82",
@@ -744,10 +700,7 @@ export const advancedTable = [
   {
     id: 15,
     order: 32,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "5/20/2022",
     quantity: 4,
     amount: "$2387.49",
@@ -757,10 +710,7 @@ export const advancedTable = [
   {
     id: 16,
     order: 89,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "5/3/2022",
     quantity: 15,
     amount: "$4236.61",
@@ -770,10 +720,7 @@ export const advancedTable = [
   {
     id: 17,
     order: 912,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "10/31/2021",
     quantity: 11,
     amount: "$2975.66",
@@ -783,10 +730,7 @@ export const advancedTable = [
   {
     id: 18,
     order: 621,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "1/13/2022",
     quantity: 5,
     amount: "$4576.13",
@@ -796,10 +740,7 @@ export const advancedTable = [
   {
     id: 19,
     order: 459,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "6/14/2022",
     quantity: 5,
     amount: "$1276.56",
@@ -809,10 +750,7 @@ export const advancedTable = [
   {
     id: 20,
     order: 108,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "10/8/2021",
     quantity: 4,
     amount: "$1078.64",
@@ -822,10 +760,7 @@ export const advancedTable = [
   {
     id: 21,
     order: 492,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "11/17/2021",
     quantity: 9,
     amount: "$1678.19",
@@ -835,10 +770,7 @@ export const advancedTable = [
   {
     id: 22,
     order: 42,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "4/4/2022",
     quantity: 9,
     amount: "$1822.02",
@@ -848,10 +780,7 @@ export const advancedTable = [
   {
     id: 23,
     order: 841,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "3/21/2022",
     quantity: 5,
     amount: "$1578.39",
@@ -861,10 +790,7 @@ export const advancedTable = [
   {
     id: 24,
     order: 561,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "6/18/2022",
     quantity: 12,
     amount: "$2130.49",
@@ -874,10 +800,7 @@ export const advancedTable = [
   {
     id: 25,
     order: 720,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "8/15/2022",
     quantity: 8,
     amount: "$3721.11",
@@ -887,10 +810,7 @@ export const advancedTable = [
   {
     id: 26,
     order: 309,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "4/28/2022",
     quantity: 8,
     amount: "$4683.45",
@@ -900,10 +820,7 @@ export const advancedTable = [
   {
     id: 27,
     order: 24,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "9/6/2021",
     quantity: 7,
     amount: "$2863.71",
@@ -913,10 +830,7 @@ export const advancedTable = [
   {
     id: 28,
     order: 518,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "9/11/2021",
     quantity: 4,
     amount: "$3879.41",
@@ -926,10 +840,7 @@ export const advancedTable = [
   {
     id: 29,
     order: 98,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "1/27/2022",
     quantity: 5,
     amount: "$4660.81",
@@ -939,10 +850,7 @@ export const advancedTable = [
   {
     id: 30,
     order: 940,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "9/16/2021",
     quantity: 6,
     amount: "$4800.75",
@@ -952,10 +860,7 @@ export const advancedTable = [
   {
     id: 31,
     order: 925,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "1/8/2022",
     quantity: 1,
     amount: "$2299.05",
@@ -965,10 +870,7 @@ export const advancedTable = [
   {
     id: 32,
     order: 122,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "11/18/2021",
     quantity: 1,
     amount: "$3578.02",
@@ -978,10 +880,7 @@ export const advancedTable = [
   {
     id: 33,
     order: 371,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "3/30/2022",
     quantity: 13,
     amount: "$1996.06",
@@ -991,10 +890,7 @@ export const advancedTable = [
   {
     id: 34,
     order: 296,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "11/13/2021",
     quantity: 5,
     amount: "$2749.00",
@@ -1004,10 +900,7 @@ export const advancedTable = [
   {
     id: 35,
     order: 887,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "12/7/2021",
     quantity: 11,
     amount: "$4353.01",
@@ -1017,10 +910,7 @@ export const advancedTable = [
   {
     id: 36,
     order: 30,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "9/9/2021",
     quantity: 15,
     amount: "$3252.37",
@@ -1030,10 +920,7 @@ export const advancedTable = [
   {
     id: 37,
     order: 365,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "2/12/2022",
     quantity: 5,
     amount: "$4044.10",
@@ -1043,10 +930,7 @@ export const advancedTable = [
   {
     id: 38,
     order: 649,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "3/6/2022",
     quantity: 5,
     amount: "$3859.92",
@@ -1056,10 +940,7 @@ export const advancedTable = [
   {
     id: 39,
     order: 923,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "7/25/2022",
     quantity: 14,
     amount: "$1652.47",
@@ -1069,10 +950,7 @@ export const advancedTable = [
   {
     id: 40,
     order: 423,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "3/2/2022",
     quantity: 8,
     amount: "$2700.12",
@@ -1082,10 +960,7 @@ export const advancedTable = [
   {
     id: 41,
     order: 703,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "12/8/2021",
     quantity: 8,
     amount: "$4508.13",
@@ -1095,10 +970,7 @@ export const advancedTable = [
   {
     id: 42,
     order: 792,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "11/22/2021",
     quantity: 11,
     amount: "$4938.04",
@@ -1108,10 +980,7 @@ export const advancedTable = [
   {
     id: 43,
     order: 400,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "4/6/2022",
     quantity: 1,
     amount: "$3471.32",
@@ -1121,10 +990,7 @@ export const advancedTable = [
   {
     id: 44,
     order: 718,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
+    
     date: "2/4/2022",
     quantity: 4,
     amount: "$4011.60",
@@ -1134,10 +1000,6 @@ export const advancedTable = [
   {
     id: 45,
     order: 970,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
     date: "3/30/2022",
     quantity: 15,
     amount: "$3723.64",
@@ -1147,10 +1009,6 @@ export const advancedTable = [
   {
     id: 46,
     order: 786,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
     date: "11/20/2021",
     quantity: 2,
     amount: "$2441.15",
@@ -1160,10 +1018,6 @@ export const advancedTable = [
   {
     id: 47,
     order: 925,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
     date: "10/24/2021",
     quantity: 11,
     amount: "$1196.76",
@@ -1173,10 +1027,6 @@ export const advancedTable = [
   {
     id: 48,
     order: 929,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
     date: "6/30/2022",
     quantity: 10,
     amount: "$3579.57",
@@ -1186,10 +1036,6 @@ export const advancedTable = [
   {
     id: 49,
     order: 377,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
     date: "11/16/2021",
     quantity: 4,
     amount: "$2657.84",
@@ -1199,10 +1045,6 @@ export const advancedTable = [
   {
     id: 50,
     order: 661,
-    customer: {
-      name: "Jenny Wilson",
-      image: customer1,
-    },
     date: "8/15/2022",
     quantity: 6,
     amount: "$2905.94",

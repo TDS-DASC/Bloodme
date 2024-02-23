@@ -14,16 +14,20 @@ export const menuItems = [
     link: "/home",
   },
   {
-    title: "Hospitales",
-    icon: "solar:hospital-broken",
+    isHeadr: true,
+    title: "Sistema",
+  },
+  {
+    title: "Citas",
+    icon: "icon-park-outline:appointment",
     child: [
         {
-          childtitle: "Tabla de Hospitales",
-          childlink: "/hospitals/index",
+          childtitle: "Tabla de citas",
+          childlink: "/appointments/index",
         },
         {
           childtitle: "Crear Hospital",
-          childlink: "/hospitals/create",
+          childlink: "/appointments/create",
         },
     ],
   },
@@ -42,30 +46,76 @@ export const menuItems = [
     ],
   },
   {
-    title: "Usuarios",
-    icon: "mdi:users-outline",
+    title: "Hospitales",
+    icon: "solar:hospital-broken",
     child: [
         {
-          childtitle: "Tabla de usuarios",
+          childtitle: "Tabla de Hospitales",
+          childlink: "/hospitals/index",
+        },
+        {
+          childtitle: "Crear Hospital",
+          childlink: "/hospitals/create",
+        },
+    ],
+  },
+  {
+    isHeadr: true,
+    title: "Usuarios",
+  },
+  {
+    title: "Agentes",
+    icon: "streamline:nurse-assistant-emergency",
+    child: [
+        {
+          childtitle: "Tabla de Usuarios",
           childlink: "/users/index",
         },
         {
-          childtitle: "Crear usuario",
+          childtitle: "Crear Usuario",
           childlink: "/users/create",
         },
     ],
   },
   {
-    title: "Citas",
-    icon: "icon-park-outline:appointment",
+    title: "Participantes",
+    icon: "formkit:people",
     child: [
         {
-          childtitle: "Tabla de Hospitales",
-          childlink: "/appointments/index",
+          childtitle: "Tabla de Participantes",
+          childlink: "/users/index",
         },
         {
-          childtitle: "Crear Hospital",
-          childlink: "/appointments/create",
+          childtitle: "Crear Participante",
+          childlink: "/users/create",
+        },
+    ],
+  },
+  {
+    title: "Administradores",
+    icon: "clarity:administrator-line",
+    child: [
+        {
+          childtitle: "Tabla de Administradores",
+          childlink: "/users/index",
+        },
+        {
+          childtitle: "Crear Administrador",
+          childlink: "/users/create",
+        },
+    ],
+  },
+  {
+    title: "Beneficiarios",
+    icon: "fluent:person-info-16-regular",
+    child: [
+        {
+          childtitle: "Tabla de Administradores",
+          childlink: "/users/index",
+        },
+        {
+          childtitle: "Crear Administrador",
+          childlink: "/users/create",
         },
     ],
   },

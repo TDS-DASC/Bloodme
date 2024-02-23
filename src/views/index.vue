@@ -20,7 +20,7 @@
           <!-- Separador de horas -->
           <div class="flex justify-center items-center">
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
-            <p class="px-5">5:00pm</p>
+            <p class="px-5 dark:text-white">5:00pm</p>
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
           </div>
 
@@ -74,7 +74,7 @@
           <!-- Separador de horas -->
           <div class="flex justify-center items-center">
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
-            <p class="px-5">6:00pm</p>
+            <p class="px-5 dark:text-white">6:00pm</p>
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
           </div>
 
@@ -230,7 +230,6 @@
       };
     },
     setup() {
-      console.log("Hey");
       
       return {
       }

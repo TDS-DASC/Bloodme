@@ -9,6 +9,7 @@
           <Icon icon="heroicons:chevron-right" />
         </span>
       </li>
+      
       <li v-for="(word, index) in $route.name.split('-')" :key="index">
         <router-link :to="`/${word.toLowerCase()}`" class="capitalize" v-if="word != 'routless'">
           {{ word }}
