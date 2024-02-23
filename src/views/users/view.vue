@@ -17,7 +17,7 @@
                             </div>
                             <div class="flex-1">
                                 <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]">
-                                    Nombre del usuario
+                                    {{ participantsTable.find(objeto => objeto.id == id) }}
                                 </div>
                                 <div class="text-sm font-light text-slate-600 dark:text-slate-400">
                                     Tipo de usuario
@@ -166,6 +166,10 @@
     import profile from "@/components/profile"
     import Card from "@/components/Card";
     import Icon from "@/components/Icon";
+    import { useCachedDataStore } from '@/stores/usersStore';
+    import { useRouter } from 'vue-router';
+    import { ref, watch } from 'vue';
+
     export default({
         components:{
             profile,
@@ -173,7 +177,19 @@
             Icon,
         },
         setup() {
-            
-        },
+            const router = useRouter();
+            const { participantsTable } = useCachedDataStore();
+            const id = router.currentRoute.value.params.id;
+            const userData = ref(Object);
+
+            useCachedDataStore().fetchData(); // Ensure fetchData is available in your store
+
+            console.log(userData[0]);
+
+            return {
+                participantsTable,
+                id
+            };
+        }
     })
 </script>

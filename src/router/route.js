@@ -40,12 +40,12 @@ const routes = [
             component: () => import("@/views/users/create.vue"),
           },
           {
-            path: ":id",
+            path: ":id/edit",
             name: "users-edit",
             component: () => import("@/views/users/edit.vue"),
           },
           {
-            path: ":id/view",
+            path: ":id",
             name: "users-view",
             component: () => import("@/views/users/view.vue"),
           }

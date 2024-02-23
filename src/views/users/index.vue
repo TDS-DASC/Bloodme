@@ -5,8 +5,6 @@
         </router-link>
         <RouterView></RouterView>
         <tableAdvanced :tableInformation=participantsTableParams :tableData=participantsTable />
-        <tableAdvanced :tableInformation=agentsTableParams :tableData=agentsTable />
-        <tableAdvanced :tableInformation=administratorsTableParams :tableData=administratorsTable />
     </div>
 </template>
 
@@ -14,7 +12,7 @@
     import tableAdvanced from "../../components/Table/advanced"
     import { ref } from "vue"
     import axios from "@/plugins/axios"
-    import { useCachedDataStore } from '../../stores/store';
+    import { useCachedDataStore } from '../../stores/usersStore';
     export default{
         components: {
             tableAdvanced
@@ -23,9 +21,7 @@
             const participantsTableParams = {
                 title: "Participantes",
                 rows: 5,
-                urls: [
-                    "users/create",
-                ],
+                headUrl: "users",
                 columns: [
                     {
                         label: "ID",
@@ -57,70 +53,15 @@
                     },
                 ]
             }
-            const agentsTableParams = {
-                title: "Agentes",
-                rows: 5,
-                columns: [
-                {
-                        label: "ID",
-                        field: "id",
-                    },
-                    {
-                        label: "Nombre",
-                        field: "name",
-                    },
-                    {
-                        label: "Alias",
-                        field: "alias",
-                    },
-                    {
-                        label: "Email",
-                        field: "email",
-                    },
-                    {
-                        label: "Accion",
-                        field: "action",
-                    },
-                ]
-            }
-            const administratorsTableParams = {
-                title: "Administradores",
-                rows: 5,
-                columns: [
-                {
-                        label: "ID",
-                        field: "id",
-                    },
-                    {
-                        label: "Nombre",
-                        field: "name",
-                    },
-                    {
-                        label: "Alias",
-                        field: "alias",
-                    },
-                    {
-                        label: "Email",
-                        field: "email",
-                    },
-                    {
-                        label: "Accion",
-                        field: "action",
-                    },
-                ]
-            }
-            const { participantsTable, agentsTable, administratorsTable } = useCachedDataStore();
+            const { participantsTable} = useCachedDataStore();
             useCachedDataStore().fetchData();
 
 
             return {
                 participantsTableParams,
                 participantsTable,
-                agentsTable,
-                agentsTableParams,
-                administratorsTable,
-                administratorsTableParams,
             }
         },
     }
 </script>
+../../stores/usersStore
