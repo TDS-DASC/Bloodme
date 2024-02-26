@@ -6,11 +6,11 @@
           class="inner-content h-full flex flex-col bg-white dark:bg-slate-800"
         >
           <div class="auth-box h-full flex flex-col justify-center">
-            <div class="mobile-logo text-center mb-6 lg:hidden block">
+            <!--<div class="mobile-logo text-center mb-6 lg:hidden block">
               <router-link to="/"
                 ><img :src="logo" alt="" class="mx-auto"
               /></router-link>
-            </div>
+            </div> -->
             <div class="text-center 2xl:mb-10 mb-4">
               <h4 class="font-medium">¡Bienvenido de nuevo!</h4>
               <div class="text-slate-500 dark:text-slate-400 text-base">

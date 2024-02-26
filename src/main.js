@@ -37,7 +37,6 @@ const app = createApp(App)
     .use(VueApexCharts)
     .use(VCalendar)
 
-app.config.globalProperties.$store = {};
 app.mount("#app");
 
 import {useThemeSettingsStore} from "@/store/themeSettings";

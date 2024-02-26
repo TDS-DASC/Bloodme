@@ -56,10 +56,9 @@
                 />
                 <Textinput
                     label="Número celular"
-                    type="password"
                     placeholder="8+ characters, 1 capitat letter "
                     name="phone"
-                    v-model="password"
+                    v-model=form.phone_number
                     :error="passwordError"
                 />
                 <Textinput
@@ -67,7 +66,7 @@
                     type="text"
                     placeholder="Enter Valid CURP"
                     name="curp"
-                    v-model="curp"
+                    v-model=form.curp
                     :error="curpError"
                 />
                 <Textinput
@@ -75,28 +74,21 @@
                     type="email"
                     placeholder="Enter Valid URL"
                     name="email"
-                    v-model="url"
-                    :error="urlError"
+                    v-model=form.email
+                    :error="emailError"
                 />
                 <Textinput
                     label="password"
                     type="url"
-                    placeholder="Enter Valid URL"
+                    placeholder="Enter Valid Password"
                     name="password"
-                    v-model="password"
+                    v-model=form.password
                     :error="passwordError"
-                />
-                <Select
-                    label="blood"
-                    placeholder="Select your blood type"
-                    v-model="bloodType"
-                    :options="bloodTypes"
-                    :error="urlError"
                 />
                 <Select
                     label="roles"
                     placeholder="Select your blood type"
-                    v-model="rolType"
+                    v-model=form.role
                     :options="rolTypes"
                     :error="rolTypeError"
                 />
@@ -214,10 +206,6 @@
 
 
             /* No de la template */
-            const options = [
-                { value: "1", label: "Usuario" },
-                { value: "2", label: "Administrador" },
-            ];
             const bloodTypes = [
                 { value: 'A+', label: 'A+' },
                 { value: 'A-', label: 'A-' },
@@ -229,9 +217,9 @@
                 { value: 'O-', label: 'O-' }
             ];
             const rolTypes = [
-                { value: 'Participants', label: 'Participante' },
-                { value: 'Administrator', label: 'Administrator' },
-                { value: 'Agents', label: 'Agentes' },
+                { value: "1", label: "administrator" },
+                { value: "2", label: "agent" },
+                { value: "3", label: "participant" },
             ];
 
             /* Not from the template */
@@ -248,7 +236,12 @@
                 lastname: null,
                 alias: null,
                 birth_date: null,
-                blood_type: null
+                blood_type: null,
+                phone_number: null,
+                curp: null,
+                email: null,
+                password: null,
+                role: null,
             })
 
             watch(participantsTable, () => {
@@ -258,7 +251,10 @@
                 form.value.alias = userData.value.alias;
                 form.value.birth_date = userData.value.birth_date;
                 form.value.blood_type = userData.value.blood_type;
-                form.value.phone = userData.value.phone;
+                form.value.phone_number = userData.value.phone_number;
+                form.value.curp = userData.value.curp;
+                form.value.email = userData.value.email;
+                form.value.role = userData.value.role;
             });
 
             if(participantsTable)
@@ -293,7 +289,6 @@
                 bloodTypeError,
                 rolType,
                 rolTypeError,
-                options,
                 bloodTypes,
                 rolTypes,
                 onSubmit,

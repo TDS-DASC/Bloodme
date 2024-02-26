@@ -63,6 +63,7 @@
   import { useField, useForm } from "vee-validate";
   import * as yup from "yup";
   import axios from "@/plugins/axios";
+  import { inject } from 'vue';
   export default {
     components: {
       Textinput,
@@ -92,10 +93,10 @@
       const { value: password, errorMessage: passwordError } = useField("password");
 
       /* mustRemoveOnceIsDone */
-      axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
-        axios.post('http://127.0.0.1:8000/login', {
-          email: 'kennethgqv@gmail.com',
-          password: 'uytjhgmnbuytqwe', 
+      axios.get(`/sanctum/csrf-cookie`).then(response => {
+        axios.post(`/auth/admin/login`, {
+          email: 'admin@admin.com',
+          password: 'admin', 
         })
         .then(res => {
           console.log(res);
@@ -107,10 +108,9 @@
         console.error('Error in login token:', error);
       });
      
-
       const onSubmit = async function handleSubmit(values){
         try{
-          await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie')
+          await axios.get(`sanctum/csrf-cookie`)
           .catch(error => {
             console.error('Error in login token:', error);
           });
