@@ -9,13 +9,14 @@
             <form
                 @submit.prevent="onSubmit"
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
+                v-if="userData"
             >
                 <Textinput
                     label="Nombre *"
                     type="text"
                     placeholder="Ingrese el nombre"
                     name="name"
-                    v-model="username"
+                    v-model=form.name
                     :error="usernameError"
                 />
                 <Textinput
@@ -23,7 +24,7 @@
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
-                    v-model="lastname"
+                    v-model=form.lastname
                     :error="lastnameError"
                 />
                 <Textinput
@@ -31,7 +32,7 @@
                     type="text"
                     placeholder="Ingrese el alias"
                     name="alias"
-                    v-model="alias"
+                    v-model=form.alias
                     :error="aliasError"
                 />
 
@@ -40,7 +41,7 @@
                     type="date"
                     placeholder="Fecha de nacimiento"
                     name="date"
-                    v-model="alphabetic"
+                    v-model=form.birth_date
                     :error="alphabeticError"
                 />
 
@@ -49,7 +50,8 @@
                     type="text"
                     placeholder="Enter minimum 3 Characters"
                     name="bloodtype"
-                    v-model="length"
+                    v-model=form.blood_type
+                    :options=bloodTypes
                     :error="lengthError"
                 />
                 <Textinput
@@ -115,6 +117,9 @@
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
     import * as yup from "yup";
+    import { useCachedDataStore } from '@/stores/usersStore';
+    import { useRouter } from 'vue-router';
+    import { ref, watch } from 'vue';
 
     export default {
         components: {
@@ -229,6 +234,36 @@
                 { value: 'Agents', label: 'Agentes' },
             ];
 
+            /* Not from the template */
+
+            const router = useRouter();
+            const { participantsTable } = useCachedDataStore();
+            const id = router.currentRoute.value.params.id;
+            
+            useCachedDataStore().fetchData();
+
+            let userData = ref(null); 
+            let form = ref({
+                name: null,
+                lastname: null,
+                alias: null,
+                birth_date: null,
+                blood_type: null
+            })
+
+            watch(participantsTable, () => {
+                userData.value = participantsTable.find(objeto => objeto.id == id);
+                form.value.name = userData.value.name;
+                form.value.lastname = userData.value.lastname;
+                form.value.alias = userData.value.alias;
+                form.value.birth_date = userData.value.birth_date;
+                form.value.blood_type = userData.value.blood_type;
+                form.value.phone = userData.value.phone;
+            });
+
+            if(participantsTable)
+                userData.value = participantsTable.find(objeto => objeto.id == id);
+
             return {
                 message,
                 messageError,
@@ -262,6 +297,9 @@
                 bloodTypes,
                 rolTypes,
                 onSubmit,
+                participantsTable,
+                userData,
+                form
             };
         }
     }

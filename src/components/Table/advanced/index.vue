@@ -129,7 +129,7 @@ export default {
         {
           name: "delete",
           icon: "heroicons-outline:trash",
-          direction_name: "users/:id/edit",
+          direction_name: props.tableInformation.headUrl+"/:id/edit",
         },
       ],
       options: [

@@ -2,25 +2,28 @@
     <div class="">
         <div class="space-y-5 profile-page">
             <div class="profiel-wrap px-[35px] pb-10 md:pt-[84px] pt-10 rounded-lg bg-white dark:bg-slate-800 lg:flex lg:space-y-0 space-y-6 justify-between items-end relative z-[1]">
-                <div class="bg-slate-900 dark:bg-slate-700 absolute left-0 top-0 md:h-1/2 h-[150px] w-full z-[-1] rounded-t-lg"></div>
+                <div class="bg-slate-900 dark:bg-slate-700 absolute left-0 top-0 md:h-1/2 h-[150px] w-full z-[-1] rounded-t-lg"></div>    
                     <div class="profile-box flex-none md:text-start text-center">
                         <div class="md:flex items-end md:space-x-6 rtl:space-x-reverse">
                             <div class="flex-none">
                                 <div class="md:h-[186px] md:w-[186px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-4 ring-slate-100 relative">
                                     <img src="@/assets/images/users/user-1.jpg" alt="" class="w-full h-full object-cover rounded-full"/>
                                         <router-link
-                                            to="/users/1"
+                                            :to="`/users/${id}/edit`"
                                             class="absolute right-2 h-8 w-8 bg-slate-50 text-slate-600 rounded-full shadow-sm flex flex-col items-center justify-center md:top-[140px] top-[100px]"
                                             ><Icon icon="heroicons:pencil-square" />
                                         </router-link>
                                 </div>
                             </div>
                             <div class="flex-1">
-                                <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]">
-                                    {{ participantsTable.find(objeto => objeto.id == id) }}
+                                <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-if="userData">
+                                    {{ userData.name }} {{ userData.lastname }}
+                                </div>
+                                <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-else>
+                                    Cargando...
                                 </div>
                                 <div class="text-sm font-light text-slate-600 dark:text-slate-400">
-                                    Tipo de usuario
+                                    Nombre completo
                                 </div>
                             </div>
                         </div>
@@ -55,13 +58,14 @@
                     </div>
                     <!-- end single -->
                 </div>
+
                 <!-- profile info-500 -->
             </div>
             <div class="w-full">
                 <div class="">
                     <Card title="Info">
                         <div class="flex gap-8">
-                            <ul class="list space-y-8">
+                            <ul class="list space-y-8 w-full">
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
                                         <Icon icon="heroicons:envelope" />
@@ -70,9 +74,10 @@
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
                                             EMAIL
                                         </div>
-                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50">
-                                            info-500@dashcode.com
+                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                            {{ userData.email }}
                                         </a>
+                                        <p v-else>...</p>
                                     </div>
                                 </li>
                             <!-- end single list -->
@@ -82,24 +87,24 @@
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                        PHONE
+                                            CELULAR
                                         </div>
-                                        <a href="tel:0189749676767" class="text-base text-slate-600 dark:text-slate-50">
-                                        +1-202-555-0151
+                                        <a href="tel:0189749676767" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                        {{ userData.phone_number}}
                                         </a>
                                     </div>
                                 </li>
                             <!-- end single list -->
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="heroicons:map" />
+                                        <Icon icon="cil:birthday-cake" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            LOCATION
+                                            Fecha de nacimiento
                                         </div>
-                                        <div class="text-base text-slate-600 dark:text-slate-50">
-                                            Home# 320/N, Road# 71/B, Mohakhali, Dhaka-1207, Bangladesh
+                                        <div class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                            {{ userData.birth_date }}
                                         </div>
                                     </div>
                                 </li>
@@ -110,17 +115,17 @@
                         <!-- Separacion -->
 
 
-                            <ul class="list space-y-8">
+                            <ul class="list space-y-8 w-full">
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="heroicons:envelope" />
+                                        <Icon icon="streamline:blood-bag-donation" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            EMAIL
+                                            Nombre
                                         </div>
-                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50">
-                                            info-500@dashcode.com
+                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                            {{ userData.name }}
                                         </a>
                                     </div>
                                 </li>
@@ -131,10 +136,10 @@
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                        PHONE
+                                        Apellidos
                                         </div>
-                                        <a href="tel:0189749676767" class="text-base text-slate-600 dark:text-slate-50">
-                                        +1-202-555-0151
+                                        <a href="tel:0189749676767" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                            {{ userData.lastname }}
                                         </a>
                                     </div>
                                 </li>
@@ -145,10 +150,45 @@
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            LOCATION
+                                            Alias
                                         </div>
-                                        <div class="text-base text-slate-600 dark:text-slate-50">
-                                            Home# 320/N, Road# 71/B, Mohakhali, Dhaka-1207, Bangladesh
+                                        <div class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                            {{ userData.alias }}
+                                        </div>
+                                    </div>
+                                </li>
+                            <!-- end single list -->
+                            </ul>
+                            
+
+                        <!-- Separacion -->
+
+
+                        <ul class="list space-y-8 w-full">
+                                <li class="flex space-x-3 rtl:space-x-reverse">
+                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                                        <Icon icon="streamline:blood-bag-donation" />
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                                            Tipo de sangre 
+                                        </div>
+                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                            {{ userData.blood_type }}
+                                        </a>
+                                    </div>
+                                </li>
+                            <!-- end single list -->
+                                <li class="flex space-x-3 rtl:space-x-reverse">
+                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                                        <Icon icon="heroicons:map" />
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                                            Sexo
+                                        </div>
+                                        <div class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                            {{ userData.sex }}
                                         </div>
                                     </div>
                                 </li>
@@ -163,6 +203,7 @@
 </template>
 
 <script>
+    import Button from "@/components/Button";
     import profile from "@/components/profile"
     import Card from "@/components/Card";
     import Icon from "@/components/Icon";
@@ -175,20 +216,29 @@
             profile,
             Card,
             Icon,
+            Button
         },
         setup() {
             const router = useRouter();
             const { participantsTable } = useCachedDataStore();
             const id = router.currentRoute.value.params.id;
-            const userData = ref(Object);
+            
+            useCachedDataStore().fetchData();
 
-            useCachedDataStore().fetchData(); // Ensure fetchData is available in your store
+            let userData = ref(null); 
 
-            console.log(userData[0]);
+            watch(participantsTable, () => {
+                console.log(participantsTable);
+                userData.value = participantsTable.find(objeto => objeto.id == id);
+            });
+
+            if(participantsTable)
+                userData.value = participantsTable.find(objeto => objeto.id == id);
 
             return {
                 participantsTable,
-                id
+                id,
+                userData,
             };
         }
     })
