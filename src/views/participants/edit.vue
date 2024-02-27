@@ -86,7 +86,7 @@
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="subtmit" text="Modificar" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
                     <router-link
-                        :to="{ path:  '/users/' }"
+                        :to="{ path:  '/participants/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>

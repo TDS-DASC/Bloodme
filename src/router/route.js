@@ -21,41 +21,67 @@ const routes = [
         component: () => import("@/views/hospitals/index.vue"),
       },
       {
-        path: "/users",
-        name: "users",
+        path: "/participants",
+        name: "participants",
         children: [
           {
             path: "",
             name: "routless",
-            component: () => import("@/views/users/index.vue"),
+            component: () => import("@/views/participants/index.vue"),
           },
           {
             path: "index",
-            name: "users",
-            component: () => import("@/views/users/index.vue"),
+            name: "participants",
+            component: () => import("@/views/participants/index.vue"),
           },
           {
             path: "create",
-            name: "users-create",
-            component: () => import("@/views/users/create.vue"),
+            name: "participants-create",
+            component: () => import("@/views/participants/create.vue"),
           },
           {
             path: ":id/edit",
-            name: "users-edit",
-            component: () => import("@/views/users/edit.vue"),
+            name: "participants-edit",
+            component: () => import("@/views/participants/edit.vue"),
           },
           {
             path: ":id",
-            name: "users-view",
-            component: () => import("@/views/users/view.vue"),
+            name: "participants-view",
+            component: () => import("@/views/participants/view.vue"),
           }
         ],  
       },
-/*       {
-        path: "/users/create",
-        name: "create",
-        component: () => import("@/views/users/create.vue"),
-      }, */
+      {
+        path: "/agents",
+        name: "agents",
+        children: [
+          {
+            path: "",
+            name: "routless2",
+            component: () => import("@/views/agents/index.vue"),
+          },
+          {
+            path: "index",
+            name: "agents",
+            component: () => import("@/views/agents/index.vue"),
+          },
+          {
+            path: "create",
+            name: "agents-create",
+            component: () => import("@/views/agents/create.vue"),
+          },
+          {
+            path: ":id/edit",
+            name: "agents-edit",
+            component: () => import("@/views/agents/edit.vue"),
+          },
+          {
+            path: ":id",
+            name: "agents-view",
+            component: () => import("@/views/agents/view.vue"),
+          }
+        ],  
+      },
     ],
   },
   {

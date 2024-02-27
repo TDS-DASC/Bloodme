@@ -49,6 +49,7 @@
                           : 'hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 dark:hover:bg-opacity-50' 
                         }
                         w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm  last:mb-0 cursor-pointer first:rounded-t last:rounded-b flex  space-x-2 items-center rtl:space-x-reverse `"
+                        
                       >
                         <span class="text-base"><Icon :icon="item.icon"/></span>
                         <span>{{ item.name }}</span>
@@ -56,7 +57,7 @@
                     </router-link>
                   </template>
                   <template v-else>
-                    <button @click="handleDelete(props.row.id)" class="bg-danger-500 text-danger-500 bg-opacity-30 hover:bg-opacity-100 hover:text-white w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm  last:mb-0 cursor-pointer first:rounded-t last:rounded-b flex  space-x-2 items-center rtl:space-x-reverse">
+                    <button @click="displayConfirmMessage(item.name, props.row.id)" class="bg-danger-500 text-danger-500 bg-opacity-30 hover:bg-opacity-100 hover:text-white w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm  last:mb-0 cursor-pointer first:rounded-t last:rounded-b flex  space-x-2 items-center rtl:space-x-reverse">
                       <span class="text-base"><Icon :icon="item.icon"/></span>
                       <span>{{ item.name }}</span>
                     </button>
@@ -85,16 +86,27 @@
           </div>
         </template>
       </vue-good-table>
+      <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+          <Card title="Se requiere confirmación" class="text-center" noborder>
+              Estas a punto de agregar una nueva entidad a la base de datos.<br>
+              ¿Estás seguro que quieres continuar?
+              <div class="mt-9 flex justify-evenly">
+                  <Button btnClass="btn-primary" text="Confirmar" @click="deleteParticipant()" />
+                  <Button btnClass="btn-dark" text="Cancelar" @click="hideConfirmMessage()" />
+              </div>
+          </Card>
+      </div>
   </div>
 </template>
 <script>
+import Card from "@/components/Card";
+import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";
 import Icon from "@/components/Icon";
 import InputGroup from "@/components/InputGroup";
 import Pagination from "@/components/Pagination";
 import { MenuItem } from "@headlessui/vue";
 import { advancedTable } from "../../../constant/basic-tablle-data";
-import axios from "@/plugins/axios"
 import { ref } from "vue" 
 export default {
   components: {
@@ -103,6 +115,8 @@ export default {
     Dropdown,
     Icon,
     MenuItem,
+    Card,
+    Button,
   },
   props: {
     tableInformation: Object,
@@ -150,8 +164,30 @@ export default {
     };
   },
   setup(props) {
-    console.log(props.tableData)
+    console.log(props.tableData);
+
+    let confirmMessage = ref(false)
+    let participant_id = ref(0)
+    function displayConfirmMessage(clickedButton, item_id){
+      if(clickedButton == "delete"){
+        participant_id = item_id;
+        console.log(confirmMessage.value);
+        confirmMessage.value = !confirmMessage.value;
+      }
+    }
+    function hideConfirmMessage(){
+        confirmMessage.value = !confirmMessage.value;
+    }
+    function deleteParticipant(){
+        confirmMessage.value = false;
+        console.log("Usuario eliminar" + participant_id);
+    }
+
     return {
+      displayConfirmMessage,
+      deleteParticipant,
+      confirmMessage,
+      hideConfirmMessage,
     }
   }
 };

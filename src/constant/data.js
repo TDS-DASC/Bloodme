@@ -69,11 +69,11 @@ export const menuItems = [
     child: [
         {
           childtitle: "Tabla de Participantes",
-          childlink: "/users/index",
+          childlink: "/participants/index",
         },
         {
           childtitle: "Crear Participante",
-          childlink: "/users/create",
+          childlink: "/participants/create",
         },
     ],
   },
@@ -83,11 +83,11 @@ export const menuItems = [
     child: [
         {
           childtitle: "Tabla de Agentes",
-          childlink: "/users/index",
+          childlink: "/agents/index",
         },
         {
           childtitle: "Crear Agente",
-          childlink: "/users/create",
+          childlink: "/agents/create",
         },
     ],
   },

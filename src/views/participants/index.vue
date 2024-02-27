@@ -1,17 +1,11 @@
 <template>
     <div class="flex flex-col gap-4">
-        <router-link :to="{ path: '/users/create' }">
-
-        </router-link>
-        <RouterView></RouterView>
         <tableAdvanced :tableInformation=participantsTableParams :tableData=participantsTable />
     </div>
 </template>
 
 <script>
     import tableAdvanced from "../../components/Table/advanced"
-    import { ref } from "vue"
-    import axios from "@/plugins/axios"
     import { useCachedDataStore } from '../../stores/usersStore';
     export default{
         components: {
@@ -21,7 +15,7 @@
             const participantsTableParams = {
                 title: "Participantes",
                 rows: 5,
-                headUrl: "users",
+                headUrl: "participants",
                 columns: [
                     {
                         label: "ID",
