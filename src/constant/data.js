@@ -64,20 +64,6 @@ export const menuItems = [
     title: "Usuarios",
   },
   {
-    title: "Agentes",
-    icon: "streamline:nurse-assistant-emergency",
-    child: [
-        {
-          childtitle: "Tabla de Usuarios",
-          childlink: "/users/index",
-        },
-        {
-          childtitle: "Crear Usuario",
-          childlink: "/users/create",
-        },
-    ],
-  },
-  {
     title: "Participantes",
     icon: "formkit:people",
     child: [
@@ -87,6 +73,20 @@ export const menuItems = [
         },
         {
           childtitle: "Crear Participante",
+          childlink: "/users/create",
+        },
+    ],
+  },
+  {
+    title: "Agentes",
+    icon: "streamline:nurse-assistant-emergency",
+    child: [
+        {
+          childtitle: "Tabla de Agentes",
+          childlink: "/users/index",
+        },
+        {
+          childtitle: "Crear Agente",
           childlink: "/users/create",
         },
     ],
@@ -110,11 +110,11 @@ export const menuItems = [
     icon: "fluent:person-info-16-regular",
     child: [
         {
-          childtitle: "Tabla de Administradores",
+          childtitle: "Tabla de Beneficiarios",
           childlink: "/users/index",
         },
         {
-          childtitle: "Crear Administrador",
+          childtitle: "Crear Beneficiario",
           childlink: "/users/create",
         },
     ],

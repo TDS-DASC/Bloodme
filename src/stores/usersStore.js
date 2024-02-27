@@ -31,7 +31,7 @@ export const useCachedDataStore = defineStore({
             agent: this.pushElementToAgents,
           };
 
-          const response = await axios.get(`http://127.0.0.1:8000/api/users`);
+          const response = await axios.get(`/api/users`);
           response.data.forEach(user => {
             const userType = this.checkUserType(user);
             const handler = userTypeFunction[userType];

@@ -3,12 +3,6 @@
         <div class="p-4 bg-white rounded-md dark:bg-slate-800">
             <div class="flex items-center justify-between py-2">
                 <h3>Crear usuario</h3><br>
-                <Select
-                    name="pt"
-                    :options="options"
-                    placeholder="Tipo de usuario"
-                    class="w-1/6"
-                />
             </div>
             <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>
@@ -21,24 +15,21 @@
                     type="text"
                     placeholder="Ingrese el nombre"
                     name="name"
-                    v-model="username"
-                    :error="usernameError"
+                    v-model="form.name"
                 />
                 <Textinput
                     label="Apellidos"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
-                    v-model="lastname"
-                    :error="lastnameError"
+                    v-model="form.lastname"
                 />
                 <Textinput
                     label="Alias"
                     type="text"
                     placeholder="Ingrese el alias"
                     name="alias"
-                    v-model="alias"
-                    :error="aliasError"
+                    v-model="form.alias"
                 />
 
                 <Textinput
@@ -46,74 +37,83 @@
                     type="date"
                     placeholder="Fecha de nacimiento"
                     name="date"
-                    v-model="alphabetic"
-                    :error="alphabeticError"
+                    v-model="form.birth_date"
                 />
 
                 <Select
                     label="Tipo de sangre"
                     type="text"
-                    placeholder="Enter minimum 3 Characters"
+                    placeholder="Seleccione su tipo de sangre"
                     name="bloodtype"
-                    v-model="length"
-                    :error="lengthError"
+                    :options="blood_types"
+                    v-model="form.blood_type"
+                />
+                <Select
+                    label="Sexo"
+                    type="text"
+                    placeholder="Seleccione su sexo"
+                    name="sex"
+                    v-model="form.sex_options"
                 />
                 <Textinput
                     label="Número celular"
                     type="password"
-                    placeholder="8+ characters, 1 capitat letter "
+                    placeholder="Ingrese su número celular"
                     name="phone"
-                    v-model="password"
-                    :error="passwordError"
+                    v-model="form.phone_number"
                 />
                 <Textinput
                     label="CURP"
                     type="text"
-                    placeholder="Enter Valid CURP"
+                    placeholder="Ingrese un curp valido"
                     name="curp"
-                    v-model="curp"
-                    :error="curpError"
+                    v-model="form.curp"
                 />
                 <Textinput
                     label="email"
                     type="email"
-                    placeholder="Enter Valid URL"
+                    placeholder="Ingrese un correo electronico"
                     name="email"
-                    v-model="url"
-                    :error="urlError"
+                    v-model="form.email"
                 />
                 <Textinput
-                    label="password"
-                    type="url"
-                    placeholder="Enter Valid URL"
+                    label="Contraseña*"
+                    type="password"
+                    placeholder="Ingrese su contraseña"
                     name="password"
-                    v-model="password"
-                    :error="passwordError"
-                />
-                <Select
-                    label="blood"
-                    placeholder="Select your blood type"
-                    v-model="bloodType"
-                    :options="bloodTypes"
-                    :error="urlError"
+                    v-model="form.password"
+                    hasicon
                 />
 
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="button" text="Crear" btnClass="btn-dark" @click="createUser()"></Button>
-                    <Button text="Cancelar" btnClass="btn-danger"></Button>
+                    <Button type="button" text="Crear" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
+                    <router-link
+                        :to="{ path:  '/users/' }"
+                    ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
+        </div>
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+            <Card title="Se requiere confirmación" class="text-center" noborder>
+                Estas a punto de agregar una nueva entidad a la base de datos.<br>
+                ¿Estás seguro que quieres continuar?
+                <div class="mt-9 flex justify-evenly">
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
+                    <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
+                </div>
+            </Card>
         </div>
     </div>
 </template>
 
 <script>
+    import Card from "@/components/Card";
     import Button from "@/components/Button";
     import Textarea from "@/components/Textarea";
     import Textinput from "@/components/Textinput";
-    import { useField, useForm } from "vee-validate";
+    import { useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import * as yup from "yup";
+    import { ref } from "vue";
 
     export default {
         components: {
@@ -121,93 +121,41 @@
             Button,
             Textarea,
             Select,
+            Textinput,
+            Card
         },
         props: {
             formInformation: Object,
         },
         setup() {
-            // Define a validation schema
-            const schema = yup.object({
-                username: yup.string().required(),
-                number: yup.number().required().positive(),
-                
-                betweenNumber: yup
-                .number()
-                .required("The Number between field is required")
-                .positive()
-                .min(1)
-                .max(10),
 
-                alphabetic: yup
-                .string()
-                .required()
-                .matches(/^[a-zA-Z]+$/, "Must only consist of alphabetic characters"),
-
-                lastname: yup
-                .string()
-                .required()
-                .matches(/^[a-zA-Z]+$/, "Must only consist of alphabetic characters"),
-
-                alias: yup
-                .string()
-                .required()
-                .matches(/^[a-zA-Z]+$/, "Must only consist of alphabetic characters"),
-
-                length: yup
-                .string()
-                .required("The Min Character field is required")
-                .min(3),
-
-                curp: yup
-                .string()
-                .required("The Min Character field is required")
-                .min(16),
-
-                email: yup
-                .string()
-                .required("The Min Character field is required")
-                .email(),
-
-                bloodType: yup
-                .string()
-                .required("Please select a bloodType")
-                .email(),
-
-                password: yup.string().required().min(8),
-                url: yup.string().required("The URL field is required").url(),
-                message: yup.string().required("The Message field is required"),
-            });
+            let form = ref({
+                name: null,
+                lastname: null,
+                alias: null,
+                birth_date: null,
+                blood_type: null,
+                phone_number: null,
+                curp: null,
+                email: null,
+                password: null,
+                role: null,
+            })
 
             const { handleSubmit } = useForm({
-                validationSchema: schema,
             });
-            // No need to define rules for fields
-
-            const { value: username, errorMessage: usernameError } = useField("username");
-            const { value: number, errorMessage: numberError } = useField("number");
-            const { value: betweenNumber, errorMessage: betweenNumberError } = useField("betweenNumber");
-            const { value: alphabetic, errorMessage: alphabeticError } = useField("alphabetic");
-            const { value: alias, errorMessage: aliasError } = useField("alias");
-            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
-            const { value: length, errorMessage: lengthError } = useField("length");
-            const { value: password, errorMessage: passwordError } = useField("password");
-            const { value: url, errorMessage: urlError } = useField("url");
-            const { value: message, errorMessage: messageError } = useField("message");
-            const { value: curp, errorMessage: curpError } = useField("curp");
-            const { value: email, errorMessage: emailError } = useField("email");
-            const { value: bloodType, errorMessage: bloodTypeError } = useField("email");
-
-            const onSubmit = handleSubmit(() => {
-                // console.warn(values.email);
-            });
-
 
             /* No de la template */
             const options = [
-                { value: "1", label: "Usuario" },
-                { value: "2", label: "Administrador" },
+                { value: "1", label: "Participante" },
+                { value: "2", label: "Agente" },
+                { value: "3", label: "Administrador" },
             ];
-            const bloodTypes = [
+            const sex_options = [
+                { value: "1", label: "Hombre" },
+                { value: "2", label: "Mujer" },
+            ];
+            const blood_types = [
                 { value: 'A+', label: 'A+' },
                 { value: 'A-', label: 'A-' },
                 { value: 'B+', label: 'B+' },
@@ -218,41 +166,33 @@
                 { value: 'O-', label: 'O-' }
             ];
 
+            let confirmMessage = ref(false)
+            function displayConfirmMessage(){
+                console.log(confirmMessage.value);
+                confirmMessage.value = !confirmMessage.value;
+            }
             function createUser(){
-                console.log("Created user");
+                confirmMessage.value = false;
+                console.log("Usuario creado");
             }
 
+            let selectedRole = ref(0);
+            function handleRoleChange(newValue, selectedIndex){
+                selectedRole = selectedIndex;
+                console.log(selectedRole == 1);
+            }
+            
+
             return {
-                message,
-                messageError,
-                url,
-                urlError,
-                password,
-                passwordError,
-                length,
-                lengthError,
-                number,
-                alphabetic,
-                alphabeticError,
-                betweenNumber,
-                betweenNumberError,
-                lastname,
-                lastnameError,
-                numberError,
-                username,
-                usernameError,
-                email,
-                emailError,
-                alias,
-                aliasError,
-                curp,
-                curpError,
-                bloodType,
-                bloodTypeError,
                 options,
-                bloodTypes,
-                onSubmit,
+                blood_types,
                 createUser,
+                form,
+                selectedRole,
+                handleRoleChange,
+                sex_options,
+                displayConfirmMessage,
+                confirmMessage
             };
         }
     }

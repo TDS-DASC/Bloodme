@@ -4,7 +4,8 @@ import router from "../router/index.js";
 const axiosClient = axios.create({
     withCredentials: true,
     withXSRFToken: true,
-    baseURL: "https://50b5-200-33-8-154.ngrok-free.app",
+    /* baseURL: "https://50b5-200-33-8-154.ngrok-free.app", */
+    baseURL: "http://127.0.0.1:8000",
 })
 
 /* axiosClient.interceptors.request.use(config => {
