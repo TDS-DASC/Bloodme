@@ -82,6 +82,37 @@ const routes = [
           }
         ],  
       },
+      {
+        path: "/administrators",
+        name: "administrators",
+        children: [
+          {
+            path: "",
+            name: "routless2",
+            component: () => import("@/views/administrators/index.vue"),
+          },
+          {
+            path: "index",
+            name: "administrators",
+            component: () => import("@/views/administrators/index.vue"),
+          },
+          {
+            path: "create",
+            name: "administrators-create",
+            component: () => import("@/views/administrators/create.vue"),
+          },
+          {
+            path: ":id/edit",
+            name: "administrators-edit",
+            component: () => import("@/views/administrators/edit.vue"),
+          },
+          {
+            path: ":id",
+            name: "administrators-view",
+            component: () => import("@/views/administrators/view.vue"),
+          }
+        ],  
+      },
     ],
   },
   {

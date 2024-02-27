@@ -93,15 +93,15 @@ export const menuItems = [
   },
   {
     title: "Administradores",
-    icon: "clarity:administrator-line",
+    icon: "streamline:nurse-assistant-emergency",
     child: [
         {
           childtitle: "Tabla de Administradores",
-          childlink: "/users/index",
+          childlink: "/administrators/index",
         },
         {
           childtitle: "Crear Administrador",
-          childlink: "/users/create",
+          childlink: "/administrators/create",
         },
     ],
   },
