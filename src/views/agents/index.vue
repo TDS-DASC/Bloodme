@@ -1,5 +1,60 @@
 <template>
-    <div>
-        <p>wep</p>
+    <div class="flex flex-col gap-4">
+        <tableAdvanced :tableInformation=agentsTableParams :tableData=agentsTable />
     </div>
 </template>
+
+<script>
+    import tableAdvanced from "../../components/Table/advanced"
+    import { useCachedDataStore } from '../../stores/usersStore';
+    export default{
+        components: {
+            tableAdvanced
+        },
+        setup() {
+            const agentsTableParams = {
+                title: "Agentes",
+                rows: 5,
+                headUrl: "agents",
+                columns: [
+                    {
+                        label: "ID",
+                        field: "id",
+                    },
+                    {
+                        label: "Nombre",
+                        field: "name",
+                    },
+                    {
+                        label: "Alias",
+                        field: "alias",
+                    },
+                    {
+                        label: "Email",
+                        field: "email",
+                    },
+                    {
+                        label: "Fecha de nacimiento",
+                        field: "birth_date",
+                    },
+                    {
+                        label: "Tipo de sangre",
+                        field: "blood_type",
+                    },
+                    {
+                        label: "Accion",
+                        field: "action",
+                    },
+                ]
+            }
+            const { agentsTable} = useCachedDataStore();
+            useCachedDataStore().fetchData();
+
+
+            return {
+                agentsTableParams,
+                agentsTable,
+            }
+        },
+    }
+</script>

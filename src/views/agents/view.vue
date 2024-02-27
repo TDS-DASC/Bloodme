@@ -10,7 +10,7 @@
                                     <img :src="userData.image_url" alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
                                     <img src="@/assets/images/avatar/av-1.svg" alt="" class="w-full h-full object-cover rounded-full" v-else />
                                         <router-link
-                                            :to="`/participants/${id}/edit`"
+                                            :to="`/agents/${id}/edit`"
                                             class="absolute right-2 h-8 w-8 bg-slate-50 text-slate-600 rounded-full shadow-sm flex flex-col items-center justify-center md:top-[140px] top-[100px]"
                                             ><Icon icon="heroicons:pencil-square" />
                                         </router-link>
@@ -221,23 +221,23 @@
         },
         setup() {
             const router = useRouter();
-            const { participantsTable } = useCachedDataStore();
+            const { agentsTable } = useCachedDataStore();
             const id = router.currentRoute.value.params.id;
             
             useCachedDataStore().fetchData();
 
             let userData = ref(null); 
 
-            watch(participantsTable, () => {
-                console.log(participantsTable);
-                userData.value = participantsTable.find(objeto => objeto.id == id);
+            watch(agentsTable, () => {
+                console.log(agentsTable);
+                userData.value = agentsTable.find(objeto => objeto.id == id);
             });
 
-            if(participantsTable)
-                userData.value = participantsTable.find(objeto => objeto.id == id);
+            if(agentsTable)
+                userData.value = agentsTable.find(objeto => objeto.id == id);
 
             return {
-                participantsTable,
+                agentsTable,
                 id,
                 userData,
             };

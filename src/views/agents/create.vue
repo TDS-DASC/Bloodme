@@ -2,7 +2,7 @@
     <div class="">
         <div class="p-4 bg-white rounded-md dark:bg-slate-800">
             <div class="flex items-center justify-between py-2">
-                <h3>Crear Participante</h3><br>
+                <h3>Crear Agente</h3><br>
             </div>
             <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>

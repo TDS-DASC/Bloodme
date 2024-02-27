@@ -86,7 +86,7 @@
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="subtmit" text="Modificar" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
                     <router-link
-                        :to="{ path:  '/participants/' }"
+                        :to="{ path:  '/agents/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
@@ -160,7 +160,7 @@
             /* Not from the template */
 
             const router = useRouter();
-            const { participantsTable } = useCachedDataStore();
+            const { agentsTable } = useCachedDataStore();
             const id = router.currentRoute.value.params.id;
             
             useCachedDataStore().fetchData();
@@ -179,13 +179,13 @@
                 role: null,
             })
 
-            watch(participantsTable, () => {
-                userData.value = participantsTable.find(objeto => objeto.id == id);
+            watch(agentsTable, () => {
+                userData.value = agentsTable.find(objeto => objeto.id == id);
                 assignFormValues();
             });
 
-            if(participantsTable){
-                userData.value = participantsTable.find(objeto => objeto.id == id);
+            if(agentsTable){
+                userData.value = agentsTable.find(objeto => objeto.id == id);
                 assignFormValues();
             }
 
@@ -217,7 +217,7 @@
                 bloodTypes,
                 rolTypes,
                 onSubmit,
-                participantsTable,
+                agentsTable,
                 userData,
                 form,
                 confirmMessage,
