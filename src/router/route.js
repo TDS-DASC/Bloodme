@@ -26,7 +26,7 @@ const routes = [
         children: [
           {
             path: "",
-            name: "routless",
+            name: "participants index",
             component: () => import("@/views/participants/index.vue"),
           },
           {
@@ -57,7 +57,7 @@ const routes = [
         children: [
           {
             path: "",
-            name: "routless2",
+            name: "agents index",
             component: () => import("@/views/agents/index.vue"),
           },
           {
@@ -88,7 +88,7 @@ const routes = [
         children: [
           {
             path: "",
-            name: "routless2",
+            name: "administrators index",
             component: () => import("@/views/administrators/index.vue"),
           },
           {

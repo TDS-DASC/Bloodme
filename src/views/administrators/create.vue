@@ -88,7 +88,7 @@
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="button" text="Crear" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
                     <router-link
-                        :to="{ path:  '/users/' }"
+                        :to="{ path:  '/administrators/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
