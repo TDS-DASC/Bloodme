@@ -208,7 +208,7 @@
     import profile from "@/components/profile"
     import Card from "@/components/Card";
     import Icon from "@/components/Icon";
-    import { useCachedDataStore } from '@/stores/usersStore';
+    import { useParticipantsStore } from '@/stores/participantsStore';
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
 
@@ -221,10 +221,10 @@
         },
         setup() {
             const router = useRouter();
-            const { participantsTable } = useCachedDataStore();
+            const { participantsTable } = useParticipantsStore();
             const id = router.currentRoute.value.params.id;
             
-            useCachedDataStore().fetchData();
+            useParticipantsStore().fetchData();
 
             let userData = ref(null); 
 

@@ -6,7 +6,7 @@
 
 <script>
     import tableAdvanced from "../../components/Table/advanced"
-    import { useCachedDataStore } from '../../stores/usersStore';
+    import { useParticipantsStore } from '../../stores/participantsStore';
     export default{
         components: {
             tableAdvanced
@@ -47,8 +47,8 @@
                     },
                 ]
             }
-            const { participantsTable} = useCachedDataStore();
-            useCachedDataStore().fetchData();
+            const { participantsTable} = useParticipantsStore();
+            useParticipantsStore().fetchData();
 
 
             return {
