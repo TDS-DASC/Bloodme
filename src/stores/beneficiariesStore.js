@@ -20,7 +20,6 @@ export const useCachedDataStoreBeneficiaries = defineStore({
             this.beneficiariesTable.push(beneficiary);
           });
           this.dataLoaded = true;
-          console.log(response);
         } catch (error) {
           console.error('Error in request api beneficiaries', error);
         }
