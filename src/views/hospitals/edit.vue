@@ -63,7 +63,7 @@
     import Textinput from "@/components/Textinput";
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { useCachedDataStore } from '@/stores/usersStore';
+    import { useCachedDataStoreHospitals } from '@/stores/hospitalsStore';
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
 
@@ -110,10 +110,10 @@
             /* Not from the template */
 
             const router = useRouter();
-            const { hospitalsTable } = useCachedDataStore();
+            const { hospitalsTable } = useCachedDataStoreHospitals();
             const id = router.currentRoute.value.params.id;
             
-            useCachedDataStore().fetchData();
+            useCachedDataStoreHospitals().fetchData();
 
             let userData = ref(null); 
             let form = ref({

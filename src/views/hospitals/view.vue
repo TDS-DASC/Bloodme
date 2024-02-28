@@ -208,7 +208,7 @@
     import profile from "@/components/profile"
     import Card from "@/components/Card";
     import Icon from "@/components/Icon";
-    import { useCachedDataStore } from '@/stores/usersStore';
+    import { useCachedDataStoreHospitals } from '@/stores/hospitalsStore';
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
 
@@ -221,10 +221,10 @@
         },
         setup() {
             const router = useRouter();
-            const { hospitalsTable } = useCachedDataStore();
+            const { hospitalsTable } = useCachedDataStoreHospitals();
             const id = router.currentRoute.value.params.id;
             
-            useCachedDataStore().fetchData();
+            useCachedDataStoreHospitals().fetchData();
 
             let userData = ref(null); 
 
