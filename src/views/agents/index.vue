@@ -6,7 +6,7 @@
 
 <script>
     import tableAdvanced from "../../components/Table/advanced"
-    import { useCachedDataStore } from '../../stores/usersStore';
+    import { useCachedDataStore } from '../../stores/agentsStore';
     export default{
         components: {
             tableAdvanced
