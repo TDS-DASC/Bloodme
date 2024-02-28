@@ -18,7 +18,64 @@ const routes = [
       {
         path: "/hospitals",
         name: "hospitals",
-        component: () => import("@/views/hospitals/index.vue"),
+        children: [
+          {
+            path: "",
+            name: "hospitals index",
+            component: () => import("@/views/hospitals/index.vue"),
+          },
+          {
+            path: "index",
+            name: "hospitals",
+            component: () => import("@/views/hospitals/index.vue"),
+          },
+          {
+            path: "create",
+            name: "hospitals-create",
+            component: () => import("@/views/hospitals/create.vue"),
+          },
+          {
+            path: ":id/edit",
+            name: "hospitals-edit",
+            component: () => import("@/views/hospitals/edit.vue"),
+          },
+          {
+            path: ":id",
+            name: "hospitals-view",
+            component: () => import("@/views/hospitals/view.vue"),
+          }
+        ],  
+      },
+      {
+        path: "/appointments",
+        name: "appointments",
+        children: [
+          {
+            path: "",
+            name: "appointments index",
+            component: () => import("@/views/appointments/index.vue"),
+          },
+          {
+            path: "index",
+            name: "appointments",
+            component: () => import("@/views/appointments/index.vue"),
+          },
+          {
+            path: "create",
+            name: "appointments-create",
+            component: () => import("@/views/appointments/create.vue"),
+          },
+          {
+            path: ":id/edit",
+            name: "appointments-edit",
+            component: () => import("@/views/appointments/edit.vue"),
+          },
+          {
+            path: ":id",
+            name: "appointments-view",
+            component: () => import("@/views/appointments/view.vue"),
+          }
+        ],  
       },
       {
         path: "/participants",
@@ -110,6 +167,37 @@ const routes = [
             path: ":id",
             name: "administrators-view",
             component: () => import("@/views/administrators/view.vue"),
+          }
+        ],  
+      },
+      {
+        path: "/beneficiaries",
+        name: "beneficiaries",
+        children: [
+          {
+            path: "",
+            name: "beneficiaries index",
+            component: () => import("@/views/beneficiaries/index.vue"),
+          },
+          {
+            path: "index",
+            name: "beneficiaries",
+            component: () => import("@/views/beneficiaries/index.vue"),
+          },
+          {
+            path: "create",
+            name: "beneficiaries-create",
+            component: () => import("@/views/beneficiaries/create.vue"),
+          },
+          {
+            path: ":id/edit",
+            name: "beneficiaries-edit",
+            component: () => import("@/views/beneficiaries/edit.vue"),
+          },
+          {
+            path: ":id",
+            name: "beneficiaries-view",
+            component: () => import("@/views/beneficiaries/view.vue"),
           }
         ],  
       },

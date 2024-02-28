@@ -1,21 +1,21 @@
 <template>
     <div class="flex flex-col gap-4">
-        <tableAdvanced :tableInformation=hospitalsTableParams :tableData=hospitalsTable />
+        <tableAdvanced :tableInformation=beneficiariesTableParams :tableData=beneficiariesTable />
     </div>
 </template>
 
 <script>
     import tableAdvanced from "../../components/Table/advanced"
-    import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
+    import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     export default{
         components: {
             tableAdvanced
         },
         setup() {
-            const hospitalsTableParams = {
-                title: "Hospitals",
+            const beneficiariesTableParams = {
+                title: "Agentes",
                 rows: 5,
-                headUrl: "hospitals",
+                headUrl: "beneficiaries",
                 columns: [
                     {
                         label: "ID",
@@ -26,8 +26,12 @@
                         field: "name",
                     },
                     {
-                        label: "Address",
-                        field: "address",
+                        label: "Fecha de nacimiento",
+                        field: "birth_date",
+                    },
+                    {
+                        label: "Tipo de sangre",
+                        field: "blood_type",
                     },
                     {
                         label: "Accion",
@@ -35,13 +39,13 @@
                     },
                 ]
             }
-            const { hospitalsTable } = useCachedDataStoreHospitals();
-            useCachedDataStoreHospitals().fetchData();
+            const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
+            useCachedDataStoreBeneficiaries().fetchData();
 
 
             return {
-                hospitalsTableParams,
-                hospitalsTable,
+                beneficiariesTableParams,
+                beneficiariesTable,
             }
         },
     }

@@ -111,11 +111,11 @@ export const menuItems = [
     child: [
         {
           childtitle: "Tabla de Beneficiarios",
-          childlink: "/users/index",
+          childlink: "/beneficiaries/index",
         },
         {
           childtitle: "Crear Beneficiario",
-          childlink: "/users/create",
+          childlink: "/beneficiaries/create",
         },
     ],
   },
