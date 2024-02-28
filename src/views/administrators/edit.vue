@@ -107,7 +107,7 @@
     import Textinput from "@/components/Textinput";
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { useCachedDataStore } from '@/stores/usersStore';
+    import { useAdministratorsStore } from '@/stores/administratorsStore';
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
 
@@ -149,10 +149,10 @@
             /* Not from the template */
 
             const router = useRouter();
-            const { administratorsTable } = useCachedDataStore();
+            const { administratorsTable } = useAdministratorsStore();
             const id = router.currentRoute.value.params.id;
             
-            useCachedDataStore().fetchData();
+            useAdministratorsStore().fetchData();
 
             let userData = ref(null); 
             let form = ref({

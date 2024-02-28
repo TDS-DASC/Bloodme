@@ -1,3 +1,6 @@
+import { defineStore } from 'pinia';
+import axios from '@/plugins/axios';
+
 export const useAdministratorsStore = defineStore({
     id: 'administratorsData',
     state: () => ({

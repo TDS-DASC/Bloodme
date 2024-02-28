@@ -1,3 +1,6 @@
+import { defineStore } from 'pinia';
+import axios from '@/plugins/axios';
+
 export const useAgentsStore = defineStore({
   id: 'agentsData',
   state: () => ({
