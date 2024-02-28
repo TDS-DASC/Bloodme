@@ -31,23 +31,6 @@
                     name="alias"
                     v-model="form.alias"
                 />
-
-                <Textinput
-                    label="Fecha de nacimiento"
-                    type="date"
-                    placeholder="Fecha de nacimiento"
-                    name="date"
-                    v-model="form.birth_date"
-                />
-
-                <Select
-                    label="Tipo de sangre"
-                    type="text"
-                    placeholder="Seleccione su tipo de sangre"
-                    name="bloodtype"
-                    :options="blood_types"
-                    v-model="form.blood_type"
-                />
                 <Select
                     label="Sexo"
                     type="text"
@@ -61,13 +44,6 @@
                     placeholder="Ingrese su número celular"
                     name="phone"
                     v-model="form.phone_number"
-                />
-                <Textinput
-                    label="CURP"
-                    type="text"
-                    placeholder="Ingrese un curp valido"
-                    name="curp"
-                    v-model="form.curp"
                 />
                 <Textinput
                     label="email"

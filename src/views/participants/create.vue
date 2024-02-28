@@ -39,14 +39,12 @@
                     name="date"
                     v-model="form.birth_date"
                 />
-
-                <Select
-                    label="Tipo de sangre"
-                    type="text"
-                    placeholder="Seleccione su tipo de sangre"
-                    name="bloodtype"
-                    :options="blood_types"
-                    v-model="form.blood_type"
+                <Textinput
+                    label="Número celular"
+                    type="password"
+                    placeholder="Ingrese su número celular"
+                    name="phone"
+                    v-model="form.phone_number"
                 />
                 <Select
                     label="Sexo"
@@ -56,18 +54,19 @@
                     v-model="form.sex_options"
                 />
                 <Textinput
-                    label="Número celular"
-                    type="password"
-                    placeholder="Ingrese su número celular"
-                    name="phone"
-                    v-model="form.phone_number"
-                />
-                <Textinput
                     label="CURP"
                     type="text"
                     placeholder="Ingrese un curp valido"
                     name="curp"
                     v-model="form.curp"
+                />
+                <Select
+                    label="Tipo de sangre"
+                    type="text"
+                    placeholder="Seleccione su tipo de sangre"
+                    name="bloodtype"
+                    :options="blood_types"
+                    v-model="form.blood_type"
                 />
                 <Textinput
                     label="email"

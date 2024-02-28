@@ -2,97 +2,79 @@
     <div class="">
         <div class="p-4 bg-white rounded-md dark:bg-slate-800">
             <div class="flex items-center justify-between py-2">
-                <h3>Editar Administrador</h3><br>
+                <h3>Crear Administrador</h3><br>
             </div>
             <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>
             <form
                 @submit.prevent="onSubmit"
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
-                v-if="userData"
             >
                 <Textinput
                     label="Nombre *"
                     type="text"
                     placeholder="Ingrese el nombre"
                     name="name"
-                    v-model=form.name
+                    v-model="form.name"
                 />
                 <Textinput
                     label="Apellidos"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
-                    v-model=form.lastname
+                    v-model="form.lastname"
                 />
                 <Textinput
                     label="Alias"
                     type="text"
                     placeholder="Ingrese el alias"
                     name="alias"
-                    v-model=form.alias
+                    v-model="form.alias"
                 />
-
-                <Textinput
-                    label="Fecha de nacimiento"
-                    type="date"
-                    placeholder="Fecha de nacimiento"
-                    name="date"
-                    v-model=form.birth_date
-                />
-
                 <Select
-                    label="Tipo de sangre"
+                    label="Sexo"
                     type="text"
-                    placeholder="Enter minimum 3 Characters"
-                    name="bloodtype"
-                    v-model=form.blood_type
-                    :options=bloodTypes
+                    placeholder="Seleccione su sexo"
+                    name="sex"
+                    v-model="form.sex_options"
                 />
                 <Textinput
                     label="Número celular"
-                    placeholder="8+ characters, 1 capitat letter "
+                    type="password"
+                    placeholder="Ingrese su número celular"
                     name="phone"
-                    v-model=form.phone_number
-                />
-                <Textinput
-                    label="CURP"
-                    type="text"
-                    placeholder="Enter Valid CURP"
-                    name="curp"
-                    v-model=form.curp
+                    v-model="form.phone_number"
                 />
                 <Textinput
                     label="email"
                     type="email"
-                    placeholder="Enter Valid URL"
+                    placeholder="Ingrese un correo electronico"
                     name="email"
-                    v-model=form.email
+                    v-model="form.email"
                 />
                 <Textinput
-                    label="password"
-                    type="url"
-                    placeholder="Enter Valid Password"
+                    label="Contraseña*"
+                    type="password"
+                    placeholder="Ingrese su contraseña"
                     name="password"
-                    v-model=form.password
+                    v-model="form.password"
+                    hasicon
                 />
 
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="subtmit" text="Modificar" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
+                    <Button type="button" text="Crear" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
                     <router-link
                         :to="{ path:  '/administrators/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
-            <div v-else class="h-screen">
-            </div>
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 Estas a punto de agregar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="editUser()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
                     <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
                 </div>
             </Card>

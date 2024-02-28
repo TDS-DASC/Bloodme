@@ -25,21 +25,12 @@
                     v-model="form.lastname"
                 />
                 <Textinput
-                    label="Alias"
-                    type="text"
-                    placeholder="Ingrese el alias"
-                    name="alias"
-                    v-model="form.alias"
-                />
-
-                <Textinput
                     label="Fecha de nacimiento"
                     type="date"
                     placeholder="Fecha de nacimiento"
                     name="date"
                     v-model="form.birth_date"
                 />
-
                 <Select
                     label="Tipo de sangre"
                     type="text"
@@ -48,20 +39,6 @@
                     :options="blood_types"
                     v-model="form.blood_type"
                 />
-                <Select
-                    label="Sexo"
-                    type="text"
-                    placeholder="Seleccione su sexo"
-                    name="sex"
-                    v-model="form.sex_options"
-                />
-                <Textinput
-                    label="Número celular"
-                    type="password"
-                    placeholder="Ingrese su número celular"
-                    name="phone"
-                    v-model="form.phone_number"
-                />
                 <Textinput
                     label="CURP"
                     type="text"
@@ -69,22 +46,6 @@
                     name="curp"
                     v-model="form.curp"
                 />
-                <Textinput
-                    label="email"
-                    type="email"
-                    placeholder="Ingrese un correo electronico"
-                    name="email"
-                    v-model="form.email"
-                />
-                <Textinput
-                    label="Contraseña*"
-                    type="password"
-                    placeholder="Ingrese su contraseña"
-                    name="password"
-                    v-model="form.password"
-                    hasicon
-                />
-
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="button" text="Crear" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
                     <router-link
