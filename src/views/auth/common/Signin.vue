@@ -76,7 +76,7 @@
     setup() {
       const schema = yup.object({
         email: yup.string().required("El correo electronico es requerido").email(),
-        password: yup.string().required("La contraseña es requerida").min(8),
+        password: yup.string().required("La contraseña es requerida").min(3),
       });
 
       const formValues = {
@@ -93,7 +93,7 @@
       const { value: password, errorMessage: passwordError } = useField("password");
 
       /* mustRemoveOnceIsDone */
-      axios.get(`/sanctum/csrf-cookie`).then(response => {
+      /* axios.get(`/sanctum/csrf-cookie`).then(response => {
         axios.post(`/auth/admin/login`, {
           email: 'admin@admin.com',
           password: 'admin', 
@@ -106,19 +106,13 @@
         });
       }).catch(error => {
         console.error('Error in login token:', error);
-      });
+      }); */
      
-      const onSubmit = async function handleSubmit(values){
-        try{
-          await axios.get(`sanctum/csrf-cookie`)
-          .catch(error => {
-            console.error('Error in login token:', error);
-          });
-
-          await axios.post('http://127.0.0.1:8000/login', {
-            withCredentials: true,
-            email: values.target[0].value,
-            password: values.target[1].value,
+      function onSubmit(){
+        axios.get(`/sanctum/csrf-cookie`).then(response => {
+          axios.post(`/api/login`, {
+            email: email.value,
+            password: password.value, 
           })
           .then(res => {
             console.log(res);
@@ -126,13 +120,9 @@
           .catch(error => {
             console.error('Error in login request:', error);
           });
-        }catch(e){
-          const err = {
-            validation: {},
-            message: null
-          }
-        }
-        
+        }).catch(error => {
+          console.error('Error in login token:', error);
+        });
       }
 
       return {

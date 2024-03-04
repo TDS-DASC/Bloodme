@@ -16,16 +16,7 @@ const router = createRouter({
 });
 
 /* router.beforeEach((to, from, next) => {
-  const titleText = to.name;
-  const words = titleText.split(" ");
-  const wordslength = words.length;
-  for (let i = 0; i < wordslength; i++) {
-    words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-  }
-
-  document.title = "Dashcode  - " + words;
-
-  next();
+  
 }); */
 
 router.afterEach(() => {
