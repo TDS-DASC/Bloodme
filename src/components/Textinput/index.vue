@@ -102,8 +102,7 @@
           <Icon icon="heroicons-outline:eye-off" v-else />
         </span>
         
-        <span v-if="error && types === 'date'" class="text-danger-500 translate-x-10">
-          <Icon icon="heroicons-outline:information-circle" />
+        <span v-if="error && types === 'date'" class="text-danger-500 mr-10">
         </span>
         <span v-else-if="error" class="text-danger-500">
           <Icon icon="heroicons-outline:information-circle" />
