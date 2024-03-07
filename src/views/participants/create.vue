@@ -15,21 +15,24 @@
                     type="text"
                     placeholder="Ingrese el nombre"
                     name="name"
-                    v-model="form.name"
+                    v-model="name"
+                    :error="nameError"
                 />
                 <Textinput
                     label="Apellidos"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
-                    v-model="form.lastname"
+                    v-model="lastname"
+                    :error="lastnameError"
                 />
                 <Textinput
                     label="Alias"
                     type="text"
                     placeholder="Ingrese el alias"
                     name="alias"
-                    v-model="form.alias"
+                    v-model="alias"
+                    :error="aliasError"
                 />
 
                 <Textinput
@@ -37,57 +40,66 @@
                     type="date"
                     placeholder="Fecha de nacimiento"
                     name="date"
-                    v-model="form.birth_date"
+                    v-model="birth_date"
+                    :error="birth_dateError"
                 />
-                <Textinput
-                    label="Número celular"
-                    type="password"
-                    placeholder="Ingrese su número celular"
-                    name="phone"
-                    v-model="form.phone_number"
-                />
-                <Select
-                    label="Sexo"
-                    type="text"
-                    placeholder="Seleccione su sexo"
-                    name="sex"
-                    v-model="form.sex_options"
-                />
-                <Textinput
-                    label="CURP"
-                    type="text"
-                    placeholder="Ingrese un curp valido"
-                    name="curp"
-                    v-model="form.curp"
-                />
+
                 <Select
                     label="Tipo de sangre"
                     type="text"
                     placeholder="Seleccione su tipo de sangre"
                     name="bloodtype"
                     :options="blood_types"
-                    v-model="form.blood_type"
+                    v-model="blood_type"
+                    :error="blood_typeError"
+                />
+                <Select
+                    label="Sexo"
+                    type="text"
+                    placeholder="Seleccione su sexo"
+                    name="sex"
+                    v-model="sex"
+                    :options="sex_options"
+                    :error="sexError"
+                />
+                <Textinput
+                    label="Número celular"
+                    type="number"
+                    placeholder="Ingrese su número celular"
+                    name="phone"
+                    v-model="phone_number"
+                    :error="phone_numberError"
+                />
+                <Textinput
+                    label="CURP"
+                    type="text"
+                    placeholder="Ingrese un curp valido"
+                    name="curp"
+                    v-model="curp"
+                    :error="curpError"
                 />
                 <Textinput
                     label="email"
                     type="email"
                     placeholder="Ingrese un correo electronico"
                     name="email"
-                    v-model="form.email"
+                    v-model="email"
+                    :error="emailError"
                 />
                 <Textinput
                     label="Contraseña*"
                     type="password"
                     placeholder="Ingrese su contraseña"
                     name="password"
-                    v-model="form.password"
+                    v-model="password"
+                    :error="passwordError"
                     hasicon
                 />
 
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="button" text="Crear" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
+                    <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
                     <router-link
-                        :to="{ path:  '/participants/' }"
+                        :to="{ path:  '/agents/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
@@ -110,9 +122,11 @@
     import Button from "@/components/Button";
     import Textarea from "@/components/Textarea";
     import Textinput from "@/components/Textinput";
-    import { useForm } from "vee-validate";
+    import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
     import { ref } from "vue";
+    import * as yup from 'yup';
+    import axios from "@/plugins/axios";
 
     export default {
         components: {
@@ -123,33 +137,65 @@
             Textinput,
             Card
         },
-        props: {
-            formInformation: Object,
-        },
         setup() {
 
-            let form = ref({
-                name: null,
-                lastname: null,
-                alias: null,
-                birth_date: null,
-                blood_type: null,
-                phone_number: null,
-                curp: null,
-                email: null,
-                password: null,
-                role: null,
-            })
+            const schema = yup.object().shape({
+                name: yup.string().required("El nombre es requerido"),
+                lastname: yup.string().required("Los apellidos son requeridos"),
+                alias: yup.string().required("El alias es requerido"),
+                birth_date: yup.date().nullable().required("La fecha de nacimiento es requerida"),
+                blood_type: yup.string().nullable().required("El tipo de sangre es requerido"),
+                phone_number: yup.string().required("El número de teléfono es requerido"),
+                curp: yup.string().required("El CURP es requerido"),
+                email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
+                password: yup.string().required("La contraseña es requerida").min(6, "La contraseña debe tener al menos 6 caracteres"),
+                sex: yup.string().required("El sexo es requerido"),
 
-            const { handleSubmit } = useForm({
             });
 
-            /* No de la template */
-            const options = [
-                { value: "1", label: "Participante" },
-                { value: "2", label: "Agente" },
-                { value: "3", label: "Administrador" },
-            ];
+            const { handleSubmit } = useForm({
+                validationSchema: schema,
+            });
+
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
+            const { value: alias, errorMessage: aliasError } = useField("alias");
+            const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
+            const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
+            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
+            const { value: curp, errorMessage: curpError } = useField("curp");
+            const { value: email, errorMessage: emailError } = useField("email");
+            const { value: password, errorMessage: passwordError } = useField("password");
+            const { value: role, errorMessage: roleError } = useField("role");
+            const { value: sex, errorMessage: sexError } = useField("sex");
+
+
+            const trySubmit = handleSubmit(async (values) => {
+                axios.post(`/participants/`, values)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(error => {
+                    console.error('Error in creating participant request:', error);
+                });
+            }); 
+            const onSubmit = handleSubmit((values) => {
+                const newUserForm = [
+                    { name: 'name', value: name.value },
+                    { name: 'lastName', value: lastname.value },
+                    { name: 'alias', value: alias.value },
+                    { name: 'birth_date', value: birth_date.value },
+                    { name: 'blood_type', value: blood_type.value },
+                    { name: 'phone_number', value: phone_number.value },
+                    { name: 'curp', value: curp.value },
+                    { name: 'email', value: email.value },
+                    { name: 'password', value: password.value },
+                    { name: 'role', value: role.value },
+                    { name: 'sex', value: sex.value },
+                ];
+                trySubmit(newUserForm);
+            });
+
             const sex_options = [
                 { value: "1", label: "Hombre" },
                 { value: "2", label: "Mujer" },
@@ -183,15 +229,36 @@
             
 
             return {
-                options,
                 blood_types,
                 createUser,
-                form,
                 selectedRole,
                 handleRoleChange,
                 sex_options,
                 displayConfirmMessage,
-                confirmMessage
+                confirmMessage,
+                name,
+                nameError,
+                lastname,
+                lastnameError,
+                alias,
+                aliasError,
+                birth_date,
+                birth_dateError,
+                blood_type,
+                blood_typeError,
+                phone_number,
+                phone_numberError,
+                curp,
+                curpError,
+                email,
+                emailError,
+                password,
+                passwordError,
+                role,
+                roleError,
+                sex,
+                sexError,
+                onSubmit
             };
         }
     }
