@@ -12,60 +12,75 @@
             >
                 <Textinput
                     label="Nombre *"
-                    type="text"
+                    type="text" 
                     placeholder="Ingrese el nombre"
                     name="name"
-                    v-model="form.name"
+                    v-model="name"
+                    :error="nameError"
+                    required
                 />
+
                 <Textinput
                     label="Apellidos"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
-                    v-model="form.lastname"
+                    v-model="lastname"
+                    :error="lastnameError"
                 />
+
                 <Textinput
                     label="Alias"
                     type="text"
                     placeholder="Ingrese el alias"
                     name="alias"
-                    v-model="form.alias"
+                    v-model="alias"
+                    :error="aliasError"
                 />
+
                 <Select
                     label="Sexo"
                     type="text"
                     placeholder="Seleccione su sexo"
                     name="sex"
-                    v-model="form.sex_options"
+                    v-model="sex"
+                    :error="sexError"
+                    :options="sex_options"
                 />
+
                 <Textinput
                     label="Número celular"
-                    type="password"
+                    type="number"
                     placeholder="Ingrese su número celular"
                     name="phone"
-                    v-model="form.phone_number"
+                    v-model="phone_number"
+                    :error="phone_numberError"
                 />
+
                 <Textinput
                     label="email"
                     type="email"
-                    placeholder="Ingrese un correo electronico"
+                    placeholder="Ingrese un correo electrónico"
                     name="email"
-                    v-model="form.email"
+                    v-model="email"
+                    :error="emailError"
                 />
+
                 <Textinput
                     label="Contraseña*"
                     type="password"
                     placeholder="Ingrese su contraseña"
                     name="password"
-                    v-model="form.password"
+                    v-model="password"
+                    :error="passwordError"
                     hasicon
                 />
 
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="button" text="Crear" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
-                    <router-link
-                        :to="{ path:  '/administrators/' }"
-                    ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
+                    <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
+                    <router-link :to="{ path:  '/administrators/' }">
+                        <Button btnClass="btn-dark" text="Cancelar" />
+                    </router-link>
                 </div>
             </form>
         </div>
@@ -85,61 +100,71 @@
 <script>
     import Card from "@/components/Card";
     import Button from "@/components/Button";
-    import Textarea from "@/components/Textarea";
     import Textinput from "@/components/Textinput";
-    import { useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { ref } from "vue";
+    import { ref, watch } from "vue";
+    import { useField, useForm } from "vee-validate";
+    import * as yup from "yup";
+    import axios from "@/plugins/axios";
 
     export default {
         components: {
             Textinput,
             Button,
-            Textarea,
             Select,
-            Textinput,
             Card
         },
-        props: {
-            formInformation: Object,
-        },
         setup() {
-
-            let form = ref({
-                name: null,
-                lastname: null,
-                alias: null,
-                birth_date: null,
-                blood_type: null,
-                phone_number: null,
-                curp: null,
-                email: null,
-                password: null,
-                role: null,
-            })
-
-            const { handleSubmit } = useForm({
+            const schema = yup.object({
+                name: yup.string().required("El nombre es requerido"),
+                lastname: yup.string().required("Los apellidos son requeridos"),
+                alias: yup.string().required("El alias es requerido"),
+                phone_number: yup.string().required("El número de teléfono es requerido"),
+                email: yup.string().required("El correo electrónico es requerido").email(),
+                password: yup.string().required("La contraseña es requerida").min(3),
+                sex: yup.string().required("Su tipo sexo es requerido"),
             });
 
-            /* No de la template */
-            const options = [
-                { value: "1", label: "Participante" },
-                { value: "2", label: "Agente" },
-                { value: "3", label: "Administrador" },
-            ];
+            const { handleSubmit } = useForm({
+                validationSchema: schema,
+            });
+            
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
+            const { value: alias, errorMessage: aliasError } = useField("alias");
+            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
+            const { value: email, errorMessage: emailError } = useField("email");
+            const { value: password, errorMessage: passwordError } = useField("password");
+            const { value: role, errorMessage: roleError } = useField("role");
+            const { value: sex, errorMessage: sexError } = useField("sex");
+
+            const trySubmit = handleSubmit(async (values) => {
+                console.log("sup");
+                axios.post(`/administrators/`, values)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(error => {
+                    console.error('Error in login request:', error);
+                });
+            }); 
+            const onSubmit = handleSubmit((values) => {
+                console.log("sup");
+                const newUserForm = [
+                    { name: 'name', value: name.value },
+                    { name: 'lastName', value: lastname.value },
+                    { name: 'alias', value: alias.value },
+                    { name: 'phone_number', value: phone_number.value },
+                    { name: 'sex', value: sex.value },
+                    { name: 'email', value: email.value },
+                    { name: 'password', value: password.value },
+                ];
+                trySubmit(newUserForm);
+            });
+
             const sex_options = [
-                { value: "1", label: "Hombre" },
-                { value: "2", label: "Mujer" },
-            ];
-            const blood_types = [
-                { value: 'A+', label: 'A+' },
-                { value: 'A-', label: 'A-' },
-                { value: 'B+', label: 'B+' },
-                { value: 'B-', label: 'B-' },
-                { value: 'AB+', label: 'AB+' },
-                { value: 'AB-', label: 'AB-' },
-                { value: 'O+', label: 'O+' },
-                { value: 'O-', label: 'O-' }
+                { value: "H", label: "Hombre" },
+                { value: "M", label: "Mujer" },
             ];
 
             let confirmMessage = ref(false)
@@ -149,7 +174,7 @@
             }
             function createUser(){
                 confirmMessage.value = false;
-                console.log("Usuario creado");
+                onSubmit();
             }
 
             let selectedRole = ref(0);
@@ -157,18 +182,31 @@
                 selectedRole = selectedIndex;
                 console.log(selectedRole == 1);
             }
-            
 
             return {
-                options,
-                blood_types,
                 createUser,
-                form,
                 selectedRole,
                 handleRoleChange,
                 sex_options,
                 displayConfirmMessage,
-                confirmMessage
+                confirmMessage,
+                onSubmit,
+                name,
+                nameError,
+                lastname,
+                lastnameError,
+                alias,
+                aliasError,
+                phone_number,
+                phone_numberError,
+                email,
+                emailError,
+                password,
+                passwordError,
+                role,
+                roleError,
+                sex,
+                sexError
             };
         }
     }
