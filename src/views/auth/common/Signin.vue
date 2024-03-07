@@ -91,22 +91,6 @@
 
       const { value: email, errorMessage: emailError } = useField("email");
       const { value: password, errorMessage: passwordError } = useField("password");
-
-      /* mustRemoveOnceIsDone */
-      /* axios.get(`/sanctum/csrf-cookie`).then(response => {
-        axios.post(`/auth/admin/login`, {
-          email: 'admin@admin.com',
-          password: 'admin', 
-        })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(error => {
-          console.error('Error in login request:', error);
-        });
-      }).catch(error => {
-        console.error('Error in login token:', error);
-      }); */
      
       function onSubmit(){
         axios.get(`/sanctum/csrf-cookie`).then(response => {

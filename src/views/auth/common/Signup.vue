@@ -5,8 +5,6 @@
     </span>
     <div name="form-container" class="w-full">
       <div v-if="stepIndex==0">
-        <input 
-            pattern="[^0-9]*" type="text">
         <Textinput
           label="Nombre*"
           type="text"
@@ -239,34 +237,10 @@ export default {
           password_confirmation: "uytjhgmnbuytqwe",
           image_url: "placeholder.jpg"  
         });
-    });
-
-    /* axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
-        axios.post('http://127.0.0.1:8000/register', {
-          name: "Kenneth de Guadalupe",
-          lastname: "Quintero Valles",
-          alias: "Kenneth Quintero",
-          birth_date: "2001-12-05",
-          blood_type: "A+",
-          phone_number: "6131051468",
-          sex: "H",
-          curp: "sdfghjqwertyu1234k",
-          email: "kennethgqv@gmail.com",
-          password: "uytjhgmnbuytqwe",
-          password_confirmation: "uytjhgmnbuytqwe",
-          image_url: "placeholder.jpg"
-        })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(error => {
-          console.error('Error in register request:', error);
-        });
-      }).catch(error => {
-        console.error('Error in register token:', error);
-      });    */  
+    }); 
 
     const onSubmit = handleSubmit((values) => {
+        console.log("sup");
         if(password_confirmation.value != password.value){
           console.log("different password");
           console.log(password_confirmation);
@@ -275,7 +249,7 @@ export default {
         }
         if(!checkbox.value)
           return;
-        const newUserForm = [
+        /* const newUserForm = [
           { name: 'name', value: name.value },
           { name: 'lastName', value: lastName.value },
           { name: 'alias', value: alias.value },
@@ -288,7 +262,7 @@ export default {
           { name: 'password', value: password.value },
           { name: 'password_confirmation', value: password_confirmation.value },
           { name: 'image_url', value: '0'}
-        ];
+        ]; */
           
         trySubmit();
     });
