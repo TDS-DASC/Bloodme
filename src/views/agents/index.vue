@@ -34,12 +34,8 @@
                         field: "email",
                     },
                     {
-                        label: "Fecha de nacimiento",
-                        field: "birth_date",
-                    },
-                    {
-                        label: "Tipo de sangre",
-                        field: "blood_type",
+                        label: "Phone",
+                        field: "phone_number",
                     },
                     {
                         label: "Accion",
