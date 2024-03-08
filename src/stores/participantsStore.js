@@ -15,6 +15,9 @@ export const useParticipantsStore = defineStore({
       if (!this.dataLoaded) {
         try {
           const response = await axios.get(`/api/participants`);
+          response.data.forEach(participant => {
+            this.participantsTable.push(participant);
+          });
           this.setParticipantsData(response.data);
           this.dataLoaded = true;
         } catch (error) {

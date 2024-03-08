@@ -16,7 +16,6 @@ export const useCachedDataStoreBeneficiaries = defineStore({
         try {
           const response = await axios.get(`/api/beneficiaries`);
           response.data.forEach(beneficiary => {
-            // Add each beneficiary directly to the beneficiariesTable array
             this.beneficiariesTable.push(beneficiary);
           });
           this.dataLoaded = true;

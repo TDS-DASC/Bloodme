@@ -16,7 +16,6 @@ export const useCachedDataStoreHospitals = defineStore({
         try {
           const response = await axios.get(`/api/hospitals`);
           response.data.forEach(hospital => {
-            // Add each hospital directly to the hospitalsTable array
             this.hospitalsTable.push(hospital);
           });
           this.dataLoaded = true;

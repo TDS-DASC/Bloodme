@@ -15,6 +15,9 @@ export const useAdministratorsStore = defineStore({
         if (!this.dataLoaded) {
           try {
             const response = await axios.get(`/api/administrators`);
+            response.data.forEach(hospital => {
+              this.administratorsTable.push(hospital);
+            });
             this.setAdministratorsData(response.data);
             this.dataLoaded = true;
           } catch (error) {

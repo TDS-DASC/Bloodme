@@ -15,6 +15,9 @@ export const useAgentsStore = defineStore({
       if (!this.dataLoaded) {
         try {
           const response = await axios.get(`/api/agents`);
+          response.data.forEach(agent => {
+            this.agentsTable.push(agent);
+          });
           this.setAgentsData(response.data);
           this.dataLoaded = true;
         } catch (error) {
