@@ -138,12 +138,12 @@ export default {
         {
           name: "edit",
           icon: "heroicons:pencil-square",
-          direction_name: "1",
+          direction_name: props.tableInformation.headUrl+"/:id/edit",
         },
         {
           name: "delete",
           icon: "heroicons-outline:trash",
-          direction_name: props.tableInformation.headUrl+"/:id/edit",
+          direction_name: "",
         },
       ],
       options: [
