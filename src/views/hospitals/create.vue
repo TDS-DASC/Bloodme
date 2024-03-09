@@ -6,47 +6,55 @@
             </div>
             <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>
-            {{  errors.address }}
             <form
                 @submit.prevent="onSubmit"
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
             >
-                <Textinput
-                    label="Nombre *"
-                    type="text"
-                    placeholder="Ingrese el nombre"
-                    name="name"
-                    v-model="name"
-                    :error="nameError"
-                />
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
-                    label="Adress"
+                        label="Nombre *"
+                        type="text"
+                        placeholder="Ingrese el nombre"
+                        name="name"
+                        v-model="name"
+                        :error="nameError"
+                    />
+                    <p v-if="errors.name" class="mt-2 text-danger-500 block text-sm">{{ errors.name[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                    label="Direccion"
                     type="text"
-                    placeholder="Ingrese sus apellidos"
-                    name="lastname"
+                    placeholder="Ingrese la direccion del hospital"
+                    name="address"
                     v-model="address"
                     :error="addressError"
                     />
                     <p v-if="errors.address" class="mt-2 text-danger-500 block text-sm">{{ errors.address[0] }}</p>
                 </div>
-                <Textinput
-                    label="longitude"
-                    type="number" 
-                    placeholder="Ingrese el alias"
-                    name="alias"
-                    v-model="longitude"
-                    :error="longitudeError"
-                />
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="longitude"
+                        type="number" 
+                        placeholder="Ingrese la coordenada longitud"
+                        name="longitude"
+                        v-model="longitude"
+                        :error="longitudeError"
+                    />
+                    <p v-if="errors.longitude" class="mt-2 text-danger-500 block text-sm">{{ errors.longitude[0] }}</p>
+                </div>
 
-                <Textinput
-                    label="latitude"
-                    type="number"
-                    placeholder="Fecha de nacimiento"
-                    name="latitude"
-                    v-model="latitude"
-                    :error="latitudeError"
-                />
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="latitude"
+                        type="number"
+                        placeholder="Ingrese la coordenada de latitud"
+                        name="latitude"
+                        v-model="latitude"
+                        :error="latitudeError"
+                    />
+                    <p v-if="errors.latitude" class="mt-2 text-danger-500 block text-sm">{{ errors.latitude[0] }}</p>
+                </div>
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
                     <router-link
@@ -55,13 +63,32 @@
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 Estas a punto de agregar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
+                <br><br>
+                <div>
+                    <div>
+                        <p class="font-bold">Nombre del Hospital:</p>
+                        {{ name }}
+                    </div>
+                    <div>
+                        <p class="font-bold">Direccion:</p>
+                        {{ address }}
+                    </div>
+                    <div>
+                        <p class="font-bold">Longitude:</p>
+                        {{ longitude }}
+                    </div>
+                    <div>
+                        <p class="font-bold">Latitude:</p>
+                        {{ latitude }}
+                    </div>
+                </div>
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
-                    <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createHospital()" />
+                    <Button btnClass="btn-dark" text="Retroceder" @click="displayConfirmMessage()" />
                 </div>
             </Card>
         </div>
@@ -88,30 +115,52 @@
             Textinput,
             Card
         },
-        props: {
-            formInformation: Object,
-        },
         setup() {
             const schema = yup.object().shape({
-                name: yup.string().required("El nombre del hospital es requerido"),
-                address: yup.string().required("Los apellidos son requeridos"),
-                longitude: yup.string().required("El alias es requerido"),
-                latitude: yup.string().required("La fecha de nacimiento es requerida"),
+                name: yup.string()
+                    .required("El nombre del hospital es requerido")
+                    .min(5, "El nombre debe de contener al menos 5 caracteres")
+                    .matches(/^[^\d]+$/, "El nombre no puede contener numeros"),
+                address: yup.string()
+                    .required("Los apellidos son requeridos")
+                    .min(10, "La direccion debe de contener al menos 10 caracteres"),
+                longitude: yup.string()
+                    .required("La coordenada de longitud es requerida")
+                    .max(45, "La longitud no puede exceder los 45 caracteres"),
+                latitude: yup.string()
+                    .required("La coordenada de latitud es requerida")
+                    .max(45, "La latitude no puede exceder los 45 caracteres"),
             });
 
+            let formValues = ref([]);
             const { handleSubmit } = useForm({
                 validationSchema: schema,
             });
+            const trySubmit = handleSubmit(async (values) => {
+                formValues = values;
+                displayConfirmMessage();
+            }); 
+            const onSubmit = handleSubmit((values) => {
+                const newHospitalForm = [
+                    { name: 'name', value: name.value },
+                    { name: 'address', value: address.value },
+                    { name: 'longitude', value: longitude.value },
+                    { name: 'latitude', value: latitude.value },
+                ];
+                trySubmit(newHospitalForm);
+            });
 
-            const { value: name, errorMessage: nameError } = useField("name");
-            const { value: address, errorMessage: addressError } = useField("address");
-            const { value: longitude, errorMessage: longitudeError } = useField("longitude");
-            const { value: latitude, errorMessage: latitudeError } = useField("latitude");
-
+            
+            let confirmMessageFlag = ref(false);
+            function displayConfirmMessage(){
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            
             let errorMessage = ref("");
             let errors = ref([]);
-            const trySubmit = handleSubmit(async (values) => {
-                axios.post(`/api/hospitals/`, values)
+            function createHospital(){
+                confirmMessageFlag.value = false;
+                axios.post(`/api/hospitals/`, formValues)
                 .then(res => {
                     console.log(res);
                 })
@@ -130,50 +179,17 @@
                     console.log(errors)
                     console.log(errorMessage)
                 });
-            }); 
-            const onSubmit = handleSubmit((values) => {
-                const newUserForm = [
-                    { name: 'name', value: name.value },
-                    { name: 'address', value: address.value },
-                    { name: 'longitude', value: longitude.value },
-                    { name: 'latitude', value: latitude.value },
-                ];
-                trySubmit(newUserForm);
-            });
-
-            /* No de la template */
-            const sex_options = [
-                { value: "1", label: "Hombre" },
-                { value: "2", label: "Mujer" },
-            ];
-            const blood_types = [
-                { value: 'A+', label: 'A+' },
-                { value: 'A-', label: 'A-' },
-                { value: 'B+', label: 'B+' },
-                { value: 'B-', label: 'B-' },
-                { value: 'AB+', label: 'AB+' },
-                { value: 'AB-', label: 'AB-' },
-                { value: 'O+', label: 'O+' },
-                { value: 'O-', label: 'O-' }
-            ];
-
-            let confirmMessage = ref(false)
-            function displayConfirmMessage(){
-                console.log(confirmMessage.value);
-                confirmMessage.value = !confirmMessage.value;
             }
-            function createUser(){
-                confirmMessage.value = false;
-                console.log("Usuario creado");
-            }
-            
+
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: address, errorMessage: addressError } = useField("address");
+            const { value: longitude, errorMessage: longitudeError } = useField("longitude");
+            const { value: latitude, errorMessage: latitudeError } = useField("latitude");
 
             return {
-                blood_types,
-                createUser,
-                sex_options,
+                createHospital,
                 displayConfirmMessage,
-                confirmMessage,
+                confirmMessageFlag,
                 address,
                 addressError,
                 longitude,
