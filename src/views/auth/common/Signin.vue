@@ -100,7 +100,7 @@
           })
           .then(res => {
             console.log(res);
-            router.push({ path: 'home'});
+            window.location.href = '/home';
           })
           .catch(error => {
             console.error('Error in login request:', error);

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex dark:bg-slate-900 gap-2" style="height: 91vh;">
+    <div class="flex dark:bg-slate-900 gap-2" style="height: 85vh;">
       <!-- Citas pendientes -->
       <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit">
         <div name="header" class="text-center bg-slate-700 text-white dark:text-white text-3xl p-1 font-semibold">
@@ -25,29 +25,6 @@
           </div>
 
           <!-- Desplegado del paciente -->
-          <button class="flex bg-white hover:bg-gray-100 dark:bg-slate-200 p-2 rounded-xl items-center shadow-md select-none" @click="showPatienInformation(this)">
-            <div class="relative">
-              <img :src="bloodbag" alt="" class="max-h-16" />
-              <p class="absolute  top-5 text-xs font-bold text-black-900 left-4">-A</p>
-            </div>
-            <div class="flex flex-col justify-start text-start px-4">
-              <div class="flex items-center justify-between gap-4">
-                <p class="font-bold text-xl">Alfonso Lopez</p>
-                <div class="flex gap-2">
-                  <Icon icon="mdi:eye" style="font-size: 120%;"/>
-                </div>
-              </div>
-              <div class="flex items-center">
-                  <Icon icon="mdi:location"/>
-                  <p class="flex-2 max-w-xs">La Paz | Centro de salud. </p>
-              </div>
-              <div class="flex items-center">
-                <Icon icon="healthicons:blood-bag-outline" style="font-size: 140%;"/>
-                <p class="flex-2 max-w-xs">5 Unidades</p>
-              </div>
-            </div>
-          </button>
-
           <button class="flex bg-white hover:bg-gray-100 dark:bg-slate-200 p-2 rounded-xl items-center shadow-md select-none" @click="showPatienInformation(this)">
             <div class="relative">
               <img :src="bloodbag" alt="" class="max-h-16" />
@@ -100,58 +77,11 @@
               </div>
             </div>
           </button>
-
-          <button class="flex bg-white hover:bg-gray-100 dark:bg-slate-200 p-2 rounded-xl items-center shadow-md select-none" @click="showPatienInformation(this)">
-            <div class="relative">
-              <img :src="bloodbag" alt="" class="max-h-16" />
-              <p class="absolute  top-5 text-xs font-bold text-black-900 left-4">-A</p>
-            </div>
-            <div class="flex flex-col justify-start text-start px-4">
-              <div class="flex items-center justify-between gap-4">
-                <p class="font-bold text-xl">Alfonso Lopez</p>
-                <div class="flex gap-2">
-                  <Icon icon="mdi:eye" style="font-size: 120%;"/>
-                </div>
-              </div>
-              <div class="flex items-center">
-                  <Icon icon="mdi:location"/>
-                  <p class="flex-2 max-w-xs">La Paz | Centro de salud. </p>
-              </div>
-              <div class="flex items-center">
-                <Icon icon="healthicons:blood-bag-outline" style="font-size: 140%;"/>
-                <p class="flex-2 max-w-xs">5 Unidades</p>
-              </div>
-            </div>
-          </button>
-
-          <button class="flex bg-white hover:bg-gray-100 dark:bg-slate-200 p-2 rounded-xl items-center shadow-md select-none" @click="showPatienInformation(this)">
-            <div class="relative">
-              <img :src="bloodbag" alt="" class="max-h-16" />
-              <p class="absolute  top-5 text-xs font-bold text-black-900 left-4">-A</p>
-            </div>
-            <div class="flex flex-col justify-start text-start px-4">
-              <div class="flex items-center justify-between gap-4">
-                <p class="font-bold text-xl">Alfonso Lopez</p>
-                <div class="flex gap-2">
-                  <Icon icon="mdi:eye" style="font-size: 120%;"/>
-                </div>
-              </div>
-              <div class="flex items-center">
-                  <Icon icon="mdi:location"/>
-                  <p class="flex-2 max-w-xs">La Paz | Centro de salud. </p>
-              </div>
-              <div class="flex items-center">
-                <Icon icon="healthicons:blood-bag-outline" style="font-size: 140%;"/>
-                <p class="flex-2 max-w-xs">5 Unidades</p>
-              </div>
-            </div>
-          </button>
-
         </div>
       </div>
 
       <!-- Información del paciente -->
-      <div class="flex-auto rounded-md overflow-hidden bg-white dark:bg-slate-600">
+      <div class="flex-auto rounded-md overflow-auto bg-white dark:bg-slate-600">
         <div name="header" class="text-start bg-slate-700 text-black text-5xl">
           <p class="text-white px-4 py-4 font-semibold">Información del donante</p>
         </div>
@@ -170,6 +100,7 @@
                   :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-full"
+                  disabled
                 />
                 <Textinput
                   label="Apellidos*"
@@ -180,6 +111,7 @@
                   :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-full"
+                  disabled
                 />
               </div>
               <div class="flex gap-2 w-full">
@@ -192,6 +124,7 @@
                   :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-1/2"
+                  disabled
                 />
                 <Textinput
                   label="CURP"
@@ -202,6 +135,7 @@
                   :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-full"
+                  disabled
                 />
                 <Textinput
                   label="Tipo de sangres"
@@ -212,6 +146,7 @@
                   :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-full"
+                  disabled
                 />
               </div>
               <div class="flex gap-2 w-full">
@@ -224,6 +159,7 @@
                   :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-1/2"
+                  disabled
                 />
                 <Textinput
                   label="Alias"
@@ -234,6 +170,7 @@
                   :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-full"
+                  disabled
                 />
               </div>
             </div>
@@ -241,7 +178,7 @@
           <br>
           <div class="px-3 py-2">
             <div class="w-full border-2 border-black-900 rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
-              <p class="font-semibold text-gray-600 text-2xl">Datos de contacto</p>
+              <p class="font-semibold text-gray-600 text-2xl">Información de contacto</p>
               <div class="flex gap-2 w-full">
                 <Textinput
                   label="Email"
@@ -252,6 +189,7 @@
                   :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-full"
+                  disabled
                 />
                 <Textinput
                   label="Número de telefono celular"
@@ -262,6 +200,7 @@
                   :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-full"
+                  disabled
                 />
               </div>
               <div class="flex gap-2 w-full">
@@ -273,13 +212,23 @@
                   v-model="lastName"
                   :error="lastNameError"
                   classInput="h-[48px]"
+                  disabled
                 />
               </div>
             </div>
           </div>
           <br>
-          <p>Hola</p>
-          <button>Terminar cita</button>
+          <div class="full flex justify-between">
+            <button type="submit" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center">
+              Cita cancelada
+            </button>
+            <button type="submit" class="btn bg-slate-400 hover:bg-slate-500 text-white block w-fit text-center">
+              Cita completada con retardo
+            </button>
+            <button type="submit" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center">
+              Cita completada
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -300,8 +249,8 @@
       };
     },
     setup() {
-      
       return {
+        
       }
     }
   };

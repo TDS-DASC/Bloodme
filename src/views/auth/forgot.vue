@@ -32,7 +32,7 @@
             >
               Olvidalo,
               <router-link
-                to="/"
+                to="/login"
                 class="text-slate-900 dark:text-white font-medium hover:underline"
               >
                 Regresame
