@@ -2,7 +2,7 @@
     <div class="flex dark:bg-slate-900 gap-2" style="height: 91vh;">
       <!-- Citas pendientes -->
       <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit">
-        <div name="header" class="text-center bg-slate-800 text-white dark:text-white text-3xl p-1">
+        <div name="header" class="text-center bg-slate-700 text-white dark:text-white text-3xl p-1 font-semibold">
           Citas pendientes
         </div>
         <div class="flex items-center pr-2 dark:bg-gray-500 bg-white">
@@ -152,77 +152,147 @@
 
       <!-- Información del paciente -->
       <div class="flex-auto rounded-md overflow-hidden bg-white dark:bg-slate-600">
-        <div name="header" class="text-center bg-slate-800 text-white dark:bg-slate-800 dark:text-white text-3xl p-1">
-          <p>Información del paciente</p>
+        <div name="header" class="text-start bg-slate-700 text-black text-5xl">
+          <p class="text-white px-4 py-4 font-semibold">Información del donante</p>
         </div>
-        <div class="py-3 px-2"> 
-          <div class="flex gap-4 flex-wrap">
-            <div class="flex gap-3 w-full">
-              <div class="flex flex-1 flex-col items-start rounded-md overflow-hidden">
-                <p class="p-1 bg-slate-800 text-white select-none dark:bg-slate-800 w-fit rounded-t-md px-9">Nombre/s</p>
-                <input value="HOLA BUENAS TARDES COMO ESTAS" class="p-1 w-full bg-gray-200 rounded-r-md" disabled>
+        <br>
+        <div class="p-4">
+          <div class="px-3 py-2">
+            <div class="w-full border-2 border-black-900 rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
+              <p class="font-semibold text-gray-600 text-2xl">Datos personales</p>
+              <div class="flex gap-2 w-full ">
+                <Textinput
+                  label="Nombre/s*"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                  class="w-full"
+                />
+                <Textinput
+                  label="Apellidos*"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                  class="w-full"
+                />
               </div>
-              <div class="flex flex-col items-start rounded-md overflow-hidden">
-                <p class="p-1 bg-slate-800 text-white select-none dark:bg-slate-800 w-fit rounded-t-md">Fecha de nacimiento</p>
-                <input value="12/20/23" class="p-1 w-full bg-gray-200 rounded-r-md" disabled>
+              <div class="flex gap-2 w-full">
+                <Textinput
+                  label="Fecha de nacimiento"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                  class="w-1/2"
+                />
+                <Textinput
+                  label="CURP"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                  class="w-full"
+                />
+                <Textinput
+                  label="Tipo de sangres"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                  class="w-full"
+                />
               </div>
-            </div>
-            <div class="flex gap-3 w-full">
-              <div class="flex w-full flex-col items-start rounded-md overflow-hidden">
-                <p class="p-1 bg-slate-800 text-white select-none dark:bg-slate-800 w-fit rounded-t-md px-9">Apellido Paterno</p>
-                <input value="HOLA BUENAS TARDES COMO ESTAS" class="p-1 w-full bg-gray-200 rounded-r-md" disabled>
-              </div>
-              <div class="flex w-full flex-col items-start rounded-md overflow-hidden">
-                <p class="p-1 bg-slate-800 text-white select-none dark:bg-slate-800 w-fit rounded-t-md px-9">Apellido Materno</p>
-                <input value="12/20/23" class="p-1 w-full bg-gray-200 rounded-r-md" disabled>
-              </div>
-            </div>
-            <div class="flex gap-3 w-full">
-              <div class="flex w-full flex-col items-start rounded-md overflow-hidden">
-                <p class="p-1 bg-slate-800 text-white select-none dark:bg-slate-800 w-fit rounded-t-md px-14">CURP</p>
-                <input value="HOLA BUENAS TARDES COMO ESTAS" class="p-1 w-full bg-gray-200 rounded-r-md" disabled>
-              </div>
-              <div class="flex w-full flex-col items-start rounded-md overflow-hidden">
-                <p class="p-1 bg-slate-800 text-white select-none dark:bg-slate-800 w-fit rounded-t-md px-14">Alias</p>
-                <input value="12/20/23" class="p-1 w-full bg-gray-200 rounded-r-md" disabled>
-              </div>
-              <div class="flex w-full flex-col items-start rounded-md overflow-hidden">
-                <p class="p-1 bg-slate-800 text-white select-none dark:bg-slate-800 w-fit rounded-t-md px-14">Sangre</p>
-                <input value="12/20/23" class="p-1 w-full bg-gray-200 rounded-r-md" disabled>
-              </div>
-            </div>
-            <div class="flex gap-3 w-full">
-              <div class="flex w-full flex-col items-start rounded-md overflow-hidden">
-                <p class="p-1 bg-slate-800 text-white select-none dark:bg-slate-800 w-fit rounded-t-md px-14">Causa</p>
-                <input value="HOLA BUENAS TARDES COMO ESTAS" class="p-1 w-full bg-gray-200 rounded-r-md" disabled>
+              <div class="flex gap-2 w-full">
+                <Textinput
+                  label="Sexo"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                  class="w-1/2"
+                />
+                <Textinput
+                  label="Alias"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                  class="w-full"
+                />
               </div>
             </div>
           </div>
-        </div>
-        <div class="flex flex-col gap-4 py-3 px-2">
-          <div class="rounded-xl overflow-hidden p-1">
-            <p class="bg-slate-800 dark:bg-slate-800 px-32 text-white w-fit rounded-tl-xl rounded-tr-xl p-2">Notas de consulta</p>
-            <textarea class="w-full bg-gray-200 p-2 rounded-tr-xl rounded-b-xl h-40" style="resize: none;"></textarea>
+          <br>
+          <div class="px-3 py-2">
+            <div class="w-full border-2 border-black-900 rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
+              <p class="font-semibold text-gray-600 text-2xl">Datos de contacto</p>
+              <div class="flex gap-2 w-full">
+                <Textinput
+                  label="Email"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                  class="w-full"
+                />
+                <Textinput
+                  label="Número de telefono celular"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                  class="w-full"
+                />
+              </div>
+              <div class="flex gap-2 w-full">
+                <Textinput
+                  label="Fecha de nacimiento"
+                  type="text"
+                  placeholder="Ingrese sus apellidos"
+                  name="lastName"
+                  v-model="lastName"
+                  :error="lastNameError"
+                  classInput="h-[48px]"
+                />
+              </div>
+            </div>
           </div>
-          <div class="flex gap-10 justify-center">
-            <button class="bg-green-600 dark:bg-green-600 px-2 py-1 rounded-md text-white hover:bg-green-700">Finalizar consulta</button>
-            <button class="hover:bg-gray-600 bg-slate-400 dark:bg-gray-800 px-2 py-1 rounded-md text-white">Marcar ausencia</button>
-          </div>
-          <div class="flex flex-col gap-2 items-center">
-            <p class="">¿Hubo algún problema con el sistema? <span class="font-semibold">Crea un reporte.</span></p>
-            <button class="bg-red-800 dark:bg-red-800 font-semibold text-white w-fit px-2 py-1 rounded-md hover:bg-red-900">Reportar</button>
-          </div>
+          <br>
+          <p>Hola</p>
+          <button>Terminar cita</button>
         </div>
       </div>
     </div>
 </template>
 <script>
   import bloodbag from "@/assets/images/all-img/BloodBag.png";
+  import Textinput from "@/components/Textinput";
   import Icon from "../components/Icon";
   import { ref } from "vue";
   export default {
     components: {
       Icon,
+      Textinput,
     },
     data() {
       return {
