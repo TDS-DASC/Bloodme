@@ -2,53 +2,74 @@
     <div class="">
         <div class="p-4 bg-white rounded-md dark:bg-slate-800">
             <div class="flex items-center justify-between py-2">
-                <h3>Editar Participante</h3><br>
+                <h3>Editar Hospital</h3><br>
             </div>
             <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>
             <form
                 @submit.prevent="onSubmit"
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
-                v-if="userData"
+                v-if="hospitalData"
             >
-                <Textinput
-                    label="Nombre *"
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="Nombre *"
+                        type="text"
+                        placeholder="Ingrese el nombre"
+                        name="name"
+                        v-model="name"
+                        :error="nameError"
+                    />
+                    <p v-if="errors.name" class="mt-2 text-danger-500 block text-sm">{{ errors.name[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                    label="Direccion"
                     type="text"
-                    placeholder="Ingrese el nombre"
-                    name="name"
-                    v-model=form.name
-                />
-                <Textinput
-                    label="Direccion *"
-                    type="text"
-                    placeholder="Ingrese sus apellidos"
-                    name="lastname"
-                    v-model=form.lastname
-                />
-                <Textinput
-                    label="Latitud"
-                    type="text"
-                    placeholder="Ingrese el alias"
-                    name="alias"
-                    v-model=form.alias
-                />
-                />
+                    placeholder="Ingrese la direccion del hospital"
+                    name="address"
+                    v-model="address"
+                    :error="addressError"
+                    />
+                    <p v-if="errors.address" class="mt-2 text-danger-500 block text-sm">{{ errors.address[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="longitude"
+                        type="number" 
+                        placeholder="Ingrese la coordenada longitud"
+                        name="longitude"
+                        v-model="longitude"
+                        :error="longitudeError"
+                    />
+                    <p v-if="errors.longitude" class="mt-2 text-danger-500 block text-sm">{{ errors.longitude[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="latitude"
+                        type="number"
+                        placeholder="Ingrese la coordenada de latitud"
+                        name="latitude"
+                        v-model="latitude"
+                        :error="latitudeError"
+                    />
+                    <p v-if="errors.latitude" class="mt-2 text-danger-500 block text-sm">{{ errors.latitude[0] }}</p>
+                </div>
+
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="subtmit" text="Modificar" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
-                    <router-link
-                        :to="{ path:  '/hospitals/' }"
-                    ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
+                    <Button type="submit" text="Modificar" btnClass="btn-primary"></Button>
+                    <router-link :to="{ path:  '/hospitals/' }"><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
-            <div v-else class="h-screen">
+            <div v-else class="h-72">
             </div>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 Estas a punto de agregar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="editUser()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="editHospital()" />
                     <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
                 </div>
             </Card>
@@ -66,6 +87,8 @@
     import { useCachedDataStoreHospitals } from '@/stores/hospitalsStore';
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
+    import * as yup from 'yup';
+    import axios from "@/plugins/axios";
 
     export default {
         components: {
@@ -79,100 +102,112 @@
             formInformation: Object,
         },
         setup() {
-            
+            const schema = yup.object().shape({
+                name: yup.string()
+                    .required("El nombre del hospital es requerido")
+                    .min(5, "El nombre debe de contener al menos 5 caracteres")
+                    .matches(/^[^\d]+$/, "El nombre no puede contener numeros"),
+                address: yup.string()
+                    .required("Los apellidos son requeridos")
+                    .min(10, "La direccion debe de contener al menos 10 caracteres"),
+                longitude: yup.string()
+                    .required("La coordenada de longitud es requerida")
+                    .max(45, "La longitud no puede exceder los 45 caracteres"),
+                latitude: yup.string()
+                    .required("La coordenada de latitud es requerida")
+                    .max(45, "La latitude no puede exceder los 45 caracteres"),
+            });
 
+            let errorMessage = ref("");
+            let errors = ref([]);
+            let formValues = ref([]);
+            let confirmMessageFlag = ref(false);
             const { handleSubmit } = useForm({
+                validationSchema: schema,
             });
-            // No need to define rules for fields
-
-            const onSubmit = handleSubmit(() => {
-                // console.warn(values.email);
+            const trySubmit = handleSubmit(async (values) => {
+                formValues = values;
+                displayConfirmMessage();
+            }); 
+            const onSubmit = handleSubmit((values) => {
+                const newHospitalForm = [
+                    { name: 'name', value: name.value },
+                    { name: 'address', value: address.value },
+                    { name: 'longitude', value: longitude.value },
+                    { name: 'latitude', value: latitude.value },
+                ];
+                trySubmit(newHospitalForm);
             });
-
-
-            /* No de la template */
-            const bloodTypes = [
-                { value: 'A+', label: 'A+' },
-                { value: 'A-', label: 'A-' },
-                { value: 'B+', label: 'B+' },
-                { value: 'B-', label: 'B-' },
-                { value: 'AB+', label: 'AB+' },
-                { value: 'AB-', label: 'AB-' },
-                { value: 'O+', label: 'O+' },
-                { value: 'O-', label: 'O-' }
-            ];
-            const rolTypes = [
-                { value: "administrator", label: "administrator" },
-                { value: "agent", label: "agent" },
-                { value: "participant", label: "participant" },
-            ];
-
-            /* Not from the template */
+            function displayConfirmMessage(){
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            function editHospital() {
+                confirmMessageFlag.value = false;
+                axios.put(`/api/hospitals/${hospitalId}`, formValues)
+                    .then(res => {
+                        /* console.log(res); */
+                    })
+                    .catch(error => {
+                        if (error.response && error.response.data) {
+                            const responseData = error.response.data;
+                            errorMessage.value = responseData.message || 'An error occurred.';
+                            if (responseData.errors) {
+                                errors.value = responseData.errors;
+                            }
+                        } else {
+                            errorMessage.value = 'An error occurred.';
+                        }
+                        /* console.log(errors) */
+                        /* console.log(errorMessage) */
+                    });
+            }
 
             const router = useRouter();
             const { hospitalsTable } = useCachedDataStoreHospitals();
-            const id = router.currentRoute.value.params.id;
-            
+            const hospitalId = router.currentRoute.value.params.id;
             useCachedDataStoreHospitals().fetchData();
-
-            let userData = ref(null); 
-            let form = ref({
-                name: null,
-                lastname: null,
-                alias: null,
-                birth_date: null,
-                blood_type: null,
-                phone_number: null,
-                curp: null,
-                email: null,
-                password: null,
-                role: null,
-            })
-
-            watch(hospitalsTable, () => {
-                userData.value = hospitalsTable.find(objeto => objeto.id == id);
-                assignFormValues();
-            });
-
-            if(hospitalsTable){
-                userData.value = hospitalsTable.find(objeto => objeto.id == id);
-                assignFormValues();
+            function passHospitalValuesToSingleVariables() {
+                name.value = hospitalData.value.name;
+                address.value = hospitalData.value.address;
+                latitude.value = hospitalData.value.latitude;
+                longitude.value = hospitalData.value.longitude;
             }
-
-            function assignFormValues(){
-                if(userData.value){
-                    form.value.name = userData.value.name;
-                    form.value.lastname = userData.value.lastname;
-                    form.value.alias = userData.value.alias;
-                    form.value.birth_date = userData.value.birth_date;
-                    form.value.blood_type = userData.value.blood_type;
-                    form.value.phone_number = userData.value.phone_number;
-                    form.value.curp = userData.value.curp;
-                    form.value.email = userData.value.email;
-                    form.value.role = userData.value.role;
+            let hospitalData = ref(null); 
+            watch(hospitalsTable, () => {
+                hospitalData.value = hospitalsTable.find(objeto => objeto.id == hospitalId);
+                if(hospitalData.value != null){
+                    passHospitalValuesToSingleVariables();
+                }
+            });
+            if(hospitalsTable){
+                hospitalData.value = hospitalsTable.find(objeto => objeto.id == hospitalId);
+                if(hospitalData.value != null){
+                    passHospitalValuesToSingleVariables();
                 }
             }
 
-            let confirmMessage = ref(false)
-            function displayConfirmMessage(){
-                console.log(confirmMessage.value);
-                confirmMessage.value = !confirmMessage.value;
-            }
-            function editUser(){
-                confirmMessage.value = false;
-                console.log("Usuario editado");
-            }
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: address, errorMessage: addressError } = useField("address");
+            const { value: longitude, errorMessage: longitudeError } = useField("longitude");
+            const { value: latitude, errorMessage: latitudeError } = useField("latitude");
 
             return {
-                bloodTypes,
-                rolTypes,
                 onSubmit,
                 hospitalsTable,
-                userData,
-                form,
-                confirmMessage,
+                hospitalData,
+                confirmMessageFlag,
                 displayConfirmMessage,
-                editUser
+                editHospital,
+                address,
+                addressError,
+                longitude,
+                longitudeError,
+                name,
+                nameError,
+                latitude,
+                latitudeError,
+                errors,
+                errorMessage
             };
         }
     }
