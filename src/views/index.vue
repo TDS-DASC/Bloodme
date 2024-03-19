@@ -95,9 +95,8 @@
                   label="Nombre/s*"
                   type="text"
                   placeholder="Ingrese sus apellidos"
-                  name="lastName"
-                  v-model="lastName"
-                  :error="lastNameError"
+                  name="name"
+                  v-model="name"
                   classInput="h-[48px]"
                   class="w-full"
                   disabled
@@ -108,7 +107,6 @@
                   placeholder="Ingrese sus apellidos"
                   name="lastName"
                   v-model="lastName"
-                  :error="lastNameError"
                   classInput="h-[48px]"
                   class="w-full"
                   disabled
@@ -119,9 +117,8 @@
                   label="Fecha de nacimiento"
                   type="text"
                   placeholder="Ingrese sus apellidos"
-                  name="lastName"
-                  v-model="lastName"
-                  :error="lastNameError"
+                  name="birthDate"
+                  v-model="birthDate"
                   classInput="h-[48px]"
                   class="w-1/2"
                   disabled
@@ -130,9 +127,8 @@
                   label="CURP"
                   type="text"
                   placeholder="Ingrese sus apellidos"
-                  name="lastName"
-                  v-model="lastName"
-                  :error="lastNameError"
+                  name="curp"
+                  v-model="curp"
                   classInput="h-[48px]"
                   class="w-full"
                   disabled
@@ -141,9 +137,8 @@
                   label="Tipo de sangres"
                   type="text"
                   placeholder="Ingrese sus apellidos"
-                  name="lastName"
-                  v-model="lastName"
-                  :error="lastNameError"
+                  name="bloodType"
+                  v-model="bloodType"
                   classInput="h-[48px]"
                   class="w-full"
                   disabled
@@ -154,9 +149,8 @@
                   label="Sexo"
                   type="text"
                   placeholder="Ingrese sus apellidos"
-                  name="lastName"
-                  v-model="lastName"
-                  :error="lastNameError"
+                  name="sex"
+                  v-model="sex"
                   classInput="h-[48px]"
                   class="w-1/2"
                   disabled
@@ -165,9 +159,8 @@
                   label="Alias"
                   type="text"
                   placeholder="Ingrese sus apellidos"
-                  name="lastName"
-                  v-model="lastName"
-                  :error="lastNameError"
+                  name="alias"
+                  v-model="alias"
                   classInput="h-[48px]"
                   class="w-full"
                   disabled
@@ -184,9 +177,8 @@
                   label="Email"
                   type="text"
                   placeholder="Ingrese sus apellidos"
-                  name="lastName"
-                  v-model="lastName"
-                  :error="lastNameError"
+                  name="email"
+                  v-model="email"
                   classInput="h-[48px]"
                   class="w-full"
                   disabled
@@ -195,23 +187,10 @@
                   label="Número de telefono celular"
                   type="text"
                   placeholder="Ingrese sus apellidos"
-                  name="lastName"
-                  v-model="lastName"
-                  :error="lastNameError"
+                  name="phoneNumber"
+                  v-model="phoneNumber"
                   classInput="h-[48px]"
                   class="w-full"
-                  disabled
-                />
-              </div>
-              <div class="flex gap-2 w-full">
-                <Textinput
-                  label="Fecha de nacimiento"
-                  type="text"
-                  placeholder="Ingrese sus apellidos"
-                  name="lastName"
-                  v-model="lastName"
-                  :error="lastNameError"
-                  classInput="h-[48px]"
                   disabled
                 />
               </div>
@@ -219,13 +198,13 @@
           </div>
           <br>
           <div class="full flex justify-between">
-            <button type="submit" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center">
+            <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center">
               Cita cancelada
             </button>
-            <button type="submit" class="btn bg-slate-400 hover:bg-slate-500 text-white block w-fit text-center">
+            <button type="button" class="btn bg-slate-400 hover:bg-slate-500 text-white block w-fit text-center">
               Cita completada con retardo
             </button>
-            <button type="submit" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center">
+            <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center">
               Cita completada
             </button>
           </div>
@@ -249,8 +228,27 @@
       };
     },
     setup() {
+
+      let name = ref('');
+      let lastName = ref('');
+      let birthDate = ref('');
+      let curp = ref('');
+      let bloodType = ref('');
+      let sex = ref('');
+      let alias = ref('');
+      let email = ref('');
+      let phoneNumber = ref('');
+
       return {
-        
+        name,
+        lastName,
+        birthDate,
+        curp,
+        bloodType,
+        sex,
+        alias,
+        email,
+        phoneNumber
       }
     }
   };

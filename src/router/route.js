@@ -15,10 +15,12 @@ const routes = [
         path: "/campaigns",
         name: "campaigns",
         component: () => import("@/views/campaigns/index.vue"),
+        meta: { requiresAuth: true },
       },
       {
         path: "/hospitals",
         name: "hospitals",
+        meta: { requiresAuth: true },
         children: [
           {
             path: "",
@@ -50,6 +52,7 @@ const routes = [
       {
         path: "/appointments",
         name: "appointments",
+        meta: { requiresAuth: true },
         children: [
           {
             path: "",
@@ -81,6 +84,7 @@ const routes = [
       {
         path: "/participants",
         name: "participants",
+        meta: { requiresAuth: true },
         children: [
           {
             path: "",
@@ -112,6 +116,7 @@ const routes = [
       {
         path: "/agents",
         name: "agents",
+        meta: { requiresAuth: true },
         children: [
           {
             path: "",
@@ -143,6 +148,7 @@ const routes = [
       {
         path: "/administrators",
         name: "administrators",
+        meta: { requiresAuth: true },
         children: [
           {
             path: "",
@@ -174,6 +180,7 @@ const routes = [
       {
         path: "/beneficiaries",
         name: "beneficiaries",
+        meta: { requiresAuth: true },
         children: [
           {
             path: "",
