@@ -1,5 +1,6 @@
 <template>
     <div class="flex flex-col gap-4">
+        <Button type="submit" text="Crear" btnClass="btn-primary">Crear</Button>
         <tableAdvanced :tableInformation=hospitalsTableParams :tableData=hospitalsTable />
     </div>
 </template>
@@ -9,7 +10,7 @@
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
     export default{
         components: {
-            tableAdvanced
+            tableAdvanced,
         },
         setup() {
             const hospitalsTableParams = {
