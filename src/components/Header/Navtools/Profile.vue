@@ -32,7 +32,7 @@
               : 'text-slate-600 dark:text-slate-300'
           } `"
           class="inline-flex items-center space-x-2 rtl:space-x-reverse w-full px-4 py-2 first:rounded-t last:rounded-b font-normal cursor-pointer"
-          @click="item.label === 'Logout' ? sendLogOutRequest() : item.link()"
+          @click="item.link()"
         >
           <div class="flex-none text-lg">
             <Icon :icon="item.icon" />
@@ -50,7 +50,6 @@ import { MenuItem } from "@headlessui/vue";
 import Dropdown from "@/components/Dropdown";
 import Icon from "@/components/Icon";
 import profileImg from "@/assets/images/all-img/user.png"
-import axios from "@/plugins/axios";
 export default {
   components: {
     Icon,
@@ -86,29 +85,13 @@ export default {
           label: "Logout",
           icon: "heroicons-outline:login",
           link: () => {
-            this.$router.push("/login");
+            this.$router.push("/");
             localStorage.removeItem("activeUser");
           },
         },
       ],
     };
   },
-  setup() {
-    function sendLogOutRequest(){
-      axios.post(`/api/logout`)
-          .then(res => {
-            console.log(res);
-            window.location.href = '/home';
-          })
-          .catch(error => {
-            console.error('Error in login request:', error);
-          });
-    }
-
-    return {
-      sendLogOutRequest,
-    }
-  }
 };
 </script>
 <style lang=""></style>

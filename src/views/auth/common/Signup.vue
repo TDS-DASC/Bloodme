@@ -223,7 +223,7 @@ export default {
     const baseUrl = "http://127.0.0.1:8000";
     const trySubmit = handleSubmit(async (values) => {
       let response = await axios.get(`${baseUrl}/sanctum/csrf-cookie`);
-      response = await axios.post(`${baseUrl}/api/register`, {
+      response = await axios.post(`${baseUrl}/register`, {
           name: "Kenneth de Guadalupe",
           lastname: "Quintero Valles",
           alias: "Kenneth Quintero",
@@ -240,6 +240,7 @@ export default {
     }); 
 
     const onSubmit = handleSubmit((values) => {
+        console.log("sup");
         if(password_confirmation.value != password.value){
           console.log("different password");
           console.log(password_confirmation);
@@ -248,6 +249,20 @@ export default {
         }
         if(!checkbox.value)
           return;
+        /* const newUserForm = [
+          { name: 'name', value: name.value },
+          { name: 'lastName', value: lastName.value },
+          { name: 'alias', value: alias.value },
+          { name: 'birth_date', value: birth_date.value },
+          { name: 'blood_type', value: blood_type.value },
+          { name: 'phone_number', value: phone_number.value },
+          { name: 'sex', value: sex.value },
+          { name: 'curp', value: curp.value },
+          { name: 'email', value: email.value },
+          { name: 'password', value: password.value },
+          { name: 'password_confirmation', value: password_confirmation.value },
+          { name: 'image_url', value: '0'}
+        ]; */
           
         trySubmit();
     });
