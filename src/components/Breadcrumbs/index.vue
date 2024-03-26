@@ -11,10 +11,10 @@
       </li>
       
       <li v-for="(word, index) in $route.name.split('-')" :key="index">
-        <router-link :to="`/${word.toLowerCase()}`" class="capitalize" v-if="word != 'routless'">
-          {{ word }}
+        <router-link :to="`/${word.toLowerCase().split(' ')[0]}`" class="capitalize" v-if="word != 'routless'">
+          {{ word.split(' ')[0] }}
         </router-link>
-        <router-link :to="`${this.$route.fullPath}`" class="capitalize" v-else>
+        <router-link :to="`${$route.name.includes(' ') ? $route.name.split(' ')[0] : $route.fullPath}`" class="capitalize" v-else>
           {{ $route.fullPath.replace(/\//g, '') }}
         </router-link>
         <span v-if="index < $route.name.split('-').length - 1" class="breadcrumbs-icon rtl:transform rtl:rotate-180">

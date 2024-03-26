@@ -1,7 +1,10 @@
 <template>
     <div class="flex flex-col gap-4">
-        <Button type="submit" text="Crear" btnClass="btn-primary">Crear</Button>
         <tableAdvanced :tableInformation=hospitalsTableParams :tableData=hospitalsTable />
+        <router-link 
+            to="/hospitals/create">
+            <Button type="submit" text="Crear" btnClass="btn-primary" class="w-1/12">Crear</Button>
+        </router-link>
     </div>
 </template>
 
