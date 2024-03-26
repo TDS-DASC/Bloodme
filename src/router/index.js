@@ -16,18 +16,13 @@ const router = createRouter({
   },
 });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    try {
-      const authenticated = await isAuthenticated();
-      if (!authenticated) {
-        next({ name: 'login' });
-      } else {
-        next();
-      }
-    } catch (error) {
-      console.error('Error checking authentication status:', error);
+    const user = localStorage.getItem('user');
+    if (!user) {
       next({ name: 'login' });
+    } else {
+      next();
     }
   } else {
     next();

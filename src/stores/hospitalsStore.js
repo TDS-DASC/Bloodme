@@ -19,14 +19,20 @@ export const useCachedDataStoreHospitals = defineStore({
             this.hospitalsTable.push(hospital);
           });
           this.dataLoaded = true;
-          /* console.log(response); */
         } catch (error) {
           console.error('Error in request api hospitals', error);
+          if (error.response && error.response.status === 401) {
+            this.logout();
+          }
         }
       }
     },
     pushElementToHospitals(element) {
       this.hospitalsTable.push(element);
+    },
+    logout() {
+      localStorage.removeItem('user');
+      window.location.href = '/login';
     },
   },
 });

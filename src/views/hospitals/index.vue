@@ -6,11 +6,13 @@
 </template>
 
 <script>
+    import Button from "@/components/Button";
     import tableAdvanced from "../../components/Table/advanced"
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
     export default{
         components: {
             tableAdvanced,
+            Button
         },
         setup() {
             const hospitalsTableParams = {

@@ -245,9 +245,7 @@ export default {
     const userDataString = localStorage.getItem('user');
     if (userDataString) {
         const userData = JSON.parse(userDataString);
-        console.log('User data:', userData);
         userRole.value = userData.role;
-        console.log(userRole.value);
     } else {
         console.log('User data not found in localStorage');
     }
