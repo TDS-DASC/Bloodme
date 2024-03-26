@@ -92,22 +92,34 @@
       const { value: email, errorMessage: emailError } = useField("email");
       const { value: password, errorMessage: passwordError } = useField("password");
      
-      function onSubmit(){
-        axios.get(`/sanctum/csrf-cookie`).then(response => {
-          axios.post(`/api/login`, {
-            email: email.value,
-            password: password.value, 
-          })
-          .then(res => {
-            console.log(res);
-            window.location.href = '/home';
-          })
-          .catch(error => {
-            console.error('Error in login request:', error);
-          });
-        }).catch(error => {
-          console.error('Error in login token:', error);
-        });
+      function onSubmit() {
+          function handleLoginSuccess(userData) {
+              const userDataString = JSON.stringify(userData);
+              localStorage.setItem('user', userDataString);
+              window.location.href = '/home';
+          }
+          function handleLoginError(error) {
+              console.error('Error in login request:', error);
+          }
+          axios.get(`/sanctum/csrf-cookie`)
+              .then(() => {
+                  axios.post(`/login`, {
+                          email: email.value,
+                          password: password.value,
+                      })
+                      .then(response => {
+                          console.log(response);
+                          axios.get(`/api/user`)
+                              .then(response => {
+                                  handleLoginSuccess(response.data);
+                              })
+                              .catch(handleLoginError);
+                      })
+                      .catch(handleLoginError);
+              })
+              .catch(error => {
+                  console.error('Error in login token:', error);
+              });
       }
 
       return {

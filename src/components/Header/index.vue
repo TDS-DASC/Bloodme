@@ -71,6 +71,7 @@ import Logo from "./Navtools/Logo.vue";
 import MobileLogo from "./Navtools/MobileLogo.vue";
 import window from "@/mixins/window";
 import HandleMobileMenu from "./Navtools/HandleMobileMenu.vue";
+import { ref } from "vue";
 
 export default {
   mixins: [window],
@@ -116,6 +117,7 @@ export default {
         return "dark:border-b dark:border-slate-700 dark:border-opacity-60";
       }
     },
+    
   },
 };
 </script>

@@ -26,17 +26,40 @@
       </router-link>
 
       <!-- ?? only for menulabel ??  -->
-      <div v-else-if="item.isHeadr && !item.child" class="menulabel">
+      <div v-else-if="item.isHeadr && !item.child && userRole == item.role" class="menulabel">
         {{ item.title }}
       </div>
       <!-- !!sub menu parent li !! -->
       <div
-        class="group menu-link hover:dark:bg-slate-700 hover:bg-slate-200 rounded-md"
-        v-else
-        :class="
-          activeSubmenu === i ? 'parent_active not-collapsed' : 'collapsed'
-        "
-        @click="toggleSubmenu(i)"
+          class="group menu-link hover:dark:bg-slate-700 hover:bg-slate-200 rounded-md"
+          v-else-if="userRole == item.role"
+          :class="activeSubmenu === i ? 'parent_active not-collapsed' : 'collapsed'"
+          @click="toggleSubmenu(i)"
+      >
+        <div class="flex-1 flex items-start">
+          <span class="menu-icon" v-show="item.icon">
+            <Icon :icon="item.icon"
+          /></span>
+          <div class="text-box" v-if="item.title">{{ item.title }}</div>
+        </div>
+        <div class="flex-0">
+          <div
+            class="menu-arrow transform transition-all duration-300"
+            :class="
+              activeSubmenu === i
+                ? ' ltr:rotate-90 rtl:rotate-90'
+                : 'rtl:rotate-180'
+            "
+          >
+            <Icon icon="heroicons-outline:chevron-right" />
+          </div>
+        </div>
+      </div>
+      <div
+          class="group menu-link hover:dark:bg-slate-700 hover:bg-slate-200 rounded-md"
+          v-else-if="item.role != 'admin'"
+          :class="activeSubmenu === i ? 'parent_active not-collapsed' : 'collapsed'"
+          @click="toggleSubmenu(i)"
       >
         <div class="flex-1 flex items-start">
           <span class="menu-icon" v-show="item.icon">
@@ -116,6 +139,7 @@
 <script>
 import { useRouter } from "vue-router";
 import Icon from "../Icon";
+import { ref } from "vue";
 export default {
   components: {
     Icon,
@@ -214,9 +238,23 @@ export default {
       });
     });
   },
-  // update if route chnage then activesubmenu null
 
   updated() {},
+  setup() {
+    let userRole = ref("");
+    const userDataString = localStorage.getItem('user');
+    if (userDataString) {
+        const userData = JSON.parse(userDataString);
+        console.log('User data:', userData);
+        userRole.value = userData.role;
+        console.log(userRole.value);
+    } else {
+        console.log('User data not found in localStorage');
+    }
+    return {
+      userRole,
+    }
+  }
 };
 </script>
 <style lang="scss">

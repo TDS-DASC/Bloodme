@@ -94,10 +94,16 @@ export default {
     };
   },
   setup() {
+    function deleteCookie(name) {
+      document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    }
     function sendLogOutRequest(){
-      axios.post(`/api/logout`)
+      axios.post(`/logout`)
           .then(res => {
             console.log(res);
+            localStorage.removeItem('user');
+            deleteCookie('XSRF-TOKEN');
+            deleteCookie('laravel_session');
             window.location.href = '/home';
           })
           .catch(error => {

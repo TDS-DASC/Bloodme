@@ -16,24 +16,27 @@ export const menuItems = [
   {
     isHeadr: true,
     title: "Sistema",
+    role: "admin",
   },
   {
     title: "Citas",
     icon: "icon-park-outline:appointment",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de citas",
-          childlink: "/appointments/index",
+          childlink: "/appointments/index"
         },
         {
           childtitle: "Crear Hospital",
-          childlink: "/appointments/create",
+          childlink: "/appointments/create"
         },
     ],
   },
   {
     title: "Campañas",
     icon: "material-symbols:campaign-outline",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Campañas",
@@ -48,6 +51,7 @@ export const menuItems = [
   {
     title: "Hospitales",
     icon: "solar:hospital-broken",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Hospitales",
@@ -62,10 +66,12 @@ export const menuItems = [
   {
     isHeadr: true,
     title: "Usuarios",
+    role: "admin",
   },
   {
     title: "Participantes",
     icon: "formkit:people",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Participantes",
@@ -80,6 +86,7 @@ export const menuItems = [
   {
     title: "Agentes",
     icon: "streamline:nurse-assistant-emergency",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Agentes",
@@ -94,6 +101,7 @@ export const menuItems = [
   {
     title: "Administradores",
     icon: "streamline:nurse-assistant-emergency",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Administradores",
@@ -108,6 +116,7 @@ export const menuItems = [
   {
     title: "Beneficiarios",
     icon: "fluent:person-info-16-regular",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Beneficiarios",
