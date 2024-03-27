@@ -105,6 +105,7 @@
     import { ref } from "vue";
     import axios from "@/plugins/axios";
     import * as yup from 'yup';
+    import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
 
     export default {
         components: {
@@ -163,13 +164,13 @@
                 axios.post(`/api/hospitals/`, formValues)
                 .then(res => {
                     console.log(res);
+                    useCachedDataStoreHospitals().refreshData();
                 })
                 .catch(error => {
                     if (error.response && error.response.data) {
                         const responseData = error.response.data;
                         errorMessage.value = responseData.message || 'An error occurred.';
 
-                        // Check if there are errors for specific fields
                         if (responseData.errors) {
                             errors.value = responseData.errors;
                         }

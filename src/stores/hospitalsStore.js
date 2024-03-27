@@ -34,5 +34,14 @@ export const useCachedDataStoreHospitals = defineStore({
       localStorage.removeItem('user');
       window.location.href = '/login';
     },
+    async refreshData() {
+      try {
+        this.hospitalsTable = [];
+        const response = await axios.get(`/api/hospitals`);
+        this.setHospitalsData(response.data);
+      } catch (error) {
+        console.error('Error refreshing data:', error);
+      }
+    },
   },
 });
