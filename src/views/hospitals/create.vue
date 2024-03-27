@@ -106,6 +106,8 @@
     import axios from "@/plugins/axios";
     import * as yup from 'yup';
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
+    import { useToast } from "vue-toastification";
+    import router from '../../router';
 
     export default {
         components: {
@@ -159,12 +161,18 @@
             
             let errorMessage = ref("");
             let errors = ref([]);
+            const toast = useToast();
+            function userRedirect(){
+                router.push('/hospitals', {shallow: false});
+            }
             function createHospital(){
                 confirmMessageFlag.value = false;
                 axios.post(`/api/hospitals/`, formValues)
                 .then(res => {
                     console.log(res);
                     useCachedDataStoreHospitals().refreshData();
+                    toast.success("¡Hospital creado correctamente!", { timeout: 1000 });
+                    setTimeout(userRedirect, 1000);
                 })
                 .catch(error => {
                     if (error.response && error.response.data) {
