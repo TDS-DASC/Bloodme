@@ -51,6 +51,7 @@ import Dropdown from "@/components/Dropdown";
 import Icon from "@/components/Icon";
 import profileImg from "@/assets/images/all-img/user.png"
 import axios from "@/plugins/axios";
+import { useToast } from "vue-toastification";
 export default {
   components: {
     Icon,
@@ -94,17 +95,21 @@ export default {
     };
   },
   setup() {
+    const toast = useToast();
     function deleteCookie(name) {
       document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    }
+    function closeSession(){
+      localStorage.removeItem('user');
+      deleteCookie('XSRF-TOKEN');
+      deleteCookie('laravel_session');
+      window.location.href = '/home';
     }
     function sendLogOutRequest(){
       axios.post(`/logout`)
           .then(res => {
-            console.log(res);
-            localStorage.removeItem('user');
-            deleteCookie('XSRF-TOKEN');
-            deleteCookie('laravel_session');
-            window.location.href = '/home';
+            toast.info("¡A cerrado su sesión!", { timeout: 1000 });
+            setTimeout(closeSession, 1000);
           })
           .catch(error => {
             console.error('Error in login request:', error);

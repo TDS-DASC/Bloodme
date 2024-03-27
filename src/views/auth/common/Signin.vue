@@ -63,7 +63,7 @@
   import { useField, useForm } from "vee-validate";
   import * as yup from "yup";
   import axios from "@/plugins/axios";
-  import { inject } from 'vue';
+  import { useToast } from "vue-toastification";
   export default {
     components: {
       Textinput,
@@ -74,6 +74,9 @@
       };
     },
     setup() {
+      const toast = useToast();
+
+      
       const schema = yup.object({
         email: yup.string().required("El correo electronico es requerido").email(),
         password: yup.string().required("La contraseña es requerida").min(3),
@@ -98,27 +101,39 @@
               localStorage.setItem('user', userDataString);
               window.location.href = '/home';
           }
+
           function handleLoginError(error) {
               console.error('Error in login request:', error);
           }
-          axios.get(`/sanctum/csrf-cookie`)
-              .then(() => {
-                  axios.post(`/login`, {
-                          email: email.value,
-                          password: password.value,
-                      })
-                      .then(response => {
-                          console.log(response);
-                          axios.get(`/api/user`)
-                              .then(response => {
-                                  handleLoginSuccess(response.data);
-                              })
-                              .catch(handleLoginError);
-                      })
-                      .catch(handleLoginError);
+
+          function fetchCSRFToken() {
+              return axios.get(`/sanctum/csrf-cookie`);
+          }
+
+          function performLogin() {
+              return axios.post(`/login`, {
+                  email: email.value,
+                  password: password.value,
+              });
+          }
+
+          function fetchUserData() {
+              return axios.get(`/api/user`)
+                  .then(response => {
+                      handleLoginSuccess(response.data);
+                  })
+                  .catch(handleLoginError);
+          }
+
+          fetchCSRFToken()
+              .then(() => performLogin())
+              .then(response => {
+                  console.log(response);
+                  toast.success("¡A iniciado sesión!", { timeout: 1000 });
+                  setTimeout(fetchUserData, 1000);
               })
               .catch(error => {
-                  console.error('Error in login token:', error);
+                  console.error('Error in login process:', error);
               });
       }
 
