@@ -175,6 +175,7 @@
                     setTimeout(userRedirect, 1000);
                 })
                 .catch(error => {
+                    toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
                     if (error.response && error.response.data) {
                         const responseData = error.response.data;
                         errorMessage.value = responseData.message || 'An error occurred.';
