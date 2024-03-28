@@ -5,10 +5,6 @@ import user4Img from "@/assets/images/all-img/user4.png";
 
 export const menuItems = [
   {
-    isHeadr: true,
-    title: "menu",
-  },
-  {
     title: "Inicio",
     icon: "heroicons-outline:home",
     link: "/home",
