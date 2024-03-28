@@ -12,7 +12,7 @@ export const useCachedDataStoreHospitals = defineStore({
       this.hospitalsTable = data;
     },
     async fetchData() {
-      if (!this.dataLoaded) {
+      if (!this.dataLoaded && this.hospitalsTable.length == 0) {
         try {
           const response = await axios.get(`/api/hospitals`);
           response.data.forEach(hospital => {
@@ -26,9 +26,6 @@ export const useCachedDataStoreHospitals = defineStore({
           }
         }
       }
-    },
-    pushElementToHospitals(element) {
-      this.hospitalsTable.push(element);
     },
     logout() {
       localStorage.removeItem('user');
