@@ -68,12 +68,18 @@
                             <!-- end single list -->
                             </ul>
                         </div>
-                        <br>
-                        <router-link 
-                            :to="`/hospitals/${ id }/edit`">
-                            <Button type="submit" text="Crear" btnClass="btn-warning" class="w-1/12">Editar</Button>
-                        </router-link>
                     </Card>
+                    <br>
+                    <div class="gap-3 w-1/2 flex">
+                        <router-link 
+                            :to="`/hospitals`" class="w-1/4">
+                            <Button type="button" text="Regresar" btnClass="btn-dark" class="w-full">Regresar</Button>
+                        </router-link>
+                        <router-link 
+                            :to="`/hospitals/${ id }/edit`" class="w-1/4">
+                            <Button type="button" text="Crear" btnClass="btn-warning" class="w-full">Editar</Button>
+                        </router-link>
+                    </div>
                 </div>
             </div>
         </div>
