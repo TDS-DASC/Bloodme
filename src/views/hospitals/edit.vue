@@ -36,33 +36,32 @@
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
                         label="longitude"
-                        type="number" 
+                        type="text" 
                         placeholder="Ingrese la coordenada longitud"
                         name="longitude"
                         v-model="longitude"
                         :error="longitudeError"
+                        @input="validateFloatInput"
                     />
                     <p v-if="errors.longitude" class="mt-2 text-danger-500 block text-sm">{{ errors.longitude[0] }}</p>
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
                         label="latitude"
-                        type="number"
+                        type="text"
                         placeholder="Ingrese la coordenada de latitud"
                         name="latitude"
                         v-model="latitude"
                         :error="latitudeError"
+                        @input="validateFloatInput"
                     />
                     <p v-if="errors.latitude" class="mt-2 text-danger-500 block text-sm">{{ errors.latitude[0] }}</p>
                 </div>
-
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Modificar" btnClass="btn-primary"></Button>
                     <router-link :to="{ path:  '/hospitals/' }"><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
-            <div v-else class="h-72">
-            </div>
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
@@ -89,6 +88,8 @@
     import { ref, watch } from 'vue';
     import * as yup from 'yup';
     import axios from "@/plugins/axios";
+    import { useToast } from "vue-toastification";
+    import router from '../../router';
 
     export default {
         components: {
@@ -101,6 +102,24 @@
         props: {
             formInformation: Object,
         },
+        methods: {
+            validateLongitudeInput(event) {
+                this.validateFloatInput(event, 'longitude');
+            },
+            validateLatitudeInput(event) {
+                this.validateFloatInput(event, 'latitude');
+            },
+            validateFloatInput(event, field) {
+                const regex = /^-?\d*\.?\d*$/;
+                let input = event.target.value;
+
+                if (!regex.test(input)) {
+                    input = input.slice(0, -1);
+                    event.target.value = input;
+                }
+                this[field] = input;
+            }
+        },
         setup() {
             const schema = yup.object().shape({
                 name: yup.string()
@@ -111,17 +130,16 @@
                     .required("Los apellidos son requeridos")
                     .min(10, "La direccion debe de contener al menos 10 caracteres"),
                 longitude: yup.string()
-                    .required("La coordenada de longitud es requerida")
-                    .max(45, "La longitud no puede exceder los 45 caracteres"),
+                    .required("La coordenada de longitud es requerida"),
                 latitude: yup.string()
-                    .required("La coordenada de latitud es requerida")
-                    .max(45, "La latitude no puede exceder los 45 caracteres"),
+                    .required("La coordenada de latitud es requerida"),
             });
 
             let errorMessage = ref("");
             let errors = ref([]);
             let formValues = ref([]);
             let confirmMessageFlag = ref(false);
+            const toast = useToast();
             const { handleSubmit } = useForm({
                 validationSchema: schema,
             });
@@ -141,13 +159,19 @@
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
+            function userRedirect(){
+                router.push('/hospitals', {shallow: false});
+            }
             function editHospital() {
                 confirmMessageFlag.value = false;
                 axios.put(`/api/hospitals/${hospitalId}`, formValues)
                     .then(res => {
-                        /* console.log(res); */
+                        useCachedDataStoreHospitals().refreshData();
+                        toast.success("¡Hospital editado correctamente!", { timeout: 1000 });
+                        setTimeout(userRedirect, 1000);
                     })
                     .catch(error => {
+                        toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
                         if (error.response && error.response.data) {
                             const responseData = error.response.data;
                             errorMessage.value = responseData.message || 'An error occurred.';
@@ -157,10 +181,13 @@
                         } else {
                             errorMessage.value = 'An error occurred.';
                         }
-                        /* console.log(errors) */
-                        /* console.log(errorMessage) */
                     });
             }
+
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: address, errorMessage: addressError } = useField("address");
+            const { value: longitude, errorMessage: longitudeError } = useField("longitude");
+            const { value: latitude, errorMessage: latitudeError } = useField("latitude");
 
             const router = useRouter();
             const { hospitalsTable } = useCachedDataStoreHospitals();
@@ -176,20 +203,17 @@
             watch(hospitalsTable, () => {
                 hospitalData.value = hospitalsTable.find(objeto => objeto.id == hospitalId);
                 if(hospitalData.value != null){
+                    console.log(hospitalData.value);
                     passHospitalValuesToSingleVariables();
                 }
             });
             if(hospitalsTable){
                 hospitalData.value = hospitalsTable.find(objeto => objeto.id == hospitalId);
                 if(hospitalData.value != null){
+                    console.log(hospitalData.value);
                     passHospitalValuesToSingleVariables();
                 }
             }
-
-            const { value: name, errorMessage: nameError } = useField("name");
-            const { value: address, errorMessage: addressError } = useField("address");
-            const { value: longitude, errorMessage: longitudeError } = useField("longitude");
-            const { value: latitude, errorMessage: latitudeError } = useField("latitude");
 
             return {
                 onSubmit,

@@ -133,7 +133,7 @@
                   setTimeout(fetchUserData, 1000);
               })
               .catch(error => {
-                  console.error('Error in login process:', error);
+                  console.error('Error in login process:', error.response.data);
               });
       }
 
