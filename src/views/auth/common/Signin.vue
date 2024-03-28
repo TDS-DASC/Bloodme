@@ -134,6 +134,7 @@
               })
               .catch(error => {
                   console.error('Error in login process:', error.response.data);
+                  toast.error(error.response.data.message, { timeout: 2500 });
               });
       }
 
