@@ -18,6 +18,12 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: "/refresh",
+        name: "refresh",
+        meta: { requiresAuth: true },
+        component: () => import("@/views/refresh.vue"),
+      },
+      {
         path: "/hospitals",
         name: "hospitals",
         meta: { requiresAuth: true },
