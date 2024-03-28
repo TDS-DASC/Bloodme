@@ -1,10 +1,15 @@
 <template>
     <div class="flex flex-col gap-4">
         <tableAdvanced :tableInformation=hospitalsTableParams :tableData=hospitalsTable />
-        <router-link 
-            to="/hospitals/create">
-            <Button type="submit" text="Crear" btnClass="btn-primary" class="w-1/12">Crear</Button>
-        </router-link>
+        <div class="flex gap-3 w-1/4">
+            <router-link 
+                to="/hospitals/create" class="w-full">
+                <Button type="submit" text="Crear" btnClass="btn-primary" class="w-full">Crear</Button>
+            </router-link>
+            <router-link :to="{ path: '/refresh', query: { urlHeader: 'hospitals' } }" class="w-full">
+                <Button type="submit" text="Refrescar" btnClass="btn-dark" class="w-full">Refrescar</Button>
+            </router-link>
+        </div>
     </div>
 </template>
 
@@ -12,6 +17,8 @@
     import Button from "@/components/Button";
     import tableAdvanced from "../../components/Table/advanced"
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
+    import router from '../../router';
+
     export default{
         components: {
             tableAdvanced,
@@ -41,9 +48,9 @@
                     },
                 ]
             }
-            const { hospitalsTable } = useCachedDataStoreHospitals();
+            
+            let { hospitalsTable } = useCachedDataStoreHospitals();
             useCachedDataStoreHospitals().fetchData();
-
 
             return {
                 hospitalsTableParams,
