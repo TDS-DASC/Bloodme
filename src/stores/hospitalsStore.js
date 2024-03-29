@@ -13,7 +13,7 @@ export const useCachedDataStoreHospitals = defineStore({
     },
     async fetchData() {
       if (!this.dataLoaded && this.hospitalsTable.length == 0) {
-        console.log("fetch");
+        /* console.log("fetch"); */
         try {
           const response = await axios.get(`/api/hospitals`);
           response.data.forEach(hospital => {
@@ -33,7 +33,7 @@ export const useCachedDataStoreHospitals = defineStore({
       window.location.href = '/login';
     },
     async refreshData() {
-      console.log("refresh");
+      /* console.log("refresh"); */
       try {
         this.hospitalsTable = [];
         const response = await axios.get(`/api/hospitals`);

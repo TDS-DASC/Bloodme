@@ -107,6 +107,10 @@ import InputGroup from "@/components/InputGroup";
 import Pagination from "@/components/Pagination";
 import { MenuItem } from "@headlessui/vue";
 import { advancedTable } from "../../../constant/basic-tablle-data";
+import { useToast } from "vue-toastification";
+import axios from "@/plugins/axios";
+import router from '../../../router';
+
 import { ref } from "vue" 
 export default {
   components: {
@@ -121,6 +125,7 @@ export default {
   props: {
     tableInformation: Object,
     tableData: Object,
+    urlMainHeader: "",
   },
   data(props) {
     return {
@@ -164,14 +169,16 @@ export default {
     };
   },
   setup(props) {
-    console.log(props.tableData);
+    const path = '/refresh';
+    const query = { urlHeader: props.urlMainHeader };
 
-    let confirmMessage = ref(false)
-    let participant_id = ref(0)
+    let confirmMessage = ref(false);
+    let selectedItem_id = ref(0);
+    const toast = useToast();
+    
     function displayConfirmMessage(clickedButton, item_id){
       if(clickedButton == "delete"){
-        participant_id = item_id;
-        console.log(confirmMessage.value);
+        selectedItem_id = item_id;
         confirmMessage.value = !confirmMessage.value;
       }
     }
@@ -180,9 +187,17 @@ export default {
     }
     function deleteParticipant(){
         confirmMessage.value = false;
-        console.log("Usuario eliminar" + participant_id);
+        axios.delete(`/api/hospitals/${selectedItem_id}`)
+        .then(response => {
+          router.push({ path, query });
+          toast.success("¡Registro borrado correctamente!", { timeout: 1000 });
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          toast.error("Ha ocurrido un error inesperado.", { timeout: 1000 });
+        });
     }
-
+    
     return {
       displayConfirmMessage,
       deleteParticipant,

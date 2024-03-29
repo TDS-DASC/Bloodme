@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>URL Header: {{ urlHeader }}</p>
+        <p>Cargando...</p>
     </div>
 </template>
   
@@ -16,8 +16,6 @@
 
         // Access the urlHeader prop using route.query.urlHeader
         const urlHeader = route.query.urlHeader;
-
-        console.log("URL Header:", urlHeader);
 
         async function userRedirect() {
             await useCachedDataStoreHospitals().refreshData();
