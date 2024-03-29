@@ -125,7 +125,9 @@ export default {
   props: {
     tableInformation: Object,
     tableData: Object,
-    urlMainHeader: "",
+    urlMainHeader: {
+      type: String,
+    }
   },
   data(props) {
     return {
@@ -189,6 +191,7 @@ export default {
         confirmMessage.value = false;
         axios.delete(`/api/hospitals/${selectedItem_id}`)
         .then(response => {
+          console.log(query);
           router.push({ path, query });
           toast.success("¡Registro borrado correctamente!", { timeout: 1000 });
         })
