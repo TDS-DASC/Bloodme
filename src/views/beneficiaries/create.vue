@@ -65,7 +65,7 @@
                         v-model="blood_type"
                         :error="blood_typeError"
                     />
-                    <p v-if="errors.curp" class="mt-2 text-danger-500 block text-sm">{{ errors.curp[0] }}</p>
+                    <p v-if="errors.blood_type" class="mt-2 text-danger-500 block text-sm">{{ errors.blood_type[0] }}</p>
                 </div>
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
@@ -82,7 +82,7 @@
                 <br><br>
                 <div>
                     <div>
-                        <p class="font-bold">Nombre del Hospital:</p>
+                        <p class="font-bold">Nombre del Beneficiario:</p>
                         {{ name }}
                     </div>
                     <div>
@@ -121,7 +121,7 @@
     import { ref } from "vue";
     import axios from "@/plugins/axios";
     import * as yup from 'yup';
-    import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
+    import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useToast } from "vue-toastification";
     import router from '../../router';
 
@@ -163,14 +163,14 @@
                 displayConfirmMessage();
             }); 
             const onSubmit = handleSubmit((values) => {
-                const newHospitalForm = [
+                const newBeneficiaryForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastname', value: lastname.value },
                     { name: 'birth_date', value: birth_date.value },
                     { name: 'curp', value: curp.value },
                     { name: 'blood_type', value: blood_type.value },
                 ];
-                trySubmit(newHospitalForm);
+                trySubmit(newBeneficiaryForm);
             });
 
             
@@ -190,7 +190,7 @@
                 axios.post(`/api/beneficiaries/`, formValues)
                 .then(res => {
                     console.log(res);
-                    useCachedDataStoreHospitals().refreshData();
+                    useCachedDataStoreBeneficiaries().refreshData();
                     toast.success("¡Beneficiario creado correctamente!", { timeout: 1000 });
                     setTimeout(userRedirect, 1000);
                 })
