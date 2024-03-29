@@ -12,7 +12,7 @@ export const useCachedDataStoreBeneficiaries = defineStore({
       this.beneficiariesTable = data;
     },
     async fetchData() {
-      if (!this.dataLoaded) {
+      if (!this.dataLoaded && this.beneficiariesTable.length == 0) {
         try {
           const response = await axios.get(`/api/beneficiaries`);
           response.data.forEach(beneficiary => {
@@ -21,11 +21,25 @@ export const useCachedDataStoreBeneficiaries = defineStore({
           this.dataLoaded = true;
         } catch (error) {
           console.error('Error in request api beneficiaries', error);
+          if (error.response && error.response.status === 401) {
+            this.logout();
+          }
         }
       }
     },
-    pushElementToBeneficiaries(element) {
-      this.beneficiariesTable.push(element);
+    logout() {
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    },
+    async refreshData() {
+      /* console.log("refresh"); */
+      try {
+        this.beneficiariesTable = [];
+        const response = await axios.get(`/api/beneficiaries`);
+        this.setBeneficiariesData(response.data);
+      } catch (error) {
+        console.error('Error refreshing data:', error);
+      }
     },
   },
 });
