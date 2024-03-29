@@ -8,6 +8,7 @@
     import { useRouter } from 'vue-router';
     import { useRoute } from 'vue-router';
     import { useCachedDataStoreHospitals } from '../stores/hospitalsStore';
+    import { useCachedDataStoreBeneficiaries } from '../stores/beneficiariesStore';
 
     export default {
         setup() {
@@ -17,10 +18,22 @@
         // Access the urlHeader prop using route.query.urlHeader
         const urlHeader = route.query.urlHeader;
 
-        async function userRedirect() {
-            await useCachedDataStoreHospitals().refreshData();
-            
+        function routerPush(){
             router.push(`/${urlHeader}`, { shallow: false });
+        }
+
+        async function userRedirect() {
+            if(urlHeader == "hospitals"){
+                /* console.log("Hospitals"); */
+                await useCachedDataStoreHospitals().refreshData();
+            }
+            
+            if(urlHeader == "beneficiaries"){
+                /* console.log("Beneficiaries"); */
+                await useCachedDataStoreBeneficiaries().refreshData();
+            }
+            
+            routerPush();
         }
 
         if (urlHeader) {
