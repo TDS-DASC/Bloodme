@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-4">
-        <tableAdvanced :tableInformation=beneficiariesTableParams :tableData=beneficiariesTable />
+        <tableAdvanced :tableInformation=beneficiariesTableParams :tableData=beneficiariesTable urlMainHeader="beneficiaries" />
         <div class="flex gap-3 w-1/4">
             <router-link 
                 to="/beneficiaries/create" class="w-full">
