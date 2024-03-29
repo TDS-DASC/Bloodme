@@ -131,12 +131,12 @@
             
             const { value: name, errorMessage: nameError } = useField("name");
             const { value: lastname, errorMessage: lastnameError } = useField("lastname");
-            const { value: alias, errorMessage: aliasError } = useField("alias");
-            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
-            const { value: email, errorMessage: emailError } = useField("email");
             const { value: password, errorMessage: passwordError } = useField("password");
+            const { value: email, errorMessage: emailError } = useField("email");
             const { value: role, errorMessage: roleError } = useField("role");
+            const { value: alias, errorMessage: aliasError } = useField("alias");
             const { value: sex, errorMessage: sexError } = useField("sex");
+            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
 
             const trySubmit = handleSubmit(async (values) => {
                 console.log("sup");
