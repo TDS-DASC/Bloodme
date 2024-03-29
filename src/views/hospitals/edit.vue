@@ -89,7 +89,6 @@
     import * as yup from 'yup';
     import axios from "@/plugins/axios";
     import { useToast } from "vue-toastification";
-    import router from '../../router';
 
     export default {
         components: {

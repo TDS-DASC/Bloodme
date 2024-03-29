@@ -73,7 +73,7 @@
                     <div class="gap-3 w-1/2 flex">
                         <router-link 
                             :to="`/hospitals`" class="w-1/4">
-                            <Button type="button" text="Regresar" btnClass="btn-dark" class="w-full">Regresar</Button>
+                            <Button type="button" text="Regresar" btnClass="btn-secondary" class="w-full">Regresar</Button>
                         </router-link>
                         <router-link 
                             :to="`/hospitals/${ id }/edit`" class="w-1/4">
