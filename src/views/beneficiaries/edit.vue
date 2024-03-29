@@ -195,7 +195,7 @@
                 .then(res => {
                     console.log(res);
                     useCachedDataStoreBeneficiaries().refreshData();
-                    toast.success("¡Beneficiario creado correctamente!", { timeout: 1000 });
+                    toast.success("¡Beneficiario editado correctamente!", { timeout: 1000 });
                     setTimeout(userRedirect, 1000);
                 })
                 .catch(error => {

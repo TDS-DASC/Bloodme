@@ -14,8 +14,34 @@ const routes = [
       {
         path: "/campaigns",
         name: "campaigns",
-        component: () => import("@/views/campaigns/index.vue"),
         meta: { requiresAuth: true },
+        children: [
+          {
+            path: "",
+            name: "campaigns index",
+            component: () => import("@/views/campaigns/index.vue"),
+          },
+          {
+            path: "index",
+            name: "campaigns",
+            component: () => import("@/views/campaigns/index.vue"),
+          },
+          {
+            path: "create",
+            name: "campaigns-create",
+            component: () => import("@/views/campaigns/create.vue"),
+          },
+          {
+            path: ":id/edit",
+            name: "campaigns-edit",
+            component: () => import("@/views/campaigns/edit.vue"),
+          },
+          {
+            path: ":id",
+            name: "campaigns-view",
+            component: () => import("@/views/campaigns/view.vue"),
+          }
+        ],  
       },
       {
         path: "/refresh",
