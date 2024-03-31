@@ -9,44 +9,48 @@
     import { useRoute } from 'vue-router';
     import { useCachedDataStoreHospitals } from '../stores/hospitalsStore';
     import { useCachedDataStoreBeneficiaries } from '../stores/beneficiariesStore';
+    import { useCachedDataStoreCampaigns } from '../stores/campaignsStore';
 
     export default {
         setup() {
-        const router = useRouter();
-        const route = useRoute();
+            const router = useRouter();
+            const route = useRoute();
 
-        // Access the urlHeader prop using route.query.urlHeader
-        const urlHeader = route.query.urlHeader;
+            const urlHeader = route.query.urlHeader;
 
-        function routerPush(){
-            router.push(`/${urlHeader}`, { shallow: false });
-        }
-
-        async function userRedirect() {
-            if(urlHeader == "hospitals"){
-                /* console.log("Hospitals"); */
-                await useCachedDataStoreHospitals().refreshData();
+            function routerPush(){
+                router.push(`/${urlHeader}`, { shallow: false });
             }
-            
-            if(urlHeader == "beneficiaries"){
-                /* console.log("Beneficiaries"); */
-                await useCachedDataStoreBeneficiaries().refreshData();
+
+            async function userRedirect() {
+                if(urlHeader == "hospitals"){
+                    /* console.log("Hospitals"); */
+                    await useCachedDataStoreHospitals().refreshData();
+                }
+                
+                if(urlHeader == "beneficiaries"){
+                    /* console.log("Beneficiaries"); */
+                    await useCachedDataStoreBeneficiaries().refreshData();
+                }
+
+                if(urlHeader == "campaigns"){
+                    /* console.log("Campaigns"); */
+                    await useCachedDataStoreCampaigns().refreshData();
+                }
+                
+                routerPush();
             }
-            
-            routerPush();
-        }
 
-        if (urlHeader) {
-            // Call userRedirect immediately if urlHeader is present
-            userRedirect();
-        }
-        else{
-            router.push(`/home`, { shallow: false });
-        }
+            if (urlHeader) {
+                userRedirect();
+            }
+            else{
+                router.push(`/home`, { shallow: false });
+            }
 
-        return {
-            userRedirect
-        };
+            return {
+                userRedirect
+            };
         }
     };
 </script>
