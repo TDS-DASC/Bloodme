@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-4 p-2">
-        <tableAdvanced :tableInformation=campaignsTableParams :tableData=campaignsTable urlMainHeader="hospitals" />
+        <tableAdvanced :tableInformation=campaignsTableParams :tableData=campaignsTable urlMainHeader="campaigns" />
         <div class="flex gap-3 w-1/4">
             <router-link 
                 to="/campaigns/create" class="w-full">
@@ -29,9 +29,7 @@
             const campaignsTableParams = {
                 title: "Campañas",
                 rows: 5,
-                urls: [
-                    "campaigns/edit",
-                ],
+                headUrl: "campaigns",
                 columns: [
                     {
                         label: "ID",

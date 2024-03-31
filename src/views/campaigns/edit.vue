@@ -156,8 +156,8 @@
     import * as yup from 'yup';
     import { useToast } from "vue-toastification";
     import router from '../../router';
-    import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
-    import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
+    import { useCachedDataStoreBeneficiaries } from '@/stores/beneficiariesStore';
+    import { useCachedDataStoreHospitals } from '@/stores/hospitalsStore';
     import { useCachedDataStoreCampaigns } from '@/stores/campaignsStore';
     import { useRouter } from 'vue-router';
 
