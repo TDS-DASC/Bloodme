@@ -8,13 +8,13 @@
                             <ul class="list space-y-8 w-full">
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="streamline:blood-bag-donation" />
+                                        <Icon icon="wpf:name" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
                                             Nombre
                                         </div>
-                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50" v-if="beneficiaryData">
+                                        <a class="text-base text-slate-600 dark:text-slate-50" v-if="beneficiaryData">
                                             {{ beneficiaryData.name }}
                                         </a>
                                     </div>
@@ -42,13 +42,13 @@
                             <!-- end single list -->
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="heroicons:phone-arrow-up-right" />
+                                        <Icon icon="mdi:dot" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
                                         Apellidos
                                         </div>
-                                        <a href="tel:0189749676767" class="text-base text-slate-600 dark:text-slate-50" v-if="beneficiaryData">
+                                        <a class="text-base text-slate-600 dark:text-slate-50" v-if="beneficiaryData">
                                             {{ beneficiaryData.lastname }}
                                         </a>
                                     </div>
@@ -56,7 +56,7 @@
                             <!-- end single list -->
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="heroicons:map" />
+                                        <Icon icon="material-symbols-light:id-card-outline" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
@@ -83,7 +83,7 @@
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
                                             Tipo de sangre 
                                         </div>
-                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50" v-if="beneficiaryData">
+                                        <a class="text-base text-slate-600 dark:text-slate-50" v-if="beneficiaryData">
                                             {{ beneficiaryData.blood_type }}
                                         </a>
                                     </div>
