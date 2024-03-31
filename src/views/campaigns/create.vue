@@ -2,7 +2,7 @@
     <div class="">
         <div class="p-4 bg-white rounded-md dark:bg-slate-800">
             <div class="flex items-center justify-between py-2">
-                <h3>Crear Camapaña</h3><br>
+                <h3>Crear Campaña</h3><br>
             </div>
             <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>
@@ -35,7 +35,7 @@
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
                         label="Plaquetas requeridas *"
-                        type="date" 
+                        type="number" 
                         placeholder="Ingrese el numero total de plaquetas requeridas"
                         name="required_platelets"
                         v-model="required_platelets"
@@ -46,7 +46,7 @@
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
                         label="Plaquetas recolectadas *"
-                        type="text"
+                        type="number"
                         placeholder="Ingrese el numero de plaquetas recolectadas"
                         name="recollected_platelets"
                         v-model="recollected_platelets"
@@ -104,24 +104,35 @@
                 <br><br>
                 <div>
                     <div>
-                        <p class="font-bold">Nombre del Beneficiario:</p>
-                        {{ name }}
+                        <span class="font-bold">Beneficiario:</span>
+                        <span>&nbsp</span>
+                        <span>{{ beneficiaries.find(b => b.value == beneficiary_id)?.label }}</span>
                     </div>
                     <div>
-                        <p class="font-bold">Direccion:</p>
-                        {{ lastname }}
+                        <span class="font-bold">ID del Hospital:</span>
+                        <span>&nbsp</span>
+                        <span>{{ hospitals.find(b => b.value == hospital_id)?.label }}</span>
+                        
                     </div>
                     <div>
-                        <p class="font-bold">Longitude:</p>
-                        {{ birth_date }}
+                        <span class="font-bold">Bolsas requeridas:</span>
+                        <span>&nbsp</span>
+                        <span>{{ required_bags }}</span>
                     </div>
                     <div>
-                        <p class="font-bold">Latitude:</p>
-                        {{ curp }}
+                        <span class="font-bold">Bolsas recolectadas:</span>
+                        <span>&nbsp</span>
+                        <span>{{ recollected_bags }}</span>
                     </div>
                     <div>
-                        <p class="font-bold">Latitude:</p>
-                        {{ blood_type }}
+                        <span class="font-bold">Plaquetas requeridas:</span>
+                        <span>&nbsp</span>
+                        <span>{{ required_platelets }}</span>
+                    </div>
+                    <div>
+                        <span class="font-bold">Plaquetas recolectadas:</span>
+                        <span>&nbsp</span>
+                        <span>{{ recollected_platelets }}</span>
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
@@ -246,23 +257,38 @@
             useCachedDataStoreHospitals().fetchData();
             let hospitals = ref([]);
             watch(hospitalsTable, () => {
-                hospitals.value = hospitalsTable.map(hospital => ({
-                    value: hospital.id,
-                    label: hospital.name
-                }));
-                console.log(hospitals.value);
+                fillHospitalArray();
             });
 
             const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
             useCachedDataStoreBeneficiaries().fetchData();
             let beneficiaries = ref([]);
             watch(beneficiariesTable, () => {
+                fillBeneficiariesArray();
+            });
+
+            if(beneficiaries.value.length == 0 || hospitals.value.length == 0){
+                if(beneficiariesTable != null && hospitalsTable != null){
+                    fillBeneficiariesArray();
+                    fillHospitalArray();
+                }
+            }
+            function fillBeneficiariesArray(){
                 beneficiaries.value = beneficiariesTable.map(beneficiaries => ({
                     value: beneficiaries.id,
                     label: beneficiaries.name
                 }));
+                console.log("Beneficiarios WATCH");
                 console.log(beneficiaries.value);
-            });
+            }
+            function fillHospitalArray(){
+                hospitals.value = hospitalsTable.map(hospital => ({
+                    value: hospital.id,
+                    label: hospital.name
+                }));
+                console.log("Hospitales WATCH");
+                console.log(hospitals.value);
+            }
 
             return {
                 beneficiaries,
