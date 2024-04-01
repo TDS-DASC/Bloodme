@@ -2,104 +2,76 @@
     <div class="">
         <div class="p-4 bg-white rounded-md dark:bg-slate-800">
             <div class="flex items-center justify-between py-2">
-                <h3>Editar Participante</h3><br>
+                <h3>Editar Cita</h3><br>
             </div>
             <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>
             <form
                 @submit.prevent="onSubmit"
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
-                v-if="userData"
             >
-                <Textinput
-                    label="Nombre *"
-                    type="text"
-                    placeholder="Ingrese el nombre"
-                    name="name"
-                    v-model=form.name
-                />
-                <Textinput
-                    label="Apellidos"
-                    type="text"
-                    placeholder="Ingrese sus apellidos"
-                    name="lastname"
-                    v-model=form.lastname
-                />
-                <Textinput
-                    label="Alias"
-                    type="text"
-                    placeholder="Ingrese el alias"
-                    name="alias"
-                    v-model=form.alias
-                />
-
-                <Textinput
-                    label="Fecha de nacimiento"
-                    type="date"
-                    placeholder="Fecha de nacimiento"
-                    name="date"
-                    v-model=form.birth_date
-                />
-
-                <Select
-                    label="Tipo de sangre"
-                    type="text"
-                    placeholder="Enter minimum 3 Characters"
-                    name="bloodtype"
-                    v-model=form.blood_type
-                    :options=bloodTypes
-                />
-                <Textinput
-                    label="Número celular"
-                    placeholder="8+ characters, 1 capitat letter "
-                    name="phone"
-                    v-model=form.phone_number
-                />
-                <Textinput
-                    label="CURP"
-                    type="text"
-                    placeholder="Enter Valid CURP"
-                    name="curp"
-                    v-model=form.curp
-                />
-                <Textinput
-                    label="email"
-                    type="email"
-                    placeholder="Enter Valid URL"
-                    name="email"
-                    v-model=form.email
-                />
-                <Textinput
-                    label="password"
-                    type="url"
-                    placeholder="Enter Valid Password"
-                    name="password"
-                    v-model=form.password
-                />
-                <Select
-                    label="roles"
-                    placeholder="Select your blood type"
-                    v-model=form.role
-                    :options="rolTypes"
-                />
-
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="Fecha de la cita *"
+                        type="date"
+                        name="name"
+                        v-model="date"
+                        :error="dateError"
+                    />
+                    <p v-if="errors.date" class="mt-2 text-danger-500 block text-sm">{{ errors.date[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="Descripcion *"
+                        type="text"
+                        placeholder="Ingrese una descripción para su cita"
+                        name="description"
+                        v-model="description"
+                        :error="descriptionError"
+                    />
+                    <p v-if="errors.description" class="mt-2 text-danger-500 block text-sm">{{ errors.description[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Select
+                        label="Campaña *"
+                        placeholder="Seleccione una campaña"
+                        name="campaign"
+                        :options="selectOptionForCampaignsInput"
+                        v-model="campaign_id"
+                        :error="campaign_idError"
+                    />
+                    <p v-if="errors.campaign_id" class="mt-2 text-danger-500 block text-sm">{{ errors.campaign_id[0] }}</p>
+                </div>
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="subtmit" text="Modificar" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
+                    <Button type="submit" text="Editar" btnClass="btn-primary"></Button>
                     <router-link
                         :to="{ path:  '/appointments/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
-            <div v-else class="h-screen">
-            </div>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 Estas a punto de agregar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
+                <br><br>
+                <div>
+                    <div>
+                        <p class="font-bold">Fecha de la cita:</p>
+                        {{ date }}
+                    </div>
+                    <div>
+                        <p class="font-bold">Descripcion:</p>
+                        {{ description }}
+                    </div>
+                    <div>
+                        <p class="font-bold">Campaña:</p>
+                        {{ campaign_id }}
+                    </div>
+                </div>
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="editUser()" />
-                    <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createAppointment()" />
+                    <Button btnClass="btn-dark" text="Retroceder" @click="displayConfirmMessage()" />
                 </div>
             </Card>
         </div>
@@ -113,9 +85,15 @@
     import Textinput from "@/components/Textinput";
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { useCachedDataStore } from '@/stores/usersStore';
+    import { ref, watch, watchEffect } from "vue";
+    import axios from "@/plugins/axios";
+    import * as yup from 'yup';
+    import { useCachedDataStoreAppointments } from '../../stores/appointmentsStore';
+    import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
+    import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
+    import { useToast } from "vue-toastification";
+    import router from '../../router';
     import { useRouter } from 'vue-router';
-    import { ref, watch } from 'vue';
 
     export default {
         components: {
@@ -123,106 +101,165 @@
             Button,
             Textarea,
             Select,
+            Textinput,
             Card
         },
-        props: {
-            formInformation: Object,
-        },
         setup() {
-            
+            const schema = yup.object().shape({
+                date: yup.string()
+                    .required("La fecha de la cita es requerida"),
+                description: yup.string(),
+                campaign_id: yup.string()
+                    .required("La campaña es requerida"),
+            });
 
+            let formValues = ref([]);
             const { handleSubmit } = useForm({
+                validationSchema: schema,
             });
-            // No need to define rules for fields
-
-            const onSubmit = handleSubmit(() => {
-                // console.warn(values.email);
+            const trySubmit = handleSubmit(async (values) => {
+                formValues = values;
+                displayConfirmMessage();
+            }); 
+            const onSubmit = handleSubmit((values) => {
+                const newAppointmentForm = [
+                    { name: 'date', value: date.value },
+                    { name: 'description', value: description.value },
+                    { name: 'campaign_id', value: campaign_id.value },
+                ];
+                trySubmit(newAppointmentForm);
             });
 
-
-            /* No de la template */
-            const bloodTypes = [
-                { value: 'A+', label: 'A+' },
-                { value: 'A-', label: 'A-' },
-                { value: 'B+', label: 'B+' },
-                { value: 'B-', label: 'B-' },
-                { value: 'AB+', label: 'AB+' },
-                { value: 'AB-', label: 'AB-' },
-                { value: 'O+', label: 'O+' },
-                { value: 'O-', label: 'O-' }
-            ];
-            const rolTypes = [
-                { value: "administrator", label: "administrator" },
-                { value: "agent", label: "agent" },
-                { value: "participant", label: "participant" },
-            ];
-
-            /* Not from the template */
-
-            const router = useRouter();
-            const { appointmentsTable } = useCachedDataStore();
-            const id = router.currentRoute.value.params.id;
             
-            useCachedDataStore().fetchData();
+            let confirmMessageFlag = ref(false);
+            function displayConfirmMessage(){
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            
+            let errorMessage = ref("");
+            let errors = ref([]);
+            const toast = useToast();
+            function userRedirect(){
+                router.push('/appointments', {shallow: false});
+            }
+            function createAppointment(){
+                confirmMessageFlag.value = false;
+                axios.post(`/api/appointments/`, formValues)
+                .then(res => {
+                    console.log(res);
+                    useCachedDataStoreAppointments().refreshData();
+                    toast.success("Cita editada correctamente!", { timeout: 1000 });
+                    setTimeout(userRedirect, 1000);
+                })
+                .catch(error => {
+                    toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
+                    if (error.response && error.response.data) {
+                        const responseData = error.response.data;
+                        errorMessage.value = responseData.message || 'An error occurred.';
 
-            let userData = ref(null); 
-            let form = ref({
-                name: null,
-                lastname: null,
-                alias: null,
-                birth_date: null,
-                blood_type: null,
-                phone_number: null,
-                curp: null,
-                email: null,
-                password: null,
-                role: null,
-            })
-
-            watch(appointmentsTable, () => {
-                userData.value = appointmentsTable.find(objeto => objeto.id == id);
-                assignFormValues();
-            });
-
-            if(appointmentsTable){
-                userData.value = appointmentsTable.find(objeto => objeto.id == id);
-                assignFormValues();
+                        if (responseData.errors) {
+                            errors.value = responseData.errors;
+                        }
+                    } else {
+                        errorMessage.value = 'An error occurred.';
+                    }
+                    console.log(errors)
+                    console.log(errorMessage)
+                });
             }
 
-            function assignFormValues(){
-                if(userData.value){
-                    form.value.name = userData.value.name;
-                    form.value.lastname = userData.value.lastname;
-                    form.value.alias = userData.value.alias;
-                    form.value.birth_date = userData.value.birth_date;
-                    form.value.blood_type = userData.value.blood_type;
-                    form.value.phone_number = userData.value.phone_number;
-                    form.value.curp = userData.value.curp;
-                    form.value.email = userData.value.email;
-                    form.value.role = userData.value.role;
+            const { value: date, errorMessage: dateError } = useField("date");
+            const { value: description, errorMessage: descriptionError } = useField("description");
+            const { value: campaign_id, errorMessage: campaign_idError } = useField("campaign_id");
+
+            const { campaignsTable } = useCachedDataStoreCampaigns();
+            useCachedDataStoreCampaigns().fetchData();
+            let campaigns = ref([]);
+            watch(campaignsTable, () => {
+                fillCampaignsArray();
+            });
+
+            const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
+            useCachedDataStoreBeneficiaries().fetchData();
+            let beneficiaries = ref([]);
+            watch(beneficiariesTable, () => {
+                fillBeneficiariesArray();
+            });
+
+            function fillBeneficiariesArray(){
+                beneficiaries.value = beneficiariesTable.map(beneficiaries => ({
+                    value: beneficiaries.id,
+                    label: beneficiaries.name
+                }));
+                console.log("Beneficiarios WATCH");
+                console.log(beneficiaries.value);
+            }
+            function fillCampaignsArray(){
+                campaigns.value = campaignsTable.map(campaign => ({
+                    value: campaign.id,
+                    label: campaign.id
+                }));
+                console.log(campaigns.value);
+            }
+            function createCampaignsWithBeneficiaryNames() {
+                const campaignsWithBeneficiaryNames = campaignsTable.map(campaign => {
+                    const beneficiary = beneficiariesTable.find(beneficiary => beneficiary.id === campaign.beneficiary_id);
+                    return {
+                        value: campaign.id,
+                        label: beneficiary ? beneficiary.name : "Unknown" // If beneficiary not found, set label to "Unknown"
+                    };
+                });
+                console.log(campaignsWithBeneficiaryNames);
+                return campaignsWithBeneficiaryNames;
+            }
+
+            let selectOptionForCampaignsInput = ref([]);
+            watchEffect(() => {
+                if (campaignsTable && beneficiariesTable) {
+                    selectOptionForCampaignsInput.value = createCampaignsWithBeneficiaryNames();
+                }
+            });
+
+            const router = useRouter();
+            const { appointmentsTable } = useCachedDataStoreAppointments();
+            const appointmentId = router.currentRoute.value.params.id;
+            useCachedDataStoreAppointments().fetchData();
+            function passAppointmentValuesToSingleVariables() {
+                date.value = appointmentData.value.date;
+                description.value = appointmentData.value.description;
+                campaign_id.value = appointmentData.value.campaign_id;
+            }
+            let appointmentData = ref(null); 
+            watch(appointmentsTable, () => {
+                appointmentData.value = appointmentsTable.find(objeto => objeto.id == appointmentId);
+                if(appointmentData.value != null){
+                    console.log(appointmentData.value);
+                    passAppointmentValuesToSingleVariables();
+                }
+            });
+            if(appointmentsTable){
+                appointmentData.value = appointmentsTable.find(objeto => objeto.id == appointmentId);
+                if(appointmentData.value != null){
+                    console.log(appointmentData.value);
+                    passAppointmentValuesToSingleVariables();
                 }
             }
 
-            let confirmMessage = ref(false)
-            function displayConfirmMessage(){
-                console.log(confirmMessage.value);
-                confirmMessage.value = !confirmMessage.value;
-            }
-            function editUser(){
-                confirmMessage.value = false;
-                console.log("Usuario editado");
-            }
-
             return {
-                bloodTypes,
-                rolTypes,
-                onSubmit,
-                appointmentsTable,
-                userData,
-                form,
-                confirmMessage,
+                selectOptionForCampaignsInput,
+                campaigns,
+                date,
+                dateError,
+                description,
+                descriptionError,
+                campaign_id,
+                campaign_idError,
+                createAppointment,
                 displayConfirmMessage,
-                editUser
+                confirmMessageFlag,
+                onSubmit,
+                errors,
+                errorMessage
             };
         }
     }

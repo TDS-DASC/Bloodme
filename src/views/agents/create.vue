@@ -6,7 +6,6 @@
             </div>
             <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>
-            {{ hospital_options }}
             <form
                 @submit.prevent="onSubmit"
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
@@ -182,6 +181,7 @@
 
 
             const trySubmit = handleSubmit(async (values) => {
+                console.log(values);
                 axios.post(`/api/agents`, values)
                 .then(res => {
                     console.log(res);

@@ -136,7 +136,7 @@
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="createBeneficiary()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createCampaign()" />
                     <Button btnClass="btn-dark" text="Retroceder" @click="displayConfirmMessage()" />
                 </div>
             </Card>
@@ -219,7 +219,7 @@
             function userRedirect(){
                 router.push('/campaigns', {shallow: false});
             }
-            function createBeneficiary(){
+            function createCampaign(){
                 confirmMessageFlag.value = false;
                 axios.post(`/api/campaigns/`, formValues)
                 .then(res => {
@@ -233,7 +233,6 @@
                     if (error.response && error.response.data) {
                         const responseData = error.response.data;
                         errorMessage.value = responseData.message || 'An error occurred.';
-
                         if (responseData.errors) {
                             errors.value = responseData.errors;
                         }
@@ -307,7 +306,7 @@
                 beneficiary_idError,
                 hospital_id,
                 hospital_idError,
-                createBeneficiary,
+                createCampaign,
                 displayConfirmMessage,
                 confirmMessageFlag,
                 onSubmit,

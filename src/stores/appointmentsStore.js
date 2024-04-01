@@ -1,32 +1,44 @@
 import { defineStore } from 'pinia';
 import axios from '@/plugins/axios';
 
-export const useParticipantsStore = defineStore({
-  id: 'participantsData',
+export const useCachedDataStoreAppointments = defineStore({
+  id: 'appointmentsData',
   state: () => ({
-    participantsTable: [],
+    appointmentsTable: [],
     dataLoaded: false,
   }),
   actions: {
-    setParticipantsData(data) {
-      this.participantsTable = data;
+    setAppointmentsData(data) {
+      this.appointmentsTable = data;
     },
     async fetchData() {
       if (!this.dataLoaded) {
         try {
-          const response = await axios.get(`/api/participants`);
-          response.data.forEach(participant => {
-            this.participantsTable.push(participant);
+          const response = await axios.get(`/api/appointments`);
+          response.data.forEach(appointment => {
+            this.appointmentsTable.push(appointment);
           });
-          this.setParticipantsData(response.data);
           this.dataLoaded = true;
         } catch (error) {
-          console.error('Error in request api participants', error);
+          console.error('Error in request api beneficiaries', error);
+          if (error.response && error.response.status === 401) {
+            this.logout();
+          }
         }
       }
     },
-    pushElementToParticipants(element) {
-      this.participantsTable.push(element);
+    logout() {
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    },
+    async refreshData() {
+      try {
+        this.appointmentsTable = [];
+        const response = await axios.get(`/api/appointments`);
+        this.setAppointmentsData(response.data);
+      } catch (error) {
+        console.error('Error refreshing data:', error);
+      }
     },
   },
 });

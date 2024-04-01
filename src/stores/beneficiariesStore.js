@@ -32,7 +32,6 @@ export const useCachedDataStoreBeneficiaries = defineStore({
       window.location.href = '/login';
     },
     async refreshData() {
-      /* console.log("refresh"); */
       try {
         this.beneficiariesTable = [];
         const response = await axios.get(`/api/beneficiaries`);
