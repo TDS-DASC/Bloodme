@@ -20,11 +20,11 @@ export const menuItems = [
     role: "admin",
     child: [
         {
-          childtitle: "Tabla de citas",
+          childtitle: "Tabla de Citas",
           childlink: "/appointments/index"
         },
         {
-          childtitle: "Crear Hospital",
+          childtitle: "Crear Citas",
           childlink: "/appointments/create"
         },
     ],
@@ -39,7 +39,7 @@ export const menuItems = [
           childlink: "/campaigns/index",
         },
         {
-          childtitle: "Crear campaña",
+          childtitle: "Crear Campaña",
           childlink: "/campaigns/create",
         },
     ],
