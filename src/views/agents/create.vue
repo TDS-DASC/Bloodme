@@ -69,7 +69,7 @@
                     name="hospital_id"
                     v-model="hospital_id"
                     :error="hospital_idError"
-                    :options="hospital_options"
+                    :options="hospitals"
                 />
                 <Textinput
                     label="Número celular"
@@ -113,7 +113,7 @@
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 Estas a punto de agregar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
@@ -136,6 +136,8 @@
     import * as yup from 'yup';
     import { useField, useForm } from "vee-validate";
     import axios from "@/plugins/axios";
+    import { useToast } from "vue-toastification";
+    import { useCachedDataStoreAgents } from '@/stores/agentsStore';
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
 
     export default {
@@ -151,20 +153,83 @@
             const schema = yup.object().shape({
                 name: yup.string().required("El nombre es requerido"),
                 lastname: yup.string().required("Los apellidos son requeridos"),
-                alias: yup.string().required("El alias es requerido"),
-                birth_date: yup.date().nullable().required("La fecha de nacimiento es requerida"),
-                blood_type: yup.string().nullable().required("El tipo de sangre es requerido"),
-                phone_number: yup.string().required("El número de teléfono es requerido"),
-                curp: yup.string().required("El CURP es requerido"),
+                alias: yup.string().nullable(),
+                birth_date: yup.date().nullable(),
+                blood_type: yup.string().nullable(),
+                phone_number: yup.string().nullable(),
+                curp: yup.string()
+                    .required("El curp es requerido")
+                    .max(18, "El curp no puede exceder los 18 caracteres")
+                    .min(18, "El curp debe de tener al menos 18 caracteres"),
                 email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
-                password: yup.string().required("La contraseña es requerida").min(6, "La contraseña debe tener al menos 6 caracteres"),
-                sex: yup.string().required("El sexo es requerido"),
-                hospital_id: yup.string().required("El debe de seleccionar un hospital"),
+                sex: yup.string().nullable(),
+                hospital_id: yup.string().nullable().required("Se debe de seleccionar un hospital"),
+                password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
             });
 
+            let errorMessage = ref("");
+            let errors = ref([]);
+            let formValues = ref([]);
+            let confirmMessageFlag = ref(false);
+            const toast = useToast();
             const { handleSubmit } = useForm({
                 validationSchema: schema,
             });
+            const trySubmit = handleSubmit(async (values) => {
+                formValues = values;
+                displayConfirmMessage();
+            });
+            const onSubmit = handleSubmit((values) => {
+                const newUserForm = [
+                    { name: 'name', value: name.value },
+                    { name: 'lastName', value: lastname.value },
+                    { name: 'alias', value: alias.value },
+                    { name: 'birth_date', value: birth_date.value },
+                    { name: 'blood_type', value: blood_type.value },
+                    { name: 'phone_number', value: phone_number.value },
+                    { name: 'curp', value: curp.value },
+                    { name: 'email', value: email.value },
+                    { name: 'sex', value: sex.value },
+                    { name: 'hospital_id', value: hospital_id.value },
+                    { name: 'password', value: password.value },
+                ];
+                trySubmit(newUserForm);
+            });
+
+
+            let hospitals = ref([]);
+            const { hospitalsTable } = useCachedDataStoreHospitals();
+            useCachedDataStoreHospitals().fetchData();
+            watch(hospitalsTable, () => {
+                fillHospitalArray();
+            });
+
+            if(hospitals.value.length == 0){
+                if(hospitalsTable != null){
+                    fillHospitalArray();
+                }
+            }
+            function fillHospitalArray(){
+                hospitals.value = hospitalsTable.map(hospital => ({
+                    value: hospital.id,
+                    label: hospital.name
+                }));
+            }
+
+            const sex_options = [
+                { value: "H", label: "Hombre" },
+                { value: "M", label: "Mujer" },
+            ];
+            const blood_types = [
+                { value: 'A+', label: 'A+' },
+                { value: 'A-', label: 'A-' },
+                { value: 'B+', label: 'B+' },
+                { value: 'B-', label: 'B-' },
+                { value: 'AB+', label: 'AB+' },
+                { value: 'AB-', label: 'AB-' },
+                { value: 'O+', label: 'O+' },
+                { value: 'O-', label: 'O-' }
+            ];
 
             const { value: name, errorMessage: nameError } = useField("name");
             const { value: lastname, errorMessage: lastnameError } = useField("lastname");
@@ -178,67 +243,31 @@
             const { value: sex, errorMessage: sexError } = useField("sex");
             const { value: hospital_id, errorMessage: hospital_idError } = useField("hospital_id");
 
-
-
-            const trySubmit = handleSubmit(async (values) => {
-                console.log(values);
-                axios.post(`/api/agents`, values)
-                .then(res => {
-                    console.log(res);
-                })
-                .catch(error => {
-                    console.error('Error in login request:', error);
-                });
-            }); 
-            const onSubmit = handleSubmit((values) => {
-                const newUserForm = [
-                    { name: 'name', value: name.value },
-                    { name: 'lastName', value: lastname.value },
-                    { name: 'alias', value: alias.value },
-                    { name: 'phone_number', value: phone_number.value },
-                    { name: 'sex', value: sex.value },
-                    { name: 'email', value: email.value },
-                    { name: 'password', value: password.value },
-                    { name: 'hospital_id', value: hospital_id.value },
-                ];
-                trySubmit(newUserForm);
-            });
-
-            const sex_options = [
-                { value: "H", label: "Hombre" },
-                { value: "M", label: "Mujer" },
-            ];
-
-            const { hospitalsTable } = useCachedDataStoreHospitals();
-            useCachedDataStoreHospitals().fetchData();
-            let hospital_options = ref([]);
-            watch(hospitalsTable, () => {
-                hospital_options.value = hospitalsTable.map(hospital => ({
-                    value: hospital.id,
-                    label: hospital.name
-                }));
-                console.log(hospital_options);
-            });
-
-            const blood_types = [
-                { value: 'A+', label: 'A+' },
-                { value: 'A-', label: 'A-' },
-                { value: 'B+', label: 'B+' },
-                { value: 'B-', label: 'B-' },
-                { value: 'AB+', label: 'AB+' },
-                { value: 'AB-', label: 'AB-' },
-                { value: 'O+', label: 'O+' },
-                { value: 'O-', label: 'O-' }
-            ];
-
-            let confirmMessage = ref(false)
             function displayConfirmMessage(){
-                console.log(confirmMessage.value);
-                confirmMessage.value = !confirmMessage.value;
+                confirmMessageFlag.value = !confirmMessageFlag.value;
             }
             function createUser(){
-                confirmMessage.value = false;
-                console.log("Usuario creado");
+                confirmMessageFlag.value = false;
+                axios.post(`/api/agents/`, formValues)
+                    .then(res => {
+                        console.log(formValues.value);
+                        useCachedDataStoreAgents().refreshData();
+                        toast.success("¡Agente creado correctamente!", { timeout: 1000 });
+                        setTimeout(userRedirect, 1000);
+                    })
+                    .catch(error => {
+                        toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
+                        if (error.response && error.response.data) {
+                            const responseData = error.response.data;
+                            errorMessage.value = responseData.message || 'An error occurred.';
+                            if (responseData.errors) {
+                                errors.value = responseData.errors;
+                            }
+                        } else {
+                            errorMessage.value = 'An error occurred.';
+                        }
+                        console.log(error);
+                    });
             }
 
             let selectedRole = ref(0);
@@ -254,8 +283,9 @@
                 selectedRole,
                 handleRoleChange,
                 sex_options,
+                hospitals,
                 displayConfirmMessage,
-                confirmMessage,
+                confirmMessageFlag,
                 name,
                 nameError,
                 lastname,
@@ -279,7 +309,6 @@
                 onSubmit,
                 hospital_id,
                 hospital_idError,
-                hospital_options,
             };
         }
     }

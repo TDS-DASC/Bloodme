@@ -9,69 +9,133 @@
             <form
                 @submit.prevent="onSubmit"
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
-                v-if="agentData"
             >
-                <Textinput
-                    label="Nombre *"
-                    type="text"
-                    placeholder="Ingrese el nombre"
-                    name="name"
-                    v-model=name
-                />
-                <Textinput
-                    label="Apellidos"
-                    type="text"
-                    placeholder="Ingrese sus apellidos"
-                    name="lastname"
-                    v-model=lastname
-                />
-                <Textinput
-                    label="Alias"
-                    type="text"
-                    placeholder="Ingrese el alias"
-                    name="alias"
-                    v-model=alias
-                />
 
-                <Textinput
-                    label="Fecha de nacimiento"
-                    type="date"
-                    placeholder="Fecha de nacimiento"
-                    name="date"
-                    v-model=birth_date
-                />
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="Nombre *"
+                        type="text"
+                        placeholder="Ingrese el nombre"
+                        name="name"
+                        v-model="name"
+                        :error="nameError"
+                    />
+                    <p v-if="errors.name" class="mt-2 text-danger-500 block text-sm">{{ errors.name[0] }}</p>
+                </div>
 
-                <Select
-                    label="Tipo de sangre"
-                    type="text"
-                    placeholder="Enter minimum 3 Characters"
-                    name="bloodtype"
-                    v-model=blood_type
-                    :options=bloodTypes
-                />
-                <Textinput
-                    label="Número celular"
-                    placeholder="8+ characters, 1 capitat letter "
-                    name="phone"
-                    v-model=phone_number
-                />
-                <Textinput
-                    label="CURP"
-                    type="text"
-                    placeholder="Enter Valid CURP"
-                    name="curp"
-                    v-model=curp
-                />
-                <Textinput
-                    label="email"
-                    type="email"
-                    placeholder="Enter Valid URL"
-                    name="email"
-                    v-model=email
-                />
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="Apellidos"
+                        type="text"
+                        placeholder="Ingrese sus apellidos"
+                        name="lastname"
+                        v-model="lastname"
+                        :error="lastnameError"
+                    />
+                    <p v-if="errors.lastname" class="mt-2 text-danger-500 block text-sm">{{ errors.lastname[0] }}</p>
+                </div>
+
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="Alias"
+                        type="text"
+                        placeholder="Ingrese el alias"
+                        name="alias"
+                        v-model="alias"
+                        :error="aliasError"
+                    />
+                    <p v-if="errors.alias" class="mt-2 text-danger-500 block text-sm">{{ errors.alias[0] }}</p>
+                </div>
+
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
+                        label="Fecha de nacimiento"
+                        type="date"
+                        placeholder="Fecha de nacimiento"
+                        name="date"
+                        v-model="birth_date"
+                        />
+                        :error="birth_dateError"
+                    <p v-if="errors.birth_date" class="mt-2 text-danger-500 block text-sm">{{ errors.birth_date[0] }}</p>
+                </div>
+
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Select
+                        label="Tipo de sangre"
+                        type="text"
+                        placeholder="Seleccione su tipo de sangre"
+                        name="bloodtype"
+                        :options="blood_types"
+                        v-model="blood_type"
+                        :error="blood_typeError"
+                    />
+                    <p v-if="errors.blood_type" class="mt-2 text-danger-500 block text-sm">{{ errors.blood_type[0] }}</p>
+                </div>
+
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Select
+                        label="Sexo"
+                        type="text"
+                        placeholder="Seleccione su sexo"
+                        name="sex"
+                        v-model="sex"
+                        :error="sexError"
+                        :options="sex_options"
+                    />
+                    <p v-if="errors.sex" class="mt-2 text-danger-500 block text-sm">{{ errors.sex[0] }}</p>
+                </div>
+
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Select
+                        label="Hospital"
+                        type="text"
+                        placeholder="Hospital perteneciente"
+                        name="hospital_id"
+                        v-model="hospital_id"
+                        :error="hospital_idError"
+                        :options="hospitals"
+                    />
+                    <p v-if="errors.hospital_id" class="mt-2 text-danger-500 block text-sm">{{ errors.hospital_id[0] }}</p>
+                </div>
+
+                <div class="flex gap-0 flex-col justify-center align-middle">                    
+                    <Textinput
+                        label="Número celular"
+                        type="number"
+                        placeholder="Ingrese su número celular"
+                        name="phone"
+                        v-model="phone_number"
+                        :error="phone_numberError"
+                    />
+                    <p v-if="errors.phone_number" class="mt-2 text-danger-500 block text-sm">{{ errors.phone_number[0] }}</p>
+                </div>
+
+                <div class="flex gap-0 flex-col justify-center align-middle">                    
+                    <Textinput
+                        label="CURP"
+                        type="text"
+                        placeholder="Ingrese un curp valido"
+                        name="curp"
+                        v-model="curp"
+                        :error="curpError"
+                    />
+                    <p v-if="errors.curp" class="mt-2 text-danger-500 block text-sm">{{ errors.curp[0] }}</p>
+                </div>
+
+                <div class="flex gap-0 flex-col justify-center align-middle">                    
+                    <Textinput
+                        label="email"
+                        type="email"
+                        placeholder="Ingrese un correo electronico"
+                        name="email"
+                        v-model="email"
+                        :error="emailError"
+                    />
+                    <p v-if="errors.email" class="mt-2 text-danger-500 block text-sm">{{ errors.email[0] }}</p>
+                </div>
 
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="submit" text="Modificar" btnClass="btn-primary"></Button>
+                    <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
                     <router-link
                         :to="{ path:  '/agents/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
@@ -104,6 +168,7 @@
     import * as yup from 'yup';
     import axios from "@/plugins/axios";
     import { useToast } from "vue-toastification";
+    import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
 
     export default {
         components: {
@@ -120,14 +185,18 @@
             const schema = yup.object().shape({
                 name: yup.string().required("El nombre es requerido"),
                 lastname: yup.string().required("Los apellidos son requeridos"),
-                alias: yup.string().required("El alias es requerido"),
-                birth_date: yup.date().nullable().required("La fecha de nacimiento es requerida"),
-                blood_type: yup.string().nullable().required("El tipo de sangre es requerido"),
-                phone_number: yup.string().required("El número de teléfono es requerido"),
-                curp: yup.string().required("El CURP es requerido"),
+                alias: yup.string().nullable(),
+                birth_date: yup.date().nullable(),
+                blood_type: yup.string().nullable(),
+                phone_number: yup.string().nullable(),
+                curp: yup.string()
+                    .required("El curp es requerido")
+                    .max(18, "El curp no puede exceder los 18 caracteres")
+                    .min(18, "El curp debe de tener al menos 18 caracteres"),
                 email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
-                sex: yup.string().required("El sexo es requerido"),
-                hospital_id: yup.string().required("El debe de seleccionar un hospital"),
+                sex: yup.string().nullable(),
+                hospital_id: yup.string().nullable().required("Se debe de seleccionar un hospital"),
+                password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
             });
 
             let errorMessage = ref("");
@@ -143,22 +212,45 @@
                 displayConfirmMessage();
             });
             const onSubmit = handleSubmit((values) => {
-                const newUserForm = [
+                const newAgentForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastName', value: lastname.value },
                     { name: 'alias', value: alias.value },
+                    { name: 'birth_date', value: birth_date.value },
+                    { name: 'blood_type', value: blood_type.value },
                     { name: 'phone_number', value: phone_number.value },
-                    { name: 'sex', value: sex.value },
+                    { name: 'curp', value: curp.value },
                     { name: 'email', value: email.value },
+                    { name: 'sex', value: sex.value },
                     { name: 'hospital_id', value: hospital_id.value },
                 ];
-                console.log("wep");
-                console.log(newUserForm);
-                trySubmit(newUserForm);
+                trySubmit(newAgentForm);
             });
 
+            let hospitals = ref([]);
+            const { hospitalsTable } = useCachedDataStoreHospitals();
+            useCachedDataStoreHospitals().fetchData();
+            watch(hospitalsTable, () => {
+                fillHospitalArray();
+            });
 
-            const bloodTypes = [
+            if(hospitals.value.length == 0){
+                if(hospitalsTable != null){
+                    fillHospitalArray();
+                }
+            }
+            function fillHospitalArray(){
+                hospitals.value = hospitalsTable.map(hospital => ({
+                    value: hospital.id,
+                    label: hospital.name
+                }));
+            }
+
+            const sex_options = [
+                { value: "H", label: "Hombre" },
+                { value: "M", label: "Mujer" },
+            ];
+            const blood_types = [
                 { value: 'A+', label: 'A+' },
                 { value: 'A-', label: 'A-' },
                 { value: 'B+', label: 'B+' },
@@ -177,6 +269,8 @@
             const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
             const { value: curp, errorMessage: curpError } = useField("curp");
             const { value: email, errorMessage: emailError } = useField("email");
+            const { value: sex, errorMessage: sexError } = useField("sex");
+            const { value: hospital_id, errorMessage: hospital_idError } = useField("hospital_id");
 
             const router = useRouter();
             const { agentsTable } = useCachedDataStoreAgents();
@@ -192,7 +286,8 @@
                 phone_number.value = agentData.value.phone_number;
                 curp.value = agentData.value.curp;
                 email.value = agentData.value.email;
-                
+                sex.value = agentData.value.sex;
+                hospital_id.value = agentData.value.hospital_id;
             }
 
             let agentData = ref(null); 
@@ -221,8 +316,8 @@
                     .then(res => {
                         console.log(formValues.value);
                         useCachedDataStoreAgents().refreshData();
-                        toast.success("Agente editado correctamente!", { timeout: 1000 });
-                        /* setTimeout(userRedirect, 1000); */
+                        toast.success("¡Agente editado correctamente!", { timeout: 1000 });
+                        setTimeout(userRedirect, 1000);
                     })
                     .catch(error => {
                         toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
@@ -240,6 +335,8 @@
             }
 
             return {
+                sex,
+                sexError,
                 name,
                 nameError,
                 lastname,
@@ -252,17 +349,22 @@
                 blood_typeError,
                 phone_number,
                 phone_numberError,
+                hospital_id,
+                hospital_idError,
                 curp,
                 curpError,
                 email,
                 emailError,
-                bloodTypes,
+                blood_types,
+                sex_options,
+                hospitals,
                 onSubmit,
                 agentsTable,
                 agentData,
                 confirmMessageFlag,
                 displayConfirmMessage,
-                editAgent
+                editAgent,
+                errors
             };
         }
     }
