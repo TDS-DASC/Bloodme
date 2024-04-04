@@ -65,7 +65,7 @@
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de agregar una nueva entidad a la base de datos.<br>
+                Estas a punto de editar una entidad de la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
                 <div class="mt-9 flex justify-evenly">
                     <Button btnClass="btn-primary" text="Confirmar" @click="editHospital()" />
