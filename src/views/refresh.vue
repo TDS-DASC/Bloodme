@@ -10,6 +10,7 @@
     import { useCachedDataStoreHospitals } from '../stores/hospitalsStore';
     import { useCachedDataStoreBeneficiaries } from '../stores/beneficiariesStore';
     import { useCachedDataStoreCampaigns } from '../stores/campaignsStore';
+    import { useCachedDataStoreAgents } from '../stores/agentsStore';
 
     export default {
         setup() {
@@ -36,6 +37,11 @@
                 if(urlHeader == "campaigns"){
                     /* console.log("Campaigns"); */
                     await useCachedDataStoreCampaigns().refreshData();
+                }
+
+                if(urlHeader == "agents"){
+                    /* console.log("Agents"); */
+                    await useCachedDataStoreAgents().refreshData();
                 }
                 
                 routerPush();
