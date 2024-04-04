@@ -139,6 +139,7 @@
     import { useToast } from "vue-toastification";
     import { useCachedDataStoreAgents } from '@/stores/agentsStore';
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
+    import { useRouter } from 'vue-router';
 
     export default {
         components: {
@@ -153,18 +154,17 @@
             const schema = yup.object().shape({
                 name: yup.string().required("El nombre es requerido"),
                 lastname: yup.string().required("Los apellidos son requeridos"),
+                password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
+                email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
                 alias: yup.string().nullable(),
                 birth_date: yup.date().nullable(),
-                blood_type: yup.string().nullable(),
+                sex: yup.string().nullable(),
                 phone_number: yup.string().nullable(),
                 curp: yup.string()
                     .required("El curp es requerido")
                     .max(18, "El curp no puede exceder los 18 caracteres")
                     .min(18, "El curp debe de tener al menos 18 caracteres"),
-                email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
-                sex: yup.string().nullable(),
                 hospital_id: yup.string().nullable().required("Se debe de seleccionar un hospital"),
-                password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
             });
 
             let errorMessage = ref("");
@@ -193,6 +193,7 @@
                     { name: 'hospital_id', value: hospital_id.value },
                     { name: 'password', value: password.value },
                 ];
+                console.log(newUserForm)
                 trySubmit(newUserForm);
             });
 
@@ -245,6 +246,10 @@
 
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            const router = useRouter();
+            function userRedirect(){
+                /* router.push('/agents', {shallow: false}); */
             }
             function createUser(){
                 confirmMessageFlag.value = false;

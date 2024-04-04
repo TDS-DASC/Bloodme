@@ -54,22 +54,9 @@
                         placeholder="Fecha de nacimiento"
                         name="date"
                         v-model="birth_date"
-                        />
                         :error="birth_dateError"
+                        />
                     <p v-if="errors.birth_date" class="mt-2 text-danger-500 block text-sm">{{ errors.birth_date[0] }}</p>
-                </div>
-
-                <div class="flex gap-0 flex-col justify-center align-middle">
-                    <Select
-                        label="Tipo de sangre"
-                        type="text"
-                        placeholder="Seleccione su tipo de sangre"
-                        name="bloodtype"
-                        :options="blood_types"
-                        v-model="blood_type"
-                        :error="blood_typeError"
-                    />
-                    <p v-if="errors.blood_type" class="mt-2 text-danger-500 block text-sm">{{ errors.blood_type[0] }}</p>
                 </div>
 
                 <div class="flex gap-0 flex-col justify-center align-middle">
@@ -135,7 +122,7 @@
                 </div>
 
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
+                    <Button type="submit" text="Editar" btnClass="btn-primary"></Button>
                     <router-link
                         :to="{ path:  '/agents/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
@@ -185,18 +172,16 @@
             const schema = yup.object().shape({
                 name: yup.string().required("El nombre es requerido"),
                 lastname: yup.string().required("Los apellidos son requeridos"),
+                email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
                 alias: yup.string().nullable(),
                 birth_date: yup.date().nullable(),
-                blood_type: yup.string().nullable(),
+                sex: yup.string().nullable(),
                 phone_number: yup.string().nullable(),
                 curp: yup.string()
                     .required("El curp es requerido")
                     .max(18, "El curp no puede exceder los 18 caracteres")
                     .min(18, "El curp debe de tener al menos 18 caracteres"),
-                email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
-                sex: yup.string().nullable(),
                 hospital_id: yup.string().nullable().required("Se debe de seleccionar un hospital"),
-                password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
             });
 
             let errorMessage = ref("");
@@ -215,15 +200,16 @@
                 const newAgentForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastName', value: lastname.value },
+                    { name: 'email', value: email.value },
                     { name: 'alias', value: alias.value },
                     { name: 'birth_date', value: birth_date.value },
-                    { name: 'blood_type', value: blood_type.value },
+                    { name: 'image_url', value: null },
+                    { name: 'sex', value: sex.value },
                     { name: 'phone_number', value: phone_number.value },
                     { name: 'curp', value: curp.value },
-                    { name: 'email', value: email.value },
-                    { name: 'sex', value: sex.value },
                     { name: 'hospital_id', value: hospital_id.value },
                 ];
+                console.log(newAgentForm)
                 trySubmit(newAgentForm);
             });
 
@@ -245,7 +231,6 @@
                     label: hospital.name
                 }));
             }
-
             const sex_options = [
                 { value: "H", label: "Hombre" },
                 { value: "M", label: "Mujer" },
@@ -265,7 +250,6 @@
             const { value: lastname, errorMessage: lastnameError } = useField("lastname");
             const { value: alias, errorMessage: aliasError } = useField("alias");
             const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
-            const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
             const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
             const { value: curp, errorMessage: curpError } = useField("curp");
             const { value: email, errorMessage: emailError } = useField("email");
@@ -282,12 +266,12 @@
                 lastname.value = agentData.value.lastname;
                 alias.value = agentData.value.alias;
                 birth_date.value = agentData.value.birth_date;
-                blood_type.value = agentData.value.blood_type;
                 phone_number.value = agentData.value.phone_number;
                 curp.value = agentData.value.curp;
                 email.value = agentData.value.email;
                 sex.value = agentData.value.sex;
                 hospital_id.value = agentData.value.hospital_id;
+                console.log(agentData.value);
             }
 
             let agentData = ref(null); 
@@ -345,8 +329,6 @@
                 aliasError,
                 birth_date,
                 birth_dateError,
-                blood_type,
-                blood_typeError,
                 phone_number,
                 phone_numberError,
                 hospital_id,
