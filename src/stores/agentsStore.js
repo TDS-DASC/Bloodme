@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import axios from '@/plugins/axios';
 
-export const useAgentsStore = defineStore({
-  id: 'agentsData',
+export const useCachedDataStoreAgents = defineStore({
+  id: 'cachedDataAgents',
   state: () => ({
     agentsTable: [],
     dataLoaded: false,
@@ -12,21 +12,34 @@ export const useAgentsStore = defineStore({
       this.agentsTable = data;
     },
     async fetchData() {
-      if (!this.dataLoaded) {
+      if (!this.dataLoaded && this.agentsTable.length == 0) {
         try {
           const response = await axios.get(`/api/agents`);
           response.data.forEach(agent => {
             this.agentsTable.push(agent);
           });
-          this.setAgentsData(response.data);
           this.dataLoaded = true;
         } catch (error) {
           console.error('Error in request api agents', error);
+          if (error.response && error.response.status === 401) {
+            this.logout();
+          }
         }
       }
     },
-    pushElementToAgents(element) {
-      this.agentsTable.push(element);
+    logout() {
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    },
+    async refreshData() {
+      /* console.log("refresh"); */
+      try {
+        this.agentsTable = [];
+        const response = await axios.get(`/api/agents`);
+        this.setAgentsData(response.data);
+      } catch (error) {
+        console.error('Error refreshing data:', error);
+      }
     },
   },
 });

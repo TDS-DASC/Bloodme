@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import axios from '@/plugins/axios';
 
-export const useAdministratorsStore = defineStore({
-    id: 'administratorsData',
+export const useCachedDataStoreAdministrators = defineStore({
+    id: 'cachedDataAdministrators',
     state: () => ({
       administratorsTable: [],
       dataLoaded: false,
@@ -12,21 +12,34 @@ export const useAdministratorsStore = defineStore({
         this.administratorsTable = data;
       },
       async fetchData() {
-        if (!this.dataLoaded) {
+        if (!this.dataLoaded && this.agentsTable.length == 0) {
           try {
             const response = await axios.get(`/api/administrators`);
-            response.data.forEach(hospital => {
-              this.administratorsTable.push(hospital);
+            response.data.forEach(administrator => {
+              this.administratorsTable.push(administrator);
             });
-            this.setAdministratorsData(response.data);
             this.dataLoaded = true;
           } catch (error) {
             console.error('Error in request api administrators', error);
+            if (error.response && error.response.status === 401) {
+              this.logout();
+            }
           }
         }
       },
-      pushElementToAdministrators(element) {
-        this.administratorsTable.push(element);
+      logout() {
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      },
+      async refreshData() {
+        /* console.log("refresh"); */
+        try {
+          this.administratorsTable = [];
+          const response = await axios.get(`/api/administrators`);
+          this.setAdministratorsData(response.data);
+        } catch (error) {
+          console.error('Error refreshing data:', error);
+        }
       },
     },
   });
