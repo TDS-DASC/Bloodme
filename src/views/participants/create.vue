@@ -171,7 +171,7 @@
 
 
             const trySubmit = handleSubmit(async (values) => {
-                axios.post(`/participants/`, values)
+                axios.post(`api/agents/`, values)
                 .then(res => {
                     console.log(res);
                 })
