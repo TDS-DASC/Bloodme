@@ -124,6 +124,21 @@ export const menuItems = [
         },
     ],
   },
+  {
+    title: "Usuarios",
+    icon: "ph:users",
+    role: "admin",
+    child: [
+        {
+          childtitle: "Tabla de Usuarios",
+          childlink: "/users/index",
+        },
+        {
+          childtitle: "Crear Usuario",
+          childlink: "/users/create",
+        },
+    ],
+  }
 ];
 // menuseetins
 
