@@ -1,12 +1,12 @@
 <template>
     <div class="flex flex-col gap-4">
-        <tableAdvanced :tableInformation=agentsTableParams :tableData=agentsTable />
+        <tableAdvanced :tableInformation=agentsTableParams :tableData=agentsTable urlMainHeader="agents" />
     </div>
 </template>
 
 <script>
     import tableAdvanced from "../../components/Table/advanced"
-    import { useAgentsStore } from '../../stores/agentsStore';
+    import { useCachedDataStoreAgents } from '../../stores/agentsStore';
     export default{
         components: {
             tableAdvanced
@@ -26,16 +26,8 @@
                         field: "name",
                     },
                     {
-                        label: "Alias",
-                        field: "alias",
-                    },
-                    {
                         label: "Email",
                         field: "email",
-                    },
-                    {
-                        label: "Phone",
-                        field: "phone_number",
                     },
                     {
                         label: "Accion",
@@ -43,8 +35,8 @@
                     },
                 ]
             }
-            const { agentsTable} = useAgentsStore();
-            useAgentsStore().fetchData();
+            const { agentsTable} = useCachedDataStoreAgents();
+            useCachedDataStoreAgents().fetchData();
 
 
             return {

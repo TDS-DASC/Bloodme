@@ -192,12 +192,14 @@
             const { hospitalsTable } = useCachedDataStoreHospitals();
             const hospitalId = router.currentRoute.value.params.id;
             useCachedDataStoreHospitals().fetchData();
+
             function passHospitalValuesToSingleVariables() {
                 name.value = hospitalData.value.name;
                 address.value = hospitalData.value.address;
                 latitude.value = hospitalData.value.latitude;
                 longitude.value = hospitalData.value.longitude;
             }
+
             let hospitalData = ref(null); 
             watch(hospitalsTable, () => {
                 hospitalData.value = hospitalsTable.find(objeto => objeto.id == hospitalId);
