@@ -9,28 +9,30 @@
             <form
                 @submit.prevent="onSubmit"
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
-                v-if="userData"
             >
                 <Textinput
                     label="Nombre *"
                     type="text"
                     placeholder="Ingrese el nombre"
                     name="name"
-                    v-model=form.name
+                    v-model="name"
+                    :error="nameError"
                 />
                 <Textinput
                     label="Apellidos"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
-                    v-model=form.lastname
+                    v-model="lastname"
+                    :error="lastnameError"
                 />
                 <Textinput
                     label="Alias"
                     type="text"
                     placeholder="Ingrese el alias"
                     name="alias"
-                    v-model=form.alias
+                    v-model="alias"
+                    :error="aliasError"
                 />
 
                 <Textinput
@@ -38,67 +40,76 @@
                     type="date"
                     placeholder="Fecha de nacimiento"
                     name="date"
-                    v-model=form.birth_date
+                    v-model="birth_date"
+                    :error="birth_dateError"
                 />
 
                 <Select
                     label="Tipo de sangre"
                     type="text"
-                    placeholder="Enter minimum 3 Characters"
+                    placeholder="Seleccione su tipo de sangre"
                     name="bloodtype"
-                    v-model=form.blood_type
-                    :options=bloodTypes
+                    :options="blood_types"
+                    v-model="blood_type"
+                    :error="blood_typeError"
+                />
+                <Select
+                    label="Sexo"
+                    type="text"
+                    placeholder="Seleccione su sexo"
+                    name="sex"
+                    v-model="sex"
+                    :options="sex_options"
+                    :error="sexError"
                 />
                 <Textinput
                     label="Número celular"
-                    placeholder="8+ characters, 1 capitat letter "
+                    type="number"
+                    placeholder="Ingrese su número celular"
                     name="phone"
-                    v-model=form.phone_number
+                    v-model="phone_number"
+                    :error="phone_numberError"
                 />
                 <Textinput
                     label="CURP"
                     type="text"
-                    placeholder="Enter Valid CURP"
+                    placeholder="Ingrese un curp valido"
                     name="curp"
-                    v-model=form.curp
+                    v-model="curp"
+                    :error="curpError"
                 />
                 <Textinput
                     label="email"
                     type="email"
-                    placeholder="Enter Valid URL"
+                    placeholder="Ingrese un correo electronico"
                     name="email"
-                    v-model=form.email
+                    v-model="email"
+                    :error="emailError"
                 />
                 <Textinput
-                    label="password"
-                    type="url"
-                    placeholder="Enter Valid Password"
+                    label="Contraseña*"
+                    type="password"
+                    placeholder="Ingrese su contraseña"
                     name="password"
-                    v-model=form.password
-                />
-                <Select
-                    label="roles"
-                    placeholder="Select your blood type"
-                    v-model=form.role
-                    :options="rolTypes"
+                    v-model="password"
+                    :error="passwordError"
+                    hasicon
                 />
 
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="subtmit" text="Modificar" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
+                    <Button type="submit" text="Editar" btnClass="btn-primary"></Button>
                     <router-link
                         :to="{ path:  '/participants/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
-            <div v-else class="h-screen">
-            </div>
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 Estas a punto de agregar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="editUser()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
                     <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
                 </div>
             </Card>
@@ -113,9 +124,9 @@
     import Textinput from "@/components/Textinput";
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { useParticipantsStore } from '@/stores/participantsStore';
-    import { useRouter } from 'vue-router';
-    import { ref, watch } from 'vue';
+    import { ref } from "vue";
+    import * as yup from 'yup';
+    import axios from "@/plugins/axios";
 
     export default {
         components: {
@@ -123,25 +134,76 @@
             Button,
             Textarea,
             Select,
+            Textinput,
             Card
         },
-        props: {
-            formInformation: Object,
-        },
         setup() {
-            
+
+            const schema = yup.object().shape({
+                name: yup.string().required("El nombre es requerido"),
+                lastname: yup.string().required("Los apellidos son requeridos"),
+                password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
+                email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
+                alias: yup.string().nullable(),
+                birth_date: yup.date().nullable().required("Es necesario brindar una fecha de nacimiento"),
+                /* image_url: yup.date().nullable().required(), */
+                sex: yup.string().nullable().required("Es necesario seleccionar el sexo"),
+                phone_number: yup.string().nullable().required(),
+                curp: yup.string()
+                    .required("El curp es requerido")
+                    .max(18, "El curp no puede exceder los   18 caracteres")
+                    .min(18, "El curp debe de tener al menos 18 caracteres"),
+                blood_type: yup.string().nullable().required("Es necesario seleccionar el tipo de sangre"),
+            });
 
             const { handleSubmit } = useForm({
-            });
-            // No need to define rules for fields
-
-            const onSubmit = handleSubmit(() => {
-                // console.warn(values.email);
+                validationSchema: schema,
             });
 
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
+            const { value: alias, errorMessage: aliasError } = useField("alias");
+            const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
+            const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
+            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
+            const { value: curp, errorMessage: curpError } = useField("curp");
+            const { value: email, errorMessage: emailError } = useField("email");
+            const { value: password, errorMessage: passwordError } = useField("password");
+            const { value: role, errorMessage: roleError } = useField("role");
+            const { value: sex, errorMessage: sexError } = useField("sex");
 
-            /* No de la template */
-            const bloodTypes = [
+
+            const trySubmit = handleSubmit(async (values) => {
+                axios.post(`api/agents/`, values)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(error => {
+                    console.error('Error in creating participant request:', error);
+                });
+            }); 
+            const onSubmit = handleSubmit((values) => {
+                const newUserForm = [
+                    { name: 'name', value: name.value },
+                    { name: 'lastName', value: lastname.value },
+                    { name: 'alias', value: alias.value },
+                    { name: 'birth_date', value: birth_date.value },
+                    { name: 'blood_type', value: blood_type.value },
+                    { name: 'phone_number', value: phone_number.value },
+                    { name: 'curp', value: curp.value },
+                    { name: 'email', value: email.value },
+                    { name: 'password', value: password.value },
+                    { name: 'role', value: role.value },
+                    { name: 'sex', value: sex.value },
+                ];
+                trySubmit(newUserForm);
+            });
+
+            const sex_options = [
+                { value: "1", label: "Hombre" },
+                { value: "2", label: "Mujer" },
+            ];
+            const blood_types = [
                 { value: 'A+', label: 'A+' },
                 { value: 'A-', label: 'A-' },
                 { value: 'B+', label: 'B+' },
@@ -151,78 +213,55 @@
                 { value: 'O+', label: 'O+' },
                 { value: 'O-', label: 'O-' }
             ];
-            const rolTypes = [
-                { value: "administrator", label: "administrator" },
-                { value: "agent", label: "agent" },
-                { value: "participant", label: "participant" },
-            ];
-
-            /* Not from the template */
-
-            const router = useRouter();
-            const { participantsTable } = useParticipantsStore();
-            const id = router.currentRoute.value.params.id;
-            
-            useParticipantsStore().fetchData();
-
-            let userData = ref(null); 
-            let form = ref({
-                name: null,
-                lastname: null,
-                alias: null,
-                birth_date: null,
-                blood_type: null,
-                phone_number: null,
-                curp: null,
-                email: null,
-                password: null,
-                role: null,
-            })
-
-            watch(participantsTable, () => {
-                userData.value = participantsTable.find(objeto => objeto.id == id);
-                assignFormValues();
-            });
-
-            if(participantsTable){
-                userData.value = participantsTable.find(objeto => objeto.id == id);
-                assignFormValues();
-            }
-
-            function assignFormValues(){
-                if(userData.value){
-                    form.value.name = userData.value.name;
-                    form.value.lastname = userData.value.lastname;
-                    form.value.alias = userData.value.alias;
-                    form.value.birth_date = userData.value.birth_date;
-                    form.value.blood_type = userData.value.blood_type;
-                    form.value.phone_number = userData.value.phone_number;
-                    form.value.curp = userData.value.curp;
-                    form.value.email = userData.value.email;
-                    form.value.role = userData.value.role;
-                }
-            }
 
             let confirmMessage = ref(false)
             function displayConfirmMessage(){
                 console.log(confirmMessage.value);
                 confirmMessage.value = !confirmMessage.value;
             }
-            function editUser(){
+            function createUser(){
                 confirmMessage.value = false;
-                console.log("Usuario editado");
+                console.log("Usuario creado");
             }
 
+            let selectedRole = ref(0);
+            function handleRoleChange(newValue, selectedIndex){
+                selectedRole = selectedIndex;
+                console.log(selectedRole == 1);
+            }
+            
+
             return {
-                bloodTypes,
-                rolTypes,
-                onSubmit,
-                participantsTable,
-                userData,
-                form,
-                confirmMessage,
+                blood_types,
+                createUser,
+                selectedRole,
+                handleRoleChange,
+                sex_options,
                 displayConfirmMessage,
-                editUser
+                confirmMessage,
+                name,
+                nameError,
+                lastname,
+                lastnameError,
+                alias,
+                aliasError,
+                birth_date,
+                birth_dateError,
+                blood_type,
+                blood_typeError,
+                phone_number,
+                phone_numberError,
+                curp,
+                curpError,
+                email,
+                emailError,
+                password,
+                passwordError,
+                role,
+                roleError,
+                sex,
+                sexError,
+                onSubmit
             };
         }
     }

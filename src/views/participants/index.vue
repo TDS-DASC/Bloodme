@@ -1,12 +1,12 @@
 <template>
     <div class="flex flex-col gap-4">
-        <tableAdvanced :tableInformation=participantsTableParams :tableData=participantsTable />
+        <tableAdvanced :tableInformation=participantsTableParams :tableData=participantsTable urlMainHeader="participants" />
     </div>
 </template>
 
 <script>
     import tableAdvanced from "../../components/Table/advanced"
-    import { useParticipantsStore } from '../../stores/participantsStore';
+    import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
     export default{
         components: {
             tableAdvanced
@@ -47,8 +47,8 @@
                     },
                 ]
             }
-            const { participantsTable} = useParticipantsStore();
-            useParticipantsStore().fetchData();
+            const { participantsTable} = useCachedDataStoreParticipants();
+            useCachedDataStoreParticipants().fetchData();
 
 
             return {

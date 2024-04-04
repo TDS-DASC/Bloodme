@@ -142,15 +142,18 @@
             const schema = yup.object().shape({
                 name: yup.string().required("El nombre es requerido"),
                 lastname: yup.string().required("Los apellidos son requeridos"),
-                alias: yup.string().required("El alias es requerido"),
-                birth_date: yup.date().nullable().required("La fecha de nacimiento es requerida"),
-                blood_type: yup.string().nullable().required("El tipo de sangre es requerido"),
-                phone_number: yup.string().required("El número de teléfono es requerido"),
-                curp: yup.string().required("El CURP es requerido"),
+                password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
                 email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
-                password: yup.string().required("La contraseña es requerida").min(6, "La contraseña debe tener al menos 6 caracteres"),
-                sex: yup.string().required("El sexo es requerido"),
-
+                alias: yup.string().nullable(),
+                birth_date: yup.date().nullable().required("Es necesario brindar una fecha de nacimiento"),
+                /* image_url: yup.date().nullable().required(), */
+                sex: yup.string().nullable().required("Es necesario seleccionar el sexo"),
+                phone_number: yup.string().nullable().required(),
+                curp: yup.string()
+                    .required("El curp es requerido")
+                    .max(18, "El curp no puede exceder los   18 caracteres")
+                    .min(18, "El curp debe de tener al menos 18 caracteres"),
+                blood_type: yup.string().nullable().required("Es necesario seleccionar el tipo de sangre"),
             });
 
             const { handleSubmit } = useForm({
@@ -171,7 +174,7 @@
 
 
             const trySubmit = handleSubmit(async (values) => {
-                axios.post(`api/agents/`, values)
+                axios.post(`api/participants/`, values)
                 .then(res => {
                     console.log(res);
                 })
