@@ -12,7 +12,7 @@ export const useCachedDataStoreParticipants = defineStore({
       this.participantsTable = data;
     },
     async fetchData() {
-      if (!this.dataLoaded && this.agentsTable.length == 0) {
+      if (!this.dataLoaded && this.participantsTable.length == 0) {
         try {
           const response = await axios.get(`/api/participants`);
           response.data.forEach(participant => {
