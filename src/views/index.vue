@@ -83,16 +83,16 @@
       <!-- Información del paciente -->
       <div class="flex-auto rounded-md overflow-auto bg-white dark:bg-slate-600">
         <div name="header" class="text-start bg-slate-700 text-black text-5xl">
-          <p class="text-white px-4 py-4 font-semibold">Información del donante</p>
+          <p class="text-white px-4 py-4 font-semibold">Información de la Cita</p>
         </div>
         <br>
         <div class="p-4">
           <div class="px-3 py-2">
             <div class="w-full border-2 border-black-900 rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
-              <p class="font-semibold text-gray-600 text-2xl">Datos personales</p>
+              <p class="font-semibold text-gray-600 text-2xl">Datos del donador</p>
               <div class="flex gap-2 w-full ">
                 <Textinput
-                  label="Nombre/s*"
+                  label="Nombre/s"
                   type="text"
                   placeholder="Ingrese sus apellidos"
                   name="name"
@@ -102,7 +102,7 @@
                   disabled
                 />
                 <Textinput
-                  label="Apellidos*"
+                  label="Apellidos"
                   type="text"
                   placeholder="Ingrese sus apellidos"
                   name="lastName"
