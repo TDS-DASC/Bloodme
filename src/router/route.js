@@ -12,6 +12,38 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
+        path: "/users",
+        name: "users",
+        meta: { requiresAuth: true },
+        children: [
+          {
+            path: "",
+            name: "users index",
+            component: () => import("@/views/users/index.vue"),
+          },
+          {
+            path: "index",
+            name: "users",
+            component: () => import("@/views/users/index.vue"),
+          },
+          {
+            path: "create",
+            name: "users-create",
+            component: () => import("@/views/users/create.vue"),
+          },
+          {
+            path: ":id/edit",
+            name: "users-edit",
+            component: () => import("@/views/users/edit.vue"),
+          },
+          {
+            path: ":id",
+            name: "users-view",
+            component: () => import("@/views/users/view.vue"),
+          }
+        ],  
+      },
+      {
         path: "/campaigns",
         name: "campaigns",
         meta: { requiresAuth: true },
