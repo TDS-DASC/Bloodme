@@ -102,10 +102,21 @@
                             :to="`/beneficiaries/${ id }/edit`" class="w-1/4">
                             <Button type="button" text="Crear" btnClass="btn-warning" class="w-full">Editar</Button>
                         </router-link>
+                        <Button type="button" text="Crear" btnClass="btn-danger" class="w-1/4" @click="displayConfirmMessage()">Eliminar</Button>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
+          <Card title="Se requiere confirmación" class="text-center" noborder>
+              Estas a punto de eliminar una entidad de la base de datos.<br>
+              ¿Estás seguro que quieres continuar?
+              <div class="mt-9 flex justify-evenly">
+                  <Button btnClass="btn-primary" text="Confirmar" @click="deleteElement()" />
+                  <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
+              </div>
+          </Card>
+      </div>
     </div>
 </template>
 
@@ -117,6 +128,8 @@
     import { useCachedDataStoreBeneficiaries } from '@/stores/beneficiariesStore';
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
+    import { useToast } from "vue-toastification";
+    import axios from "@/plugins/axios";
 
     export default({
         components:{
@@ -126,6 +139,7 @@
             Button
         },
         setup() {
+            let confirmMessageFlag = ref(false);
             const router = useRouter();
             const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
             const id = router.currentRoute.value.params.id;
@@ -142,10 +156,35 @@
             if(beneficiariesTable)
                 beneficiaryData.value = beneficiariesTable.find(objeto => objeto.id == id);
 
+
+            const toast = useToast();
+            function displayConfirmMessage(){
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            function userRedirect(){
+                router.push('/beneficiaries', {shallow: false});
+            }
+            function deleteElement(){
+                confirmMessageFlag.value = false;
+                axios.delete(`/api/beneficiaries/${ id }`)
+                .then(response => {
+                    useCachedDataStoreBeneficiaries().refreshData();
+                    toast.success("¡Beneficiario eliminado correctamente!", { timeout: 1000 });
+                    setTimeout(userRedirect, 1000);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    toast.error("Ha ocurrido un error inesperado.", { timeout: 1000 });
+                });
+            }
+
             return {
+                deleteElement,
                 beneficiariesTable,
                 id,
                 beneficiaryData,
+                displayConfirmMessage,
+                confirmMessageFlag
             };
         }
     })

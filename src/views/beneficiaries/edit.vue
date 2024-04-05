@@ -77,7 +77,7 @@
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de agregar una nueva entidad a la base de datos.<br>
+                Estas a punto de editar una entidad en la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
                 <br><br>
                 <div>
@@ -184,16 +184,13 @@
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
-            
             function userRedirect(){
                 router.push('/beneficiaries', {shallow: false});
             }
-
             function editBeneficiary(){
                 confirmMessageFlag.value = false;
                 axios.put(`/api/beneficiaries/${beneficiaryId}`, formValues)
                 .then(res => {
-                    console.log(res);
                     useCachedDataStoreBeneficiaries().refreshData();
                     toast.success("¡Beneficiario editado correctamente!", { timeout: 1000 });
                     setTimeout(userRedirect, 1000);

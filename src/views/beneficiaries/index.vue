@@ -26,7 +26,7 @@
         setup() {
             const toast = useToast();
             const beneficiariesTableParams = {
-                title: "Agentes",
+                title: "Beneficiarios",
                 rows: 5,
                 headUrl: "beneficiaries",
                 columns: [

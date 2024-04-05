@@ -82,23 +82,23 @@
                 <br><br>
                 <div>
                     <div>
-                        <p class="font-bold">Nombre del Beneficiario:</p>
+                        <p class="font-bold">Nombre/s:</p>
                         {{ name }}
                     </div>
                     <div>
-                        <p class="font-bold">Direccion:</p>
+                        <p class="font-bold">Apellidos:</p>
                         {{ lastname }}
                     </div>
                     <div>
-                        <p class="font-bold">Longitude:</p>
+                        <p class="font-bold">Fecha de nacimiento:</p>
                         {{ birth_date }}
                     </div>
                     <div>
-                        <p class="font-bold">Latitude:</p>
+                        <p class="font-bold">Curp:</p>
                         {{ curp }}
                     </div>
                     <div>
-                        <p class="font-bold">Latitude:</p>
+                        <p class="font-bold">Tipo de sangre:</p>
                         {{ blood_type }}
                     </div>
                 </div>
