@@ -152,11 +152,14 @@
         },
         setup() {
             const schema = yup.object().shape({
-                name: yup.string().required("El nombre es requerido"),
-                lastname: yup.string().required("Los apellidos son requeridos"),
+                name: yup.string().required("El nombre es requerido")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
+                lastname: yup.string().required("Los apellidos son requeridos")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
                 email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
-                alias: yup.string().nullable(),
+                alias: yup.string().nullable()
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable(),
                 sex: yup.string().nullable(),
                 phone_number: yup.string().nullable(),
@@ -249,7 +252,7 @@
             }
             const router = useRouter();
             function userRedirect(){
-                /* router.push('/agents', {shallow: false}); */
+                router.push('/agents', {shallow: false});
             }
             function createUser(){
                 confirmMessageFlag.value = false;

@@ -131,7 +131,7 @@
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de agregar una nueva entidad a la base de datos.<br>
+                Estas a punto de editar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
                 <div class="mt-9 flex justify-evenly">
                     <Button btnClass="btn-primary" text="Confirmar" @click="editAgent()" />
@@ -170,10 +170,13 @@
         },
         setup() {
             const schema = yup.object().shape({
-                name: yup.string().required("El nombre es requerido"),
-                lastname: yup.string().required("Los apellidos son requeridos"),
+                name: yup.string().required("El nombre es requerido")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
+                lastname: yup.string().required("Los apellidos son requeridos")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
-                alias: yup.string().nullable(),
+                alias: yup.string().nullable()
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable(),
                 sex: yup.string().nullable(),
                 phone_number: yup.string().nullable(),
@@ -271,7 +274,6 @@
                 email.value = agentData.value.email;
                 sex.value = agentData.value.sex;
                 hospital_id.value = agentData.value.hospital_id;
-                console.log(agentData.value);
             }
 
             let agentData = ref(null); 
