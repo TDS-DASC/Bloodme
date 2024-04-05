@@ -12,7 +12,7 @@ export const useCachedDataStoreAppointments = defineStore({
       this.appointmentsTable = data;
     },
     async fetchData() {
-      if (!this.dataLoaded) {
+      if (!this.dataLoaded && this.appointmentsTable.length == 0) {
         try {
           const response = await axios.get(`/api/appointments`);
           response.data.forEach(appointment => {

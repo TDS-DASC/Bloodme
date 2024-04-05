@@ -11,6 +11,7 @@
     import { useCachedDataStoreBeneficiaries } from '../stores/beneficiariesStore';
     import { useCachedDataStoreCampaigns } from '../stores/campaignsStore';
     import { useCachedDataStoreAgents } from '../stores/agentsStore';
+    import { useCachedDataStoreAppointments } from '../stores/appointmentsStore';
 
     export default {
         setup() {
@@ -42,6 +43,11 @@
                 if(urlHeader == "agents"){
                     /* console.log("Agents"); */
                     await useCachedDataStoreAgents().refreshData();
+                }
+
+                if(urlHeader == "appointments"){
+                    /* console.log("Agents"); */
+                    await useCachedDataStoreAppointments().refreshData();
                 }
                 
                 routerPush();
