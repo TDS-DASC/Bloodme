@@ -86,15 +86,6 @@
                     v-model="email"
                     :error="emailError"
                 />
-                <Textinput
-                    label="Contraseña*"
-                    type="password"
-                    placeholder="Ingrese su contraseña"
-                    name="password"
-                    v-model="password"
-                    :error="passwordError"
-                    hasicon
-                />
 
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Editar" btnClass="btn-primary"></Button>
@@ -104,9 +95,9 @@
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de agregar una nueva entidad a la base de datos.<br>
+                Estas a punto de editar una entidad de la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
                 <div class="mt-9 flex justify-evenly">
                     <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
@@ -124,9 +115,12 @@
     import Textinput from "@/components/Textinput";
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { ref } from "vue";
+    import { ref, watch } from "vue";
     import * as yup from 'yup';
     import axios from "@/plugins/axios";
+    import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
+    import { useToast } from "vue-toastification";
+    import { useRouter } from 'vue-router';
 
     export default {
         components: {
@@ -140,15 +134,21 @@
         setup() {
 
             const schema = yup.object().shape({
-                name: yup.string().required("El nombre es requerido"),
-                lastname: yup.string().required("Los apellidos son requeridos"),
-                password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
+                name: yup.string().required("El nombre es requerido")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
+                lastname: yup.string().required("Los apellidos son requeridos")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
-                alias: yup.string().nullable(),
+                alias: yup.string().nullable()
+                    .required("El alias es requerido")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s.]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable().required("Es necesario brindar una fecha de nacimiento"),
                 /* image_url: yup.date().nullable().required(), */
                 sex: yup.string().nullable().required("Es necesario seleccionar el sexo"),
-                phone_number: yup.string().nullable().required(),
+                phone_number: yup.string().nullable()
+                    .required("El nummero de celular es requerido")
+                    .max(10, "El Número de telefono no puede pasar de 10 digitos")
+                    .min(10, "El Número de telefono no puede ser menor a 10 digitos"),
                 curp: yup.string()
                     .required("El curp es requerido")
                     .max(18, "El curp no puede exceder los   18 caracteres")
@@ -156,32 +156,18 @@
                 blood_type: yup.string().nullable().required("Es necesario seleccionar el tipo de sangre"),
             });
 
+            let errorMessage = ref("");
+            let errors = ref([]);
+            let formValues = ref([]);
+            let confirmMessageFlag = ref(false);
+            const toast = useToast();
             const { handleSubmit } = useForm({
                 validationSchema: schema,
             });
-
-            const { value: name, errorMessage: nameError } = useField("name");
-            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
-            const { value: alias, errorMessage: aliasError } = useField("alias");
-            const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
-            const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
-            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
-            const { value: curp, errorMessage: curpError } = useField("curp");
-            const { value: email, errorMessage: emailError } = useField("email");
-            const { value: password, errorMessage: passwordError } = useField("password");
-            const { value: role, errorMessage: roleError } = useField("role");
-            const { value: sex, errorMessage: sexError } = useField("sex");
-
-
             const trySubmit = handleSubmit(async (values) => {
-                axios.post(`api/agents/`, values)
-                .then(res => {
-                    console.log(res);
-                })
-                .catch(error => {
-                    console.error('Error in creating participant request:', error);
-                });
-            }); 
+                formValues = values;
+                displayConfirmMessage();
+            });
             const onSubmit = handleSubmit((values) => {
                 const newUserForm = [
                     { name: 'name', value: name.value },
@@ -192,16 +178,26 @@
                     { name: 'phone_number', value: phone_number.value },
                     { name: 'curp', value: curp.value },
                     { name: 'email', value: email.value },
-                    { name: 'password', value: password.value },
                     { name: 'role', value: role.value },
                     { name: 'sex', value: sex.value },
                 ];
                 trySubmit(newUserForm);
             });
 
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
+            const { value: alias, errorMessage: aliasError } = useField("alias");
+            const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
+            const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
+            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
+            const { value: curp, errorMessage: curpError } = useField("curp");
+            const { value: email, errorMessage: emailError } = useField("email");
+            const { value: role, errorMessage: roleError } = useField("role");
+            const { value: sex, errorMessage: sexError } = useField("sex");
+
             const sex_options = [
-                { value: "1", label: "Hombre" },
-                { value: "2", label: "Mujer" },
+                { value: "H", label: "Hombre" },
+                { value: "M", label: "Mujer" },
             ];
             const blood_types = [
                 { value: 'A+', label: 'A+' },
@@ -214,31 +210,74 @@
                 { value: 'O-', label: 'O-' }
             ];
 
-            let confirmMessage = ref(false)
             function displayConfirmMessage(){
-                console.log(confirmMessage.value);
-                confirmMessage.value = !confirmMessage.value;
+                console.log(confirmMessageFlag.value);
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            const router = useRouter();
+            function userRedirect(){
+                router.push('/participants', {shallow: false});
             }
             function createUser(){
-                confirmMessage.value = false;
-                console.log("Usuario creado");
+                confirmMessageFlag.value = false;
+                axios.put(`/api/participants/${ participantId }`, formValues)
+                    .then(res => {
+                        useCachedDataStoreParticipants().refreshData();
+                        toast.success("¡Participante editado correctamente!", { timeout: 1000 });
+                        setTimeout(userRedirect, 1000);
+                    })
+                    .catch(error => {
+                        toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
+                        if (error.response && error.response.data) {
+                            const responseData = error.response.data;
+                            errorMessage.value = responseData.message || 'An error occurred.';
+                            if (responseData.errors) {
+                                errors.value = responseData.errors;
+                            }
+                        } else {
+                            errorMessage.value = 'An error occurred.';
+                        }
+                        console.log(error);
+                    });
             }
 
-            let selectedRole = ref(0);
-            function handleRoleChange(newValue, selectedIndex){
-                selectedRole = selectedIndex;
-                console.log(selectedRole == 1);
+            const { participantsTable } = useCachedDataStoreParticipants();
+            const participantId = router.currentRoute.value.params.id;
+            useCachedDataStoreParticipants().fetchData();
+
+            function passParticipantValuesToSingleVariables() {
+                name.value = participantData.value.name;
+                lastname.value = participantData.value.lastname;
+                alias.value = participantData.value.alias;
+                birth_date.value = participantData.value.birth_date;
+                blood_type.value = participantData.value.blood_type;
+                phone_number.value = participantData.value.phone_number;
+                curp.value = participantData.value.curp;
+                email.value = participantData.value.email;
+                role.value = participantData.value.role;
+                sex.value = participantData.value.sex;
             }
-            
+
+            let participantData = ref(null); 
+            watch(participantsTable, () => {
+                participantData.value = participantsTable.find(objeto => objeto.id == participantId);
+                if(participantData.value != null){
+                    passParticipantValuesToSingleVariables();
+                }
+            });
+            if(participantsTable){
+                participantData.value = participantsTable.find(objeto => objeto.id == participantId);
+                if(participantData.value != null){
+                    passParticipantValuesToSingleVariables();
+                }
+            }
 
             return {
                 blood_types,
                 createUser,
-                selectedRole,
-                handleRoleChange,
                 sex_options,
                 displayConfirmMessage,
-                confirmMessage,
+                confirmMessageFlag,
                 name,
                 nameError,
                 lastname,
@@ -255,8 +294,6 @@
                 curpError,
                 email,
                 emailError,
-                password,
-                passwordError,
                 role,
                 roleError,
                 sex,

@@ -12,6 +12,8 @@
     import { useCachedDataStoreCampaigns } from '../stores/campaignsStore';
     import { useCachedDataStoreAgents } from '../stores/agentsStore';
     import { useCachedDataStoreAppointments } from '../stores/appointmentsStore';
+    import { useCachedDataStoreParticipants } from '../stores/participantsStore';
+    import { useCachedDataStoreAdministrators } from '../stores/administratorsStore';
 
     export default {
         setup() {
@@ -46,8 +48,18 @@
                 }
 
                 if(urlHeader == "appointments"){
-                    /* console.log("Agents"); */
+                    /* console.log("appointments"); */
                     await useCachedDataStoreAppointments().refreshData();
+                }
+
+                if(urlHeader == "participants"){
+                    /* console.log("participants"); */
+                    await useCachedDataStoreParticipants().refreshData();
+                }
+                
+                if(urlHeader == "administrators"){
+                    /* console.log("administrators"); */
+                    await useCachedDataStoreAdministrators().refreshData();
                 }
                 
                 routerPush();

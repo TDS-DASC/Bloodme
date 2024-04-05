@@ -99,12 +99,12 @@
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
                     <router-link
-                        :to="{ path:  '/agents/' }"
+                        :to="{ path:  '/participants/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 Estas a punto de agregar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
@@ -127,6 +127,9 @@
     import { ref } from "vue";
     import * as yup from 'yup';
     import axios from "@/plugins/axios";
+    import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
+    import { useToast } from "vue-toastification";
+    import { useRouter } from 'vue-router';
 
     export default {
         components: {
@@ -140,15 +143,22 @@
         setup() {
 
             const schema = yup.object().shape({
-                name: yup.string().required("El nombre es requerido"),
-                lastname: yup.string().required("Los apellidos son requeridos"),
+                name: yup.string().required("El nombre es requerido")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
+                lastname: yup.string().required("Los apellidos son requeridos")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres"),
                 email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
-                alias: yup.string().nullable(),
+                alias: yup.string().nullable()
+                    .required("El alias es requerido")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable().required("Es necesario brindar una fecha de nacimiento"),
                 /* image_url: yup.date().nullable().required(), */
                 sex: yup.string().nullable().required("Es necesario seleccionar el sexo"),
-                phone_number: yup.string().nullable().required(),
+                phone_number: yup.string().nullable()
+                    .required("El nummero de celular es requerido para crear un participante")
+                    .max(10, "El Número de telefono no puede pasar de 10 digitos")
+                    .min(10, "El Número de telefono no puede ser menor a 10 digitos"),
                 curp: yup.string()
                     .required("El curp es requerido")
                     .max(18, "El curp no puede exceder los   18 caracteres")
@@ -156,32 +166,18 @@
                 blood_type: yup.string().nullable().required("Es necesario seleccionar el tipo de sangre"),
             });
 
+            let errorMessage = ref("");
+            let errors = ref([]);
+            let formValues = ref([]);
+            let confirmMessageFlag = ref(false);
+            const toast = useToast();
             const { handleSubmit } = useForm({
                 validationSchema: schema,
             });
-
-            const { value: name, errorMessage: nameError } = useField("name");
-            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
-            const { value: alias, errorMessage: aliasError } = useField("alias");
-            const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
-            const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
-            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
-            const { value: curp, errorMessage: curpError } = useField("curp");
-            const { value: email, errorMessage: emailError } = useField("email");
-            const { value: password, errorMessage: passwordError } = useField("password");
-            const { value: role, errorMessage: roleError } = useField("role");
-            const { value: sex, errorMessage: sexError } = useField("sex");
-
-
             const trySubmit = handleSubmit(async (values) => {
-                axios.post(`api/participants/`, values)
-                .then(res => {
-                    console.log(res);
-                })
-                .catch(error => {
-                    console.error('Error in creating participant request:', error);
-                });
-            }); 
+                formValues = values;
+                displayConfirmMessage();
+            });
             const onSubmit = handleSubmit((values) => {
                 const newUserForm = [
                     { name: 'name', value: name.value },
@@ -199,9 +195,21 @@
                 trySubmit(newUserForm);
             });
 
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
+            const { value: alias, errorMessage: aliasError } = useField("alias");
+            const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
+            const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
+            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
+            const { value: curp, errorMessage: curpError } = useField("curp");
+            const { value: email, errorMessage: emailError } = useField("email");
+            const { value: password, errorMessage: passwordError } = useField("password");
+            const { value: role, errorMessage: roleError } = useField("role");
+            const { value: sex, errorMessage: sexError } = useField("sex");
+
             const sex_options = [
-                { value: "1", label: "Hombre" },
-                { value: "2", label: "Mujer" },
+                { value: "H", label: "Hombre" },
+                { value: "M", label: "Mujer" },
             ];
             const blood_types = [
                 { value: 'A+', label: 'A+' },
@@ -214,31 +222,42 @@
                 { value: 'O-', label: 'O-' }
             ];
 
-            let confirmMessage = ref(false)
             function displayConfirmMessage(){
-                console.log(confirmMessage.value);
-                confirmMessage.value = !confirmMessage.value;
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            const router = useRouter();
+            function userRedirect(){
+                router.push('/participants', {shallow: false});
             }
             function createUser(){
-                confirmMessage.value = false;
-                console.log("Usuario creado");
+                confirmMessageFlag.value = false;
+                axios.post(`/api/participants/`, formValues)
+                    .then(res => {
+                        useCachedDataStoreParticipants().refreshData();
+                        toast.success("¡Participante creado correctamente!", { timeout: 1000 });
+                        setTimeout(userRedirect, 1000);
+                    })
+                    .catch(error => {
+                        toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
+                        if (error.response && error.response.data) {
+                            const responseData = error.response.data;
+                            errorMessage.value = responseData.message || 'An error occurred.';
+                            if (responseData.errors) {
+                                errors.value = responseData.errors;
+                            }
+                        } else {
+                            errorMessage.value = 'An error occurred.';
+                        }
+                        console.log(error);
+                    });
             }
-
-            let selectedRole = ref(0);
-            function handleRoleChange(newValue, selectedIndex){
-                selectedRole = selectedIndex;
-                console.log(selectedRole == 1);
-            }
-            
 
             return {
                 blood_types,
                 createUser,
-                selectedRole,
-                handleRoleChange,
                 sex_options,
                 displayConfirmMessage,
-                confirmMessage,
+                confirmMessageFlag,
                 name,
                 nameError,
                 lastname,
