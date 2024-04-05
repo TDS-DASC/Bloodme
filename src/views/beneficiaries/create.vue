@@ -139,11 +139,11 @@
                 name: yup.string()
                     .required("El nombre del beneficiario es requerido")
                     .min(3, "El nombre debe de contener al menos 3 caracteres")
-                    .matches(/^[^\d]+$/, "El nombre no puede contener numeros"),
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 lastname: yup.string()
                     .required("Los apellidos son requeridos")
                     .min(3, "El apellido debe de contener al menos 3 caracteres")
-                    .matches(/^[^\d]+$/, "El apellido no puede contener numeros"),
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 birth_date: yup.string()
                     .required("La fecha de nacimiento es requerida"),
                 curp: yup.string()
