@@ -124,7 +124,7 @@
                 name: yup.string()
                     .required("El nombre del hospital es requerido")
                     .min(5, "El nombre debe de contener al menos 5 caracteres")
-                    .matches(/^[^\d]+$/, "El nombre no puede contener numeros"),
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 address: yup.string()
                     .required("Los apellidos son requeridos")
                     .min(10, "La direccion debe de contener al menos 10 caracteres"),
