@@ -30,34 +30,6 @@
                 />
 
                 <Textinput
-                    label="Alias"
-                    type="text"
-                    placeholder="Ingrese el alias"
-                    name="alias"
-                    v-model="alias"
-                    :error="aliasError"
-                />
-
-                <Select
-                    label="Sexo"
-                    type="text"
-                    placeholder="Seleccione su sexo"
-                    name="sex"
-                    v-model="sex"
-                    :error="sexError"
-                    :options="sex_options"
-                />
-
-                <Textinput
-                    label="Número celular"
-                    type="number"
-                    placeholder="Ingrese su número celular"
-                    name="phone"
-                    v-model="phone_number"
-                    :error="phone_numberError"
-                />
-
-                <Textinput
                     label="email"
                     type="email"
                     placeholder="Ingrese un correo electrónico"
@@ -84,7 +56,7 @@
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 Estas a punto de agregar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
@@ -106,6 +78,10 @@
     import { useField, useForm } from "vee-validate";
     import * as yup from "yup";
     import axios from "@/plugins/axios";
+    import { useToast } from "vue-toastification";
+    import { useRouter } from 'vue-router';
+    import { useCachedDataStoreAdministrators } from '../../stores/administratorsStore';
+
 
     export default {
         components: {
@@ -116,97 +92,85 @@
         },
         setup() {
             const schema = yup.object({
-                name: yup.string().required("El nombre es requerido"),
-                lastname: yup.string().required("Los apellidos son requeridos"),
-                alias: yup.string().required("El alias es requerido"),
-                phone_number: yup.string().required("El número de teléfono es requerido"),
+                name: yup.string().required("El nombre es requerido")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
+                lastname: yup.string().required("Los apellidos son requeridos")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 email: yup.string().required("El correo electrónico es requerido").email(),
-                password: yup.string().required("La contraseña es requerida").min(3),
-                sex: yup.string().required("Su tipo sexo es requerido"),
+                password: yup.string().required("La contraseña es requerida").min(8),
             });
 
+            let errorMessage = ref("");
+            let errors = ref([]);
+            let formValues = ref([]);
+            let confirmMessageFlag = ref(false);
+            const toast = useToast();
             const { handleSubmit } = useForm({
                 validationSchema: schema,
             });
-            
-            const { value: name, errorMessage: nameError } = useField("name");
-            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
-            const { value: password, errorMessage: passwordError } = useField("password");
-            const { value: email, errorMessage: emailError } = useField("email");
-            const { value: role, errorMessage: roleError } = useField("role");
-            const { value: alias, errorMessage: aliasError } = useField("alias");
-            const { value: sex, errorMessage: sexError } = useField("sex");
-            const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
-
             const trySubmit = handleSubmit(async (values) => {
-                console.log("sup");
-                axios.post(`/administrators/`, values)
-                .then(res => {
-                    console.log(res);
-                })
-                .catch(error => {
-                    console.error('Error in login request:', error);
-                });
-            }); 
+                formValues = values;
+                displayConfirmMessage();
+            });
             const onSubmit = handleSubmit((values) => {
                 console.log("sup");
                 const newUserForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastName', value: lastname.value },
-                    { name: 'alias', value: alias.value },
-                    { name: 'phone_number', value: phone_number.value },
-                    { name: 'sex', value: sex.value },
                     { name: 'email', value: email.value },
                     { name: 'password', value: password.value },
                 ];
                 trySubmit(newUserForm);
             });
 
-            const sex_options = [
-                { value: "H", label: "Hombre" },
-                { value: "M", label: "Mujer" },
-            ];
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
+            const { value: password, errorMessage: passwordError } = useField("password");
+            const { value: email, errorMessage: emailError } = useField("email");
 
-            let confirmMessage = ref(false)
             function displayConfirmMessage(){
-                console.log(confirmMessage.value);
-                confirmMessage.value = !confirmMessage.value;
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            const router = useRouter();
+            function userRedirect(){
+                router.push('/administrators', {shallow: false});
             }
             function createUser(){
-                confirmMessage.value = false;
-                onSubmit();
-            }
-
-            let selectedRole = ref(0);
-            function handleRoleChange(newValue, selectedIndex){
-                selectedRole = selectedIndex;
-                console.log(selectedRole == 1);
+                confirmMessageFlag.value = false;
+                axios.post(`/api/administrators/`, formValues)
+                    .then(res => {
+                        useCachedDataStoreAdministrators().refreshData();
+                        toast.success("¡Administrador creado correctamente!", { timeout: 1000 });
+                        setTimeout(userRedirect, 1000);
+                    })
+                    .catch(error => {
+                        toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
+                        if (error.response && error.response.data) {
+                            const responseData = error.response.data;
+                            errorMessage.value = responseData.message || 'An error occurred.';
+                            if (responseData.errors) {
+                                errors.value = responseData.errors;
+                            }
+                        } else {
+                            errorMessage.value = 'An error occurred.';
+                        }
+                        console.log(error);
+                    });
             }
 
             return {
+                confirmMessageFlag,
                 createUser,
-                selectedRole,
-                handleRoleChange,
-                sex_options,
                 displayConfirmMessage,
-                confirmMessage,
                 onSubmit,
                 name,
                 nameError,
                 lastname,
                 lastnameError,
-                alias,
-                aliasError,
-                phone_number,
-                phone_numberError,
                 email,
                 emailError,
                 password,
                 passwordError,
-                role,
-                roleError,
-                sex,
-                sexError
             };
         }
     }

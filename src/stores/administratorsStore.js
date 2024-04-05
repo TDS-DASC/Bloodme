@@ -12,7 +12,7 @@ export const useCachedDataStoreAdministrators = defineStore({
         this.administratorsTable = data;
       },
       async fetchData() {
-        if (!this.dataLoaded && this.agentsTable.length == 0) {
+        if (!this.dataLoaded && this.administratorsTable.length == 0) {
           try {
             const response = await axios.get(`/api/administrators`);
             response.data.forEach(administrator => {

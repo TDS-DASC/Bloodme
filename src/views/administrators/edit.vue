@@ -2,7 +2,7 @@
     <div class="">
         <div class="p-4 bg-white rounded-md dark:bg-slate-800">
             <div class="flex items-center justify-between py-2">
-                <h3>Crear Administrador</h3><br>
+                <h3>Editar Administrador</h3><br>
             </div>
             <div class="w-full border-slate-200 border-b-2 dark:border-slate-600"></div>
             <br>
@@ -12,64 +12,41 @@
             >
                 <Textinput
                     label="Nombre *"
-                    type="text"
+                    type="text" 
                     placeholder="Ingrese el nombre"
                     name="name"
-                    v-model="form.name"
+                    v-model="name"
+                    :error="nameError"
+                    required
                 />
+
                 <Textinput
                     label="Apellidos"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
-                    v-model="form.lastname"
+                    v-model="lastname"
+                    :error="lastnameError"
                 />
-                <Textinput
-                    label="Alias"
-                    type="text"
-                    placeholder="Ingrese el alias"
-                    name="alias"
-                    v-model="form.alias"
-                />
-                <Select
-                    label="Sexo"
-                    type="text"
-                    placeholder="Seleccione su sexo"
-                    name="sex"
-                    v-model="form.sex_options"
-                />
-                <Textinput
-                    label="Número celular"
-                    type="password"
-                    placeholder="Ingrese su número celular"
-                    name="phone"
-                    v-model="form.phone_number"
-                />
+
                 <Textinput
                     label="email"
                     type="email"
-                    placeholder="Ingrese un correo electronico"
+                    placeholder="Ingrese un correo electrónico"
                     name="email"
-                    v-model="form.email"
-                />
-                <Textinput
-                    label="Contraseña*"
-                    type="password"
-                    placeholder="Ingrese su contraseña"
-                    name="password"
-                    v-model="form.password"
-                    hasicon
+                    v-model="email"
+                    :error="emailError"
                 />
 
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="button" text="Crear" btnClass="btn-primary" @click="displayConfirmMessage()"></Button>
-                    <router-link
-                        :to="{ path:  '/administrators/' }"
-                    ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
+                    <Button type="submit" text="Editar" btnClass="btn-primary"></Button>
+                    <router-link :to="{ path:  '/administrators/' }">
+                        <Button btnClass="btn-dark" text="Cancelar" />
+                    </router-link>
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessage">
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 Estas a punto de agregar una nueva entidad a la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
@@ -85,114 +62,124 @@
 <script>
     import Card from "@/components/Card";
     import Button from "@/components/Button";
-    import Textarea from "@/components/Textarea";
     import Textinput from "@/components/Textinput";
-    import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { useAdministratorsStore } from '@/stores/administratorsStore';
+    import { ref, watch } from "vue";
+    import { useField, useForm } from "vee-validate";
+    import * as yup from "yup";
+    import axios from "@/plugins/axios";
+    import { useToast } from "vue-toastification";
     import { useRouter } from 'vue-router';
-    import { ref, watch } from 'vue';
+    import { useCachedDataStoreAdministrators } from '../../stores/administratorsStore';
+
 
     export default {
         components: {
             Textinput,
             Button,
-            Textarea,
             Select,
             Card
         },
-        props: {
-            formInformation: Object,
-        },
         setup() {
-            
+            const schema = yup.object({
+                name: yup.string().required("El nombre es requerido")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
+                lastname: yup.string().required("Los apellidos son requeridos")
+                    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
+                email: yup.string().required("El correo electrónico es requerido").email(),
+            });
 
+            let errorMessage = ref("");
+            let errors = ref([]);
+            let formValues = ref([]);
+            let confirmMessageFlag = ref(false);
+            const toast = useToast();
             const { handleSubmit } = useForm({
+                validationSchema: schema,
             });
-            // No need to define rules for fields
-
-            const onSubmit = handleSubmit(() => {
-                // console.warn(values.email);
+            const trySubmit = handleSubmit(async (values) => {
+                formValues = values;
+                displayConfirmMessage();
+            });
+            const onSubmit = handleSubmit((values) => {
+                console.log("sup");
+                const newUserForm = [
+                    { name: 'name', value: name.value },
+                    { name: 'lastName', value: lastname.value },
+                    { name: 'email', value: email.value },
+                ];
+                trySubmit(newUserForm);
             });
 
+            const { value: name, errorMessage: nameError } = useField("name");
+            const { value: lastname, errorMessage: lastnameError } = useField("lastname");
+            const { value: email, errorMessage: emailError } = useField("email");
 
-            /* No de la template */
-            const bloodTypes = [
-                { value: 'A+', label: 'A+' },
-                { value: 'A-', label: 'A-' },
-                { value: 'B+', label: 'B+' },
-                { value: 'B-', label: 'B-' },
-                { value: 'AB+', label: 'AB+' },
-                { value: 'AB-', label: 'AB-' },
-                { value: 'O+', label: 'O+' },
-                { value: 'O-', label: 'O-' }
-            ];
-
-            /* Not from the template */
-
+            function displayConfirmMessage(){
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
             const router = useRouter();
-            const { administratorsTable } = useAdministratorsStore();
-            const id = router.currentRoute.value.params.id;
-            
-            useAdministratorsStore().fetchData();
-
-            let userData = ref(null); 
-            let form = ref({
-                name: null,
-                lastname: null,
-                alias: null,
-                birth_date: null,
-                blood_type: null,
-                phone_number: null,
-                curp: null,
-                email: null,
-                password: null,
-                role: null,
-            })
-
-            watch(administratorsTable, () => {
-                userData.value = administratorsTable.find(objeto => objeto.id == id);
-                assignFormValues();
-            });
-
-            if(administratorsTable){
-                userData.value = administratorsTable.find(objeto => objeto.id == id);
-                assignFormValues();
+            function userRedirect(){
+                router.push('/administrators', {shallow: false});
+            }
+            function createUser(){
+                confirmMessageFlag.value = false;
+                axios.put(`/api/administrators/${administratorId}`, formValues)
+                    .then(res => {
+                        useCachedDataStoreAdministrators().refreshData();
+                        toast.success("¡Administrador editado correctamente!", { timeout: 1000 });
+                        setTimeout(userRedirect, 1000);
+                    })
+                    .catch(error => {
+                        toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
+                        if (error.response && error.response.data) {
+                            const responseData = error.response.data;
+                            errorMessage.value = responseData.message || 'An error occurred.';
+                            if (responseData.errors) {
+                                errors.value = responseData.errors;
+                            }
+                        } else {
+                            errorMessage.value = 'An error occurred.';
+                        }
+                        console.log(error);
+                    });
             }
 
-            function assignFormValues(){
-                if(userData.value){
-                    form.value.name = userData.value.name;
-                    form.value.lastname = userData.value.lastname;
-                    form.value.alias = userData.value.alias;
-                    form.value.birth_date = userData.value.birth_date;
-                    form.value.blood_type = userData.value.blood_type;
-                    form.value.phone_number = userData.value.phone_number;
-                    form.value.curp = userData.value.curp;
-                    form.value.email = userData.value.email;
-                    form.value.role = userData.value.role;
+            const { administratorsTable } = useCachedDataStoreAdministrators();
+            const administratorId = router.currentRoute.value.params.id;
+            useCachedDataStoreAdministrators().fetchData();
+
+            function passAgentValuesToSingleVariables(){
+                name.value = administratorData.value.name;
+                lastname.value = administratorData.value.lastname;
+                email.value = administratorData.value.email;
+            }
+
+            let administratorData = ref(null); 
+            watch(administratorsTable, () => {
+                administratorData.value = administratorsTable.find(objeto => objeto.id == administratorId);
+                if(administratorData.value != null){
+                    passAgentValuesToSingleVariables();
+                }
+            });
+            if(administratorsTable){
+                administratorData.value = administratorsTable.find(objeto => objeto.id == administratorId);
+                if(administratorData.value != null){
+                    passAgentValuesToSingleVariables();
                 }
             }
 
-            let confirmMessage = ref(false)
-            function displayConfirmMessage(){
-                console.log(confirmMessage.value);
-                confirmMessage.value = !confirmMessage.value;
-            }
-            function editUser(){
-                confirmMessage.value = false;
-                console.log("Usuario editado");
-            }
-
             return {
-                bloodTypes,
-                onSubmit,
-                administratorsTable,
-                userData,
-                form,
-                confirmMessage,
+                confirmMessageFlag,
+                createUser,
                 displayConfirmMessage,
-                editUser
+                onSubmit,
+                name,
+                nameError,
+                lastname,
+                lastnameError,
+                email,
+                emailError,
             };
         }
     }

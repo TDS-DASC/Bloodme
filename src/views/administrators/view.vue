@@ -4,18 +4,7 @@
             <div class="profiel-wrap px-[35px] pb-10 md:pt-[84px] pt-10 rounded-lg bg-white dark:bg-slate-800 lg:flex lg:space-y-0 space-y-6 justify-between items-end relative z-[1]">
                 <div class="bg-slate-900 dark:bg-slate-700 absolute left-0 top-0 md:h-1/2 h-[150px] w-full z-[-1] rounded-t-lg"></div>    
                     <div class="profile-box flex-none md:text-start text-center">
-                        <div class="md:flex items-end md:space-x-6 rtl:space-x-reverse">
-                            <div class="flex-none">
-                                <div class="md:h-[186px] md:w-[186px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-4 ring-slate-100 relative">
-                                    <img :src="userData.image_url" alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
-                                    <img src="@/assets/images/avatar/av-1.svg" alt="" class="w-full h-full object-cover rounded-full" v-else />
-                                        <router-link
-                                            :to="`/administrators/${id}/edit`"
-                                            class="absolute right-2 h-8 w-8 bg-slate-50 text-slate-600 rounded-full shadow-sm flex flex-col items-center justify-center md:top-[140px] top-[100px]"
-                                            ><Icon icon="heroicons:pencil-square" />
-                                        </router-link>
-                                </div>
-                            </div>
+                        <div class="md:flex items-end md:space-x-6 rtl:space-x-reverse  h-[140px]">
                             <div class="flex-1">
                                 <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-if="userData">
                                     {{ userData.name }} {{ userData.lastname }}
@@ -66,57 +55,11 @@
                 <div class="">
                     <Card title="Info">
                         <div class="flex gap-8">
-                            <ul class="list space-y-8 w-full">
-                                <li class="flex space-x-3 rtl:space-x-reverse">
-                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="heroicons:envelope" />
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            EMAIL
-                                        </div>
-                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
-                                            {{ userData.email }}
-                                        </a>
-                                        <p v-else>...</p>
-                                    </div>
-                                </li>
-                            <!-- end single list -->
-                                <li class="flex space-x-3 rtl:space-x-reverse">
-                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="heroicons:phone-arrow-up-right" />
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            CELULAR
-                                        </div>
-                                        <a href="tel:0189749676767" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
-                                        {{ userData.phone_number}}
-                                        </a>
-                                    </div>
-                                </li>
-                            <!-- end single list -->
-                                <li class="flex space-x-3 rtl:space-x-reverse">
-                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="cil:birthday-cake" />
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            Fecha de nacimiento
-                                        </div>
-                                        <div class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
-                                            {{ userData.birth_date }}
-                                        </div>
-                                    </div>
-                                </li>
-                            <!-- end single list -->
-                            </ul>
-
 
                         <!-- Separacion -->
 
 
-                            <ul class="list space-y-8 w-full">
+                            <ul class="list space-y-8 w-full flex items-center justify-between">
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
                                         <Icon icon="streamline:blood-bag-donation" />
@@ -144,61 +87,49 @@
                                         </a>
                                     </div>
                                 </li>
-                            <!-- end single list -->
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="heroicons:map" />
+                                        <Icon icon="heroicons:envelope" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            Alias
-                                        </div>
-                                        <div class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
-                                            {{ userData.alias }}
-                                        </div>
-                                    </div>
-                                </li>
-                            <!-- end single list -->
-                            </ul>
-                            
-
-                        <!-- Separacion -->
-
-
-                        <ul class="list space-y-8 w-full">
-                                <li class="flex space-x-3 rtl:space-x-reverse">
-                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="streamline:blood-bag-donation" />
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            Tipo de sangre 
+                                            EMAIL
                                         </div>
                                         <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
-                                            {{ userData.blood_type }}
+                                            {{ userData.email }}
                                         </a>
+                                        <p v-else>...</p>
                                     </div>
                                 </li>
                             <!-- end single list -->
-                                <li class="flex space-x-3 rtl:space-x-reverse">
-                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="heroicons:map" />
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            Sexo
-                                        </div>
-                                        <div class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
-                                            {{ userData.sex }}
-                                        </div>
-                                    </div>
-                                </li>
                             <!-- end single list -->
                             </ul>
                         </div>
                     </Card>
+                    <br>
+                    <div class="gap-3 w-1/2 flex">
+                        <router-link 
+                            :to="`/administrators`" class="w-1/4">
+                            <Button type="button" text="Regresar" btnClass="btn-secondary" class="w-full">Regresar</Button>
+                        </router-link>
+                        <router-link 
+                            :to="`/administrators/${ id }/edit`" class="w-1/4">
+                            <Button type="button" text="Crear" btnClass="btn-warning" class="w-full">Editar</Button>
+                        </router-link>
+                        <Button type="button" text="Crear" btnClass="btn-danger" class="w-1/4" @click="displayConfirmMessage()">Eliminar</Button>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
+          <Card title="Se requiere confirmación" class="text-center" noborder>
+              Estas a punto de eliminar una entidad de la base de datos.<br>
+              ¿Estás seguro que quieres continuar?
+              <div class="mt-9 flex justify-evenly">
+                  <Button btnClass="btn-primary" text="Confirmar" @click="deleteElement()" />
+                  <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
+              </div>
+          </Card>
         </div>
     </div>
 </template>
@@ -208,9 +139,11 @@
     import profile from "@/components/profile"
     import Card from "@/components/Card";
     import Icon from "@/components/Icon";
-    import { useAdministratorsStore } from '@/stores/administratorsStore';
+    import { useCachedDataStoreAdministrators } from '@/stores/administratorsStore';
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
+    import { useToast } from "vue-toastification";
+    import axios from "@/plugins/axios";
 
     export default({
         components:{
@@ -221,10 +154,10 @@
         },
         setup() {
             const router = useRouter();
-            const { administratorsTable } = useAdministratorsStore();
+            const { administratorsTable } = useCachedDataStoreAdministrators();
             const id = router.currentRoute.value.params.id;
             
-            useAdministratorsStore().fetchData();
+            useCachedDataStoreAdministrators().fetchData();
 
             let userData = ref(null); 
 
@@ -236,7 +169,32 @@
             if(administratorsTable)
                 userData.value = administratorsTable.find(objeto => objeto.id == id);
 
+            let confirmMessageFlag = ref(false);
+            const toast = useToast();
+            function displayConfirmMessage(){
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            function userRedirect(){
+                router.push('/administrators', {shallow: false});
+            }
+            function deleteElement(){
+                confirmMessageFlag.value = false;
+                axios.delete(`/api/administrators/${ id }`)
+                .then(response => {
+                    useCachedDataStoreAdministrators().refreshData();
+                    toast.success("¡Administrador eliminado correctamente!", { timeout: 1000 });
+                    setTimeout(userRedirect, 1000);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    toast.error("Ha ocurrido un error inesperado.", { timeout: 1000 });
+                });
+            }
+
             return {
+                confirmMessageFlag,
+                deleteElement,
+                displayConfirmMessage,
                 administratorsTable,
                 id,
                 userData,
