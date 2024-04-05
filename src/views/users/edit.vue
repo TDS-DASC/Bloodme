@@ -113,7 +113,6 @@
     import Textinput from "@/components/Textinput";
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { useParticipantsStore } from '@/stores/participantsStore';
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
 
