@@ -17,12 +17,22 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    const user = localStorage.getItem('user');
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const user = JSON.parse(localStorage.getItem('user'));
+  
+  if (requiresAuth) {
     if (!user) {
       next({ name: 'login' });
     } else {
-      next();
+      if (to.matched.some(record => record.meta.requiresAdmin)) {
+        if (user.role === 'admin') {
+          next();
+        } else {
+          next({ name: 'home' });
+        }
+      } else {
+        next();
+      }
     }
   } else {
     next();
@@ -30,7 +40,6 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach(() => {
-  // Remove initial loading
   const appLoading = document.getElementById("loading-bg");
   if (appLoading) {
     appLoading.style.display = "none";

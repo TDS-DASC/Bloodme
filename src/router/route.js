@@ -14,7 +14,7 @@ const routes = [
       {
         path: "/users",
         name: "users",
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresAdmin: true },
         children: [
           {
             path: "",
@@ -46,7 +46,7 @@ const routes = [
       {
         path: "/campaigns",
         name: "campaigns",
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresAdmin: true },
         children: [
           {
             path: "",
@@ -84,7 +84,7 @@ const routes = [
       {
         path: "/hospitals",
         name: "hospitals",
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresAdmin: true },
         children: [
           {
             path: "",
@@ -116,7 +116,7 @@ const routes = [
       {
         path: "/appointments",
         name: "appointments",
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresAdmin: true },
         children: [
           {
             path: "",
@@ -148,7 +148,7 @@ const routes = [
       {
         path: "/participants",
         name: "participants",
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresAdmin: true },
         children: [
           {
             path: "",
@@ -180,7 +180,7 @@ const routes = [
       {
         path: "/agents",
         name: "agents",
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresAdmin: true },
         children: [
           {
             path: "",
@@ -212,7 +212,7 @@ const routes = [
       {
         path: "/administrators",
         name: "administrators",
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresAdmin: true  },
         children: [
           {
             path: "",
@@ -244,7 +244,7 @@ const routes = [
       {
         path: "/beneficiaries",
         name: "beneficiaries",
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresAdmin: true },
         children: [
           {
             path: "",
