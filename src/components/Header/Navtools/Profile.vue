@@ -49,7 +49,7 @@
 import { MenuItem } from "@headlessui/vue";
 import Dropdown from "@/components/Dropdown";
 import Icon from "@/components/Icon";
-import profileImg from "@/assets/images/all-img/user.png"
+import profileImg from "@/assets/images/all-img/UserImages/user2.png"
 import axios from "@/plugins/axios";
 import { useToast } from "vue-toastification";
 export default {
@@ -67,13 +67,6 @@ export default {
           icon: "heroicons-outline:user",
           link: () => {
             this.$router.push("profile");
-          },
-        },
-        {
-          label: "Settings",
-          icon: "heroicons-outline:cog",
-          link: () => {
-            this.$router.push("settings");
           },
         },
         {
