@@ -136,7 +136,7 @@
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="createBeneficiary()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createCampaign()" />
                     <Button btnClass="btn-dark" text="Retroceder" @click="displayConfirmMessage()" />
                 </div>
             </Card>
@@ -180,7 +180,7 @@
                     .required("El número de plaquetas necesitadas es requerido"),
                 recollected_platelets: yup.string()
                     .required("El número de plaquetas recolectadas hasta ahora es requerido"),
-                description: yup.string(),
+                description: yup.string().required("La descripcion de la campaña es requerida"),
                 beneficiary_id: yup.string()
                     .required("Se necesita seleccionar al beneficiario de esta campaña"),
                 hospital_id: yup.string()
@@ -220,7 +220,7 @@
             function userRedirect(){
                 router.push('/campaigns', {shallow: false});
             }
-            function createBeneficiary(){
+            function createCampaign(){
                 confirmMessageFlag.value = false;
                 axios.put(`/api/campaigns/${campaignId}`, formValues)
                 .then(res => {
@@ -337,7 +337,7 @@
                 beneficiary_idError,
                 hospital_id,
                 hospital_idError,
-                createBeneficiary,
+                createCampaign,
                 displayConfirmMessage,
                 confirmMessageFlag,
                 onSubmit,

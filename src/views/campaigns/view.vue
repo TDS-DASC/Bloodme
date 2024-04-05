@@ -115,9 +115,20 @@
                             :to="`/campaigns/${ id }/edit`" class="w-1/4">
                             <Button type="button" text="Crear" btnClass="btn-warning" class="w-full">Editar</Button>
                         </router-link>
+                        <Button type="button" text="Crear" btnClass="btn-danger" class="w-1/4" @click="displayConfirmMessage()">Eliminar</Button>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
+          <Card title="Se requiere confirmación" class="text-center" noborder>
+              Estas a punto de eliminar una entidad de la base de datos.<br>
+              ¿Estás seguro que quieres continuar?
+              <div class="mt-9 flex justify-evenly">
+                  <Button btnClass="btn-primary" text="Confirmar" @click="deleteElement()" />
+                  <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
+              </div>
+          </Card>
         </div>
     </div>
 </template>
@@ -132,9 +143,11 @@
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
+    import { useToast } from "vue-toastification";
+    import axios from "@/plugins/axios";
 
-    export default({
-        components:{
+    export default {
+        components: {
             profile,
             Card,
             Icon,
@@ -143,42 +156,46 @@
         setup() {
             const router = useRouter();
 
-            const { hospitalsTable } = useCachedDataStoreHospitals();
-            useCachedDataStoreHospitals().fetchData();
+            const { fetchData: fetchHospitals, hospitalsTable } = useCachedDataStoreHospitals();
+            const { fetchData: fetchBeneficiaries, beneficiariesTable } = useCachedDataStoreBeneficiaries();
+            const { fetchData: fetchCampaigns, campaignsTable } = useCachedDataStoreCampaigns();
+
             let hospitals = ref([]);
-
-            const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
-            useCachedDataStoreBeneficiaries().fetchData();
             let beneficiaries = ref([]);
+            let campaignData = ref(null);
 
-            const { campaignsTable } = useCachedDataStoreCampaigns();
             const id = router.currentRoute.value.params.id;
-            
-            useCachedDataStoreCampaigns().fetchData();
 
-            let campaignData = ref(null); 
+            const fetchData = async () => {
+                await fetchCampaigns();
+                await fetchHospitals();
+                await fetchBeneficiaries();
+                campaignData.value = campaignsTable.find(objeto => objeto.id == id);
+                if (campaignData.value) {
+                    fillBeneficiariesArray();
+                    fillHospitalArray();
+                }
+            };
+
+            fetchData();
 
             watch(campaignsTable, () => {
                 campaignData.value = campaignsTable.find(objeto => objeto.id == id);
-                if(beneficiaries.value.length == 0 || hospitals.value.length == 0){
-                    if(beneficiariesTable != null && hospitalsTable != null){
-                        fillBeneficiariesArray();
-                        fillHospitalArray();
-                    }
+                if (campaignData.value) {
+                    fillBeneficiariesArray();
+                    fillHospitalArray();
                 }
             });
-
-            if(campaignsTable)
-                campaignData.value = campaignsTable.find(objeto => objeto.id == id);
 
             function fillBeneficiariesArray() {
                 const matchingBeneficiary = beneficiariesTable.find(beneficiary => beneficiary.id == campaignData.value.beneficiary_id);
                 if (matchingBeneficiary) {
                     beneficiaries.value = matchingBeneficiary.name;
                 } else {
-                    beneficiaries.value = ("No matching hospital found");
+                    beneficiaries.value = ("No matching beneficiary found");
                 }
             }
+
             function fillHospitalArray() {
                 const matchingHospital = hospitalsTable.find(hospital => hospital.id == campaignData.value.hospital_id);
                 if (matchingHospital) {
@@ -188,7 +205,32 @@
                 }
             }
 
+            let confirmMessageFlag = ref(false);
+            const toast = useToast();
+            function displayConfirmMessage(){
+                confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            function userRedirect(){
+                router.push('/campaigns', {shallow: false});
+            }
+            function deleteElement(){
+                confirmMessageFlag.value = false;
+                axios.delete(`/api/campaigns/${ id }`)
+                .then(response => {
+                    useCachedDataStoreCampaigns().refreshData();
+                    toast.success("¡Campaña eliminado correctamente!", { timeout: 1000 });
+                    setTimeout(userRedirect, 1000);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    toast.error("Ha ocurrido un error inesperado.", { timeout: 1000 });
+                });
+            }
+
             return {
+                confirmMessageFlag,
+                displayConfirmMessage,
+                deleteElement,
                 hospitals,
                 beneficiaries,
                 campaignsTable,
@@ -196,5 +238,5 @@
                 campaignData,
             };
         }
-    })
+    }
 </script>

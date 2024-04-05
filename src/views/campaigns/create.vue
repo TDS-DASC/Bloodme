@@ -225,7 +225,7 @@
                 .then(res => {
                     console.log(res);
                     useCachedDataStoreCampaigns().refreshData();
-                    toast.success("¡Campaña creado correctamente!", { timeout: 1000 });
+                    toast.success("¡Campaña creada correctamente!", { timeout: 1000 });
                     setTimeout(userRedirect, 1000);
                 })
                 .catch(error => {
