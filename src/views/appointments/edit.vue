@@ -42,6 +42,17 @@
                     />
                     <p v-if="errors.campaign_id" class="mt-2 text-danger-500 block text-sm">{{ errors.campaign_id[0] }}</p>
                 </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Select
+                        label="Participantes *"
+                        placeholder="Seleccione una participante"
+                        name="participant"
+                        :options="participants"
+                        v-model="user_id"
+                        :error="user_idError"
+                    />
+                    <p v-if="errors.user_id" class="mt-2 text-danger-500 block text-sm">{{ errors.user_id[0] }}</p>
+                </div>
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Editar" btnClass="btn-primary"></Button>
                     <router-link
@@ -52,7 +63,7 @@
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de agregar una nueva entidad a la base de datos.<br>
+                Estas a punto de editar una entidad en la base de datos.<br>
                 ¿Estás seguro que quieres continuar?
                 <br><br>
                 <div>
@@ -68,9 +79,13 @@
                         <p class="font-bold">Campaña:</p>
                         {{ campaign_id }}
                     </div>
+                    <div>
+                        <p class="font-bold">Participante:</p>
+                        <span>{{ participants.find(b => b.value == user_id)?.label }}</span>
+                    </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="createAppointment()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="editAppointment()" />
                     <Button btnClass="btn-dark" text="Retroceder" @click="displayConfirmMessage()" />
                 </div>
             </Card>
@@ -91,6 +106,7 @@
     import { useCachedDataStoreAppointments } from '../../stores/appointmentsStore';
     import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
+    import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
     import { useToast } from "vue-toastification";
     import router from '../../router';
     import { useRouter } from 'vue-router';
@@ -111,6 +127,8 @@
                 description: yup.string(),
                 campaign_id: yup.string()
                     .required("La campaña es requerida"),
+                user_id: yup.string()
+                    .required("Se debe de escoger un participante")
             });
 
             let formValues = ref([]);
@@ -126,6 +144,7 @@
                     { name: 'date', value: date.value },
                     { name: 'description', value: description.value },
                     { name: 'campaign_id', value: campaign_id.value },
+                    { name: 'user_id', value: user_id.value },
                 ];
                 trySubmit(newAppointmentForm);
             });
@@ -142,13 +161,13 @@
             function userRedirect(){
                 router.push('/appointments', {shallow: false});
             }
-            function createAppointment(){
+            function editAppointment(){
                 confirmMessageFlag.value = false;
-                axios.post(`/api/appointments/`, formValues)
+                axios.put(`/api/appointments/${participantId}`, formValues)
                 .then(res => {
                     console.log(res);
                     useCachedDataStoreAppointments().refreshData();
-                    toast.success("Cita editada correctamente!", { timeout: 1000 });
+                    toast.success("¡Cita editada correctamente!", { timeout: 1000 });
                     setTimeout(userRedirect, 1000);
                 })
                 .catch(error => {
@@ -171,6 +190,7 @@
             const { value: date, errorMessage: dateError } = useField("date");
             const { value: description, errorMessage: descriptionError } = useField("description");
             const { value: campaign_id, errorMessage: campaign_idError } = useField("campaign_id");
+            const { value: user_id, errorMessage: user_idError } = useField("user_id");
 
             const { campaignsTable } = useCachedDataStoreCampaigns();
             useCachedDataStoreCampaigns().fetchData();
@@ -206,13 +226,12 @@
                     const beneficiary = beneficiariesTable.find(beneficiary => beneficiary.id === campaign.beneficiary_id);
                     return {
                         value: campaign.id,
-                        label: beneficiary ? beneficiary.name : "Unknown" // If beneficiary not found, set label to "Unknown"
+                        label: beneficiary ? beneficiary.name : "Unknown"
                     };
                 });
                 console.log(campaignsWithBeneficiaryNames);
                 return campaignsWithBeneficiaryNames;
             }
-
             let selectOptionForCampaignsInput = ref([]);
             watchEffect(() => {
                 if (campaignsTable && beneficiariesTable) {
@@ -220,32 +239,57 @@
                 }
             });
 
-            const router = useRouter();
-            const { appointmentsTable } = useCachedDataStoreAppointments();
-            const appointmentId = router.currentRoute.value.params.id;
-            useCachedDataStoreAppointments().fetchData();
-            function passAppointmentValuesToSingleVariables() {
-                date.value = appointmentData.value.date;
-                description.value = appointmentData.value.description;
-                campaign_id.value = appointmentData.value.campaign_id;
+            let participants = ref([]);
+
+            function fillParticipantsArray() {
+                participants.value = participantsTable.map(participant => ({
+                    value: participant.id,
+                    label: participant.name
+                }));
+                console.log("Participants WATCH");
+                console.log(participants.value);
             }
-            let appointmentData = ref(null); 
+
+            const { participantsTable } = useCachedDataStoreParticipants();
+            useCachedDataStoreParticipants().fetchData();
+
+            watchEffect(() => {
+                if (participantsTable) {
+                    fillParticipantsArray();
+                }
+            });
+
+            const { appointmentsTable } = useCachedDataStoreAppointments();
+            useCachedDataStoreAppointments().fetchData();
+            const router = useRouter();
+            const participantId = router.currentRoute.value.params.id;
+
+            function passParticipantValuesToSingleVariables() {
+                let dateFromApi = participantData.value.date;
+                let formattedDate = dateFromApi.split(" ")[0];
+                date.value = formattedDate;
+                description.value = participantData.value.description;
+                campaign_id.value = participantData.value.campaign_id;
+                user_id.value = participantData.value.user_id;
+            }
+            let participantData = ref(null); 
             watch(appointmentsTable, () => {
-                appointmentData.value = appointmentsTable.find(objeto => objeto.id == appointmentId);
-                if(appointmentData.value != null){
-                    console.log(appointmentData.value);
-                    passAppointmentValuesToSingleVariables();
+                participantData.value = appointmentsTable.find(objeto => objeto.id == participantId);
+                if(participantData.value != null){
+                    console.log(participantData.value);
+                    passParticipantValuesToSingleVariables();
                 }
             });
             if(appointmentsTable){
-                appointmentData.value = appointmentsTable.find(objeto => objeto.id == appointmentId);
-                if(appointmentData.value != null){
-                    console.log(appointmentData.value);
-                    passAppointmentValuesToSingleVariables();
+                participantData.value = appointmentsTable.find(objeto => objeto.id == participantId);
+                if(participantData.value != null){
+                    console.log(participantData.value);
+                    passParticipantValuesToSingleVariables();
                 }
             }
 
             return {
+                participants,
                 selectOptionForCampaignsInput,
                 campaigns,
                 date,
@@ -254,7 +298,9 @@
                 descriptionError,
                 campaign_id,
                 campaign_idError,
-                createAppointment,
+                user_id,
+                user_idError,
+                editAppointment,
                 displayConfirmMessage,
                 confirmMessageFlag,
                 onSubmit,

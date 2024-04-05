@@ -42,6 +42,17 @@
                     />
                     <p v-if="errors.campaign_id" class="mt-2 text-danger-500 block text-sm">{{ errors.campaign_id[0] }}</p>
                 </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Select
+                        label="Participantes *"
+                        placeholder="Seleccione una participante"
+                        name="participant"
+                        :options="participants"
+                        v-model="user_id"
+                        :error="user_idError"
+                    />
+                    <p v-if="errors.user_id" class="mt-2 text-danger-500 block text-sm">{{ errors.user_id[0] }}</p>
+                </div>
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
                     <router-link
@@ -68,6 +79,10 @@
                         <p class="font-bold">Campaña:</p>
                         {{ campaign_id }}
                     </div>
+                    <div>
+                        <p class="font-bold">Participante:</p>
+                        <span>{{ participants.find(b => b.value == user_id)?.label }}</span>
+                    </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
                     <Button btnClass="btn-primary" text="Confirmar" @click="createAppointment()" />
@@ -91,6 +106,7 @@
     import { useCachedDataStoreAppointments } from '../../stores/appointmentsStore';
     import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
+    import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
     import { useToast } from "vue-toastification";
     import router from '../../router';
 
@@ -110,6 +126,8 @@
                 description: yup.string(),
                 campaign_id: yup.string()
                     .required("La campaña es requerida"),
+                user_id: yup.string()
+                    .required("Se debe de escoger un participante")
             });
 
             let formValues = ref([]);
@@ -125,6 +143,7 @@
                     { name: 'date', value: date.value },
                     { name: 'description', value: description.value },
                     { name: 'campaign_id', value: campaign_id.value },
+                    { name: 'user_id', value: 22 },
                 ];
                 trySubmit(newAppointmentForm);
             });
@@ -145,10 +164,11 @@
                 confirmMessageFlag.value = false;
                 axios.post(`/api/appointments/`, formValues)
                 .then(res => {
-                    console.log(res);
                     useCachedDataStoreAppointments().refreshData();
                     toast.success("Cita creada correctamente!", { timeout: 1000 });
-                    setTimeout(userRedirect, 1000);
+                    console.log("Form Values:");
+                    console.log(formValues);
+                    /* setTimeout(userRedirect, 1000); */
                 })
                 .catch(error => {
                     toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
@@ -170,6 +190,7 @@
             const { value: date, errorMessage: dateError } = useField("date");
             const { value: description, errorMessage: descriptionError } = useField("description");
             const { value: campaign_id, errorMessage: campaign_idError } = useField("campaign_id");
+            const { value: user_id, errorMessage: user_idError } = useField("user_id");
 
             const { campaignsTable } = useCachedDataStoreCampaigns();
             useCachedDataStoreCampaigns().fetchData();
@@ -211,7 +232,6 @@
                 console.log(campaignsWithBeneficiaryNames);
                 return campaignsWithBeneficiaryNames;
             }
-
             let selectOptionForCampaignsInput = ref([]);
             watchEffect(() => {
                 if (campaignsTable && beneficiariesTable) {
@@ -219,7 +239,28 @@
                 }
             });
 
+            let participants = ref([]);
+
+            function fillParticipantsArray() {
+                participants.value = participantsTable.map(participant => ({
+                    value: participant.id,
+                    label: participant.name
+                }));
+                console.log("Participants WATCH");
+                console.log(participants.value);
+            }
+
+            const { participantsTable } = useCachedDataStoreParticipants();
+            useCachedDataStoreParticipants().fetchData();
+
+            watchEffect(() => {
+                if (participantsTable) {
+                    fillParticipantsArray();
+                }
+            });
+
             return {
+                participants,
                 selectOptionForCampaignsInput,
                 campaigns,
                 date,
@@ -228,6 +269,8 @@
                 descriptionError,
                 campaign_id,
                 campaign_idError,
+                user_id,
+                user_idError,
                 createAppointment,
                 displayConfirmMessage,
                 confirmMessageFlag,
