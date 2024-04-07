@@ -77,29 +77,41 @@
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de editar una entidad en la base de datos.<br>
-                ¿Estás seguro que quieres continuar?
+                <span class="dark:text-white">
+                    Estas a punto de editar una entidad de la base de datos.<br>
+                    ¿Estás seguro que quieres continuar?
+                </span>
                 <br><br>
                 <div>
                     <div>
-                        <p class="font-bold">Nombre del Beneficiario:</p>
-                        {{ name }}
+                        <p class="font-bold dark:text-white">Nombre/s:</p>
+                        <p class="dark:text-gray-300">
+                            {{ name }}
+                        </p>
                     </div>
                     <div>
-                        <p class="font-bold">Apellido:</p>
-                        {{ lastname }}
+                        <p class="font-bold dark:text-white">Apellidos:</p>
+                        <p class="dark:text-gray-300">
+                            {{ lastname }}
+                        </p>
                     </div>
                     <div>
-                        <p class="font-bold">Fecha de nacimiento:</p>
-                        {{ birth_date }}
+                        <p class="font-bold dark:text-white">Fecha de nacimiento:</p>
+                        <p class="dark:text-gray-300">
+                            {{ birth_date }}
+                        </p>
                     </div>
                     <div>
-                        <p class="font-bold">Curp:</p>
-                        {{ curp }}
+                        <p class="font-bold dark:text-white">Curp:</p>
+                        <p class="dark:text-gray-300">
+                            {{ curp }}
+                        </p>
                     </div>
                     <div>
-                        <p class="font-bold">Tipo de sangre:</p>
-                        {{ blood_type }}
+                        <p class="font-bold dark:text-white">Tipo de sangre:</p>
+                        <p class="dark:text-gray-300">
+                            {{ blood_type }}
+                        </p>
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">

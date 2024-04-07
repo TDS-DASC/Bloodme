@@ -63,25 +63,33 @@
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de editar una entidad en la base de datos.<br>
-                ¿Estás seguro que quieres continuar?
+                <span class="dark:text-white">
+                    Estas a punto de editar una entidad de la base de datos.<br>
+                    ¿Estás seguro que quieres continuar?
+                </span>
                 <br><br>
                 <div>
                     <div>
-                        <p class="font-bold">Fecha de la cita:</p>
-                        {{ date }}
+                        <p class="font-bold dark:text-white">Fecha de la cita:</p>
+                        <p class="dark:text-gray-300">
+                            {{ date }}
+                        </p>
                     </div>
                     <div>
-                        <p class="font-bold">Descripcion:</p>
-                        {{ description }}
+                        <p class="font-bold dark:text-white">Descripcion:</p>
+                        <p class="dark:text-gray-300">
+                            {{ description }}
+                        </p>
                     </div>
                     <div>
-                        <p class="font-bold">Campaña:</p>
-                        {{ campaign_id }}
+                        <p class="font-bold dark:text-white">Campaña:</p>
+                        <p class="dark:text-gray-300">
+                            {{ campaign_id }}
+                        </p>
                     </div>
                     <div>
-                        <p class="font-bold">Participante:</p>
-                        <span>{{ participants.find(b => b.value == user_id)?.label }}</span>
+                        <p class="font-bold dark:text-white">Participante:</p>
+                        <span class="dark:text-gray-300">{{ participants.find(b => b.value == user_id)?.label }}</span>
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">

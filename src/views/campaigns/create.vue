@@ -99,40 +99,47 @@
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de agregar una nueva entidad a la base de datos.<br>
-                ¿Estás seguro que quieres continuar?
+                <span class="dark:text-white">
+                    Estas a punto de agregar una nueva entidad a la base de datos.<br>
+                    ¿Estás seguro que quieres continuar?
+                </span>
                 <br><br>
                 <div>
                     <div>
-                        <span class="font-bold">Beneficiario:</span>
+                        <span class="font-bold dark:text-white">Beneficiario:</span>
                         <span>&nbsp</span>
-                        <span>{{ beneficiaries.find(b => b.value == beneficiary_id)?.label }}</span>
+                        <span class="dark:text-gray-300">{{ beneficiaries.find(b => b.value == beneficiary_id)?.label }}</span>
                     </div>
                     <div>
-                        <span class="font-bold">ID del Hospital:</span>
+                        <span class="font-bold dark:text-white">Hospital:</span>
                         <span>&nbsp</span>
-                        <span>{{ hospitals.find(b => b.value == hospital_id)?.label }}</span>
+                        <span class="dark:text-gray-300">{{ hospitals.find(b => b.value == hospital_id)?.label }}</span>
                         
                     </div>
                     <div>
-                        <span class="font-bold">Bolsas requeridas:</span>
+                        <span class="font-bold dark:text-white">Bolsas requeridas:</span>
                         <span>&nbsp</span>
-                        <span>{{ required_bags }}</span>
+                        <span class="dark:text-gray-300">{{ required_bags }}</span>
                     </div>
                     <div>
-                        <span class="font-bold">Bolsas recolectadas:</span>
+                        <span class="font-bold dark:text-white">Bolsas recolectadas:</span>
                         <span>&nbsp</span>
-                        <span>{{ recollected_bags }}</span>
+                        <span class="dark:text-gray-300">{{ recollected_bags }}</span>
                     </div>
                     <div>
-                        <span class="font-bold">Plaquetas requeridas:</span>
-                        <span>&nbsp</span>
-                        <span>{{ required_platelets }}</span>
+                        <span class="font-bold dark:text-white">Plaquetas requeridas:</span>
+                        <span>&nbsp</span> 
+                        <span class="dark:text-gray-300">{{ required_platelets }}</span>
                     </div>
                     <div>
-                        <span class="font-bold">Plaquetas recolectadas:</span>
+                        <span class="font-bold dark:text-white">Plaquetas recolectadas:</span>
                         <span>&nbsp</span>
-                        <span>{{ recollected_platelets }}</span>
+                        <span class="dark:text-gray-300">{{ recollected_platelets }}</span>
+                    </div>
+                    <div>
+                        <span class="font-bold dark:text-white">Descripcion de la campaña:</span>
+                        <span>&nbsp</span>
+                        <span class="dark:text-gray-300">{{ description }}</span>
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">

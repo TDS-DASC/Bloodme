@@ -96,6 +96,17 @@
                     hasicon
                 />
 
+                <div class="border border-gray-300 dark:border-gray-500 rounded-md p-4 w-fit">
+                    <p class="font-semibold mb-4 dark:text-slate-300">Selecciona una imagen de perfil</p>
+                    <div class="grid grid-cols-3 gap-0.5">
+                        <div v-for="(userPng, index) in [userPngOne, userPngTwo, userPngThree, userPngFour, userPngFive, userPngSix, userPngSeven, userPngEight, userPngNine]" :key="index" 
+                            class="group border-transparent hover:border-blue-500 border-4 w-fit h-fit rounded-sm transition duration-300"
+                            @click="toggleBorder(index)">
+                            <img :src="userPng" alt="User Image" class="group-hover:border-blue-500 p-2 transition duration-300" :class="{ 'border-blue-500 border-4': selectedImageIndex == index }" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
                     <router-link
@@ -104,10 +115,69 @@
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
+        <div class="absolute w-1/4 shadow-xl top-40 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de agregar una nueva entidad a la base de datos.<br>
-                ¿Estás seguro que quieres continuar?
+                <p class="dark:text-white">
+                    Estas a punto de crear una nueva entidad en la base de datos.<br>
+                    ¿Estás seguro que quieres continuar?
+                </p>
+                <br>
+                <div>
+                    <div>
+                        <p class="font-bold dark:text-white">Nombre:</p>
+                        <p class="dark:text-gray-300">
+                            {{ name }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Apellidos:</p>
+                        <p class="dark:text-gray-300">
+                            {{ lastname }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Correo electronico:</p>
+                        <p class="dark:text-gray-300">
+                            {{ email }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Alias:</p>
+                        <p class="dark:text-gray-300">
+                            {{ alias }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Fecha de nacimiento:</p>
+                        <p class="dark:text-gray-300">
+                            {{ birth_date }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Sexo:</p>
+                        <p class="dark:text-gray-300">
+                        {{ sex }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Número telefonico:</p>
+                        <p class="dark:text-gray-300">
+                        {{ phone_number }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">CURP:</p>
+                        <p class="dark:text-gray-300">
+                            {{ curp }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Tipo de sangre:</p>
+                        <p class="dark:text-gray-300">
+                            {{ blood_type }}
+                        </p>
+                    </div>
+                </div>
                 <div class="mt-9 flex justify-evenly">
                     <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
                     <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
@@ -124,12 +194,22 @@
     import Textinput from "@/components/Textinput";
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { ref } from "vue";
+    import { ref, watch } from "vue";
     import * as yup from 'yup';
     import axios from "@/plugins/axios";
     import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
     import { useToast } from "vue-toastification";
     import { useRouter } from 'vue-router';
+    
+    import userPngOne from "@/assets/images/all-img/UserImages/user.png";
+    import userPngTwo from "@/assets/images/all-img/UserImages/user2.png";
+    import userPngThree from "@/assets/images/all-img/UserImages/user3.png";
+    import userPngFour from "@/assets/images/all-img/UserImages/user4.png";
+    import userPngFive from "@/assets/images/all-img/UserImages/user5.png";
+    import userPngSix from "@/assets/images/all-img/UserImages/user6.png";
+    import userPngSeven from "@/assets/images/all-img/UserImages/user7.png";
+    import userPngEight from "@/assets/images/all-img/UserImages/user8.png";
+    import userPngNine from "@/assets/images/all-img/UserImages/user9.png";
 
     export default {
         components: {
@@ -139,6 +219,19 @@
             Select,
             Textinput,
             Card
+        },
+        data() {
+            return {
+                userPngOne: userPngOne,
+                userPngTwo: userPngTwo,
+                userPngThree: userPngThree,
+                userPngFour: userPngFour,
+                userPngFive: userPngFive,
+                userPngSix: userPngSix,
+                userPngSeven: userPngSeven,
+                userPngEight: userPngEight,
+                userPngNine: userPngNine,
+            }
         },
         setup() {
 
@@ -179,6 +272,8 @@
                 displayConfirmMessage();
             });
             const onSubmit = handleSubmit((values) => {
+                if(image_url.value == "" || image_url.value == null || image_url.value == undefined)
+                    image_url.value = 'user.png';
                 const newUserForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastName', value: lastname.value },
@@ -191,6 +286,7 @@
                     { name: 'password', value: password.value },
                     { name: 'role', value: role.value },
                     { name: 'sex', value: sex.value },
+                    { name: 'image_url', value: image_url },
                 ];
                 trySubmit(newUserForm);
             });
@@ -206,6 +302,7 @@
             const { value: password, errorMessage: passwordError } = useField("password");
             const { value: role, errorMessage: roleError } = useField("role");
             const { value: sex, errorMessage: sexError } = useField("sex");
+            let { value: image_url, errorMessage: image_urlError } = useField("image_url");
 
             const sex_options = [
                 { value: "H", label: "Hombre" },
@@ -222,6 +319,25 @@
                 { value: 'O-', label: 'O-' }
             ];
 
+
+            /* Aqui te quedaste, falta hacer que el numero seleccionado por el usuario al dar click, se compare
+            con el id de este array y así obtener el value correspondiente para despues mandarlo como image_url 
+            en la peticion POST
+            
+            Poner un color diferente en el modo oscuro al fondo de las imagenes
+            */
+            const user_profile_images = [
+                { value: 'user.png', id: '0' },
+                { value: 'user2.png', id: '1' },
+                { value: 'user3.png', id: '2' },
+                { value: 'user4.png', id: '3' },
+                { value: 'user5.png', id: '4' },
+                { value: 'user6.png', id: '5' },
+                { value: 'user7.png', id: '6' },
+                { value: 'user8.png', id: '7' },
+                { value: 'user9.png', id: '8' },
+            ];
+
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
@@ -235,7 +351,8 @@
                     .then(res => {
                         useCachedDataStoreParticipants().refreshData();
                         toast.success("¡Participante creado correctamente!", { timeout: 1000 });
-                        setTimeout(userRedirect, 1000);
+                        console.log(formValues);
+                        /* setTimeout(userRedirect, 1000); */
                     })
                     .catch(error => {
                         toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
@@ -252,7 +369,20 @@
                     });
             }
 
+            let selectedImageIndex = ref(null);
+            function toggleBorder(index) {
+                selectedImageIndex.value = index;
+                console.log(selectedImageIndex.value)
+            }
+
+            
+            watch(selectedImageIndex, () => {
+                image_url = user_profile_images.find((image) => image.id == selectedImageIndex.value);
+            });
+
             return {
+                selectedImageIndex,
+                toggleBorder,
                 blood_types,
                 createUser,
                 sex_options,
@@ -280,6 +410,8 @@
                 roleError,
                 sex,
                 sexError,
+                image_url,
+                image_urlError,
                 onSubmit
             };
         }

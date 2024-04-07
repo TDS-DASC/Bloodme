@@ -65,8 +65,37 @@
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                Estas a punto de editar una entidad de la base de datos.<br>
-                ¿Estás seguro que quieres continuar?
+                <p class="text-white">
+                    Estas a punto de editar una entidad de la base de datos.<br>
+                    ¿Estás seguro que quieres continuar?
+                </p>
+                <br>
+                <div>
+                    <div>
+                        <p class="font-bold dark:text-white">Nombre del Hospital:</p>
+                        <p class="dark:text-gray-300">
+                            {{ name }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Direccion:</p>
+                        <p class="dark:text-gray-300">
+                            {{ address }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Longitude:</p>
+                        <p class="dark:text-gray-300">
+                            {{ longitude }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Latitude:</p>
+                        <p class="dark:text-gray-300">
+                            {{ latitude }}
+                        </p>
+                    </div>
+                </div>
                 <div class="mt-9 flex justify-evenly">
                     <Button btnClass="btn-primary" text="Confirmar" @click="editHospital()" />
                     <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
