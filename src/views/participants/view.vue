@@ -75,7 +75,7 @@
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
                                             EMAIL
                                         </div>
-                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                        <a class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
                                             {{ userData.email }}
                                         </a>
                                         <p v-else>...</p>
@@ -90,7 +90,7 @@
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
                                             CELULAR
                                         </div>
-                                        <a href="tel:0189749676767" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                        <a class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
                                         {{ userData.phone_number}}
                                         </a>
                                     </div>
@@ -125,7 +125,7 @@
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
                                             Nombre
                                         </div>
-                                        <a href="mailto:someone@example.com" class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
+                                        <a class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
                                             {{ userData.name }}
                                         </a>
                                     </div>
