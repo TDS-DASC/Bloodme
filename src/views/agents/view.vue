@@ -158,8 +158,10 @@
         </div>
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
           <Card title="Se requiere confirmación" class="text-center" noborder>
-              Estas a punto de eliminar una entidad de la base de datos.<br>
-              ¿Estás seguro que quieres continuar?
+            <span class="dark:text-white">
+                    Estas a punto de eliminar una entidad de la base de datos.<br>
+                    ¿Estás seguro que quieres continuar?
+                </span>
               <div class="mt-9 flex justify-evenly">
                   <Button btnClass="btn-primary" text="Confirmar" @click="deleteElement()" />
                   <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
