@@ -19,6 +19,7 @@ export const useCachedDataStoreHospitals = defineStore({
           response.data.forEach(hospital => {
             this.hospitalsTable.push(hospital);
           });
+          console.log("se hizo la peticion")
           this.dataLoaded = true;
         } catch (error) {
           console.error('Error in request api hospitals', error);

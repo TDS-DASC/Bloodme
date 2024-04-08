@@ -22,6 +22,16 @@
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
+                        label="Hora de la cita *"
+                        type="time"
+                        name="name"
+                        v-model="time"
+                        :error="timeError"
+                    />
+                    <p v-if="errors.time" class="mt-2 text-danger-500 block text-sm">{{ errors.time[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
                         label="Descripcion *"
                         type="text"
                         placeholder="Ingrese una descripción para su cita"
@@ -52,6 +62,17 @@
                         :error="user_idError"
                     />
                     <p v-if="errors.user_id" class="mt-2 text-danger-500 block text-sm">{{ errors.user_id[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Select
+                        label="Status *"
+                        placeholder="Seleccione una participante"
+                        name="participant"
+                        :options="statusSelection"
+                        v-model="status"
+                        :error="statusError"
+                    />
+                    <p v-if="errors.status" class="mt-2 text-danger-500 block text-sm">{{ errors.status[0] }}</p>
                 </div>
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Editar" btnClass="btn-primary"></Button>
@@ -91,6 +112,10 @@
                         <p class="font-bold dark:text-white">Participante:</p>
                         <span class="dark:text-gray-300">{{ participants.find(b => b.value == user_id)?.label }}</span>
                     </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Status:</p>
+                        <span class="dark:text-gray-300">{{ status }}</span>
+                    </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
                     <Button btnClass="btn-primary" text="Confirmar" @click="editAppointment()" />
@@ -109,8 +134,8 @@
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
     import { ref, watch, watchEffect } from "vue";
-    import axios from "@/plugins/axios";
     import * as yup from 'yup';
+    import axios from "@/plugins/axios";
     import { useCachedDataStoreAppointments } from '../../stores/appointmentsStore';
     import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
@@ -132,7 +157,10 @@
             const schema = yup.object().shape({
                 date: yup.string()
                     .required("La fecha de la cita es requerida"),
+                time: yup.string()
+                    .required("Es necesario seleccionar la hora de la cita"),
                 description: yup.string(),
+                status: yup.string(),
                 campaign_id: yup.string()
                     .required("La campaña es requerida"),
                 user_id: yup.string()
@@ -148,12 +176,18 @@
                 displayConfirmMessage();
             }); 
             const onSubmit = handleSubmit((values) => {
+                const datetimeWithoutSeconds = `${date.value} ${time.value.substring(0, 5)}`;
+
+                date.value = datetimeWithoutSeconds;
+
                 const newAppointmentForm = [
-                    { name: 'date', value: date.value },
+                    { name: 'date', value: datetimeWithoutSeconds },
                     { name: 'description', value: description.value },
+                    { name: 'status', value: status.value },
                     { name: 'campaign_id', value: campaign_id.value },
                     { name: 'user_id', value: user_id.value },
                 ];
+
                 trySubmit(newAppointmentForm);
             });
 
@@ -176,9 +210,11 @@
                     console.log(res);
                     useCachedDataStoreAppointments().refreshData();
                     toast.success("¡Cita editada correctamente!", { timeout: 1000 });
+                    console.log(formValues);
                     setTimeout(userRedirect, 1000);
                 })
                 .catch(error => {
+                    console.log(formValues);
                     toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
                     if (error.response && error.response.data) {
                         const responseData = error.response.data;
@@ -196,7 +232,9 @@
             }
 
             const { value: date, errorMessage: dateError } = useField("date");
+            const { value: time, errorMessage: timeError } = useField("time");
             const { value: description, errorMessage: descriptionError } = useField("description");
+            const { value: status, errorMessage: statusError } = useField("status");
             const { value: campaign_id, errorMessage: campaign_idError } = useField("campaign_id");
             const { value: user_id, errorMessage: user_idError } = useField("user_id");
 
@@ -219,15 +257,12 @@
                     value: beneficiaries.id,
                     label: beneficiaries.name
                 }));
-                console.log("Beneficiarios WATCH");
-                console.log(beneficiaries.value);
             }
             function fillCampaignsArray(){
                 campaigns.value = campaignsTable.map(campaign => ({
                     value: campaign.id,
                     label: campaign.id
                 }));
-                console.log(campaigns.value);
             }
             function createCampaignsWithBeneficiaryNames() {
                 const campaignsWithBeneficiaryNames = campaignsTable.map(campaign => {
@@ -237,7 +272,6 @@
                         label: beneficiary ? beneficiary.name : "Unknown"
                     };
                 });
-                console.log(campaignsWithBeneficiaryNames);
                 return campaignsWithBeneficiaryNames;
             }
             let selectOptionForCampaignsInput = ref([]);
@@ -254,8 +288,6 @@
                     value: participant.id,
                     label: participant.name
                 }));
-                console.log("Participants WATCH");
-                console.log(participants.value);
             }
 
             const { participantsTable } = useCachedDataStoreParticipants();
@@ -276,34 +308,45 @@
                 let dateFromApi = participantData.value.date;
                 let formattedDate = dateFromApi.split(" ")[0];
                 date.value = formattedDate;
+                time.value = dateFromApi.split(" ")[1];
                 description.value = participantData.value.description;
                 campaign_id.value = participantData.value.campaign_id;
                 user_id.value = participantData.value.user_id;
+                status.value = participantData.value.status;
             }
             let participantData = ref(null); 
             watch(appointmentsTable, () => {
                 participantData.value = appointmentsTable.find(objeto => objeto.id == participantId);
                 if(participantData.value != null){
-                    console.log(participantData.value);
                     passParticipantValuesToSingleVariables();
                 }
             });
             if(appointmentsTable){
                 participantData.value = appointmentsTable.find(objeto => objeto.id == participantId);
                 if(participantData.value != null){
-                    console.log(participantData.value);
                     passParticipantValuesToSingleVariables();
                 }
             }
 
+            const statusSelection = [
+                { value: 'cancelled', label: 'Cancelled' },
+                { value: 'pending', label: 'Pending' },
+                { value: 'completed', label: 'Completed' },
+            ];
+
             return {
+                statusSelection,
                 participants,
                 selectOptionForCampaignsInput,
                 campaigns,
                 date,
+                status,
+                statusError,
                 dateError,
                 description,
                 descriptionError,
+                time,
+                timeError,
                 campaign_id,
                 campaign_idError,
                 user_id,

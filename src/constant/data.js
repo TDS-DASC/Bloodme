@@ -1,7 +1,7 @@
-import userImg from "@/assets/images/all-img/user.png";
-import user2Img from "@/assets/images/all-img/user2.png";
-import user3Img from "@/assets/images/all-img/user3.png";
-import user4Img from "@/assets/images/all-img/user4.png";
+import userImg from "@/assets/images/all-img/UserImages/user.png";
+import user2Img from "@/assets/images/all-img/UserImages/user2.png";
+import user3Img from "@/assets/images/all-img/UserImages/user3.png";
+import user4Img from "@/assets/images/all-img/UserImages/user4.png";
 
 export const menuItems = [
   {
