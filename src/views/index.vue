@@ -1,21 +1,21 @@
 <template>
     <div class="flex dark:bg-slate-900 gap-2" style="height: 85vh;">
       <!-- Citas pendientes -->
-      <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit">
-        <div name="header" class="text-center bg-slate-700 text-white dark:text-white text-3xl p-1 font-semibold">
+      <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit dark:bg-slate-800">
+        <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-3xl p-1 font-semibold">
           Citas pendientes
         </div>
-        <div class="flex items-center pr-2 dark:bg-gray-500 bg-white">
+        <div class="flex items-center pr-2 dark:bg-slate-800 bg-white">
           <div class="flex flex-1 items-center m-2 bg-white rounded-xl overflow-hidden border-2 border-black-400 border-solid">
             <Icon icon="material-symbols-light:search" style="font-size: 180%; font-weight: bold; color: gray;"/>
             <input class="p-2 w-full focus:outline-none" placeholder="Buscar...">
           </div>
-          <button class="hover:bg-gray-300 rounded-md">
+          <button class="hover:bg-gray-300 rounded-md dark:bg-slate-300 dark:hover:bg-gray-100">
             <Icon icon="system-uicons:filtering" style="font-size: 180%; font-weight: bold; color: darkslategray;"/>
           </button>
         </div>
         
-        <div class="bg-white dark:bg-slate-600 w-full h-full p-2 pb-10 overflow-auto gap-2 flex flex-col">
+        <div class="bg-white dark:bg-slate-800 w-full h-full p-2 pb-10 overflow-auto gap-2 flex flex-col">
           
           <!-- Separador de horas -->
           <div class="flex justify-center items-center">
@@ -24,72 +24,46 @@
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
           </div>
 
-          <!-- Desplegado del paciente -->
-          <button class="flex bg-white hover:bg-gray-100 dark:bg-slate-200 p-2 rounded-xl items-center shadow-md select-none" @click="showPatienInformation(this)">
-            <div class="relative">
-              <img :src="bloodbag" alt="" class="max-h-16" />
-              <p class="absolute  top-5 text-xs font-bold text-black-900 left-4">-A</p>
-            </div>
-            <div class="flex flex-col justify-start text-start px-4">
-              <div class="flex items-center justify-between gap-4">
-                <p class="font-bold text-xl">Alfonso Lopez</p>
-                <div class="flex gap-2">
-                  <Icon icon="mdi:eye" style="font-size: 120%;"/>
+          <div v-for="(appointment, index) in combinedDataRef" :key="index">
+            <button class="flex bg-white hover:bg-gray-100 dark:bg-slate-200 p-2 rounded-xl items-center shadow-md select-none w-full" @click="showPatientInformation(appointment)">
+              <div class="relative w-1/4">
+                <img :src="bloodbag" alt="" class="max-h-16" />
+                <p class="absolute top-5 text-xs font-bold text-black-900 left-4">-A</p>
+              </div>
+              <div class="flex flex-col justify-start text-start px-4 w-full">
+                <div class="flex items-center justify-between gap-4 w-full">
+                  <p class="font-bold text-xl">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+                  <div class="flex gap-2">
+                    <Icon icon="mdi:eye" style="font-size: 120%;" />
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <Icon icon="mdi:location" />
+                  <p class="flex-2 max-w-xs">{{ appointment.campaign_id }}</p>
+                </div>
+                <div class="flex items-center">
+                  <Icon icon="material-symbols-light:description-outline" style="font-size: 140%;" />
+                  <p class="flex-2 max-w-xs">{{ appointment.description }} Unidades</p>
                 </div>
               </div>
-              <div class="flex items-center">
-                  <Icon icon="mdi:location"/>
-                  <p class="flex-2 max-w-xs">La Paz | Centro de salud. </p>
-              </div>
-              <div class="flex items-center">
-                <Icon icon="healthicons:blood-bag-outline" style="font-size: 140%;"/>
-                <p class="flex-2 max-w-xs">5 Unidades</p>
-              </div>
-            </div>
-          </button>
-
-          <!-- Separador de horas -->
-          <div class="flex justify-center items-center">
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-            <p class="px-5 dark:text-white">6:00pm</p>
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
+            </button>
           </div>
 
-          <button class="flex bg-white hover:bg-gray-100 dark:bg-slate-200 p-2 rounded-xl items-center shadow-md select-none" @click="showPatienInformation(this)">
-            <div class="relative">
-              <img :src="bloodbag" alt="" class="max-h-16" />
-              <p class="absolute  top-5 text-xs font-bold text-black-900 left-4">-A</p>
-            </div>
-            <div class="flex flex-col justify-start text-start px-4">
-              <div class="flex items-center justify-between gap-4">
-                <p class="font-bold text-xl">Alfonso Lopez</p>
-                <div class="flex gap-2">
-                  <Icon icon="mdi:eye" style="font-size: 120%;"/>
-                </div>
-              </div>
-              <div class="flex items-center">
-                  <Icon icon="mdi:location"/>
-                  <p class="flex-2 max-w-xs">La Paz | Centro de salud. </p>
-              </div>
-              <div class="flex items-center">
-                <Icon icon="healthicons:blood-bag-outline" style="font-size: 140%;"/>
-                <p class="flex-2 max-w-xs">5 Unidades</p>
-              </div>
-            </div>
-          </button>
         </div>
       </div>
 
       <!-- Información del paciente -->
-      <div class="flex-auto rounded-md overflow-auto bg-white dark:bg-slate-600">
-        <div name="header" class="text-start bg-slate-700 text-black text-5xl">
-          <p class="text-white px-4 py-4 font-semibold">Información de la Cita</p>
+      <div class="flex-auto rounded-md overflow-auto bg-white dark:bg-gray-800">
+        <div name="header" class="text-start bg-slate-700 text-black text-3xl dark:bg-slate-800">
+          <div name="header" class="bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-3xl px-4 py-4 font-semibold border-b-2">
+            Información de la cita
+          </div>
         </div>
         <br>
         <div class="p-4">
           <div class="px-3 py-2">
-            <div class="w-full border-2 border-black-900 rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
-              <p class="font-semibold text-gray-600 text-2xl">Datos del donador</p>
+            <p class="font-semibold text-gray-600 text-2xl dark:text-white dark:border-b-2 border-b-2">Datos del donador</p>
+            <div class="w-full rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
               <div class="flex gap-2 w-full ">
                 <Textinput
                   label="Nombre/s"
@@ -170,8 +144,8 @@
           </div>
           <br>
           <div class="px-3 py-2">
-            <div class="w-full border-2 border-black-900 rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
-              <p class="font-semibold text-gray-600 text-2xl">Información de contacto</p>
+            <p class="font-semibold text-gray-600 text-2xl dark:text-white dark:border-b-2 border-b-2">Información de contacto</p>
+            <div class="w-full rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
               <div class="flex gap-2 w-full">
                 <Textinput
                   label="Email"
@@ -216,7 +190,13 @@
   import bloodbag from "@/assets/images/all-img/BloodBag.png";
   import Textinput from "@/components/Textinput";
   import Icon from "../components/Icon";
+  import { useCachedDataStoreAppointments } from '../stores/appointmentsStore';
+  import { useCachedDataStoreUsers } from '../stores/usersStore';
+  import { useCachedDataStoreCampaigns } from '../stores/campaignsStore';
+  import { useCachedDataStoreBeneficiaries } from '../stores/beneficiariesStore';
   import { ref } from "vue";
+  import axios from "@/plugins/axios";
+
   export default {
     components: {
       Icon,
@@ -239,7 +219,57 @@
       let email = ref('');
       let phoneNumber = ref('');
 
+      const { appointmentsTable } = useCachedDataStoreAppointments();
+      const { usersTable } = useCachedDataStoreUsers();
+      const { campaignsTable } = useCachedDataStoreCampaigns();
+      const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
+      const combinedDataRef = ref([]);
+
+      async function fetchData() {
+        await useCachedDataStoreAppointments().fetchData();
+        await useCachedDataStoreUsers().fetchData();
+        await useCachedDataStoreCampaigns().fetchData();
+        await useCachedDataStoreBeneficiaries().fetchData();
+
+        const combinedData = appointmentsTable.map(appointment => {
+          const user = usersTable.find(user => user.id === appointment.user_id);
+          const campaign = campaignsTable.find(campaign => campaign.id === appointment.campaign_id);
+          const beneficiary = beneficiariesTable.find(beneficiary => beneficiary.id === campaign.beneficiary_id);
+          return {
+            appointment_id: appointment.id,
+            datetime: appointment.datetime,
+            description: appointment.description,
+            user_name: user ? user.name : '', 
+            user_lastname: user ? user.lastname : '', 
+            user_email: user ? user.email : '', 
+            user_alias: user ? user.alias : '', 
+            user_birth_date: user ? user.birth_date : '', 
+            user_image_url: user ? user.image_url : '',
+            user_sex: user ? user.sex : '',
+            user_phone_number: user ? user.phone_number : '',
+            user_curp: user ? user.curp : '',
+            user_blood_type: user ? user.blood_type : '',
+            campaign_required_bags: campaign ? campaign.required_bags : '',
+            campaign_recollected_bags: campaign ? campaign.recollected_bags : '',
+            campaign_required_platelets: campaign ? campaign.required_platelets : '',
+            campaign_recollected_platelets: campaign ? campaign.recollected_platelets : '',
+            campaign_description: campaign ? campaign.description : '',
+            campaign_beneficiary_id: campaign ? campaign.beneficiary_id : '',
+            campaign_hospital_id: campaign ? campaign.hospital_id : '',
+            beneficiary_name: beneficiary ? beneficiary.name : '',
+            beneficiary_lastname: beneficiary ? beneficiary.lastname : '',
+            beneficiary_curp: beneficiary ? beneficiary.curp : '',
+            beneficiary_blood_type: beneficiary ? beneficiary.blood_type : '',
+          };
+        });
+
+        combinedDataRef.value = combinedData;
+      }
+
+      fetchData();
+
       return {
+        combinedDataRef,
         name,
         lastName,
         birthDate,
@@ -248,7 +278,9 @@
         sex,
         alias,
         email,
-        phoneNumber
+        phoneNumber,
+        appointmentsTable,
+        usersTable
       }
     }
   };

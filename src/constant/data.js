@@ -124,7 +124,7 @@ export const menuItems = [
         },
     ],
   },
-  {
+/*   {
     title: "Usuarios",
     icon: "ph:users",
     role: "admin",
@@ -138,7 +138,7 @@ export const menuItems = [
           childlink: "/users/create",
         },
     ],
-  }
+  } */
 ];
 // menuseetins
 

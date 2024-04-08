@@ -36,10 +36,6 @@
                         field: "id",
                     },
                     {
-                        label: "Date",
-                        field: "date",
-                    },
-                    {
                         label: "Descripcion",
                         field: "description",
                     },

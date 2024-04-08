@@ -352,7 +352,7 @@
                         useCachedDataStoreParticipants().refreshData();
                         toast.success("¡Participante creado correctamente!", { timeout: 1000 });
                         console.log(formValues);
-                        /* setTimeout(userRedirect, 1000); */
+                        setTimeout(userRedirect, 1000);
                     })
                     .catch(error => {
                         toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
