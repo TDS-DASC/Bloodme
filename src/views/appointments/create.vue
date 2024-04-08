@@ -22,6 +22,16 @@
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
+                        label="Hora de la cita *"
+                        type="time"
+                        name="name"
+                        v-model="time"
+                        :error="timeError"
+                    />
+                    <p v-if="errors.time" class="mt-2 text-danger-500 block text-sm">{{ errors.time[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Textinput
                         label="Descripcion *"
                         type="text"
                         placeholder="Ingrese una descripción para su cita"
@@ -47,7 +57,7 @@
                         label="Participantes *"
                         placeholder="Seleccione una participante"
                         name="participant"
-                        :options="participants"
+                        :options="users"
                         v-model="user_id"
                         :error="user_idError"
                     />
@@ -89,7 +99,7 @@
                     </div>
                     <div>
                         <p class="font-bold dark:text-white">Participante:</p>
-                        <span class="dark:text-gray-300">{{ participants.find(b => b.value == user_id)?.label }}</span>
+                        <span class="dark:text-gray-300">{{ users.find(b => b.value == user_id)?.label }}</span>
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
@@ -115,6 +125,7 @@
     import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
+    import { useCachedDataStoreUsers } from '../../stores/usersStore';
     import { useToast } from "vue-toastification";
     import router from '../../router';
 
@@ -131,6 +142,8 @@
             const schema = yup.object().shape({
                 date: yup.string()
                     .required("La fecha de la cita es requerida"),
+                time: yup.string()
+                    .required("Es necesario seleccionar la hora de la cita"),
                 description: yup.string(),
                 campaign_id: yup.string()
                     .required("La campaña es requerida"),
@@ -147,6 +160,8 @@
                 displayConfirmMessage();
             }); 
             const onSubmit = handleSubmit((values) => {
+                date.value = date.value + " " + time.value;
+                console.log(date.value);
                 const newAppointmentForm = [
                     { name: 'date', value: date.value },
                     { name: 'description', value: description.value },
@@ -194,8 +209,9 @@
                     console.log(errorMessage)
                 });
             }
-
+            /* año-mes-día -espacio- hora:minuto */
             const { value: date, errorMessage: dateError } = useField("date");
+            const { value: time, errorMessage: timeError } = useField("time");
             const { value: description, errorMessage: descriptionError } = useField("description");
             const { value: campaign_id, errorMessage: campaign_idError } = useField("campaign_id");
             const { value: user_id, errorMessage: user_idError } = useField("user_id");
@@ -247,28 +263,28 @@
                 }
             });
 
-            let participants = ref([]);
+            let users = ref([]);
 
             function fillParticipantsArray() {
-                participants.value = participantsTable.map(participant => ({
-                    value: participant.id,
-                    label: participant.name
+                users.value = usersTable.map(user => ({
+                    value: user.id,
+                    label: user.name
                 }));
-                console.log("Participants WATCH");
-                console.log(participants.value);
+                console.log("users WATCH");
+                console.log(users.value);
             }
 
-            const { participantsTable } = useCachedDataStoreParticipants();
-            useCachedDataStoreParticipants().fetchData();
+            const { usersTable } = useCachedDataStoreUsers();
+            useCachedDataStoreUsers().fetchData();
 
             watchEffect(() => {
-                if (participantsTable) {
+                if (usersTable) {
                     fillParticipantsArray();
                 }
             });
 
             return {
-                participants,
+                users,
                 selectOptionForCampaignsInput,
                 campaigns,
                 date,
@@ -277,6 +293,8 @@
                 descriptionError,
                 campaign_id,
                 campaign_idError,
+                time,
+                timeError,
                 user_id,
                 user_idError,
                 createAppointment,

@@ -264,6 +264,7 @@
         });
 
         combinedDataRef.value = combinedData;
+        console.log(combinedDataRef.value);
       }
 
       fetchData();
