@@ -225,6 +225,7 @@
             let errors = ref([]);
             const toast = useToast();
             function userRedirect(){
+                router.refresh();
                 router.push('/campaigns', {shallow: false});
             }
             function createCampaign(){

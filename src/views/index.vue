@@ -8,15 +8,63 @@
         <div class="flex items-center pr-2 dark:bg-slate-800 bg-white">
           <div class="flex flex-1 items-center m-2 bg-white rounded-xl overflow-hidden border-2 border-black-400 border-solid">
             <Icon icon="material-symbols-light:search" style="font-size: 180%; font-weight: bold; color: gray;"/>
-            <input class="p-2 w-full focus:outline-none" placeholder="Buscar...">
+            <input class="p-2 w-full focus:outline-none" placeholder="Buscar..." @input="filterData($event.target.value)">
           </div>
-          <button class="hover:bg-gray-300 rounded-md dark:bg-slate-300 dark:hover:bg-gray-100">
-            <Icon icon="system-uicons:filtering" style="font-size: 180%; font-weight: bold; color: darkslategray;"/>
+          <button class="hover:bg-gray-300 rounded-md dark:bg-slate-300 dark:hover:bg-gray-100 z-10">
+            <Icon icon="system-uicons:filtering" style="font-size: 180%; font-weight: bold; color: darkslategray;" @click="showFilteringOptions()" />
+            <div class="absolute" v-if="showFilteringOptionsValue">
+              <div class="w-fit h-fit bg-white border-2 border-black-900 flex flex-col justify-start items-start p-2">
+                <div class="flex justify-between w-full">
+                  <p class="font-bold">Filtrar por:</p>
+                  <Icon icon="carbon:close-outline" style="font-size: 180%; font-weight: bold; color: darkslategray;" @click="showFilteringOptions()" />
+                </div>
+                <div class="px-4 py-2 font-semibold gap-2 flex flex-col">
+                  <div class="flex">
+                    <input type="radio" id="filtered-by-id" name="filter-option" @click="changeFilter('byId')">
+                    <label for="filtered-by-id" class="px-2" >Por orden de creación</label><br>
+                  </div>
+                  <div class="flex">
+                    <input type="radio" id="filtered-by-name" name="filter-option" @click="changeFilter('byName')">
+                    <label for="filtered-by-name" class="px-2">Por nombre del donador</label><br>
+                  </div>
+                  <div class="flex">
+                    <input type="radio" id="filtered-by-lastname" name="filter-option" @click="changeFilter('byUserLastName')">
+                    <label for="filtered-by-lastname" class="px-2">Por apellido del donador</label>
+                  </div>
+                  <div class="flex">
+                    <input type="radio" id="filtered-by-beneficiary-name" name="filter-option" @click="changeFilter('byBeneficiaryName')">
+                    <label for="filtered-by-beneficiary-name" class="px-2">Por nombre del beneficiario</label>
+                  </div>
+                  <div class="flex">
+                    <input type="radio" id="filtered-by-beneficiary-lastname" name="filter-option" @click="changeFilter('byBeneficiaryLastName')">
+                    <label for="filtered-by-beneficiary-lastname" class="px-2">Por apellido del beneficiario</label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </button>
         </div>
-        
+
         <div class="bg-white dark:bg-slate-800 h-full p-2 pb-10 overflow-auto gap-2 flex flex-col">
           
+        <div class="bg-white p-2">
+          <div class="flex justify-center items-center">
+            <div class="border-b-4 border-solid border-gray-300 w-full"></div>
+            <p class="px-5 dark:text-white">Ocultar</p>
+            <div class="border-b-4 border-solid border-gray-300 w-full"></div>
+          </div>
+          <div class="flex justify-center gap-2">
+            <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('pending')" :class="{ 'bg-gray-500': pending, 'hover:bg-green-300': pending }">
+              Pendientes
+            </button>
+            <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('canceled')" :class="{ 'bg-gray-500': canceled, 'hover:bg-green-300': canceled }">
+              Canceladas
+            </button>
+            <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('completed')" :class="{ 'bg-gray-500': completed, 'hover:bg-green-300': completed }">
+              Completadas
+            </button>
+          </div>
+        </div>
           <!-- Separador de horas -->
           <!-- <div class="flex justify-center items-center">
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
@@ -24,14 +72,14 @@
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
           </div> -->
 
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center" v-if="!pending">
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
             <p class="px-5 dark:text-white">Pendientes</p>
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
           </div>
 
-          <div v-for="(appointment, index) in combinedDataRef" :key="index">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedImageIndex == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
+          <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!pending">
+            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
               <div class="relative w-1/4 flex justify-center items-center dark:bg-white dark:rounded-md dark:w-fit">
                 <img :src="bloodbag" alt="" class="max-h-16" />
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
@@ -55,14 +103,45 @@
             </button>
           </div>
 
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center" v-if="!canceled">
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
             <p class="px-5 dark:text-white">Canceladas</p>
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
           </div>
 
-          <div v-for="(appointment, index) in combinedDataRef" :key="index">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedImageIndex == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'cancelled'">
+          <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!canceled">
+            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'cancelled'">
+              <div class="relative w-1/4 flex justify-center items-center dark:bg-white dark:rounded-md dark:w-fit">
+                <img :src="bloodbag" alt="" class="max-h-16" />
+                <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
+              </div>
+              <div class="flex flex-col justify-start text-start px-4 w-full">
+                <div class="flex items-center justify-between gap-4 w-full dark:text-white">
+                  <p class="font-bold text-xl dark:text-white">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+                  <div class="flex gap-2">
+                    <Icon icon="mdi:eye" style="font-size: 120%;" />
+                  </div>
+                </div>
+                <div class="flex items-center dark:text-gray-300">
+                  <Icon icon="mdi:location" />
+                  <p class="flex-2 max-w-xs">{{ appointment.hospital_name }}</p>
+                </div>
+                <div class="flex items-center dark:text-gray-300">
+                  <Icon icon="material-symbols-light:description-outline" style="font-size: 140%;" />
+                  <p class="flex-2 max-w-xs">{{ appointment.description }} Unidades</p>
+                </div>
+              </div>
+            </button>
+          </div>
+          
+          <div class="flex justify-center items-center" v-if="!completed">
+            <div class="border-b-2 border-solid border-black-300 w-full"></div>
+            <p class="px-5 dark:text-white">Completadas</p>
+            <div class="border-b-2 border-solid border-black-300 w-full"></div>
+          </div>
+
+          <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!completed">
+            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'completed'">
               <div class="relative w-1/4 flex justify-center items-center dark:bg-white dark:rounded-md dark:w-fit">
                 <img :src="bloodbag" alt="" class="max-h-16" />
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
@@ -252,13 +331,13 @@
           </div>
           <br>
           <div class="full flex justify-end gap-2">
-            <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center" @click="cancelledAppointment" v-if="appointment_status != 'cancelled'">
+            <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
+              Cita pendiente
+            </button>
+            <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
               Cita cancelada
             </button>
-            <button type="button" class="btn bg-slate-400 hover:bg-slate-500 text-white block w-fit text-center">
-              Cita completada con retardo
-            </button>
-            <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center">
+            <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
               Cita completada
             </button>
           </div>
@@ -297,6 +376,8 @@
       const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
       const { hospitalsTable } = useCachedDataStoreHospitals();
       const combinedDataRef = ref([]);
+
+      let originalData = [];
 
       async function fetchData() {
         await useCachedDataStoreAppointments().fetchData();
@@ -345,6 +426,7 @@
         });
 
         combinedDataRef.value = combinedData;
+        originalData = combinedDataRef.value;
       }
 
       fetchData();
@@ -365,10 +447,10 @@
       let appointment_date = ref('');
       let appointment_status = ref('');
       
-      let selectedImageIndex = ref(null);
+      let selectedAppointment = ref(null);
       function showPatientInformation(appointment, index){
-        selectedImageIndex.value = index;
-        console.log(selectedImageIndex.value)
+        selectedAppointment.value = index;
+        console.log(selectedAppointment.value)
 
         appointmentId.value = appointment.appointment_id;
         name.value = appointment.user_name ? appointment.user_name : 'No registrado';
@@ -388,7 +470,7 @@
       }
 
       const toast = useToast();
-      function cancelledAppointment(){
+      function changeAppointmentValue(newAppointmentStatus){
         let selectedAppointment = null;
         if(appointmentId.value){
           selectedAppointment = combinedDataRef.value.find((appointment) => appointment.appointment_id == appointmentId.value);
@@ -397,7 +479,7 @@
           const appointmentData  = [
                       { name: 'date', value: datetimeWithoutSeconds },
                       { name: 'description', value: selectedAppointment.description },
-                      { name: 'status', value: "cancelled" },
+                      { name: 'status', value: newAppointmentStatus },
                       { name: 'campaign_id', value: selectedAppointment.campaign_id },
                       { name: 'user_id', value: selectedAppointment.user_id },
                   ];
@@ -409,7 +491,7 @@
                   .then(res => {
                       console.log(res);
                       useCachedDataStoreAppointments().refreshData();
-                      selectedAppointment.appointment_status = 'cancelled';
+                      selectedAppointment.appointment_status = newAppointmentStatus;
                       toast.success("¡Cita cancelada correctamente!", { timeout: 1000 });
                   })
                   .catch(error => {
@@ -425,9 +507,116 @@
         }
       }
 
+      function changeFilter(selectedFilterOption) {
+        if (selectedFilterOption === 'byId') {
+          combinedDataRef.value.sort((a, b) => a.appointment_id - b.appointment_id);
+        } else if (selectedFilterOption === 'byName') {
+          combinedDataRef.value.sort((a, b) => {
+            const nameA = a.user_name.toUpperCase();
+            const nameB = b.user_name.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
+        } else if (selectedFilterOption === 'byBeneficiaryName') {
+          combinedDataRef.value.sort((a, b) => {
+            const beneficiaryNameA = a.beneficiary_name.toUpperCase();
+            const beneficiaryNameB = b.beneficiary_name.toUpperCase();
+            if (beneficiaryNameA < beneficiaryNameB) {
+              return -1;
+            }
+            if (beneficiaryNameA > beneficiaryNameB) {
+              return 1;
+            }
+            return 0;
+          });
+        } else if (selectedFilterOption === 'byBeneficiaryLastName') {
+          combinedDataRef.value.sort((a, b) => {
+            const beneficiaryLastNameA = a.beneficiary_lastname.toUpperCase();
+            const beneficiaryLastNameB = b.beneficiary_lastname.toUpperCase();
+            if (beneficiaryLastNameA < beneficiaryLastNameB) {
+              return -1;
+            }
+            if (beneficiaryLastNameA > beneficiaryLastNameB) {
+              return 1;
+            }
+            return 0;
+          });
+        } else if (selectedFilterOption === 'byUserLastName') {
+          combinedDataRef.value.sort((a, b) => {
+            const userLastNameA = a.user_lastname.toUpperCase();
+            const userLastNameB = b.user_lastname.toUpperCase();
+            if (userLastNameA < userLastNameB) {
+              return -1;
+            }
+            if (userLastNameA > userLastNameB) {
+              return 1;
+            }
+            return 0;
+          });
+        }
+      }
+
+      let showFilteringOptionsValue = ref(false);
+      function showFilteringOptions(){
+        showFilteringOptionsValue.value = !showFilteringOptionsValue.value;
+      }
+
+      let completed = ref(false);
+      let canceled = ref(false);
+      let pending = ref(false);
+      function changeAppointmentView(visibility){
+        if(visibility == "completed"){
+          completed.value = !completed.value;
+        }
+        if(visibility == "canceled"){
+          canceled.value = !canceled.value;
+        }
+        if(visibility == "pending"){
+          pending.value = !pending.value;
+        }
+
+      }
+
+      function filterData(searchQuery) {
+        console.log(searchQuery == '')
+        if (searchQuery.trim() == '' || searchQuery == '') {
+          combinedDataRef.value = originalData;
+          return;
+        }
+
+        const filteredData = originalData.filter(item => {
+          const searchString = [
+            item.user_email,
+            item.user_name,
+            item.user_lastname,
+            item.user_curp,
+            item.beneficiary_name,
+            item.beneficiary_lastname,
+            item.beneficiary_curp
+          ].join(' ').toLowerCase();
+
+          return searchString.includes(searchQuery.toLowerCase());
+        });
+
+        combinedDataRef.value = filteredData;
+      }
+
       return {
-        cancelledAppointment,
-        selectedImageIndex,
+        filterData,
+        canceled,
+        pending,
+        completed,
+        changeAppointmentView,
+        showFilteringOptionsValue,
+        showFilteringOptions,
+        changeFilter,
+        changeAppointmentValue,
+        selectedAppointment,
         appointment_date,
         campaign_recollected_bags,
         campaign_beneficiary,
@@ -450,5 +639,3 @@
     }
   };
 </script>
-<style lang="css">
-</style>
