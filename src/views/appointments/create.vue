@@ -44,7 +44,7 @@
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Select
                         label="Campaña *"
-                        placeholder="Beneficiario - Sede hospital"
+                        placeholder="Seleccione: Beneficiario - Sede hospital"
                         name="campaign"
                         :options="selectOptionForCampaignsInput"
                         v-model="campaign_id"
@@ -162,11 +162,8 @@
             let savedDate = ref(null);
             const onSubmit = handleSubmit((values) => {
                 savedDate.value = date.value;
-
                 const datetimeWithoutSeconds = `${date.value} ${time.value.substring(0, 5)}`;
-
                 date.value = datetimeWithoutSeconds;
-
                 const newAppointmentForm = [
                     { name: 'date', value: date.value },
                     { name: 'description', value: description.value },

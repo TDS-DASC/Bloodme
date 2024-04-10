@@ -44,7 +44,7 @@
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Select
                         label="Campaña *"
-                        placeholder="Seleccione una campaña"
+                        placeholder="Seleccione: Beneficiario - Sede hospital"
                         name="campaign"
                         :options="selectOptionForCampaignsInput"
                         v-model="campaign_id"
@@ -66,8 +66,8 @@
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Select
                         label="Status *"
-                        placeholder="Seleccione una participante"
-                        name="participant"
+                        placeholder="Seleccione un estado"
+                        name="status"
                         :options="statusSelection"
                         v-model="status"
                         :error="statusError"
@@ -140,6 +140,7 @@
     import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
+    import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
     import { useToast } from "vue-toastification";
     import router from '../../router';
     import { useRouter } from 'vue-router';
@@ -177,7 +178,7 @@
             }); 
             let savedDate = ref(null);
             const onSubmit = handleSubmit((values) => {
-                savedDate = date.value;
+                savedDate.value = date.value;
                 const datetimeWithoutSeconds = `${date.value} ${time.value.substring(0, 5)}`;
                 date.value = datetimeWithoutSeconds;
                 const newAppointmentForm = [
@@ -203,12 +204,13 @@
             let errorMessage = ref("");
             let errors = ref([]);
             const toast = useToast();
+            const routeId = router.currentRoute.value.params.id;
             function userRedirect(){
                 router.push('/appointments', {shallow: false});
             }
             function editAppointment(){
                 confirmMessageFlag.value = false;
-                axios.put(`/api/appointments/${participantId}`, formValues)
+                axios.put(`/api/appointments/${routeId}`, formValues)
                 .then(res => {
                     console.log(res);
                     useCachedDataStoreAppointments().refreshData();
@@ -241,20 +243,33 @@
             const { value: campaign_id, errorMessage: campaign_idError } = useField("campaign_id");
             const { value: user_id, errorMessage: user_idError } = useField("user_id");
 
-            const { campaignsTable } = useCachedDataStoreCampaigns();
-            useCachedDataStoreCampaigns().fetchData();
-            let campaigns = ref([]);
-            watch(campaignsTable, () => {
-                fillCampaignsArray();
-            });
+            async function fetchData() {
+                await useCachedDataStoreParticipants().fetchData();
+                await useCachedDataStoreCampaigns().fetchData();
+                await useCachedDataStoreBeneficiaries().fetchData();
+                await useCachedDataStoreHospitals().fetchData();
+                await useCachedDataStoreAppointments().fetchData();
 
-            const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
-            useCachedDataStoreBeneficiaries().fetchData();
-            let beneficiaries = ref([]);
-            watch(beneficiariesTable, () => {
+                console.log(appointmentsTable);
+
                 fillBeneficiariesArray();
-            });
+                fillCampaignsArray();
+                fillParticipantsArray();
+                createCampaignsWithBeneficiaryNames();
+                passParticipantValuesToSingleVariables();
+            }
+            fetchData();
 
+            const { participantsTable } = useCachedDataStoreParticipants();
+            const { hospitalsTable } = useCachedDataStoreHospitals();
+            const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
+            const { campaignsTable } = useCachedDataStoreCampaigns();
+            const { appointmentsTable } = useCachedDataStoreAppointments();
+
+            let campaigns = ref([]);
+            let beneficiaries = ref([]);
+            let participants = ref([]);
+            let appointments = ref([]);
             function fillBeneficiariesArray(){
                 beneficiaries.value = beneficiariesTable.map(beneficiaries => ({
                     value: beneficiaries.id,
@@ -267,47 +282,36 @@
                     label: campaign.id
                 }));
             }
+            function fillParticipantsArray() {
+                participants.value = participantsTable.map(user => ({
+                    value: user.id,
+                    label: user.name
+                }));
+            }
+            
+            let selectOptionForCampaignsInput = ref([]);
             function createCampaignsWithBeneficiaryNames() {
                 const campaignsWithBeneficiaryNames = campaignsTable.map(campaign => {
                     const beneficiary = beneficiariesTable.find(beneficiary => beneficiary.id === campaign.beneficiary_id);
+                    const hospital = hospitalsTable.find(hospital => hospital.id == campaign.hospital_id)
                     return {
                         value: campaign.id,
-                        label: beneficiary ? beneficiary.name : "Unknown"
+                        label: beneficiary.name + ' - ' + hospital.name
                     };
                 });
-                return campaignsWithBeneficiaryNames;
-            }
-            let selectOptionForCampaignsInput = ref([]);
-            watchEffect(() => {
-                if (campaignsTable && beneficiariesTable) {
-                    selectOptionForCampaignsInput.value = createCampaignsWithBeneficiaryNames();
-                }
-            });
-
-            let participants = ref([]);
-
-            function fillParticipantsArray() {
-                participants.value = participantsTable.map(participant => ({
-                    value: participant.id,
-                    label: participant.name
-                }));
+                selectOptionForCampaignsInput.value = campaignsWithBeneficiaryNames;
             }
 
-            const { participantsTable } = useCachedDataStoreParticipants();
-            useCachedDataStoreParticipants().fetchData();
+            const statusSelection = [
+                { value: 'cancelled', label: 'Cancelled' },
+                { value: 'pending', label: 'Pending' },
+                { value: 'completed', label: 'Completed' },
+            ];
 
-            watchEffect(() => {
-                if (participantsTable) {
-                    fillParticipantsArray();
-                }
-            });
-
-            const { appointmentsTable } = useCachedDataStoreAppointments();
-            useCachedDataStoreAppointments().fetchData();
-            const router = useRouter();
-            const participantId = router.currentRoute.value.params.id;
-
+            let participantData = ref(null); 
             function passParticipantValuesToSingleVariables() {
+                participantData.value = appointmentsTable.find(appointment => appointment.id == routeId);
+
                 let dateFromApi = participantData.value.date;
                 let formattedDate = dateFromApi.split(" ")[0];
                 date.value = formattedDate;
@@ -317,25 +321,6 @@
                 user_id.value = participantData.value.user_id;
                 status.value = participantData.value.status;
             }
-            let participantData = ref(null); 
-            watch(appointmentsTable, () => {
-                participantData.value = appointmentsTable.find(objeto => objeto.id == participantId);
-                if(participantData.value != null){
-                    passParticipantValuesToSingleVariables();
-                }
-            });
-            if(appointmentsTable){
-                participantData.value = appointmentsTable.find(objeto => objeto.id == participantId);
-                if(participantData.value != null){
-                    passParticipantValuesToSingleVariables();
-                }
-            }
-
-            const statusSelection = [
-                { value: 'cancelled', label: 'Cancelled' },
-                { value: 'pending', label: 'Pending' },
-                { value: 'completed', label: 'Completed' },
-            ];
 
             return {
                 statusSelection,
