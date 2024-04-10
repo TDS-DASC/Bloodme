@@ -104,6 +104,26 @@
                     :error="passwordError"
                     hasicon
                 />
+                <Textinput
+                    label="Selected Image*"
+                    type="string"
+                    placeholder="Imagen seleccionada"
+                    name="image_url"
+                    v-model="image_url"
+                    :error="image_urlError"
+                    disabled
+                />
+
+                <div class="border border-gray-300 dark:border-gray-500 rounded-md p-4 w-fit">
+                    <p class="font-semibold mb-4 dark:text-slate-300">Selecciona una imagen de perfil</p>
+                    <div class="grid grid-cols-3 gap-0.5">
+                        <div v-for="(userPng, index) in [userPngOne, userPngTwo, userPngThree, userPngFour, userPngFive, userPngSix, userPngSeven, userPngEight, userPngNine]" :key="index" 
+                            class="group border-transparent hover:border-blue-500 border-4 w-fit h-fit rounded-sm transition duration-300"
+                            @click="toggleBorder(index)">
+                            <img :src="userPng" alt="User Image" class="group-hover:border-blue-500 p-2 transition duration-300" :class="{ 'border-blue-500 border-4': selectedImageIndex == index }" />
+                        </div>
+                    </div>
+                </div>
 
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
@@ -165,6 +185,16 @@
     import { useCachedDataStoreAgents } from '@/stores/agentsStore';
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
     import { useRouter } from 'vue-router';
+    
+    import userPngOne from "@/assets/images/all-img/UserImages/user.png";
+    import userPngTwo from "@/assets/images/all-img/UserImages/user2.png";
+    import userPngThree from "@/assets/images/all-img/UserImages/user3.png";
+    import userPngFour from "@/assets/images/all-img/UserImages/user4.png";
+    import userPngFive from "@/assets/images/all-img/UserImages/user5.png";
+    import userPngSix from "@/assets/images/all-img/UserImages/user6.png";
+    import userPngSeven from "@/assets/images/all-img/UserImages/user7.png";
+    import userPngEight from "@/assets/images/all-img/UserImages/user8.png";
+    import userPngNine from "@/assets/images/all-img/UserImages/user9.png";
 
     export default {
         components: {
@@ -174,6 +204,19 @@
             Select,
             Textinput,
             Card
+        },
+        data() {
+            return {
+                userPngOne: userPngOne,
+                userPngTwo: userPngTwo,
+                userPngThree: userPngThree,
+                userPngFour: userPngFour,
+                userPngFive: userPngFive,
+                userPngSix: userPngSix,
+                userPngSeven: userPngSeven,
+                userPngEight: userPngEight,
+                userPngNine: userPngNine,
+            }
         },
         setup() {
             const schema = yup.object().shape({
@@ -187,7 +230,11 @@
                     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable(),
                 sex: yup.string().nullable(),
-                phone_number: yup.string().nullable(),
+                image_url: yup.string().nullable(),
+                phone_number: yup.string().nullable()
+                    .required("El nummero de celular es requerido para crear un agente")
+                    .max(10, "El Número de telefono no puede pasar de 10 digitos")
+                    .min(10, "El Número de telefono no puede ser menor a 10 digitos"),
                 curp: yup.string()
                     .required("El curp es requerido")
                     .max(18, "El curp no puede exceder los 18 caracteres")
@@ -208,6 +255,8 @@
                 displayConfirmMessage();
             });
             const onSubmit = handleSubmit((values) => {
+                if(image_url.value == "" || image_url.value == null || image_url.value == undefined)
+                    image_url.value = 'user.png';
                 const newUserForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastName', value: lastname.value },
@@ -220,6 +269,7 @@
                     { name: 'sex', value: sex.value },
                     { name: 'hospital_id', value: hospital_id.value },
                     { name: 'password', value: password.value },
+                    { name: 'image_url', value: image_url.value },
                 ];
                 console.log(newUserForm)
                 trySubmit(newUserForm);
@@ -260,6 +310,18 @@
                 { value: 'O-', label: 'O-' }
             ];
 
+            const user_profile_images = [
+                { value: 'user.png', id: '0' },
+                { value: 'user2.png', id: '1' },
+                { value: 'user3.png', id: '2' },
+                { value: 'user4.png', id: '3' },
+                { value: 'user5.png', id: '4' },
+                { value: 'user6.png', id: '5' },
+                { value: 'user7.png', id: '6' },
+                { value: 'user8.png', id: '7' },
+                { value: 'user9.png', id: '8' },
+            ];
+
             const { value: name, errorMessage: nameError } = useField("name");
             const { value: lastname, errorMessage: lastnameError } = useField("lastname");
             const { value: alias, errorMessage: aliasError } = useField("alias");
@@ -271,6 +333,7 @@
             const { value: password, errorMessage: passwordError } = useField("password");
             const { value: sex, errorMessage: sexError } = useField("sex");
             const { value: hospital_id, errorMessage: hospital_idError } = useField("hospital_id");
+            const { value: image_url, errorMessage: image_urlError } = useField("image_url");
 
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
@@ -309,8 +372,23 @@
                 console.log(selectedRole == 1);
             }
             
+            let selectedImageIndex = ref(null);
+            function toggleBorder(index) {
+                selectedImageIndex.value = index;
+                console.log(selectedImageIndex.value)
+            }
+            
+            watch(selectedImageIndex, () => {
+                image_url.value = user_profile_images.find((image) => image.id == selectedImageIndex.value);
+                image_url.value = image_url.value.value;
+            });
+            
 
             return {
+                selectedImageIndex,
+                toggleBorder,
+                image_url,
+                image_urlError,
                 blood_types,
                 createUser,
                 selectedRole,

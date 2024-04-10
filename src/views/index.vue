@@ -46,31 +46,24 @@
         </div>
 
         <div class="bg-white dark:bg-slate-800 h-full p-2 pb-10 overflow-auto gap-2 flex flex-col">
-          
-        <div class="bg-white p-2">
-          <div class="flex justify-center items-center">
-            <div class="border-b-4 border-solid border-gray-300 w-full"></div>
-            <p class="px-5 dark:text-white">Ocultar</p>
-            <div class="border-b-4 border-solid border-gray-300 w-full"></div>
+          <div class="bg-white p-2 dark:bg-slate-800">
+            <div class="flex justify-center items-center">
+              <div class="border-b-4 border-solid border-gray-300 w-full"></div>
+              <p class="px-5 dark:text-white">Ocultar</p>
+              <div class="border-b-4 border-solid border-gray-300 w-full"></div>
+            </div>
+            <div class="flex justify-center gap-2">
+              <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('pending')" :class="{ 'bg-gray-500': pending, 'hover:bg-green-300': pending }">
+                Pendientes
+              </button>
+              <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('canceled')" :class="{ 'bg-gray-500': canceled, 'hover:bg-green-300': canceled }">
+                Canceladas
+              </button>
+              <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('completed')" :class="{ 'bg-gray-500': completed, 'hover:bg-green-300': completed }">
+                Completadas
+              </button>
+            </div>
           </div>
-          <div class="flex justify-center gap-2">
-            <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('pending')" :class="{ 'bg-gray-500': pending, 'hover:bg-green-300': pending }">
-              Pendientes
-            </button>
-            <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('canceled')" :class="{ 'bg-gray-500': canceled, 'hover:bg-green-300': canceled }">
-              Canceladas
-            </button>
-            <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('completed')" :class="{ 'bg-gray-500': completed, 'hover:bg-green-300': completed }">
-              Completadas
-            </button>
-          </div>
-        </div>
-          <!-- Separador de horas -->
-          <!-- <div class="flex justify-center items-center">
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-            <p class="px-5 dark:text-white">5:00pm</p>
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-          </div> -->
 
           <div class="flex justify-center items-center" v-if="!pending">
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
