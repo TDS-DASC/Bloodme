@@ -87,6 +87,27 @@
                     :error="emailError"
                 />
 
+                <Textinput
+                    label="Selected Image*"
+                    type="string"
+                    placeholder="Imagen seleccionada"
+                    name="image_url"
+                    v-model="image_url"
+                    :error="image_urlError"
+                    disabled
+                />
+
+                <div class="border border-gray-300 dark:border-gray-500 rounded-md p-4 w-fit">
+                    <p class="font-semibold mb-4 dark:text-slate-300">Selecciona una imagen de perfil</p>
+                    <div class="grid grid-cols-3 gap-0.5">
+                        <div v-for="(userPng, index) in [userPngOne, userPngTwo, userPngThree, userPngFour, userPngFive, userPngSix, userPngSeven, userPngEight, userPngNine]" :key="index" 
+                            class="group border-transparent hover:border-blue-500 border-4 w-fit h-fit rounded-sm transition duration-300"
+                            @click="toggleBorder(index)">
+                            <img :src="userPng" alt="User Image" class="group-hover:border-blue-500 p-2 transition duration-300" :class="{ 'border-blue-500 border-4': selectedImageIndex == index }" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Editar" btnClass="btn-primary"></Button>
                     <router-link
@@ -159,7 +180,7 @@
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="editUser()" />
                     <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
                 </div>
             </Card>
@@ -181,6 +202,16 @@
     import { useToast } from "vue-toastification";
     import { useRouter } from 'vue-router';
 
+    import userPngOne from "@/assets/images/all-img/UserImages/user.png";
+    import userPngTwo from "@/assets/images/all-img/UserImages/user2.png";
+    import userPngThree from "@/assets/images/all-img/UserImages/user3.png";
+    import userPngFour from "@/assets/images/all-img/UserImages/user4.png";
+    import userPngFive from "@/assets/images/all-img/UserImages/user5.png";
+    import userPngSix from "@/assets/images/all-img/UserImages/user6.png";
+    import userPngSeven from "@/assets/images/all-img/UserImages/user7.png";
+    import userPngEight from "@/assets/images/all-img/UserImages/user8.png";
+    import userPngNine from "@/assets/images/all-img/UserImages/user9.png";
+
     export default {
         components: {
             Textinput,
@@ -189,6 +220,19 @@
             Select,
             Textinput,
             Card
+        },
+        data() {
+            return {
+                userPngOne: userPngOne,
+                userPngTwo: userPngTwo,
+                userPngThree: userPngThree,
+                userPngFour: userPngFour,
+                userPngFive: userPngFive,
+                userPngSix: userPngSix,
+                userPngSeven: userPngSeven,
+                userPngEight: userPngEight,
+                userPngNine: userPngNine,
+            }
         },
         setup() {
 
@@ -202,7 +246,7 @@
                     .required("El alias es requerido")
                     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s.]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable().required("Es necesario brindar una fecha de nacimiento"),
-                /* image_url: yup.date().nullable().required(), */
+                image_url: yup.string().nullable(),
                 sex: yup.string().nullable().required("Es necesario seleccionar el sexo"),
                 phone_number: yup.string().nullable()
                     .required("El nummero de celular es requerido")
@@ -228,6 +272,8 @@
                 displayConfirmMessage();
             });
             const onSubmit = handleSubmit((values) => {
+                if(image_url.value == "" || image_url.value == null || image_url.value == undefined)
+                    image_url.value = 'user.png';
                 const newUserForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastName', value: lastname.value },
@@ -253,6 +299,7 @@
             const { value: email, errorMessage: emailError } = useField("email");
             const { value: role, errorMessage: roleError } = useField("role");
             const { value: sex, errorMessage: sexError } = useField("sex");
+            const { value: image_url, errorMessage: image_urlError } = useField("image_url");
 
             const sex_options = [
                 { value: "H", label: "Hombre" },
@@ -269,15 +316,26 @@
                 { value: 'O-', label: 'O-' }
             ];
 
+            const user_profile_images = [
+                { value: 'user.png', id: '0' },
+                { value: 'user2.png', id: '1' },
+                { value: 'user3.png', id: '2' },
+                { value: 'user4.png', id: '3' },
+                { value: 'user5.png', id: '4' },
+                { value: 'user6.png', id: '5' },
+                { value: 'user7.png', id: '6' },
+                { value: 'user8.png', id: '7' },
+                { value: 'user9.png', id: '8' },
+            ];
+
             function displayConfirmMessage(){
-                console.log(confirmMessageFlag.value);
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
             const router = useRouter();
             function userRedirect(){
                 router.push('/participants', {shallow: false});
             }
-            function createUser(){
+            function editUser(){
                 confirmMessageFlag.value = false;
                 axios.put(`/api/participants/${ participantId }`, formValues)
                     .then(res => {
@@ -296,14 +354,22 @@
                         } else {
                             errorMessage.value = 'An error occurred.';
                         }
-                        console.log(error);
+                        /* console.log(error); */
                     });
             }
 
             const { participantsTable } = useCachedDataStoreParticipants();
             const participantId = router.currentRoute.value.params.id;
             useCachedDataStoreParticipants().fetchData();
+            async function fetchData() {
+                await useCachedDataStoreParticipants().fetchData();
+                participantData.value = participantsTable.find(objeto => objeto.id == participantId);
+                passParticipantValuesToSingleVariables();
+            }
+            fetchData();
 
+            let selectedImageIndex = ref(null);
+            let participantData = ref(null); 
             function passParticipantValuesToSingleVariables() {
                 name.value = participantData.value.name;
                 lastname.value = participantData.value.lastname;
@@ -315,10 +381,13 @@
                 email.value = participantData.value.email;
                 role.value = participantData.value.role;
                 sex.value = participantData.value.sex;
+                image_url.value = participantData.value.image_url;
+
+                selectedImageIndex.value = user_profile_images.find((image) => image.value == participantData.value.image_url);
+                selectedImageIndex.value = selectedImageIndex.value.id;
             }
 
-            let participantData = ref(null); 
-            watch(participantsTable, () => {
+            /* watch(participantsTable, () => {
                 participantData.value = participantsTable.find(objeto => objeto.id == participantId);
                 if(participantData.value != null){
                     passParticipantValuesToSingleVariables();
@@ -329,11 +398,24 @@
                 if(participantData.value != null){
                     passParticipantValuesToSingleVariables();
                 }
+            } */
+
+            function toggleBorder(index) {
+                selectedImageIndex.value = index;
             }
+            
+            watch(selectedImageIndex, () => {
+                image_url.value = user_profile_images.find((image) => image.id == selectedImageIndex.value);
+                image_url.value = image_url.value.value;
+            });
 
             return {
+                image_url,
+                image_urlError,
+                selectedImageIndex,
+                toggleBorder,
                 blood_types,
-                createUser,
+                editUser,
                 sex_options,
                 displayConfirmMessage,
                 confirmMessageFlag,

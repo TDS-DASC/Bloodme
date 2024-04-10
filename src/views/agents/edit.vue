@@ -138,26 +138,24 @@
                 <br><br>
                 <div>
                     <div>
-                        <p class="font-bold dark:text-white">Fecha de la cita:</p>
+                        <p class="font-bold dark:text-white">Nombre del agente:</p>
                         <span class="dark:text-gray-300">
-                            {{ date }}
+                            {{ name }}
                         </span>
                     </div>
                     <div>
-                        <p class="font-bold dark:text-white">Descripcion:</p>
+                        <p class="font-bold dark:text-white">Apellido del agente:</p>
                         <span class="dark:text-gray-300">
-                            {{ description }}
+                            {{ lastname }}
                         </span>
                     </div>
                     <div>
-                        <p class="font-bold dark:text-white">Campaña:</p>
-                        <span class="dark:text-gray-300">
-                            {{ campaign_id }}
-                        </span>
+                        <p class="font-bold dark:text-white">Curp:</p>
+                        <span class="dark:text-gray-300">{{ curp }}</span>
                     </div>
                     <div>
-                        <p class="font-bold dark:text-white">Participante:</p>
-                        <span class="dark:text-gray-300">{{ participants.find(b => b.value == user_id)?.label }}</span>
+                        <p class="font-bold dark:text-white">Email:</p>
+                        <span class="dark:text-gray-300">{{ email }}</span>
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">

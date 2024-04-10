@@ -95,6 +95,15 @@
                     :error="passwordError"
                     hasicon
                 />
+                <Textinput
+                    label="Selected Image*"
+                    type="string"
+                    placeholder="Imagen seleccionada"
+                    name="image_url"
+                    v-model="image_url"
+                    :error="image_urlError"
+                    disabled
+                />
 
                 <div class="border border-gray-300 dark:border-gray-500 rounded-md p-4 w-fit">
                     <p class="font-semibold mb-4 dark:text-slate-300">Selecciona una imagen de perfil</p>
@@ -246,7 +255,7 @@
                     .required("El alias es requerido")
                     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable().required("Es necesario brindar una fecha de nacimiento"),
-                /* image_url: yup.date().nullable().required(), */
+                image_url: yup.string().nullable(),
                 sex: yup.string().nullable().required("Es necesario seleccionar el sexo"),
                 phone_number: yup.string().nullable()
                     .required("El nummero de celular es requerido para crear un participante")
@@ -286,7 +295,7 @@
                     { name: 'password', value: password.value },
                     { name: 'role', value: role.value },
                     { name: 'sex', value: sex.value },
-                    { name: 'image_url', value: image_url },
+                    { name: 'image_url', value: image_url.value },
                 ];
                 trySubmit(newUserForm);
             });
@@ -302,7 +311,7 @@
             const { value: password, errorMessage: passwordError } = useField("password");
             const { value: role, errorMessage: roleError } = useField("role");
             const { value: sex, errorMessage: sexError } = useField("sex");
-            let { value: image_url, errorMessage: image_urlError } = useField("image_url");
+            const { value: image_url, errorMessage: image_urlError } = useField("image_url");
 
             const sex_options = [
                 { value: "H", label: "Hombre" },
@@ -377,10 +386,13 @@
 
             
             watch(selectedImageIndex, () => {
-                image_url = user_profile_images.find((image) => image.id == selectedImageIndex.value);
+                image_url.value = user_profile_images.find((image) => image.id == selectedImageIndex.value);
+                image_url.value = image_url.value.value;
             });
 
             return {
+                image_url,
+                image_urlError,
                 selectedImageIndex,
                 toggleBorder,
                 blood_types,
@@ -410,8 +422,6 @@
                 roleError,
                 sex,
                 sexError,
-                image_url,
-                image_urlError,
                 onSubmit
             };
         }

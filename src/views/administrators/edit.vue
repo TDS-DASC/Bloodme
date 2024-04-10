@@ -72,10 +72,6 @@
                             {{ email }}
                         </span>
                     </div>
-                    <div>
-                        <p class="font-bold dark:text-white">Participante:</p>
-                        <span class="dark:text-gray-300">{{ participants.find(b => b.value == user_id)?.label }}</span>
-                    </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
                     <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
