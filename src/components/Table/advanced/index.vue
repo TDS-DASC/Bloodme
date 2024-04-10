@@ -1,9 +1,10 @@
 <template>
-  <div class="flex flex-col p-4 bg-white rounded-md dark:bg-slate-800" v-if="tableData">
+  <div class="flex flex-col p-4 bg-white rounded-md dark:bg-slate-800 z-10 relative" v-if="tableData">
       <div
-        class="md:flex justify-between pb-6 md:space-y-0 space-y-3 items-center"
+        class="md:flex justify-between pb-6 md:space-y-0 space-y-3 items-center z-10 relative"
       >
         <h5>{{ tableInformation.title }}</h5>
+        <!-- Aqui es donde se ponen los botones -->
         <InputGroup
           v-model="searchTerm"
           placeholder="Search"
@@ -27,12 +28,12 @@
         }"
         :select-options="{
           enabled: true,
-          selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
+          selectOnCheckboxOnly: true, 
           selectioninfoClass: 'custom-class',
           selectionText: 'rows selected',
           clearSelectionText: 'clear',
-          disableSelectinfo: true, // disable the select info-500 panel on top
-          selectAllByGroup: true, // when used in combination with a grouped table, add a checkbox in the header row to check/uncheck the entire group
+          disableSelectinfo: true, 
+          selectAllByGroup: true,
         }"
       >
         <template v-slot:table-row="props">
@@ -40,16 +41,15 @@
             <Dropdown classMenuItems=" w-[140px]">
               <span class="text-xl"><Icon icon="heroicons-outline:dots-vertical"/></span>
               <template v-slot:menus>
-                <MenuItem v-for="(item, i) in actions" :key="i">
-                  <template v-if="item.name !== 'delete'">
-                    <router-link :to="item.name === 'view' ? `/${tableInformation.headUrl}/${props.row.id}` : (item.name === 'edit' ? `/${tableInformation.headUrl}/${props.row.id}/edit` : '')">
+                <MenuItem v-for="(item, i) in actions" :key="i" style="top: -50px; left: -10px">
+                  <template v-if="item.name != 'delete'">
+                    <router-link :to="item.name == 'view' ? `/${tableInformation.headUrl}/${props.row.id}` : (item.name == 'edit' ? `/${tableInformation.headUrl}/${props.row.id}/edit` : '')">
                       <div :class="`${
                         item.name === 'delete'
                           ? 'bg-danger-500 text-danger-500 bg-opacity-30 hover:bg-opacity-100 hover:text-white'
                           : 'hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 dark:hover:bg-opacity-50' 
                         }
-                        w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm  last:mb-0 cursor-pointer first:rounded-t last:rounded-b flex  space-x-2 items-center rtl:space-x-reverse `"
-                        
+                        w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm  last:mb-0 cursor-pointer first:rounded-t last:rounded-b flex  space-x-2 items-center rtl:space-x-reverse`"
                       >
                         <span class="text-base"><Icon :icon="item.icon"/></span>
                         <span>{{ item.name }}</span>

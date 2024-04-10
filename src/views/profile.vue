@@ -219,13 +219,24 @@
                         </div>
                     </Card>
                     <br>
-                    <div class="gap-3 w-1/2 flex">
+                    <div class="gap-3 w-1/2 flex" v-if="userRole == 'agent'">
                         <router-link 
-                            :to="`/participants`" class="w-1/4">
+                            :to="`/agents`" class="w-1/4">
                             <Button type="button" text="Regresar" btnClass="btn-secondary" class="w-full">Regresar</Button>
                         </router-link>
                         <router-link 
-                            :to="`/participants/${ id }/edit`" class="w-1/4">
+                            :to="`/agents/${ userId }/edit`" class="w-1/4">
+                            <Button type="button" text="Crear" btnClass="btn-warning" class="w-full">Editar</Button>
+                        </router-link>
+                        <Button type="button" text="Crear" btnClass="btn-danger" class="w-1/4" @click="displayConfirmMessage()">Eliminar</Button>
+                    </div>
+                    <div class="gap-3 w-1/2 flex" v-if="userRole == 'admin'">
+                        <router-link 
+                            :to="`/administrators`" class="w-1/4">
+                            <Button type="button" text="Regresar" btnClass="btn-secondary" class="w-full">Regresar</Button>
+                        </router-link>
+                        <router-link 
+                            :to="`/administrators/${ userId }/edit`" class="w-1/4">
                             <Button type="button" text="Crear" btnClass="btn-warning" class="w-full">Editar</Button>
                         </router-link>
                         <Button type="button" text="Crear" btnClass="btn-danger" class="w-1/4" @click="displayConfirmMessage()">Eliminar</Button>
@@ -279,9 +290,10 @@
 
             const userData = JSON.parse(localStorage.getItem('user'));
             const userRole = JSON.parse(localStorage.getItem('user')).role;
-            console.log(userRole)
+            const userId = JSON.parse(localStorage.getItem('user')).id;
 
             return {
+                userId,
                 userRole,
                 confirmMessageFlag,
                 deleteElement,

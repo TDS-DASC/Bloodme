@@ -88,10 +88,6 @@
                   <Icon icon="mdi:location" />
                   <p class="flex-2 max-w-xs">{{ appointment.hospital_name }}</p>
                 </div>
-                <div class="flex items-center dark:text-gray-300">
-                  <Icon icon="material-symbols-light:description-outline" style="font-size: 140%;" />
-                  <p class="flex-2 max-w-xs">{{ appointment.description }} Unidades</p>
-                </div>
               </div>
             </button>
           </div>
@@ -208,7 +204,7 @@
                   name="birthDate"
                   v-model="birthDate"
                   classInput="h-[48px] dark:text-white"
-                  class="w-1/2"
+                  class="w-3/4 lg:w-5/6"
                   disabled
                 />
                 <Textinput
