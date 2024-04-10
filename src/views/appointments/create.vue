@@ -57,7 +57,7 @@
                         label="Participantes *"
                         placeholder="Seleccione una participante"
                         name="participant"
-                        :options="users"
+                        :options="participants"
                         v-model="user_id"
                         :error="user_idError"
                     />
@@ -99,7 +99,7 @@
                     </div>
                     <div>
                         <p class="font-bold dark:text-white">Participante:</p>
-                        <span class="dark:text-gray-300">{{ users.find(b => b.value == user_id)?.label }}</span>
+                        <span class="dark:text-gray-300">{{ participants.find(b => b.value == user_id)?.label }}</span>
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
@@ -125,7 +125,6 @@
     import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
-    import { useCachedDataStoreUsers } from '../../stores/usersStore';
     import { useToast } from "vue-toastification";
     import router from '../../router';
 
@@ -159,8 +158,14 @@
                 formValues = values;
                 displayConfirmMessage();
             }); 
+            let savedDate = ref(null);
             const onSubmit = handleSubmit((values) => {
-                date.value = date.value + " " + time.value;
+                savedDate.value = date.value;
+
+                const datetimeWithoutSeconds = `${date.value} ${time.value.substring(0, 5)}`;
+
+                date.value = datetimeWithoutSeconds;
+
                 const newAppointmentForm = [
                     { name: 'date', value: date.value },
                     { name: 'description', value: description.value },
@@ -174,6 +179,9 @@
             let confirmMessageFlag = ref(false);
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
+                if(confirmMessageFlag.value == false){
+                    date.value = savedDate.value;
+                }
             }
             
             let errorMessage = ref("");
@@ -208,7 +216,6 @@
                     console.log(errorMessage)
                 });
             }
-            /* año-mes-día -espacio- hora:minuto */
             const { value: date, errorMessage: dateError } = useField("date");
             const { value: time, errorMessage: timeError } = useField("time");
             const { value: description, errorMessage: descriptionError } = useField("description");
@@ -262,28 +269,28 @@
                 }
             });
 
-            let users = ref([]);
+            let participants = ref([]);
 
             function fillParticipantsArray() {
-                users.value = usersTable.map(user => ({
+                participants.value = participantsTable.map(user => ({
                     value: user.id,
                     label: user.name
                 }));
-                console.log("users WATCH");
-                console.log(users.value);
+                console.log("participants WATCH");
+                console.log(participants.value);
             }
 
-            const { usersTable } = useCachedDataStoreUsers();
-            useCachedDataStoreUsers().fetchData();
+            const { participantsTable } = useCachedDataStoreParticipants();
+            useCachedDataStoreParticipants().fetchData();
 
             watchEffect(() => {
-                if (usersTable) {
+                if (participantsTable) {
                     fillParticipantsArray();
                 }
             });
 
             return {
-                users,
+                participants,
                 selectOptionForCampaignsInput,
                 campaigns,
                 date,

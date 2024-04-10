@@ -159,7 +159,7 @@
                     .required("La fecha de la cita es requerida"),
                 time: yup.string()
                     .required("Es necesario seleccionar la hora de la cita"),
-                description: yup.string(),
+                description: yup.string().nullable(),
                 status: yup.string(),
                 campaign_id: yup.string()
                     .required("La campaña es requerida"),
@@ -175,11 +175,11 @@
                 formValues = values;
                 displayConfirmMessage();
             }); 
+            let savedDate = ref(null);
             const onSubmit = handleSubmit((values) => {
+                savedDate = date.value;
                 const datetimeWithoutSeconds = `${date.value} ${time.value.substring(0, 5)}`;
-
                 date.value = datetimeWithoutSeconds;
-
                 const newAppointmentForm = [
                     { name: 'date', value: datetimeWithoutSeconds },
                     { name: 'description', value: description.value },
@@ -195,6 +195,9 @@
             let confirmMessageFlag = ref(false);
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
+                if(confirmMessageFlag.value == false){
+                    date.value = savedDate.value;
+                }
             }
             
             let errorMessage = ref("");
