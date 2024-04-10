@@ -44,7 +44,7 @@
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Select
                         label="Campaña *"
-                        placeholder="Seleccione una campaña"
+                        placeholder="Beneficiario - Sede hospital"
                         name="campaign"
                         :options="selectOptionForCampaignsInput"
                         v-model="campaign_id"
@@ -125,6 +125,7 @@
     import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
+    import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
     import { useToast } from "vue-toastification";
     import router from '../../router';
 
@@ -221,73 +222,62 @@
             const { value: description, errorMessage: descriptionError } = useField("description");
             const { value: campaign_id, errorMessage: campaign_idError } = useField("campaign_id");
             const { value: user_id, errorMessage: user_idError } = useField("user_id");
+            
+            async function fetchData() {
+                await useCachedDataStoreParticipants().fetchData();
+                await useCachedDataStoreCampaigns().fetchData();
+                await useCachedDataStoreBeneficiaries().fetchData();
+                await useCachedDataStoreHospitals().fetchData();
 
-            const { campaignsTable } = useCachedDataStoreCampaigns();
-            useCachedDataStoreCampaigns().fetchData();
-            let campaigns = ref([]);
-            watch(campaignsTable, () => {
-                fillCampaignsArray();
-            });
-
-            const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
-            useCachedDataStoreBeneficiaries().fetchData();
-            let beneficiaries = ref([]);
-            watch(beneficiariesTable, () => {
                 fillBeneficiariesArray();
-            });
+                fillCampaignsArray();
+                createCampaignsWithBeneficiaryNames();
+                fillParticipantsArray();
+            }
+            fetchData();
+
+            const { participantsTable } = useCachedDataStoreParticipants();
+            const { hospitalsTable } = useCachedDataStoreHospitals();
+            const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
+            const { campaignsTable } = useCachedDataStoreCampaigns();
+
+            let campaigns = ref([]);
+            let beneficiaries = ref([]);
+            let participants = ref([]);
+
+
 
             function fillBeneficiariesArray(){
                 beneficiaries.value = beneficiariesTable.map(beneficiaries => ({
                     value: beneficiaries.id,
                     label: beneficiaries.name
                 }));
-                console.log("Beneficiarios WATCH");
-                console.log(beneficiaries.value);
             }
             function fillCampaignsArray(){
                 campaigns.value = campaignsTable.map(campaign => ({
                     value: campaign.id,
                     label: campaign.id
                 }));
-                console.log(campaigns.value);
             }
-            function createCampaignsWithBeneficiaryNames() {
-                const campaignsWithBeneficiaryNames = campaignsTable.map(campaign => {
-                    const beneficiary = beneficiariesTable.find(beneficiary => beneficiary.id === campaign.beneficiary_id);
-                    return {
-                        value: campaign.id,
-                        label: beneficiary ? beneficiary.name : "Unknown" // If beneficiary not found, set label to "Unknown"
-                    };
-                });
-                console.log(campaignsWithBeneficiaryNames);
-                return campaignsWithBeneficiaryNames;
-            }
-            let selectOptionForCampaignsInput = ref([]);
-            watchEffect(() => {
-                if (campaignsTable && beneficiariesTable) {
-                    selectOptionForCampaignsInput.value = createCampaignsWithBeneficiaryNames();
-                }
-            });
-
-            let participants = ref([]);
-
             function fillParticipantsArray() {
                 participants.value = participantsTable.map(user => ({
                     value: user.id,
                     label: user.name
                 }));
-                console.log("participants WATCH");
-                console.log(participants.value);
             }
 
-            const { participantsTable } = useCachedDataStoreParticipants();
-            useCachedDataStoreParticipants().fetchData();
-
-            watchEffect(() => {
-                if (participantsTable) {
-                    fillParticipantsArray();
-                }
-            });
+            let selectOptionForCampaignsInput = ref([]);
+            function createCampaignsWithBeneficiaryNames() {
+                const campaignsWithBeneficiaryNames = campaignsTable.map(campaign => {
+                    const beneficiary = beneficiariesTable.find(beneficiary => beneficiary.id === campaign.beneficiary_id);
+                    const hospital = hospitalsTable.find(hospital => hospital.id == campaign.hospital_id)
+                    return {
+                        value: campaign.id,
+                        label: beneficiary.name + ' - ' + hospital.name
+                    };
+                });
+                selectOptionForCampaignsInput.value = campaignsWithBeneficiaryNames;
+            }
 
             return {
                 participants,

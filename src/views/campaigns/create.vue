@@ -114,7 +114,6 @@
                         <span class="font-bold dark:text-white">Hospital:</span>
                         <span>&nbsp</span>
                         <span class="dark:text-gray-300">{{ hospitals.find(b => b.value == hospital_id)?.label }}</span>
-                        
                     </div>
                     <div>
                         <span class="font-bold dark:text-white">Bolsas requeridas:</span>
@@ -275,8 +274,8 @@
 
             if(beneficiaries.value.length == 0 || hospitals.value.length == 0){
                 if(beneficiariesTable != null && hospitalsTable != null){
-                    fillBeneficiariesArray();
                     fillHospitalArray();
+                    fillBeneficiariesArray();
                 }
             }
             function fillBeneficiariesArray(){
