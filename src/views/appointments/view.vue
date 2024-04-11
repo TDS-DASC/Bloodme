@@ -44,10 +44,10 @@
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            Creador 
+                                            Donante 
                                         </div>
                                         <a class="text-base text-slate-600 dark:text-slate-50" v-if="appointmentData">
-                                            {{ appointmentData.user_id }}
+                                            {{ appointmentData.name }}
                                         </a>
                                     </div>
                                 </li>
@@ -58,10 +58,10 @@
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            Campaña
+                                            Campaña: Beneficiario
                                         </div>
                                         <div class="text-base text-slate-600 dark:text-slate-50" v-if="appointmentData">
-                                            {{ appointmentData.campaign_id }}
+                                            {{ appointmentData.beneficiary }}
                                         </div>
                                     </div>
                                 </li>
@@ -104,7 +104,12 @@
     import profile from "@/components/profile"
     import Card from "@/components/Card";
     import Icon from "@/components/Icon";
+
     import { useCachedDataStoreAppointments } from '@/stores/appointmentsStore';
+    import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
+    import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
+    import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
+
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
     import { useToast } from "vue-toastification";
@@ -119,28 +124,15 @@
         },
         setup() {
             const router = useRouter();
-            const { appointmentsTable } = useCachedDataStoreAppointments();
             const id = router.currentRoute.value.params.id;
             
-            useCachedDataStoreAppointments().fetchData();
-
-            let appointmentData = ref(null); 
-
-            watch(appointmentsTable, () => {
-                console.log(appointmentsTable);
-                appointmentData.value = appointmentsTable.find(objeto => objeto.id == id);
-            });
-
-            if(appointmentsTable)
-                appointmentData.value = appointmentsTable.find(objeto => objeto.id == id);
-
             let confirmMessageFlag = ref(false);
             const toast = useToast();
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
             function userRedirect(){
-                router.push('/appointments', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'appointments' } });
             }
             function deleteElement(){
                 confirmMessageFlag.value = false;
@@ -155,6 +147,35 @@
                     toast.error("Ha ocurrido un error inesperado.", { timeout: 1000 });
                 });
             }
+            
+            const { appointmentsTable} = useCachedDataStoreAppointments();
+            const { participantsTable} = useCachedDataStoreParticipants();
+            const { campaignsTable } = useCachedDataStoreCampaigns();
+            const { beneficiariesTable} = useCachedDataStoreBeneficiaries();
+
+            let appointmentData = ref(null);
+            async function fetchData() {
+                await useCachedDataStoreAppointments().fetchData();
+                await useCachedDataStoreParticipants().fetchData();
+                await useCachedDataStoreCampaigns().fetchData();
+                await useCachedDataStoreBeneficiaries().fetchData();
+                
+
+                const participantData = participantsTable.map(participant => ({ id: participant.id, name: participant.name }));
+                const campaignData = campaignsTable.map(campaign => ({ id: campaign.id, beneficiary: campaign.beneficiary_id }));
+                const beneficiaryData = beneficiariesTable.map(beneficiary => ({ id: beneficiary.id, name: beneficiary.name }));
+
+                appointmentsTable.forEach(appointment => {
+                    appointment.name = participantData.find(participant => participant.id == appointment.user_id)?.name;
+                    const campaign = campaignData.find(campaign => campaign.id == appointment.campaign_id);
+                    if (campaign) {
+                        appointment.beneficiary = beneficiaryData.find(beneficiary => beneficiary.id == campaign.beneficiary).name;
+                    }
+                });
+
+                appointmentData.value = appointmentsTable.find(appointment => appointment.id == id);
+            }
+            fetchData();
 
             return {
                 confirmMessageFlag,

@@ -22,7 +22,7 @@
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
-                        label="Hora de la cita *"
+                        label="Hora de la cita (formato 24:00) *"
                         type="time"
                         name="name"
                         v-model="time"
@@ -32,7 +32,7 @@
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
-                        label="Descripcion *"
+                        label="Descripcion"
                         type="text"
                         placeholder="Ingrese una descripción para su cita"
                         name="description"
