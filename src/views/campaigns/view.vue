@@ -213,7 +213,7 @@
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
             function userRedirect(){
-                router.push('/campaigns', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'campaigns' } });
             }
             function deleteElement(){
                 confirmMessageFlag.value = false;

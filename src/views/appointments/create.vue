@@ -186,7 +186,7 @@
             let errors = ref([]);
             const toast = useToast();
             function userRedirect(){
-                router.push('/appointments', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'appointments' } });
             }
             function createAppointment(){
                 confirmMessageFlag.value = false;

@@ -90,7 +90,7 @@
                     <p v-if="errors.hospital_id" class="mt-2 text-danger-500 block text-sm">{{ errors.hospital_id[0] }}</p>
                 </div>
                 <div class="lg:col-span-2 gap-2 flex">
-                    <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
+                    <Button type="submit" text="Editar" btnClass="btn-primary"></Button>
                     <router-link
                         :to="{ path:  '/campaigns/' }"
                     ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
@@ -100,7 +100,7 @@
         <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 <span class="dark:text-white">
-                    Estas a punto de agregar una nueva entidad a la base de datos.<br>
+                    Estas a punto de editar una entidad de la base de datos.<br>
                     ¿Estás seguro que quieres continuar?
                 </span>
                 <br><br>
@@ -187,7 +187,7 @@
                     .required("El número de plaquetas necesitadas es requerido"),
                 recollected_platelets: yup.string()
                     .required("El número de plaquetas recolectadas hasta ahora es requerido"),
-                description: yup.string().required("La descripcion de la campaña es requerida"),
+                description: yup.string().nullable(),
                 beneficiary_id: yup.string()
                     .required("Se necesita seleccionar al beneficiario de esta campaña"),
                 hospital_id: yup.string()
@@ -225,8 +225,7 @@
             let errors = ref([]);
             const toast = useToast();
             function userRedirect(){
-                router.refresh();
-                router.push('/campaigns', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'campaigns' } });
             }
             function createCampaign(){
                 confirmMessageFlag.value = false;

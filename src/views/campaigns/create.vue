@@ -223,7 +223,7 @@
             let errors = ref([]);
             const toast = useToast();
             function userRedirect(){
-                router.push('/campaigns', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'campaigns' } });
             }
             function createCampaign(){
                 confirmMessageFlag.value = false;

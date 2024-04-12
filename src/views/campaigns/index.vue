@@ -17,6 +17,7 @@
     import Button from "@/components/Button";   
     import tableAdvanced from "../../components/Table/advanced"
     import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
+    import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useToast } from "vue-toastification";
 
     export default{
@@ -34,6 +35,10 @@
                     {
                         label: "ID",
                         field: "id",
+                    },
+                    {
+                        label: "Beneficiario",
+                        field: "beneficiary_name",
                     },
                     {
                         label: "Bolsas recolectadas",
@@ -54,8 +59,21 @@
                 ]
             }
 
-            let { campaignsTable } = useCachedDataStoreCampaigns();
-            useCachedDataStoreCampaigns().fetchData();
+            const { campaignsTable} = useCachedDataStoreCampaigns();
+            const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
+
+            async function fetchData() {
+                await useCachedDataStoreCampaigns().fetchData();
+                await useCachedDataStoreBeneficiaries().fetchData();
+                
+                const campaignData = campaignsTable.map(campaign => ({ id: campaign.id, beneficiary: campaign.beneficiary_id }));
+                const beneficiaryData = beneficiariesTable.map(participant => ({ id: participant.id, name: participant.name }));
+
+                campaignsTable.forEach(campaign => {
+                    campaign.beneficiary_name = beneficiaryData.find(beneficiary => beneficiary.id == campaign.beneficiary_id).name;
+                });
+            }
+            fetchData();
 
             function refreshToast(){
                 toast.warning("Refrescando la tabla.", { timeout: 1000 });

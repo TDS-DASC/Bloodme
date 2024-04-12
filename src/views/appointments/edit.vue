@@ -206,7 +206,7 @@
             const toast = useToast();
             const routeId = router.currentRoute.value.params.id;
             function userRedirect(){
-                router.push('/appointments', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'appointments' } });
             }
             function editAppointment(){
                 confirmMessageFlag.value = false;
