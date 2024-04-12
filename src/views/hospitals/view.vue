@@ -141,7 +141,7 @@
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
             function userRedirect(){
-                router.push('/hospitals', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'hospitals' } });
             }
             function deleteElement(){
                 confirmMessageFlag.value = false;
