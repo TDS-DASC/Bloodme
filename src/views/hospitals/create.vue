@@ -173,7 +173,7 @@
             let errors = ref([]);
             const toast = useToast();
             function userRedirect(){
-                router.push('/hospitals', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'hospitals' } });
             }
             function createHospital(){
                 confirmMessageFlag.value = false;

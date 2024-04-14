@@ -233,6 +233,7 @@
     import Card from "@/components/Card";
     import Icon from "@/components/Icon";
     import { useCachedDataStoreParticipants } from '@/stores/participantsStore';
+    import user from '@/assets/'
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
     import { useToast } from "vue-toastification";

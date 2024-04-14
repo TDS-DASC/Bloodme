@@ -27,7 +27,7 @@
                     :error="lastnameError"
                 />
                 <Textinput
-                    label="Alias"
+                    label="Alias *"
                     type="text"
                     placeholder="Ingrese el alias"
                     name="alias"
@@ -36,7 +36,7 @@
                 />
 
                 <Textinput
-                    label="Fecha de nacimiento"
+                    label="Fecha de nacimiento *"
                     type="date"
                     placeholder="Fecha de nacimiento"
                     name="date"
@@ -45,7 +45,7 @@
                 />
 
                 <Select
-                    label="Tipo de sangre"
+                    label="Tipo de sangre *"
                     type="text"
                     placeholder="Seleccione su tipo de sangre"
                     name="bloodtype"
@@ -54,7 +54,7 @@
                     :error="blood_typeError"
                 />
                 <Select
-                    label="Sexo"
+                    label="Sexo *"
                     type="text"
                     placeholder="Seleccione su sexo"
                     name="sex"
@@ -63,7 +63,7 @@
                     :error="sexError"
                 />
                 <Textinput
-                    label="Número celular"
+                    label="Número celular *"
                     type="number"
                     placeholder="Ingrese su número celular"
                     name="phone"
@@ -71,7 +71,7 @@
                     :error="phone_numberError"
                 />
                 <Textinput
-                    label="CURP"
+                    label="CURP *"
                     type="text"
                     placeholder="Ingrese un curp valido"
                     name="curp"
@@ -79,7 +79,7 @@
                     :error="curpError"
                 />
                 <Textinput
-                    label="email"
+                    label="email *"
                     type="email"
                     placeholder="Ingrese un correo electronico"
                     name="email"
@@ -96,7 +96,7 @@
                     hasicon
                 />
                 <Textinput
-                    label="Selected Image*"
+                    label="Seleccione una imagen ->"
                     type="string"
                     placeholder="Imagen seleccionada"
                     name="image_url"
