@@ -1,7 +1,7 @@
 <template>
-    <div class="flex dark:bg-slate-900 gap-2" style="height: 85vh;">
+    <div class="flex dark:bg-slate-900 gap-2 w-full" style="height: 85vh;">
       <!-- Citas pendientes -->
-      <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit dark:bg-slate-800 w-1/6">
+      <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit dark:bg-slate-800 min-w-28">
         <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-3xl p-1 font-semibold">
           Citas pendientes
         </div>
@@ -53,13 +53,13 @@
               <div class="border-b-4 border-solid border-gray-300 w-full"></div>
             </div>
             <div class="flex justify-center gap-2">
-              <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('pending')" :class="{ 'bg-gray-500': pending, 'hover:bg-green-300': pending }">
+              <button type="button" class="btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('pending')" :class="{ 'bg-slate-500': pending, 'hover:bg-green-400': pending }">
                 Pendientes
               </button>
-              <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('canceled')" :class="{ 'bg-gray-500': canceled, 'hover:bg-green-300': canceled }">
+              <button type="button" class="btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('canceled')" :class="{ 'bg-slate-500': canceled, 'hover:bg-green-400': canceled }">
                 Canceladas
               </button>
-              <button type="button" class="btn bg-green-500 hover:bg-gray-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('completed')" :class="{ 'bg-gray-500': completed, 'hover:bg-green-300': completed }">
+              <button type="button" class="btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('completed')" :class="{ 'bg-slate-500': completed, 'hover:bg-green-400': completed }">
                 Completadas
               </button>
             </div>
@@ -77,7 +77,7 @@
                 <img :src="bloodbag" alt="" class="max-h-16" />
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
               </div>
-              <div class="flex flex-col justify-start text-start px-4 w-full">
+              <div class="flex flex-col justify-start text-start w-full">
                 <div class="flex items-center justify-between gap-4 w-full dark:text-white">
                   <p class="font-bold text-xl dark:text-white">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
                   <div class="flex gap-2">
@@ -86,7 +86,7 @@
                 </div>
                 <div class="flex items-center dark:text-gray-300">
                   <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs">{{ appointment.hospital_name }}</p>
+                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_name }}</p>
                 </div>
               </div>
             </button>

@@ -12,12 +12,12 @@ export const menuItems = [
   {
     isHeadr: true,
     title: "Sistema",
-    role: "admin",
+    role: "administrator",
   },
   {
     title: "Citas",
     icon: "icon-park-outline:appointment",
-    role: "admin",
+    role: "administrator",
     child: [
         {
           childtitle: "Tabla de Citas",
@@ -32,7 +32,7 @@ export const menuItems = [
   {
     title: "Campañas",
     icon: "material-symbols:campaign-outline",
-    role: "admin",
+    role: "administrator",
     child: [
         {
           childtitle: "Tabla de Campañas",
@@ -47,7 +47,7 @@ export const menuItems = [
   {
     title: "Hospitales",
     icon: "solar:hospital-broken",
-    role: "admin",
+    role: "administrator",
     child: [
         {
           childtitle: "Tabla de Hospitales",
@@ -62,12 +62,12 @@ export const menuItems = [
   {
     isHeadr: true,
     title: "Usuarios",
-    role: "admin",
+    role: "administrator",
   },
   {
     title: "Participantes",
     icon: "formkit:people",
-    role: "admin",
+    role: "administrator",
     child: [
         {
           childtitle: "Tabla de Participantes",
@@ -82,7 +82,7 @@ export const menuItems = [
   {
     title: "Agentes",
     icon: "streamline:nurse-assistant-emergency",
-    role: "admin",
+    role: "administrator",
     child: [
         {
           childtitle: "Tabla de Agentes",
@@ -97,7 +97,7 @@ export const menuItems = [
   {
     title: "Administradores",
     icon: "streamline:nurse-assistant-emergency",
-    role: "admin",
+    role: "administrator",
     child: [
         {
           childtitle: "Tabla de Administradores",
@@ -112,7 +112,7 @@ export const menuItems = [
   {
     title: "Beneficiarios",
     icon: "fluent:person-info-16-regular",
-    role: "admin",
+    role: "administrator",
     child: [
         {
           childtitle: "Tabla de Beneficiarios",
@@ -127,7 +127,7 @@ export const menuItems = [
 /*   {
     title: "Usuarios",
     icon: "ph:users",
-    role: "admin",
+    role: "administrator",
     child: [
         {
           childtitle: "Tabla de Usuarios",
