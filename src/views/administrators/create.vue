@@ -156,7 +156,7 @@
             }
             const router = useRouter();
             function userRedirect(){
-                router.push('/administrators', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'administrators' } });
             }
             function createUser(){
                 confirmMessageFlag.value = false;

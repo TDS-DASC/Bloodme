@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <!-- end profile box -->
-                    <div    class="profile-info-500 md:flex md:text-start text-center flex-1 max-w-[516px] md:space-y-0 space-y-4">
+                    <!-- <div    class="profile-info-500 md:flex md:text-start text-center flex-1 max-w-[516px] md:space-y-0 space-y-4">
                         <div class="flex-1">
                             <div class="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
                                 33
@@ -28,41 +28,33 @@
                                 Donaciones totales
                             </div>
                         </div>
-                    <!-- end single -->
-                    <div class="flex-1">
-                        <div class="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                            2
+                        <div class="flex-1">
+                            <div class="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
+                                2
+                            </div>
+                            <div class="text-sm text-slate-600 font-light dark:text-slate-300">
+                                Campañas creadas
+                            </div>
                         </div>
-                        <div class="text-sm text-slate-600 font-light dark:text-slate-300">
-                            Campañas creadas
+                        <div class="flex-1">
+                            <div class="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
+                                9 
+                            </div>
+                            <div class="text-sm text-slate-600 font-light dark:text-slate-300">
+                                Citas agendadas
+                            </div>
                         </div>
-                    </div>
-                    <!-- end single -->
-                    <div class="flex-1">
-                        <div class="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                            9 
-                        </div>
-                        <div class="text-sm text-slate-600 font-light dark:text-slate-300">
-                            Citas agendadas
-                        </div>
-                    </div>
-                    <!-- end single -->
-                </div>
-
-                <!-- profile info-500 -->
+                    </div> -->
             </div>
             <div class="w-full">
                 <div class="">
                     <Card title="Info">
                         <div class="flex gap-8">
-
                         <!-- Separacion -->
-
-
-                            <ul class="list space-y-8 w-full flex items-center justify-between">
+                            <ul class="w-full flex items-center align-middle gap-20">
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="streamline:blood-bag-donation" />
+                                        <Icon icon="wpf:name" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
@@ -76,7 +68,7 @@
                             <!-- end single list -->
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="heroicons:phone-arrow-up-right" />
+                                        <Icon icon="mdi:dot" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
@@ -147,7 +139,7 @@
     import { useToast } from "vue-toastification";
     import axios from "@/plugins/axios";
 
-    export default({
+    export default{
         components:{
             profile,
             Card,
@@ -177,7 +169,7 @@
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
             function userRedirect(){
-                router.push('/administrators', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'administrators' } });
             }
             function deleteElement(){
                 confirmMessageFlag.value = false;
@@ -202,5 +194,5 @@
                 userData,
             };
         }
-    })
+    }
 </script>
