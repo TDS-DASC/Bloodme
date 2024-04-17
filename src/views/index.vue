@@ -169,7 +169,6 @@
             </div>
           </div>
         </div>
-        <br>
         <div class="p-4">
           <div class="px-3 py-2">
             <p class="font-semibold text-gray-600 text-2xl dark:text-white dark:border-b-2 border-b-2">Datos del donador</p>
@@ -252,7 +251,6 @@
               </div>
             </div>
           </div>
-          <br>
           <div class="px-3 py-2">
             <p class="font-semibold text-gray-600 text-2xl dark:text-white dark:border-b-2 border-b-2">Información de contacto</p>
             <div class="w-full rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
@@ -280,7 +278,6 @@
               </div>
             </div>
           </div>
-          <br>
           <div class="px-3 py-2">
             <p class="font-semibold text-gray-600 text-2xl dark:text-white dark:border-b-2 border-b-2">Información de Campaña</p>
             <div class="w-full rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">

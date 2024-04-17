@@ -12,12 +12,12 @@ export const menuItems = [
   {
     isHeadr: true,
     title: "Sistema",
-    role: "administrator",
+    role: "admin",
   },
   {
     title: "Citas",
     icon: "icon-park-outline:appointment",
-    role: "administrator",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Citas",
@@ -32,7 +32,7 @@ export const menuItems = [
   {
     title: "Campañas",
     icon: "material-symbols:campaign-outline",
-    role: "administrator",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Campañas",
@@ -47,7 +47,7 @@ export const menuItems = [
   {
     title: "Hospitales",
     icon: "solar:hospital-broken",
-    role: "administrator",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Hospitales",
@@ -62,12 +62,12 @@ export const menuItems = [
   {
     isHeadr: true,
     title: "Usuarios",
-    role: "administrator",
+    role: "admin",
   },
   {
     title: "Participantes",
     icon: "formkit:people",
-    role: "administrator",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Participantes",
@@ -82,7 +82,7 @@ export const menuItems = [
   {
     title: "Agentes",
     icon: "streamline:nurse-assistant-emergency",
-    role: "administrator",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Agentes",
@@ -97,22 +97,22 @@ export const menuItems = [
   {
     title: "Administradores",
     icon: "streamline:nurse-assistant-emergency",
-    role: "administrator",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Administradores",
-          childlink: "/administrators/index",
+          childlink: "/admins/index",
         },
         {
           childtitle: "Crear Administrador",
-          childlink: "/administrators/create",
+          childlink: "/admins/create",
         },
     ],
   },
   {
     title: "Beneficiarios",
     icon: "fluent:person-info-16-regular",
-    role: "administrator",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Beneficiarios",
@@ -127,7 +127,7 @@ export const menuItems = [
 /*   {
     title: "Usuarios",
     icon: "ph:users",
-    role: "administrator",
+    role: "admin",
     child: [
         {
           childtitle: "Tabla de Usuarios",

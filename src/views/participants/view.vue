@@ -6,13 +6,14 @@
                     <div class="profile-box flex-none md:text-start text-center">
                         <div class="md:flex items-end md:space-x-6 rtl:space-x-reverse">
                             <div class="flex-none">
-                                <div class="md:h-[186px] md:w-[186px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-4 ring-slate-100 relative">
-                                    <img :src="userData.image_url" alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
+                                <div class="md:h-[100px] md:w-[100px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-4 ring-slate-100 relative">
+                                    <img :src="profileImg" alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
                                     <img src="@/assets/images/avatar/av-1.svg" alt="" class="w-full h-full object-cover rounded-full" v-else />
                                         <router-link
                                             :to="`/participants/${id}/edit`"
-                                            class="absolute right-2 h-8 w-8 bg-slate-50 text-slate-600 rounded-full shadow-sm flex flex-col items-center justify-center md:top-[140px] top-[100px]"
-                                            ><Icon icon="heroicons:pencil-square" />
+                                            class="absolute right-2 h-4 w-4 bg-slate-50 text-slate-600 rounded-full shadow-sm flex flex-col items-center justify-center md:top-[80px] top-[200px]"
+                                            >
+                                            <Icon icon="heroicons:pencil-square" />
                                         </router-link>
                                 </div>
                             </div>
@@ -233,13 +234,22 @@
     import Card from "@/components/Card";
     import Icon from "@/components/Icon";
     import { useCachedDataStoreParticipants } from '@/stores/participantsStore';
-    import user from '@/assets/'
     import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
     import { useToast } from "vue-toastification";
     import axios from "@/plugins/axios";
+    
+    import profileImg2 from "@/assets/images/all-img/UserImages/user2.png"
+    import profileImg1 from "@/assets/images/all-img/UserImages/user.png"
+    import profileImg3 from "@/assets/images/all-img/UserImages/user3.png"
+    import profileImg4 from "@/assets/images/all-img/UserImages/user4.png"
+    import profileImg5 from "@/assets/images/all-img/UserImages/user5.png"
+    import profileImg6 from "@/assets/images/all-img/UserImages/user6.png"
+    import profileImg7 from "@/assets/images/all-img/UserImages/user7.png"
+    import profileImg8 from "@/assets/images/all-img/UserImages/user8.png"
+    import profileImg9 from "@/assets/images/all-img/UserImages/user9.png"
 
-    export default({
+    export default {
         components:{
             profile,
             Card,
@@ -285,7 +295,26 @@
                 });
             }
 
+            const imageMapping = {
+                'user.png': profileImg1,
+                'user2.png': profileImg2,
+                'user3.png': profileImg3,
+                'user4.png': profileImg4,
+                'user5.png': profileImg5,
+                'user6.png': profileImg6,
+                'user7.png': profileImg7,
+                'user8.png': profileImg8,
+                'user9.png': profileImg9
+            };
+
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            const profileImageKey = user && user.image_url ? user.image_url : 'user2.png'; // Default to user2.png if image_url is empty or null
+            const profileImg = imageMapping[profileImageKey];
+
             return {
+                user,
+                profileImg,
                 confirmMessageFlag,
                 deleteElement,
                 displayConfirmMessage,
@@ -293,6 +322,6 @@
                 id,
                 userData,
             };
-        }
-    })
+        },
+    }
 </script>
