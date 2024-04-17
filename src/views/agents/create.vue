@@ -340,7 +340,7 @@
             }
             const router = useRouter();
             function userRedirect(){
-                router.push('/agents', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'agents' } });
             }
             function createUser(){
                 confirmMessageFlag.value = false;
