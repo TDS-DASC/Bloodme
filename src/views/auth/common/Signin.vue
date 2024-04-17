@@ -133,8 +133,7 @@
                   setTimeout(fetchUserData, 1000);
               })
               .catch(error => {
-                  console.error('Error in login process:', error.response.data);
-                  toast.error(error.response.data.message, { timeout: 2500 });
+                  toast.error('Ha ocurrido un error inesperado, por favor intentelo más tarde', { timeout: 2500 });
               });
       }
 

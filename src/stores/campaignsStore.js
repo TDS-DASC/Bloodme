@@ -21,7 +21,7 @@ export const useCachedDataStoreCampaigns = defineStore({
           this.dataLoaded = true;
         } catch (error) {
           console.error('Error in request api Campaigns', error);
-          if (error.response && error.response.status === 401) {
+          if (error.response && error.response.status === 401 || error.code == 'ERR_NETWORK' || error.code =='ERR_CONNECTION_REFUSED') {
             this.logout();
           }
         }

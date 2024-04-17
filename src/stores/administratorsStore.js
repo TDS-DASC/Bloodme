@@ -21,7 +21,7 @@ export const useCachedDataStoreAdministrators = defineStore({
             this.dataLoaded = true;
           } catch (error) {
             console.error('Error in request api administrators', error);
-            if (error.response && error.response.status === 401) {
+            if (error.response && error.response.status === 401 || error.code == 'ERR_NETWORK' || error.code =='ERR_CONNECTION_REFUSED') {
               this.logout();
             }
           }
