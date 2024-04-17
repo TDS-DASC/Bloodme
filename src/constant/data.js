@@ -101,11 +101,11 @@ export const menuItems = [
     child: [
         {
           childtitle: "Tabla de Administradores",
-          childlink: "/admins/index",
+          childlink: "/administrators/index",
         },
         {
           childtitle: "Crear Administrador",
-          childlink: "/admins/create",
+          childlink: "/administrators/create",
         },
     ],
   },
