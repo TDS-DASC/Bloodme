@@ -195,7 +195,7 @@
             let errors = ref([]);
             const toast = useToast();
             function userRedirect(){
-                router.push('/beneficiaries', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'beneficiaries' } });
             }
             function createBeneficiary(){
                 confirmMessageFlag.value = false;

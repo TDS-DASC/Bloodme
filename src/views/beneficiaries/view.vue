@@ -133,7 +133,7 @@
     import { useToast } from "vue-toastification";
     import axios from "@/plugins/axios";
 
-    export default({
+    export default{
         components:{
             profile,
             Card,
@@ -164,7 +164,7 @@
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
             function userRedirect(){
-                router.push('/beneficiaries', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'beneficiaries' } });
             }
             function deleteElement(){
                 confirmMessageFlag.value = false;
@@ -189,5 +189,5 @@
                 confirmMessageFlag
             };
         }
-    })
+    }
 </script>

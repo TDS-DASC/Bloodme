@@ -197,7 +197,7 @@
                 confirmMessageFlag.value = !confirmMessageFlag.value;
             }
             function userRedirect(){
-                router.push('/beneficiaries', {shallow: false});
+                router.push({ path: '/refresh', query: { urlHeader: 'beneficiaries' } });
             }
             function editBeneficiary(){
                 confirmMessageFlag.value = false;
