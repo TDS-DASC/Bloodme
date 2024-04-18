@@ -307,13 +307,10 @@
                 'user9.png': profileImg9
             };
 
-            const user = JSON.parse(localStorage.getItem('user'));
-
-            const profileImageKey = user && user.image_url ? user.image_url : 'user2.png'; // Default to user2.png if image_url is empty or null
+            const profileImageKey = userData.value && userData.value.image_url ? userData.value.image_url : 'user.png'; // Default to user2.png if image_url is empty or null
             const profileImg = imageMapping[profileImageKey];
 
             return {
-                user,
                 profileImg,
                 confirmMessageFlag,
                 deleteElement,
