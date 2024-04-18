@@ -244,6 +244,7 @@
                 email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
                 alias: yup.string().nullable()
                     .required("El alias es requerido")
+                    .min(2, "El alias debe de ser de un minimo de 2 caracteres")
                     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s.]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable().required("Es necesario brindar una fecha de nacimiento"),
                 image_url: yup.string().nullable(),

@@ -201,6 +201,10 @@
                     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 email: yup.string().required("El correo electrónico es requerido").email("Correo electrónico inválido"),
                 alias: yup.string().nullable()
+                    .test('minimum-length', '¡El alias debe de tener por lo menos 2 caracteres de largo!', function(value) {
+                        if (!value) return true;
+                        return value.length >= 2;
+                    })
                     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable(),
                 sex: yup.string().nullable(),
