@@ -7,7 +7,7 @@
                         <div class="md:flex items-end md:space-x-6 rtl:space-x-reverse"  v-if="userRole == 'agent'">
                             <div class="flex-none">
                                 <div class="md:h-[186px] md:w-[186px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-4 ring-slate-100 relative">
-                                    <img :src="userData.image_url" alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
+                                    <img :src=profileImg alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
                                     <img src="@/assets/images/avatar/av-1.svg" alt="" class="w-full h-full object-cover rounded-full" v-else />
                                         <router-link
                                             :to="`/agents/${userId}/edit`"
@@ -226,6 +226,16 @@
     import { useCachedDataStoreAdministrators } from '@/stores/administratorsStore';
     import { useCachedDataStoreParticipants } from '@/stores/participantsStore';
 
+    import profileImg2 from "@/assets/images/all-img/UserImages/user2.png"
+    import profileImg1 from "@/assets/images/all-img/UserImages/user.png"
+    import profileImg3 from "@/assets/images/all-img/UserImages/user3.png"
+    import profileImg4 from "@/assets/images/all-img/UserImages/user4.png"
+    import profileImg5 from "@/assets/images/all-img/UserImages/user5.png"
+    import profileImg6 from "@/assets/images/all-img/UserImages/user6.png"
+    import profileImg7 from "@/assets/images/all-img/UserImages/user7.png"
+    import profileImg8 from "@/assets/images/all-img/UserImages/user8.png"
+    import profileImg9 from "@/assets/images/all-img/UserImages/user9.png"
+
     export default{
         components:{
             profile,
@@ -275,7 +285,23 @@
             const userRole = JSON.parse(localStorage.getItem('user')).role;
             const userId = JSON.parse(localStorage.getItem('user')).id;
 
+            const imageMapping = {
+                'user.png': profileImg1,
+                'user2.png': profileImg2,
+                'user3.png': profileImg3,
+                'user4.png': profileImg4,
+                'user5.png': profileImg5,
+                'user6.png': profileImg6,
+                'user7.png': profileImg7,
+                'user8.png': profileImg8,
+                'user9.png': profileImg9
+            };
+
+            const profileImageKey = userData.value && userData.value.image_url ? userData.value.image_url : 'user.png'; // Default to user2.png if image_url is empty or null
+            const profileImg = imageMapping[profileImageKey];
+
             return {
+                profileImg,
                 userId,
                 userRole,
                 confirmMessageFlag,
