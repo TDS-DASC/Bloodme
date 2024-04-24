@@ -45,7 +45,7 @@
           </button>
         </div>
 
-        <div class="bg-white dark:bg-slate-800 h-full p-2 pb-10 overflow-auto gap-2 flex flex-col">
+        <div class="bg-white dark:bg-slate-800 h-full p-2 pb-10 overflow-auto gap-2 flex flex-col items-center">
           <div class="bg-white p-2 dark:bg-slate-800">
             <div class="flex justify-center items-center">
               <div class="border-b-4 border-solid border-gray-300 w-full"></div>
@@ -72,19 +72,19 @@
           </div>
 
           <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!pending">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
-              <div class="relative w-1/4 flex justify-center items-center dark:bg-white dark:rounded-md dark:w-fit">
+            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
+              <div class="relative w-1/4 flex justify-center items-center ">
                 <img :src="bloodbag" alt="" class="max-h-16" />
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
               </div>
               <div class="flex flex-col justify-start text-start w-full">
-                <div class="flex items-center justify-between gap-4 w-full dark:text-white">
-                  <p class="font-bold text-xl dark:text-white">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+                <div class="flex items-center justify-between gap-4 w-full">
+                  <p class="font-bold text-xl ">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
                   <div class="flex gap-2">
                     <Icon icon="mdi:eye" style="font-size: 120%;" />
                   </div>
                 </div>
-                <div class="flex items-center dark:text-gray-300">
+                <div class="flex items-center ">
                   <Icon icon="mdi:location" />
                   <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_name }}</p>
                 </div>
@@ -99,25 +99,21 @@
           </div>
 
           <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!canceled">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'cancelled'">
-              <div class="relative w-1/4 flex justify-center items-center dark:bg-white dark:rounded-md dark:w-fit">
+            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
+              <div class="relative w-1/4 flex justify-center items-center ">
                 <img :src="bloodbag" alt="" class="max-h-16" />
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
               </div>
-              <div class="flex flex-col justify-start text-start px-4 w-full">
-                <div class="flex items-center justify-between gap-4 w-full dark:text-white">
-                  <p class="font-bold text-xl dark:text-white">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+              <div class="flex flex-col justify-start text-start w-full">
+                <div class="flex items-center justify-between gap-4 w-full">
+                  <p class="font-bold text-xl ">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
                   <div class="flex gap-2">
                     <Icon icon="mdi:eye" style="font-size: 120%;" />
                   </div>
                 </div>
-                <div class="flex items-center dark:text-gray-300">
+                <div class="flex items-center ">
                   <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs">{{ appointment.hospital_name }}</p>
-                </div>
-                <div class="flex items-center dark:text-gray-300">
-                  <Icon icon="material-symbols-light:description-outline" style="font-size: 140%;" />
-                  <p class="flex-2 max-w-xs">{{ appointment.description }} Unidades</p>
+                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_name }}</p>
                 </div>
               </div>
             </button>
@@ -130,25 +126,21 @@
           </div>
 
           <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!completed">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'completed'">
-              <div class="relative w-1/4 flex justify-center items-center dark:bg-white dark:rounded-md dark:w-fit">
+            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
+              <div class="relative w-1/4 flex justify-center items-center ">
                 <img :src="bloodbag" alt="" class="max-h-16" />
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
               </div>
-              <div class="flex flex-col justify-start text-start px-4 w-full">
-                <div class="flex items-center justify-between gap-4 w-full dark:text-white">
-                  <p class="font-bold text-xl dark:text-white">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+              <div class="flex flex-col justify-start text-start w-full">
+                <div class="flex items-center justify-between gap-4 w-full">
+                  <p class="font-bold text-xl ">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
                   <div class="flex gap-2">
                     <Icon icon="mdi:eye" style="font-size: 120%;" />
                   </div>
                 </div>
-                <div class="flex items-center dark:text-gray-300">
+                <div class="flex items-center ">
                   <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs">{{ appointment.hospital_name }}</p>
-                </div>
-                <div class="flex items-center dark:text-gray-300">
-                  <Icon icon="material-symbols-light:description-outline" style="font-size: 140%;" />
-                  <p class="flex-2 max-w-xs">{{ appointment.description }} Unidades</p>
+                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_name }}</p>
                 </div>
               </div>
             </button>
@@ -162,10 +154,10 @@
         <div name="header" class="text-start bg-slate-700 text-black text-3xl dark:bg-slate-800">
           <div name="header" class="bg-slate-700 dark:bg-slate-700 flex justify-between">
             <div class="text-white dark:text-white text-3xl px-4 py-4 font-semibold">
-              Información de la cita
+              Información
             </div>
             <div class="text-white dark:text-white text-2xl px-4 py-4 font-semibold">
-              {{ appointment_date }}
+              <p>Fecha de la cita: {{ new Date(appointment_date).toLocaleDateString() }}, Hora de la cita: {{ new Date(appointment_date).toLocaleTimeString() }}</p>
             </div>
           </div>
         </div>
