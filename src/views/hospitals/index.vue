@@ -17,7 +17,7 @@
             const toast = useToast();
             const hospitalsTableParams = {
                 title: "Hospitals",
-                rows: 5,
+                rows: 10,
                 headUrl: "hospitals",
                 columns: [
                     {

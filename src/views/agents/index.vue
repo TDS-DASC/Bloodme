@@ -17,7 +17,7 @@
             const toast = useToast();
             const agentsTableParams = {
                 title: "Agentes",
-                rows: 5,
+                rows: 10,
                 headUrl: "agents",
                 columns: [
                     {

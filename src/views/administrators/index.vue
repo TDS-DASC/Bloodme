@@ -15,7 +15,7 @@
         setup() {
             const administratorsTableParams = {
                 title: "Administradores",
-                rows: 5,
+                rows: 10,
                 headUrl: "administrators",
                 columns: [
                     {

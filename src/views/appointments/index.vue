@@ -20,7 +20,7 @@
             const toast = useToast();
             const appointmentsTableParams = {
                 title: "Citas",
-                rows: 5,
+                rows: 10,
                 headUrl: "appointments",
                 columns: [
                     {

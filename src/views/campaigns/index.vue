@@ -18,7 +18,7 @@
             const toast = useToast();
             const campaignsTableParams = {
                 title: "Campañas",
-                rows: 5,
+                rows: 10,
                 headUrl: "campaigns",
                 columns: [
                     {

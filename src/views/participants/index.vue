@@ -16,7 +16,7 @@
             const toast = useToast();
             const participantsTableParams = {
                 title: "Participantes",
-                rows: 5,
+                rows: 10,
                 headUrl: "participants",
                 columns: [
                     {
