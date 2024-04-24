@@ -4,14 +4,24 @@
         class="md:flex justify-between pb-6 md:space-y-0 space-y-3 items-center z-10 relative"
       >
         <h5>{{ tableInformation.title }}</h5>
-        <!-- Aqui es donde se ponen los botones -->
-        <InputGroup
-          v-model="searchTerm"
-          placeholder="Search"
-          type="text"
-          prependIcon="heroicons-outline:search"
-          merged
-        />
+        <div class="flex gap-4">
+          <InputGroup
+            v-model="searchTerm"
+            placeholder="Search"
+            type="text"
+            prependIcon="heroicons-outline:search"
+            merged
+          />
+          <div class="flex gap-3 w-1/4">
+              <router-link 
+                  :to="`/${query.urlHeader}/create`" class="w-full">
+                  <Button type="submit" text="Crear" btnClass="btn-primary" class="w-full h-10 items-center">Crear</Button>
+              </router-link>
+              <router-link :to="{ path: '/refresh', query: { urlHeader: query.urlHeader } }" class="w-full">
+                  <Button type="submit" text="Refrescar" btnClass="btn-secondary" class="w-full h-10 items-center" @click="refreshToast()">Refrescar</Button>
+              </router-link>
+          </div>
+        </div>
       </div>
 
       <vue-good-table
@@ -202,12 +212,18 @@ export default {
           toast.error("Ha ocurrido un error inesperado.", { timeout: 1000 });
         });
     }
+
+    function refreshToast(){
+        toast.warning("Refrescando la tabla de "+query.urlHeader+".", { timeout: 1000 });
+    }
     
     return {
       displayConfirmMessage,
       deleteParticipant,
       confirmMessage,
       hideConfirmMessage,
+      query,
+      refreshToast
     }
   }
 };
