@@ -11,7 +11,7 @@
       }
       `"
     >
-      <div class="flex justify-between items-center h-full">
+      <div class="flex justify-between items-center h-full md:h-2">
         <div
           v-if="this.$store.themeSettingsStore.menuLayout === 'vertical'"
           class="flex items-center md:space-x-4 space-x-2 rtl:space-x-reverse"
@@ -34,7 +34,6 @@
           <handle-mobile-menu
             v-if="window.width < 1280 && window.width > 768"
           />
-          <SearchModal />
         </div>
         <div
           v-if="this.$store.themeSettingsStore.menuLayout === 'horizontal'"

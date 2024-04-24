@@ -157,7 +157,9 @@
               Información
             </div>
             <div class="text-white dark:text-white text-2xl px-4 py-4 font-semibold">
-              <p>Fecha de la cita: {{ new Date(appointment_date).toLocaleDateString() }}, Hora de la cita: {{ new Date(appointment_date).toLocaleTimeString() }}</p>
+              <span v-if="appointment_date != ''">
+                <p>Fecha de la cita: {{ new Date(appointment_date).toLocaleDateString() }}, Hora de la cita: {{ new Date(appointment_date).toLocaleTimeString() }}</p>
+              </span>
             </div>
           </div>
         </div>
