@@ -45,7 +45,16 @@
           </button>
         </div>
 
-        <div class="bg-white dark:bg-slate-800 h-full p-2 pb-10 overflow-auto gap-2 flex flex-col items-center">
+        <div class="h-full bg-white flex flex-col items-center justify-center" v-if="combinedDataRef == ''">
+          <svg xmlns="http://www.w3.org/2000/svg" width="27em" height="12em" viewBox="0 0 24 24" class="bg-white">
+            <path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12">
+              <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/>
+              <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/>
+            </path>
+          </svg>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 h-full p-2 pb-10 overflow-auto gap-2 flex flex-col" v-if="combinedDataRef != ''">
           <div class="bg-white p-2 dark:bg-slate-800">
             <div class="flex justify-center items-center">
               <div class="border-b-4 border-solid border-gray-300 w-full"></div>
@@ -72,7 +81,7 @@
           </div>
 
           <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!pending">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
+            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
               <div class="relative w-1/4 flex justify-center items-center ">
                 <img :src="bloodbag" alt="" class="max-h-16" />
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
@@ -99,7 +108,7 @@
           </div>
 
           <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!canceled">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
+            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'cancelled'">
               <div class="relative w-1/4 flex justify-center items-center ">
                 <img :src="bloodbag" alt="" class="max-h-16" />
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
@@ -126,7 +135,7 @@
           </div>
 
           <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!completed">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
+            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'completed'">
               <div class="relative w-1/4 flex justify-center items-center ">
                 <img :src="bloodbag" alt="" class="max-h-16" />
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
@@ -472,7 +481,20 @@
                       console.log(res);
                       useCachedDataStoreAppointments().refreshData();
                       selectedAppointment.appointment_status = newAppointmentStatus;
-                      toast.success("¡Cita cancelada correctamente!", { timeout: 1000 });
+                      switch(newAppointmentStatus) {
+                        case 'cancelled':
+                          toast.success("¡Cita cancelada correctamente!", { timeout: 1000 });
+                          break;
+                        case 'pending':
+                          toast.success("¡Cita pasada a pendientes correctamente!", { timeout: 1000 });
+                          break;
+                        case 'completed':
+                          toast.success("¡Cita completada correctamente!", { timeout: 1000 });
+                          break;
+                        default:
+                          // Mensaje predeterminado en caso de que newAppointmentStatus no coincida con ninguno de los casos anteriores
+                          toast.error("Estado de cita desconocido", { timeout: 1000 });
+                      }
                   })
                   .catch(error => {
                       console.log(formattedData);
