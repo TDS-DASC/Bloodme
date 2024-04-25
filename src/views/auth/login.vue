@@ -4,13 +4,9 @@
       <div class="right-column relative">
         <div
           class="inner-content h-full flex flex-col bg-white dark:bg-slate-800"
+          v-if="!userIsLoggedFlag"
         >
           <div class="auth-box h-full flex flex-col justify-center">
-            <!--<div class="mobile-logo text-center mb-6 lg:hidden block">
-              <router-link to="/"
-                ><img :src="logo" alt="" class="mx-auto"
-              /></router-link>
-            </div> -->
             <div class="text-center 2xl:mb-10 mb-4">
               <h4 class="font-medium">¡Bienvenido de nuevo!</h4>
               <div class="text-slate-500 dark:text-slate-400 text-base">
@@ -27,6 +23,35 @@
               >
               Crea una aquí .</router-link
               >
+            </div>
+          </div>
+          <div class="auth-footer text-center flex flex-col justify-center items-center gap-1">
+              <p>Aplicación diseñada por DASC.</p>
+              <img :src="dasclogo" alt="Dasc logo." />
+          </div>
+        </div>
+        <div class="inner-content h-full flex flex-col bg-white dark:bg-slate-800" 
+        v-else>
+          <div class="auth-box h-full flex flex-col justify-center">
+            <div class="text-center 2xl:mb-10 mb-4">
+              <h4 class="font-medium">¡Hola! {{ user.name }} {{ user.lastname }}</h4>
+              <div class="text-slate-500 dark:text-slate-400 text-base">
+                De momento ya hay una sesión iniciada con tu correo: <br> 
+                {{ user.email }} <br><br>
+                Pudes volver al inicio desde aquí: <br>
+                <router-link
+                  to="/home"
+                  class="text-slate-900 dark:text-white font-medium hover:underline"
+                >
+                Volver al inicio .</router-link>
+              </div>
+            </div>
+            <div class="relative border-b-[#9AA2AF] border-opacity-[16%] border-b pt-6"></div>
+            <div class="md:max-w-[345px] mt-6 mx-auto font-normal text-slate-500 dark:text-slate-400mt-12 uppercase text-sm text-center">
+              ¿Quieres cerrar tu sesión e iniciar una nueva?
+                <button class="text-xl" @click="sendLogOutRequest">
+                  Cerrar sesión
+                </button>
             </div>
           </div>
           <div class="auth-footer text-center flex flex-col justify-center items-center gap-1">
@@ -66,6 +91,9 @@
   import bgloginimage from "@/assets/images/all-img/bg-auth.jpg";
   import blooddrop from "@/assets/images/icon/blooddrop.svg";
   import dasclogo from "@/assets/images/logo/dasclogo.png";
+  import axios from "@/plugins/axios";
+  import { useToast } from "vue-toastification";
+  import { ref } from "vue";
 
   export default {
     data() {
@@ -79,6 +107,41 @@
       Social,
       Signin,
     },
+    setup() {
+      let user = JSON.parse(localStorage.getItem('user'));
+      let userIsLoggedFlag = ref(false);
+      console.log(user)
+      if(user != null){
+        userIsLoggedFlag.value = true;
+      }
+
+      let toast = useToast();
+      function deleteCookie(name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      }
+      function closeSession(){
+        localStorage.removeItem('user');
+        deleteCookie('XSRF-TOKEN');
+        deleteCookie('laravel_session');
+        window.location.href = '/home';
+      }
+      function sendLogOutRequest(){
+        axios.post(`/logout`)
+            .then(res => {
+              toast.info("¡A cerrado su sesión!", { timeout: 1000 });
+              setTimeout(closeSession, 1000);
+            })
+            .catch(error => {
+              console.error('Error in login request:', error);
+            });
+      }
+
+      return {
+        userIsLoggedFlag,
+        user,
+        sendLogOutRequest
+      }
+    }
   };
 </script>
 <style lang="scss"></style>
