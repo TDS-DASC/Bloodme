@@ -71,10 +71,15 @@
                 await useCachedDataStoreBeneficiaries().fetchData();
                 
                 const campaignData = campaignsTable.map(campaign => ({ id: campaign.id, beneficiary: campaign.beneficiary_id }));
-                const beneficiaryData = beneficiariesTable.map(participant => ({ id: participant.id, name: participant.name }));
+                const beneficiaryData = beneficiariesTable.map(beneficiary => ({ id: beneficiary.id, name: beneficiary.name }));
 
                 campaignsTable.forEach(campaign => {
-                    campaign.beneficiary_name = beneficiaryData.find(beneficiary => beneficiary.id == campaign.beneficiary_id).name;
+                    const beneficiary = beneficiaryData.find(beneficiary => beneficiary.id == campaign.beneficiary_id);
+                    if (beneficiary) {
+                        campaign.beneficiary_name = beneficiary.name;
+                    } else {
+                        campaign.beneficiary_name = "No se encontró el beneficiario";
+                    }
                 });
                 loadingFlag.value = false;
             }

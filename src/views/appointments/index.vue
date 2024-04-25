@@ -77,17 +77,27 @@
                 await useCachedDataStoreCampaigns().fetchData();
                 await useCachedDataStoreBeneficiaries().fetchData();
                 
-
                 const participantData = participantsTable.map(participant => ({ id: participant.id, name: participant.name }));
                 const campaignData = campaignsTable.map(campaign => ({ id: campaign.id, beneficiary: campaign.beneficiary_id }));
                 const beneficiaryData = beneficiariesTable.map(beneficiary => ({ id: beneficiary.id, name: beneficiary.name }));
 
                 appointmentsTable.forEach(appointment => {
-                    appointment.name = participantData.find(participant => participant.id == appointment.user_id)?.name;
+                    const participant = participantData.find(participant => participant.id == appointment.user_id);
+                    if (participant && participant.name) {
+                        appointment.name = participant.name;
+                    } else {
+                        appointment.name = "No se encontró al donador";
+                    }
+
                     const campaign = campaignData.find(campaign => campaign.id == appointment.campaign_id);
                     console.log(campaign)
                     if (campaign) {
-                        appointment.beneficiary = beneficiaryData.find(beneficiary => beneficiary.id == campaign.beneficiary).name;
+                        const beneficiary = beneficiaryData.find(beneficiary => beneficiary.id == campaign.beneficiary);
+                        if (beneficiary) {
+                            appointment.beneficiary = beneficiary.name;
+                        } else {
+                            appointment.beneficiary = "No se encontró al beneficiario";
+                        }
                     }
                 });
                 loadingFlag.value = false;
