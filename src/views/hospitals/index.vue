@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-4">
         <tableAdvanced :tableInformation=hospitalsTableParams :tableData=hospitalsTable urlMainHeader="hospitals" />
-        <div v-if="loadingFlag" class="fixed inset-0 flex flex-col justify-center items-center bg-white bg-opacity-0 z-10">
+        <div v-if="loadingFlag" class="fixed w-3/4 h-screen flex flex-col justify-center items-center bg-white bg-opacity-0 z-10">
             <div class="bg-white flex flex-col justify-center align-middle items-center p-10 rounded-md border-2 border-gray-300">
                 <p class="font-bold text-4xl mb-4">Cargando</p>
                 <div class="w-24 h-24">

@@ -148,6 +148,7 @@
             </Card>
         </div>
     </div>
+    <SearchModal/>
 </template>
 
 <script>
@@ -165,6 +166,7 @@
     import router from '../../router';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
+    import SearchModal from '@/components/SearchModal';
 
     export default {
         components: {
@@ -173,7 +175,8 @@
             Textarea,
             Select,
             Textinput,
-            Card
+            Card,
+            SearchModal
         },
         setup() {
             const schema = yup.object().shape({
