@@ -16,28 +16,32 @@
               <div class="w-fit h-fit bg-white border-2 border-black-900 flex flex-col justify-start items-start p-2">
                 <div class="flex justify-between w-full">
                   <p class="font-bold">Filtrar por:</p>
-                  <Icon icon="carbon:close-outline" style="font-size: 180%; font-weight: bold; color: darkslategray;" @click="showFilteringOptions()" />
+                  <Icon icon="carbon:close-outline" class="hover:bg-red-400 rounded-full transition-all duration-300" style="font-size: 180%; font-weight: bold; color: darkslategray;" @click="showFilteringOptions()" />
                 </div>
                 <div class="px-4 py-2 font-semibold gap-2 flex flex-col">
-                  <div class="flex">
+                  <div class="flex hover:bg-gray-300 transition-all duration-300 p-1 rounded-md">
                     <input type="radio" id="filtered-by-id" name="filter-option" @click="changeFilter('byId')">
                     <label for="filtered-by-id" class="px-2" >Por orden de creación</label><br>
                   </div>
-                  <div class="flex">
+                  <div class="flex hover:bg-gray-300 transition-all duration-300 p-1 rounded-md">
                     <input type="radio" id="filtered-by-name" name="filter-option" @click="changeFilter('byName')">
                     <label for="filtered-by-name" class="px-2">Por nombre del donador</label><br>
                   </div>
-                  <div class="flex">
+                  <div class="flex hover:bg-gray-300 transition-all duration-300 p-1 rounded-md">
                     <input type="radio" id="filtered-by-lastname" name="filter-option" @click="changeFilter('byUserLastName')">
                     <label for="filtered-by-lastname" class="px-2">Por apellido del donador</label>
                   </div>
-                  <div class="flex">
+                  <div class="flex hover:bg-gray-300 transition-all duration-300 p-1 rounded-md">
                     <input type="radio" id="filtered-by-beneficiary-name" name="filter-option" @click="changeFilter('byBeneficiaryName')">
                     <label for="filtered-by-beneficiary-name" class="px-2">Por nombre del beneficiario</label>
                   </div>
-                  <div class="flex">
+                  <div class="flex hover:bg-gray-300 transition-all duration-300 p-1 rounded-md">
                     <input type="radio" id="filtered-by-beneficiary-lastname" name="filter-option" @click="changeFilter('byBeneficiaryLastName')">
                     <label for="filtered-by-beneficiary-lastname" class="px-2">Por apellido del beneficiario</label>
+                  </div>
+                  <div class="flex hover:bg-gray-300 transition-all duration-300 p-1 rounded-md">
+                    <input type="radio" id="filtered-by-appointment-hour" name="filter-option" @click="changeFilter('byAppointmentHour')">
+                    <label for="filtered-by-appointment-hour" class="px-2">Por hora de cita</label>
                   </div>
                 </div>
               </div>
@@ -556,6 +560,20 @@
               return -1;
             }
             if (userLastNameA > userLastNameB) {
+              return 1;
+            }
+            return 0;
+          });
+        } else if (selectedFilterOption === 'byAppointmentHour') {
+          console.log("byAppointmentHour")
+          combinedDataRef.value.sort((a, b) => {
+            const dateA = new Date(a.appointment_date);
+            const dateB = new Date(b.appointment_date);
+
+            if (dateA < dateB) {
+              return -1;
+            }
+            if (dateA > dateB) {
               return 1;
             }
             return 0;
