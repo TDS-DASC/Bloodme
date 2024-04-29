@@ -347,6 +347,7 @@
   import { useCachedDataStoreCampaigns } from '../stores/campaignsStore';
   import { useCachedDataStoreBeneficiaries } from '../stores/beneficiariesStore';
   import { useCachedDataStoreHospitals } from '../stores/hospitalsStore';
+  import { useCachedDataStoreAppointmentsPerAgent } from '../stores/appointmentsPerAgent';
   import { ref } from "vue";
   import axios from "@/plugins/axios";
   import { useToast } from "vue-toastification";
@@ -362,22 +363,27 @@
       };
     },
     setup() {
-
       const { appointmentsTable } = useCachedDataStoreAppointments();
-      const { usersTable } = useCachedDataStoreUsers();
       const { campaignsTable } = useCachedDataStoreCampaigns();
       const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
+      const { participantsTable } = useCachedDataStoreBeneficiaries();
       const { hospitalsTable } = useCachedDataStoreHospitals();
+      const { appointmentsPerAgent } = useCachedDataStoreAppointmentsPerAgent();
       const combinedDataRef = ref([]);
 
       let originalData = [];
 
+      useCachedDataStoreAppointmentsPerAgent().fetchData();
+      useCachedDataStoreBeneficiaries().fetchData();
+      useCachedDataStoreCampaigns().fetchData();
+
+      console.log(appointmentsPerAgent)
+
       async function fetchData() {
-        await useCachedDataStoreAppointments().fetchData();
-        await useCachedDataStoreUsers().fetchData();
-        await useCachedDataStoreCampaigns().fetchData();
-        await useCachedDataStoreBeneficiaries().fetchData();
-        await useCachedDataStoreHospitals().fetchData();
+        /* await useCachedDataStoreAppointments().fetchData(); */
+        /* await useCachedDataStoreUsers().fetchData(); */
+        /* await useCachedDataStoreCampaigns().fetchData(); */
+        /* await useCachedDataStoreBeneficiaries().fetchData(); */
 
         const combinedData = appointmentsTable.map(appointment => {
           const user = usersTable.find(user => user.id === appointment.user_id);
@@ -422,7 +428,7 @@
         originalData = combinedDataRef.value;
       }
 
-      fetchData();
+      /* fetchData(); */
 
       let appointmentId = ref('');
       let name = ref('');
