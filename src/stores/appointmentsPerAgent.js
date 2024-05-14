@@ -12,9 +12,13 @@ export const useCachedDataStoreAppointmentsPerAgent = defineStore({
       this.appointmentsPerAgentTable = data;
     },
     async fetchData() {
+      let agentHospital = 0;
+      const userDataString = localStorage.getItem('user');
+      const userData = JSON.parse(userDataString);
+      agentHospital = userData.hospital_id;
       if (!this.dataLoaded && this.appointmentsPerAgentTable.length == 0) {
         try {
-          const response = await axios.get(`/api/hospitals/${1}/appointments`);
+          const response = await axios.get(`/api/hospitals/${agentHospital}/appointments`);
           response.data.forEach(appointmentPerAgent => {
             this.appointmentsPerAgentTable.push(appointmentPerAgent);
           });

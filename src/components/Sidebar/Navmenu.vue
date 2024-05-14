@@ -243,13 +243,14 @@
     setup() {
       let userRole = ref("");
       const userDataString = localStorage.getItem('user');
+      console.log(userDataString)
       if (userDataString) {
           const userData = JSON.parse(userDataString);
           userRole.value = userData.role;
       } else {
           console.log('User data not found in localStorage');
       }
-      console.log(userRole.value)
+      /* console.log(userRole.value) */
       return {
         userRole,
       }
