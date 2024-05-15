@@ -1,5 +1,5 @@
 <template>
-    <div class="flex dark:bg-slate-900 gap-2 w-full" style="height: 85vh;">
+    <div class="flex dark:bg-slate-900 gap-2 w-full" style="height: 83vh;">
       <!-- Citas pendientes -->
       <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit dark:bg-slate-800 min-w-28">
         <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-3xl p-1 font-semibold">
@@ -99,7 +99,7 @@
                 </div>
                 <div class="flex items-center ">
                   <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_name }}</p>
+                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_address }}</p>
                 </div>
               </div>
             </button>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="flex items-center ">
                   <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_name }}</p>
+                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_address }}</p>
                 </div>
               </div>
             </button>
@@ -153,7 +153,7 @@
                 </div>
                 <div class="flex items-center ">
                   <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_name }}</p>
+                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_address }}</p>
                 </div>
               </div>
             </button>
@@ -342,8 +342,6 @@
   import bloodbag from "@/assets/images/all-img/BloodBag.png";
   import Textinput from "@/components/Textinput";
   import Icon from "../components/Icon";
-  import { useCachedDataStoreAppointments } from '../stores/appointmentsStore';
-  import { useCachedDataStoreUsers } from '../stores/usersStore';
   import { useCachedDataStoreCampaigns } from '../stores/campaignsStore';
   import { useCachedDataStoreBeneficiaries } from '../stores/beneficiariesStore';
   import { useCachedDataStoreHospitals } from '../stores/hospitalsStore';
@@ -363,64 +361,53 @@
       };
     },
     setup() {
-      const { appointmentsTable } = useCachedDataStoreAppointments();
+      const { appointmentsPerAgentTable } = useCachedDataStoreAppointmentsPerAgent();
       const { campaignsTable } = useCachedDataStoreCampaigns();
       const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
-      const { participantsTable } = useCachedDataStoreBeneficiaries();
       const { hospitalsTable } = useCachedDataStoreHospitals();
-      const { appointmentsPerAgent } = useCachedDataStoreAppointmentsPerAgent();
       const combinedDataRef = ref([]);
 
       let originalData = [];
 
-      useCachedDataStoreAppointmentsPerAgent().fetchData();
-      useCachedDataStoreBeneficiaries().fetchData();
-      useCachedDataStoreCampaigns().fetchData();
-
-      console.log(appointmentsPerAgent)
-
+      let hospital_id = JSON.parse(localStorage.getItem('user')).hospital_id
+      
       async function fetchData() {
-        /* await useCachedDataStoreAppointments().fetchData(); */
-        /* await useCachedDataStoreUsers().fetchData(); */
-        /* await useCachedDataStoreCampaigns().fetchData(); */
-        /* await useCachedDataStoreBeneficiaries().fetchData(); */
+        const response = await axios.get(`/api/hospitals/${hospital_id}`);
+        let hospital_agent = response
+        await useCachedDataStoreAppointmentsPerAgent().fetchData()
 
-        const combinedData = appointmentsTable.map(appointment => {
-          const user = usersTable.find(user => user.id === appointment.user_id);
-          const campaign = campaignsTable.find(campaign => campaign.id === appointment.campaign_id);
-          const beneficiary = beneficiariesTable.find(beneficiary => beneficiary.id === campaign.beneficiary_id);
-          const hospital = hospitalsTable.find(hospital => hospital.id === campaign.hospital_id);
+        const combinedData = appointmentsPerAgentTable.map(appointment => {
           return { 
             appointment_id: appointment.id,
             appointment_date : appointment.date,
             appointment_status : appointment.status,
             datetime: appointment.datetime,
             description: appointment.description,
-            user_id: user ? user.id : '',
-            user_name: user ? user.name : '', 
-            user_lastname: user ? user.lastname : '', 
-            user_email: user ? user.email : '', 
-            user_alias: user ? user.alias : '', 
-            user_birth_date: user ? user.birth_date : '', 
-            user_image_url: user ? user.image_url : '',
-            user_sex: user ? user.sex : '',
-            user_phone_number: user ? user.phone_number : '',
-            user_curp: user ? user.curp : '',
-            user_blood_type: user ? user.blood_type : '',
-            campaign_id: campaign ? campaign.id : '',
-            campaign_required_bags: campaign ? campaign.required_bags : '',
-            campaign_recollected_bags: campaign ? campaign.recollected_bags : '',
-            campaign_required_platelets: campaign ? campaign.required_platelets : '',
-            campaign_recollected_platelets: campaign ? campaign.recollected_platelets : '',
-            campaign_description: campaign ? campaign.description : '',
-            campaign_beneficiary_id: campaign ? campaign.beneficiary_id : '',
-            campaign_hospital_id: campaign ? campaign.hospital_id : '',
-            beneficiary_name: beneficiary ? beneficiary.name : '',
-            beneficiary_lastname: beneficiary ? beneficiary.lastname : '',
-            beneficiary_curp: beneficiary ? beneficiary.curp : '',
-            beneficiary_blood_type: beneficiary ? beneficiary.blood_type : '',
-            hospital_name: hospital ? hospital.name : '',
-            hospital_name: hospital ? hospital.address : '',
+            user_id: appointment.user ? appointment.user.id : '',
+            user_name: appointment.user ? appointment.user.name : '', 
+            user_lastname: appointment.user ? appointment.user.lastname : '', 
+            user_email: appointment.user ? appointment.user.email : '', 
+            user_alias: appointment.user ? appointment.user.alias : '', 
+            user_birth_date: appointment.user ? appointment.user.birth_date : '', 
+            user_image_url: appointment.user ? appointment.user.image_url : '',
+            user_sex: appointment.user ? appointment.user.sex : '',
+            user_phone_number: appointment.user ? appointment.user.phone_number : '',
+            user_curp: appointment.user ? appointment.user.curp : '',
+            user_blood_type: appointment.user ? appointment.user.blood_type : '',
+            campaign_id: appointment.campaign ? appointment.campaign.id : '',
+            campaign_required_bags: appointment.campaign ? appointment.campaign.required_bags : '',
+            campaign_recollected_bags: appointment.campaign ? appointment.campaign.recollected_bags : '',
+            campaign_required_platelets: appointment.campaign ? appointment.campaign.required_platelets : '',
+            campaign_recollected_platelets: appointment.campaign ? appointment.campaign.recollected_platelets : '',
+            campaign_description: appointment.campaign ? appointment.campaign.description : '',
+            campaign_beneficiary_id: appointment.campaign ? appointment.campaign.beneficiary_id : '',
+            campaign_hospital_id: appointment.campaign ? appointment.campaign.hospital_id : '',
+            beneficiary_name: appointment.beneficiary ? appointment.beneficiary.name : '',
+            beneficiary_lastname: appointment.beneficiary ? appointment.beneficiary.lastname : '',
+            beneficiary_curp: appointment.beneficiary ? appointment.beneficiary.curp : '',
+            beneficiary_blood_type: appointment.beneficiary ? appointment.beneficiary.blood_type : '',
+            hospital_name: hospital_agent.data ? hospital_agent.data.name : '',
+            hospital_address: hospital_agent.data ? hospital_agent.data.address : '',
           };
         });
 
@@ -428,7 +415,7 @@
         originalData = combinedDataRef.value;
       }
 
-      /* fetchData(); */
+      fetchData();
 
       let appointmentId = ref('');
       let name = ref('');
@@ -449,8 +436,6 @@
       let selectedAppointment = ref(null);
       function showPatientInformation(appointment, index){
         selectedAppointment.value = index;
-        console.log(selectedAppointment.value)
-
         appointmentId.value = appointment.appointment_id;
         name.value = appointment.user_name ? appointment.user_name : 'No registrado';
         lastName.value = appointment.user_lastname ? appointment.user_lastname : 'No registrado';
@@ -487,35 +472,33 @@
               formattedData[item.name] = item.value;
           });
           axios.put(`/api/appointments/${appointmentId.value}`, formattedData)
-                  .then(res => {
-                      console.log(res);
-                      useCachedDataStoreAppointments().refreshData();
-                      selectedAppointment.appointment_status = newAppointmentStatus;
-                      switch(newAppointmentStatus) {
-                        case 'cancelled':
-                          toast.success("¡Cita cancelada correctamente!", { timeout: 1000 });
-                          break;
-                        case 'pending':
-                          toast.success("¡Cita pasada a pendientes correctamente!", { timeout: 1000 });
-                          break;
-                        case 'completed':
-                          toast.success("¡Cita completada correctamente!", { timeout: 1000 });
-                          break;
-                        default:
-                          // Mensaje predeterminado en caso de que newAppointmentStatus no coincida con ninguno de los casos anteriores
-                          toast.error("Estado de cita desconocido", { timeout: 1000 });
-                      }
-                  })
-                  .catch(error => {
-                      console.log(formattedData);
-                      toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
-                      if (error.response && error.response.data) {
-                          const responseData = error.response.data;
-                          errorMessage.value = responseData.message || 'An error occurred.';
-                      } else {
-                          errorMessage.value = 'An error occurred.';
-                      }
-                  });
+            .then(res => {
+                useCachedDataStoreAppointments().refreshData();
+                selectedAppointment.appointment_status = newAppointmentStatus;
+                switch(newAppointmentStatus) {
+                  case 'cancelled':
+                    toast.success("¡Cita cancelada correctamente!", { timeout: 1000 });
+                    break;
+                  case 'pending':
+                    toast.success("¡Cita pasada a pendientes correctamente!", { timeout: 1000 });
+                    break;
+                  case 'completed':
+                    toast.success("¡Cita completada correctamente!", { timeout: 1000 });
+                    break;
+                  default:
+                    // Mensaje predeterminado en caso de que newAppointmentStatus no coincida con ninguno de los casos anteriores
+                    toast.error("Estado de cita desconocido", { timeout: 1000 });
+                }
+            })
+            .catch(error => {
+                toast.error("Ha ocurrido un error inesperado.", { timeout: 2000 });
+                if (error.response && error.response.data) {
+                    const responseData = error.response.data;
+                    errorMessage.value = responseData.message || 'An error occurred.';
+                } else {
+                    errorMessage.value = 'An error occurred.';
+                }
+            });
         }
       }
 
@@ -571,7 +554,6 @@
             return 0;
           });
         } else if (selectedFilterOption === 'byAppointmentHour') {
-          console.log("byAppointmentHour")
           combinedDataRef.value.sort((a, b) => {
             const dateA = new Date(a.appointment_date);
             const dateB = new Date(b.appointment_date);
@@ -609,7 +591,6 @@
       }
 
       function filterData(searchQuery) {
-        console.log(searchQuery == '')
         if (searchQuery.trim() == '' || searchQuery == '') {
           combinedDataRef.value = originalData;
           return;
@@ -659,8 +640,7 @@
         alias,
         email,
         phoneNumber,
-        appointmentsTable,
-        usersTable
+        appointmentsPerAgentTable,
       }
     }
   };

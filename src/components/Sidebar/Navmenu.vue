@@ -243,7 +243,6 @@
     setup() {
       let userRole = ref("");
       const userDataString = localStorage.getItem('user');
-      console.log(userDataString)
       if (userDataString) {
           const userData = JSON.parse(userDataString);
           userRole.value = userData.role;
