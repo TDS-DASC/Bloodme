@@ -1,14 +1,14 @@
 <template>
     <div class="flex dark:bg-slate-900 gap-2 w-full" style="height: 83vh;">
       <!-- Citas pendientes -->
-      <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden min-w-fit dark:bg-slate-800 min-w-28">
-        <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-3xl p-1 font-semibold">
+      <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden dark:bg-slate-800 min-w-20 max-w-80">
+        <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-xl p-1 py-2 font-semibold">
           Citas pendientes
         </div>
         <div class="flex items-center pr-2 dark:bg-slate-800 bg-white">
           <div class="flex flex-1 items-center m-2 bg-white rounded-xl overflow-hidden border-2 border-black-400 border-solid">
             <Icon icon="material-symbols-light:search" style="font-size: 180%; font-weight: bold; color: gray;"/>
-            <input class="p-2 w-full focus:outline-none" placeholder="Buscar..." @input="filterData($event.target.value)">
+            <input class="py-0 w-full focus:outline-none" placeholder="Buscar..." @input="filterData($event.target.value)">
           </div>
           <button class="hover:bg-gray-300 rounded-md dark:bg-slate-300 dark:hover:bg-gray-100 z-10">
             <Icon icon="system-uicons:filtering" style="font-size: 180%; font-weight: bold; color: darkslategray;" @click="showFilteringOptions()" />
@@ -92,14 +92,14 @@
               </div>
               <div class="flex flex-col justify-start text-start w-full">
                 <div class="flex items-center justify-between gap-4 w-full">
-                  <p class="font-bold text-xl ">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+                  <p class="font-bold">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
                   <div class="flex gap-2">
                     <Icon icon="mdi:eye" style="font-size: 120%;" />
                   </div>
                 </div>
                 <div class="flex items-center ">
                   <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_address }}</p>
+                  <p class="flex-2 max-w-xs text-xs">{{ appointment.hospital_address }}</p>
                 </div>
               </div>
             </button>
@@ -118,15 +118,15 @@
                 <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
               </div>
               <div class="flex flex-col justify-start text-start w-full">
-                <div class="flex items-center justify-between gap-4 w-full">
-                  <p class="font-bold text-xl ">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
-                  <div class="flex gap-2">
+                <div class="flex items-center justify-between">
+                  <p class="font-bold">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+                  <div class="flex">
                     <Icon icon="mdi:eye" style="font-size: 120%;" />
                   </div>
                 </div>
                 <div class="flex items-center ">
                   <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_address }}</p>
+                  <p class="flex-2 max-w-xs text-xs">{{ appointment.hospital_address }}</p>
                 </div>
               </div>
             </button>
@@ -146,14 +146,14 @@
               </div>
               <div class="flex flex-col justify-start text-start w-full">
                 <div class="flex items-center justify-between gap-4 w-full">
-                  <p class="font-bold text-xl ">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+                  <p class="font-bold">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
                   <div class="flex gap-2">
                     <Icon icon="mdi:eye" style="font-size: 120%;" />
                   </div>
                 </div>
                 <div class="flex items-center ">
                   <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs text-sm">{{ appointment.hospital_address }}</p>
+                  <p class="flex-2 max-w-xs text-xs">{{ appointment.hospital_address }}</p>
                 </div>
               </div>
             </button>
@@ -166,10 +166,10 @@
       <div class="flex-auto rounded-md overflow-auto bg-white dark:bg-gray-800">
         <div name="header" class="text-start bg-slate-700 text-black text-3xl dark:bg-slate-800">
           <div name="header" class="bg-slate-700 dark:bg-slate-700 flex justify-between">
-            <div class="text-white dark:text-white text-3xl px-4 py-4 font-semibold">
+            <div class="text-white dark:text-white text-xl px-4 py-4 font-semibold">
               Información
             </div>
-            <div class="text-white dark:text-white text-2xl px-4 py-4 font-semibold">
+            <div class="text-white dark:text-white text-lg px-4 py-4 font-semibold">
               <span v-if="appointment_date != ''">
                 <p>Fecha de la cita: {{ new Date(appointment_date).toLocaleDateString() }}, Hora de la cita: {{ new Date(appointment_date).toLocaleTimeString() }}</p>
               </span>
@@ -178,16 +178,16 @@
         </div>
         <div class="p-4">
           <div class="px-3 py-2">
-            <div class="flex justify-between">
-              <p class="font-semibold text-gray-600 text-2xl dark:text-white dark:border-b-2">Datos del donador</p>
+            <div class="flex justify-between border-b-2 pb-1">
+              <p class="font-semibold text-gray-600 text-lg dark:text-white dark:border-b-2">Datos del donador</p>
               <div class="full flex justify-end gap-2">
-                <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
+                <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center py-2" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
                   Cita pendiente
                 </button>
-                <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
+                <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center py-2" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
                   Cita cancelada
                 </button>
-                <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
+                <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center py-2" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
                   Cita completada
                 </button>
               </div>
@@ -272,7 +272,7 @@
             </div>
           </div>
           <div class="px-3 py-2">
-            <p class="font-semibold text-gray-600 text-2xl dark:text-white dark:border-b-2 border-b-2">Información de contacto</p>
+            <p class="font-semibold text-gray-600 dark:text-white dark:border-b-2 border-b-2">Información de contacto</p>
             <div class="w-full rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
               <div class="flex gap-2 w-full">
                 <Textinput
@@ -299,7 +299,7 @@
             </div>
           </div>
           <div class="px-3 py-2">
-            <p class="font-semibold text-gray-600 text-2xl dark:text-white dark:border-b-2 border-b-2">Información de Campaña</p>
+            <p class="font-semibold text-gray-600 dark:text-white dark:border-b-2 border-b-2">Información de Campaña</p>
             <div class="w-full rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
               <div class="flex gap-2 w-full">
                 <Textinput
