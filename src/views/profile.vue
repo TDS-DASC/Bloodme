@@ -3,43 +3,71 @@
         <div class="space-y-5 profile-page">
             <div class="profiel-wrap px-[35px] pb-10 md:pt-[84px] pt-10 rounded-lg bg-white dark:bg-slate-800 lg:flex lg:space-y-0 space-y-6 justify-between items-end relative z-[1]">
                 <div class="bg-slate-900 dark:bg-slate-700 absolute left-0 top-0 md:h-1/2 h-[150px] w-full z-[-1] rounded-t-lg"></div>    
-                    <div class="profile-box flex-none md:text-start text-center">
-                        <div class="md:flex items-end md:space-x-6 rtl:space-x-reverse"  v-if="userRole == 'agent'">
-                            <div class="flex-none">
-                                <div class="md:h-[186px] md:w-[186px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-4 ring-slate-100 relative">
-                                    <img :src=profileImg alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
-                                    <img src="@/assets/images/avatar/av-1.svg" alt="" class="w-full h-full object-cover rounded-full" v-else />
-                                        <router-link
-                                            :to="`/agents/${userId}/edit`"
-                                            class="absolute right-2 h-8 w-8 bg-slate-50 text-slate-600 rounded-full shadow-sm flex flex-col items-center justify-center md:top-[140px] top-[100px]"
-                                            ><Icon icon="heroicons:pencil-square" />
-                                        </router-link>
+                    <div class="profile-box flex-none md:text-start text-center w-full">
+                        <div class="items-end flex justify-between w-full"  v-if="userRole == 'agent'">
+                            <div class="md:flex items-end md:space-x-6 rtl:space-x-reverse">
+                                <div class="flex-none">
+                                    <div class="md:h-[186px] md:w-[186px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-4 ring-slate-100 relative">
+                                        <img :src=profileImg alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
+                                        <img src="@/assets/images/avatar/av-1.svg" alt="" class="w-full h-full object-cover rounded-full" v-else />
+                                            <router-link
+                                                :to="`/agents/${userId}/edit`"
+                                                class="absolute right-2 h-8 w-8 bg-slate-50 text-slate-600 rounded-full shadow-sm flex flex-col items-center justify-center md:top-[140px] top-[100px]"
+                                                ><Icon icon="heroicons:pencil-square" />
+                                            </router-link>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-if="userData">
+                                        {{ userData.name }} {{ userData.lastname }}
+                                    </div>
+                                    <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-else>
+                                        Cargando...
+                                    </div>
+                                    <div class="text-sm font-light text-slate-600 dark:text-slate-400">
+                                        Nombre completo
+                                    </div>
                                 </div>
                             </div>
-                            <div class="flex-1">
-                                <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-if="userData">
-                                    {{ userData.name }} {{ userData.lastname }}
-                                </div>
-                                <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-else>
-                                    Cargando...
-                                </div>
-                                <div class="text-sm font-light text-slate-600 dark:text-slate-400">
-                                    Nombre completo
+                            <div class="flex justify-around">
+                                <div class="gap-3 flex" v-if="userRole == 'agent'">
+                                    <router-link 
+                                        :to="`/home`">
+                                        <Button type="button" text="Regresar" btnClass="btn-secondary" class="w-full h-10 text-center flex items-center">Regresar</Button>
+                                    </router-link>
+                                    <router-link 
+                                        :to="`/agents/${ userId }/edit`" class="w-1/4">
+                                        <Button type="button" text="Crear" btnClass="btn-warning" class="w-full h-10 text-center flex items-center">Editar</Button>
+                                    </router-link>
+                                    <Button type="button" text="Crear" btnClass="btn-danger" class="w-full h-10 text-center flex items-center" @click="displayConfirmMessage()">Eliminar</Button>
                                 </div>
                             </div>
                         </div>
                         <div class="md:flex items-end md:space-x-6 rtl:space-x-reverse h-[140px]"  v-else>
                             <div class="flex-none">
                             </div>
-                            <div class="flex-1">
-                                <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-if="userData">
-                                    {{ userData.name }} {{ userData.lastname }}
+                            <div class="flex justify-between w-full">
+                                <div>
+                                    <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-if="userData">
+                                        {{ userData.name }} {{ userData.lastname }}
+                                    </div>
+                                    <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-else>
+                                        Cargando...
+                                    </div>
+                                    <div class="text-sm font-light text-slate-600 dark:text-slate-400">
+                                        Nombre completo
+                                    </div>
                                 </div>
-                                <div class="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]" v-else>
-                                    Cargando...
-                                </div>
-                                <div class="text-sm font-light text-slate-600 dark:text-slate-400">
-                                    Nombre completo
+                                <div class="gap-3 flex" v-if="userRole == 'admin'">
+                                    <router-link 
+                                        :to="`/home`">
+                                        <Button type="button" text="Regresar" btnClass="btn-secondary" class="w-full h-8 text-center flex items-center">Regresar</Button>
+                                    </router-link>
+                                    <router-link 
+                                        :to="`/administrators/${ userId }/edit`" class="w-1/4">
+                                        <Button type="button" text="Crear" btnClass="btn-warning" class="w-full h-8 text-center flex items-center">Editar</Button>
+                                    </router-link>
+                                    <Button type="button" text="Crear" btnClass="btn-danger" class="w-full h-8 text-center flex items-center" @click="displayConfirmMessage()">Eliminar</Button>
                                 </div>
                             </div>
                         </div>
@@ -177,27 +205,31 @@
                         </div>
                     </Card>
                     <br>
-                    <div class="gap-3 w-1/2 flex" v-if="userRole == 'agent'">
+                    <div class="gap-3 w-1/2 flex items-center h-2" v-if="userRole == 'agent'">
                         <router-link 
                             :to="`/home`" class="w-1/4">
-                            <Button type="button" text="Regresar" btnClass="btn-secondary" class="w-full">Regresar</Button>
+                            <Button type="button" text="" btnClass="btn-secondary" class="w-full"></Button>
                         </router-link>
                         <router-link 
                             :to="`/agents/${ userId }/edit`" class="w-1/4">
-                            <Button type="button" text="Crear" btnClass="btn-warning" class="w-full">Editar</Button>
+                            <Button type="button" text="" btnClass="btn-warning" class="w-full"></Button>
                         </router-link>
-                        <Button type="button" text="Crear" btnClass="btn-danger" class="w-1/4" @click="displayConfirmMessage()">Eliminar</Button>
+                        <a class="w-1/4">
+                            <Button type="button" text="" btnClass="btn-danger" class="w-full" @click="displayConfirmMessage()"></Button>
+                        </a>
                     </div>
                     <div class="gap-3 w-1/2 flex" v-if="userRole == 'admin'">
                         <router-link 
                             :to="`/home`" class="w-1/4">
-                            <Button type="button" text="Regresar" btnClass="btn-secondary" class="w-full">Regresar</Button>
+                            <Button type="button" text="" btnClass="btn-secondary" class="w-full"></Button>
                         </router-link>
                         <router-link 
                             :to="`/administrators/${ userId }/edit`" class="w-1/4">
-                            <Button type="button" text="Crear" btnClass="btn-warning" class="w-full">Editar</Button>
+                            <Button type="button" text="" btnClass="btn-warning" class="w-full"></Button>
                         </router-link>
-                        <Button type="button" text="Crear" btnClass="btn-danger" class="w-1/4" @click="displayConfirmMessage()">Eliminar</Button>
+                        <a class="w-1/4">
+                            <Button type="button" text="" btnClass="btn-danger" class="w-full" @click="displayConfirmMessage()"></Button>
+                        </a>
                     </div>
                 </div>
             </div>
