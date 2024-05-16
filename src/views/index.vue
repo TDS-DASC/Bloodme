@@ -1,7 +1,7 @@
 <template>
     <div class="flex dark:bg-slate-900 gap-2 w-full" style="height: 83vh;">
       <!-- Citas pendientes -->
-      <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden dark:bg-slate-800 min-w-20 max-w-80">
+      <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden dark:bg-slate-800 w-80">
         <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-xl p-1 py-2 font-semibold">
           Citas pendientes
         </div>
@@ -59,32 +59,15 @@
         </div>
 
         <div class="bg-white dark:bg-slate-800 h-full p-2 pb-10 overflow-auto gap-2 flex flex-col" v-if="combinedDataRef != ''">
-          <div class="bg-white p-2 dark:bg-slate-800">
-            <div class="flex justify-center items-center">
-              <div class="border-b-4 border-solid border-gray-300 w-full"></div>
-              <p class="px-5 dark:text-white">Ocultar</p>
-              <div class="border-b-4 border-solid border-gray-300 w-full"></div>
-            </div>
-            <div class="flex justify-center gap-2">
-              <button type="button" class="btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('pending')" :class="{ 'bg-slate-500': pending, 'hover:bg-green-400': pending }">
+          <div class="flex justify-center items-center">
+            <div class="border-b-2 border-solid border-black-300 w-full"></div>
+              <button type="button" class="mx-2 btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-4 flex items-center" @click="changeAppointmentView('pending')" :class="{ 'bg-slate-500': pending, 'hover:bg-green-400': pending }">
                 Pendientes
               </button>
-              <button type="button" class="btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('canceled')" :class="{ 'bg-slate-500': canceled, 'hover:bg-green-400': canceled }">
-                Canceladas
-              </button>
-              <button type="button" class="btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-10 flex items-center" @click="changeAppointmentView('completed')" :class="{ 'bg-slate-500': completed, 'hover:bg-green-400': completed }">
-                Completadas
-              </button>
-            </div>
-          </div>
-
-          <div class="flex justify-center items-center" v-if="!pending">
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-            <p class="px-5 dark:text-white">Pendientes</p>
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
           </div>
 
-          <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!pending">
+          <template v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!pending">
             <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
               <div class="relative w-1/4 flex justify-center items-center ">
                 <img :src="bloodbag" alt="" class="max-h-16" />
@@ -103,15 +86,17 @@
                 </div>
               </div>
             </button>
-          </div>
+          </template>
 
-          <div class="flex justify-center items-center" v-if="!canceled">
+          <div class="flex justify-center items-center">
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
-            <p class="px-5 dark:text-white">Canceladas</p>
+              <button type="button" class="mx-2 btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-4 flex items-center" @click="changeAppointmentView('canceled')" :class="{ 'bg-slate-500': canceled, 'hover:bg-green-400': canceled }">
+                Canceladas
+              </button>
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
           </div>
-
-          <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!canceled">
+          
+          <template v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!canceled">
             <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'cancelled'">
               <div class="relative w-1/4 flex justify-center items-center ">
                 <img :src="bloodbag" alt="" class="max-h-16" />
@@ -130,15 +115,17 @@
                 </div>
               </div>
             </button>
-          </div>
+          </template>
           
-          <div class="flex justify-center items-center" v-if="!completed">
+          <div class="flex justify-center items-center">
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
-            <p class="px-5 dark:text-white">Completadas</p>
+              <button type="button" class="mx-2 btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-4 flex items-center" @click="changeAppointmentView('completed')" :class="{ 'bg-slate-500': completed, 'hover:bg-green-400': completed }">
+                Completadas
+              </button>
             <div class="border-b-2 border-solid border-black-300 w-full"></div>
           </div>
 
-          <div v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!completed">
+          <template v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!completed">
             <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'completed'">
               <div class="relative w-1/4 flex justify-center items-center ">
                 <img :src="bloodbag" alt="" class="max-h-16" />
@@ -157,7 +144,7 @@
                 </div>
               </div>
             </button>
-          </div>
+          </template>
 
         </div>
       </div>
@@ -181,13 +168,13 @@
             <div class="flex justify-between border-b-2 pb-1">
               <p class="font-semibold text-gray-600 text-lg dark:text-white dark:border-b-2">Datos del donador</p>
               <div class="full flex justify-end gap-2">
-                <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center py-2" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
+                <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center py-1" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
                   Cita pendiente
                 </button>
-                <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center py-2" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
+                <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center py-1" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
                   Cita cancelada
                 </button>
-                <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center py-2" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
+                <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center py-1" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
                   Cita completada
                 </button>
               </div>
@@ -376,6 +363,9 @@
       const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
       const { hospitalsTable } = useCachedDataStoreHospitals();
       const combinedDataRef = ref([]);
+      const canceledAppointments = ref([])
+      const pendingAppointments = ref([])
+      const accomplishedAppointments = ref([])
 
       let originalData = [];
 
