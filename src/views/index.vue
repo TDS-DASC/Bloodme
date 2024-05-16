@@ -158,8 +158,19 @@
             </div>
             <div class="text-white dark:text-white text-lg px-4 py-4 font-semibold">
               <span v-if="appointment_date != ''">
-                <p>Fecha de la cita: {{ new Date(appointment_date).toLocaleDateString() }}, Hora de la cita: {{ new Date(appointment_date).toLocaleTimeString() }}</p>
+                <p>Fecha: {{ new Date(appointment_date).toLocaleDateString() }} - Hora: {{ new Date(appointment_date).toLocaleTimeString() }}</p>
               </span>
+            </div>
+            <div class="flex justify-end">
+              <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
+                Cita pendiente
+              </button>
+              <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
+                Cita cancelada
+              </button>
+              <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
+                Cita completada
+              </button>
             </div>
           </div>
         </div>
@@ -167,17 +178,6 @@
           <div class="px-3 py-2">
             <div class="flex justify-between border-b-2 pb-1">
               <p class="font-semibold text-gray-600 text-lg dark:text-white dark:border-b-2">Datos del donador</p>
-              <div class="full flex justify-end gap-2">
-                <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center py-1" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
-                  Cita pendiente
-                </button>
-                <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center py-1" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
-                  Cita cancelada
-                </button>
-                <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center py-1" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
-                  Cita completada
-                </button>
-              </div>
             </div>
             <div class="w-full rounded-sm p-3 border-opacity-10 gap-5 flex flex-col">
               <div class="flex gap-2 w-full ">
