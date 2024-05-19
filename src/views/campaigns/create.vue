@@ -147,8 +147,8 @@
                 </div>
             </Card>
         </div>
+        <SearchModal v-if="!beneficiario"/>
     </div>
-    <SearchModal/>
 </template>
 
 <script>
@@ -232,7 +232,6 @@
                 confirmMessageFlag.value = false;
                 axios.post(`/api/campaigns/`, formValues)
                 .then(res => {
-                    console.log(res);
                     useCachedDataStoreCampaigns().refreshData();
                     toast.success("¡Campaña creada correctamente!", { timeout: 1000 });
                     setTimeout(userRedirect, 1000);
@@ -248,8 +247,6 @@
                     } else {
                         errorMessage.value = 'An error occurred.';
                     }
-                    console.log(errors)
-                    console.log(errorMessage)
                 });
             }
 
@@ -286,16 +283,12 @@
                     value: beneficiaries.id,
                     label: beneficiaries.name
                 }));
-                console.log("Beneficiarios WATCH");
-                console.log(beneficiaries.value);
             }
             function fillHospitalArray(){
                 hospitals.value = hospitalsTable.map(hospital => ({
                     value: hospital.id,
                     label: hospital.name
                 }));
-                console.log("Hospitales WATCH");
-                console.log(hospitals.value);
             }
 
             return {
