@@ -9,13 +9,19 @@ const routes = [
         path: "/profile",
         name: "profile",
         component: () => import("@/views/profile.vue"),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true}
       },
       {
         path: "/home",
         name: "home",
         component: () => import("@/views/index.vue"),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, requiresAgent: true }
+      },
+      {
+        path: "/dashboard",
+        name: "dashboard",
+        component: () => import("@/views/dashboard.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true }
       },
       {
         path: "/users",

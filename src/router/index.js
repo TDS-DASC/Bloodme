@@ -30,7 +30,13 @@ router.beforeEach((to, from, next) => {
         } else {
           next({ name: 'home' });
         }
-      } else {
+      } else if(to.matched.some(record => record.meta.requiresAgent)) {
+        if (user.role === 'agent') {
+          next();
+        } else {
+          next({ name: 'dashboard' });
+        }
+      }else{
         next();
       }
     }

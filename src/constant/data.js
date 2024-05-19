@@ -7,7 +7,14 @@ export const menuItems = [
   {
     title: "Inicio",
     icon: "heroicons-outline:home",
+    role: "agent",
     link: "/home",
+  },
+  {
+    title: "Dashboard",
+    icon: "heroicons-outline:home",
+    role: "admin",
+    link: "/dashboard",
   },
   {
     isHeadr: true,

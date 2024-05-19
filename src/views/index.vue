@@ -149,8 +149,8 @@
       </div>
 
       <!-- Información del paciente -->
-      <div class="flex-auto rounded-md overflow-auto bg-white dark:bg-gray-800">
-        <div name="header" class="text-start bg-slate-700 text-black text-3xl dark:bg-slate-800">
+      <div class="flex-auto rounded-md bg-white dark:bg-gray-800 overflow-auto">
+        <div name="header" class="text-start bg-slate-700 text-black text-3xl dark:bg-slate-800 z-10">
           <div name="header" class="bg-slate-700 dark:bg-slate-700 flex justify-between">
             <div class="text-white dark:text-white text-xl px-4 py-4 font-semibold">
               Información
@@ -173,7 +173,7 @@
             </div>
           </div>
         </div>
-        <div class="p-4">
+        <div class="p-4 h-screen overflow-auto">
           <div class="px-3 py-2">
             <div class="flex justify-between border-b-2 pb-1">
               <p class="font-semibold text-gray-600 text-lg dark:text-white dark:border-b-2">Datos del donador</p>

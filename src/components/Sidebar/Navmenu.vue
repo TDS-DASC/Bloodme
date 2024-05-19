@@ -17,7 +17,7 @@
         :to="`${item.link}`"
         class="menu-link rounded-md"
         :replace="true"
-        v-if="!item.child && !item.isHeadr"
+        v-if="!item.child && !item.isHeadr && item.role == userRole"
       >
         <span class="menu-icon" v-if="item.icon">
           <Icon :icon="item.icon"/>

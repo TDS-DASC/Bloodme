@@ -1,20 +1,15 @@
 <template>
     <div class="">
         <div class="space-y-5 profile-page">
-            <div class="profiel-wrap px-[35px] pb-10 md:pt-[84px] pt-10 rounded-lg bg-white dark:bg-slate-800 lg:flex lg:space-y-0 space-y-6 justify-between items-end relative z-[1]">
-                <div class="bg-slate-900 dark:bg-slate-700 absolute left-0 top-0 md:h-1/2 h-[150px] w-full z-[-1] rounded-t-lg"></div>    
+            <div class="profiel-wrap px-[35px] pb-10 md:pt-[30px] pt-10 rounded-lg bg-white dark:bg-slate-800 lg:flex lg:space-y-0 space-y-6 justify-between items-end relative z-[1]">
+                <div class="bg-slate-900 dark:bg-slate-700 absolute left-0 -top-2 md:h-1/2 h-[120px] w-full z-[-1] rounded-t-lg"></div>    
                     <div class="profile-box flex-none md:text-start text-center w-full">
                         <div class="items-end flex justify-between w-full"  v-if="userRole == 'agent'">
                             <div class="md:flex items-end md:space-x-6 rtl:space-x-reverse">
                                 <div class="flex-none">
-                                    <div class="md:h-[186px] md:w-[186px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-4 ring-slate-100 relative">
+                                    <div class="md:h-[120px] md:w-[120px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-2 ring-slate-100 relative">
                                         <img :src=profileImg alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
                                         <img src="@/assets/images/avatar/av-1.svg" alt="" class="w-full h-full object-cover rounded-full" v-else />
-                                            <router-link
-                                                :to="`/agents/${userId}/edit`"
-                                                class="absolute right-2 h-8 w-8 bg-slate-50 text-slate-600 rounded-full shadow-sm flex flex-col items-center justify-center md:top-[140px] top-[100px]"
-                                                ><Icon icon="heroicons:pencil-square" />
-                                            </router-link>
                                     </div>
                                 </div>
                                 <div class="flex-1">
@@ -203,34 +198,36 @@
                                 </li>
                             </ul>
                         </div>
+                        <br>
+                        <div class="w-full flex justify-end">
+                            <div class="gap-3 w-1/2 flex items-center h-2 justify-end" v-if="userRole == 'agent'">
+                                <router-link 
+                                    :to="`/home`" class="w-1/12">
+                                    <Button type="button" text="" btnClass="btn-secondary" class="w-full"></Button>
+                                </router-link>
+                                <router-link 
+                                    :to="`/agents/${ userId }/edit`" class="w-1/12">
+                                    <Button type="button" text="" btnClass="btn-warning" class="w-full"></Button>
+                                </router-link>
+                                <a class="w-1/12">
+                                    <Button type="button" text="" btnClass="btn-danger" class="w-full" @click="displayConfirmMessage()"></Button>
+                                </a>
+                            </div>
+                            <div class="gap-3 w-1/2 flex items-center h-2 justify-end" v-if="userRole == 'admin'">
+                                <router-link 
+                                    :to="`/home`" class="w-1/12">
+                                    <Button type="button" text="" btnClass="btn-secondary" class="w-full"></Button>
+                                </router-link>
+                                <router-link 
+                                    :to="`/administrators/${ userId }/edit`" class="w-1/12">
+                                    <Button type="button" text="" btnClass="btn-warning" class="w-full"></Button>
+                                </router-link>
+                                <a class="w-1/12">
+                                    <Button type="button" text="" btnClass="btn-danger" class="w-full" @click="displayConfirmMessage()"></Button>
+                                </a>
+                            </div>
+                        </div>
                     </Card>
-                    <br>
-                    <div class="gap-3 w-1/2 flex items-center h-2" v-if="userRole == 'agent'">
-                        <router-link 
-                            :to="`/home`" class="w-1/4">
-                            <Button type="button" text="" btnClass="btn-secondary" class="w-full"></Button>
-                        </router-link>
-                        <router-link 
-                            :to="`/agents/${ userId }/edit`" class="w-1/4">
-                            <Button type="button" text="" btnClass="btn-warning" class="w-full"></Button>
-                        </router-link>
-                        <a class="w-1/4">
-                            <Button type="button" text="" btnClass="btn-danger" class="w-full" @click="displayConfirmMessage()"></Button>
-                        </a>
-                    </div>
-                    <div class="gap-3 w-1/2 flex" v-if="userRole == 'admin'">
-                        <router-link 
-                            :to="`/home`" class="w-1/4">
-                            <Button type="button" text="" btnClass="btn-secondary" class="w-full"></Button>
-                        </router-link>
-                        <router-link 
-                            :to="`/administrators/${ userId }/edit`" class="w-1/4">
-                            <Button type="button" text="" btnClass="btn-warning" class="w-full"></Button>
-                        </router-link>
-                        <a class="w-1/4">
-                            <Button type="button" text="" btnClass="btn-danger" class="w-full" @click="displayConfirmMessage()"></Button>
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
