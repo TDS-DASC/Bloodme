@@ -203,7 +203,6 @@ export default {
         confirmMessage.value = false;
         axios.delete(`/api/${props.urlMainHeader}/${selectedItem_id}`)
         .then(response => {
-          console.log(query);
           router.push({ path, query });
           toast.success("¡Registro borrado correctamente!", { timeout: 1000 });
         })

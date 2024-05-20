@@ -89,7 +89,6 @@
                     }
 
                     const campaign = campaignData.find(campaign => campaign.id == appointment.campaign_id);
-                    console.log(campaign)
                     if (campaign) {
                         const beneficiary = beneficiaryData.find(beneficiary => beneficiary.id == campaign.beneficiary);
                         if (beneficiary) {

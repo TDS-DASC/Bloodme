@@ -74,6 +74,8 @@
                         :options="beneficiaries"
                         v-model="beneficiary_id"
                         :error="beneficiary_idError"
+                        @change="handleChange"
+                        @mousedown.prevent="preventOptionsDisplay"
                     />
                     <p v-if="errors.beneficiary_id" class="mt-2 text-danger-500 block text-sm">{{ errors.beneficiary_id[0] }}</p>
                 </div>
@@ -147,7 +149,7 @@
                 </div>
             </Card>
         </div>
-        <SearchModal v-if="!beneficiario"/>
+        <SearchModal typeOfModal="beneficiaries" v-if="beneficiariesModal"/>
     </div>
 </template>
 
@@ -290,8 +292,23 @@
                     label: hospital.name
                 }));
             }
+            
+            let beneficiariesModal = ref(false)
+            const handleChange =  () => {
+                beneficiariesModal.value = true
+                console.log(beneficiariesModal.value)
+            }
+
+            const preventOptionsDisplay = (event) => {
+                event.preventDefault();
+                beneficiariesModal.value = true
+                console.log(beneficiariesModal.value)
+            }
 
             return {
+                beneficiariesModal,
+                preventOptionsDisplay,
+                handleChange,
                 beneficiaries,
                 hospitals,
                 required_bags,
