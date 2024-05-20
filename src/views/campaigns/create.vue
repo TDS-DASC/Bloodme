@@ -149,7 +149,40 @@
                 </div>
             </Card>
         </div>
-        <SearchModal typeOfModal="beneficiaries" v-if="beneficiariesModal"/>
+        <!-- Temporary search modal -->
+        <div class="fixed inset-0 h-screen flex flex-col justify-center items-center bg-white bg-opacity-40 z-10 gap-2" v-if="beneficiariesModal">
+            <div class="flex gap-2 bg-white w-1/6 justify-center items-center align-middle p-2 border-2 shadow-lg rounded-md">
+                <input
+                    class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md"
+                    placeholder="Buscar..."
+                />
+                <Button btnClass="btn-danger" class="p-4 py-1" text="X" @click="beneficiariesModal = false" />
+            </div>
+            <div>
+                <h1>{{ beneficiariesSearchCategoryNames.title }}</h1>
+                <div v-for="(category, index) in beneficiariesSearchCategoryNames.categories" :key="index">
+                    <h2>{{ category.subtitle }}</h2>
+                    <div v-if="category.subtitle != 'Tipos de Sangre'">
+                        <div v-for="(item, idx) in category.items" :key="idx">
+                            <label>
+                                {{ item }}
+                            </label>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div v-for="(item, idx) in category.items" :key="idx">
+                            <p>{{ item.subtitle }}</p>
+                            <div v-for="(item, idx) in item.items" :key="idx">
+                                <label>
+                                    {{ item }}
+                                </label>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <pre>{{ selectedOptions }}</pre>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -168,7 +201,6 @@
     import router from '../../router';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
-    import SearchModal from '@/components/SearchModal';
 
     export default {
         components: {
@@ -178,7 +210,6 @@
             Select,
             Textinput,
             Card,
-            SearchModal
         },
         setup() {
             const schema = yup.object().shape({
@@ -305,7 +336,53 @@
                 console.log(beneficiariesModal.value)
             }
 
+            const beneficiariesSearchCategoryNames = {
+                title: "Beneficiaries",
+                categories: [
+                    {
+                        subtitle: "Claves de identidad",
+                        items: [
+                            "Nombre",
+                            "Apellidos",
+                            "CURP"
+                        ]
+                    },
+                    {
+                        subtitle: "Fecha de nacimiento",
+                        items: [
+                            "Año",
+                            "Mes",
+                            "Día"
+                        ]
+                    },
+                    {
+                        subtitle: "Tipos de Sangre",
+                        items: [
+                            {
+                            subtitle: "Rh Positivo",
+                                items: [
+                                    "A+",
+                                    "B+",
+                                    "AB+",
+                                    "O+"
+                                ]
+                            },
+                            {
+                            subtitle: "Rh Negativo",
+                                items: [
+                                    "A-",
+                                    "B-",
+                                    "AB-",
+                                    "O-"
+                                ]
+                            }
+                        ]
+                    },
+                ]
+            }
+
             return {
+                beneficiariesSearchCategoryNames,
                 beneficiariesModal,
                 preventOptionsDisplay,
                 handleChange,
