@@ -24,3 +24,18 @@ npm run dev
 ```
 npm build
 ```
+
+## Cypress setup
+
+This project have Cypress installed which is a tool to help the developer to test the API endpoints, edge cases, failures on updates or modifications based on the front-end forms by writing the testscases and running them automatically on start.
+
+### Start Cypress aplication
+```
+npx cypress open
+```
+
+### Type of testcases written
+```
+E2E Testing
+```
+
