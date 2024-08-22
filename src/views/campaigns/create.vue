@@ -151,36 +151,21 @@
         </div>
         <!-- Temporary search modal -->
         <div class="fixed inset-0 h-screen flex flex-col justify-center items-center bg-white bg-opacity-40 z-10 gap-2" v-if="beneficiariesModal">
-            <div class="flex gap-2 bg-white w-1/6 justify-center items-center align-middle p-2 border-2 shadow-lg rounded-md">
+            <div class="flex gap-2 bg-white w-1/3 justify-center items-center align-middle p-2 border-2 shadow-lg rounded-md">
                 <input
                     class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md"
                     placeholder="Buscar..."
                 />
                 <Button btnClass="btn-danger" class="p-4 py-1" text="X" @click="beneficiariesModal = false" />
             </div>
-            <div>
-                <h1>{{ beneficiariesSearchCategoryNames.title }}</h1>
-                <div v-for="(category, index) in beneficiariesSearchCategoryNames.categories" :key="index">
-                    <h2>{{ category.subtitle }}</h2>
-                    <div v-if="category.subtitle != 'Tipos de Sangre'">
-                        <div v-for="(item, idx) in category.items" :key="idx">
-                            <label>
-                                {{ item }}
-                            </label>
-                        </div>
-                    </div>
-                    <div v-else>
-                        <div v-for="(item, idx) in category.items" :key="idx">
-                            <p>{{ item.subtitle }}</p>
-                            <div v-for="(item, idx) in item.items" :key="idx">
-                                <label>
-                                    {{ item }}
-                                </label>
-                        </div>
-                        </div>
+            <div class="flex gap-2 bg-white w-1/2 justify-center items-center align-middle p-4 border-2 shadow-lg rounded-md">
+                <div class="flex flex-col overflow-hidden gap-2 w-full">
+                    <div v-for="item, index in copyOfBeneciariesTable" :key="index"  
+                    class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md
+                    flex justify-center items-center">
+                        <p> {{ item.name }} </p>
                     </div>
                 </div>
-                <pre>{{ selectedOptions }}</pre>
             </div>
         </div>
     </div>
@@ -196,9 +181,9 @@
     import { ref, watch } from "vue";
     import axios from "@/plugins/axios";
     import * as yup from 'yup';
-    import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
     import { useToast } from "vue-toastification";
     import router from '../../router';
+    import { useCachedDataStoreCampaigns } from '../../stores/campaignsStore';
     import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
 
@@ -248,7 +233,6 @@
                 ];
                 trySubmit(newBeneficiaryForm);
             });
-
             
             let confirmMessageFlag = ref(false);
             function displayConfirmMessage(){
@@ -261,6 +245,7 @@
             function userRedirect(){
                 router.push({ path: '/refresh', query: { urlHeader: 'campaigns' } });
             }
+
             function createCampaign(){
                 confirmMessageFlag.value = false;
                 axios.post(`/api/campaigns/`, formValues)
@@ -291,26 +276,23 @@
             const { value: beneficiary_id, errorMessage: beneficiary_idError } = useField("beneficiary_id");
             const { value: hospital_id, errorMessage: hospital_idError } = useField("hospital_id");
 
+            async function fetchData() {
+                await useCachedDataStoreBeneficiaries().fetchData();
+                await useCachedDataStoreHospitals().fetchData();
+
+                fillBeneficiariesArray();
+                fillHospitalArray();
+            }
+            fetchData();
+
             const { hospitalsTable } = useCachedDataStoreHospitals();
             useCachedDataStoreHospitals().fetchData();
             let hospitals = ref([]);
-            watch(hospitalsTable, () => {
-                fillHospitalArray();
-            });
 
             const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
             useCachedDataStoreBeneficiaries().fetchData();
             let beneficiaries = ref([]);
-            watch(beneficiariesTable, () => {
-                fillBeneficiariesArray();
-            });
 
-            if(beneficiaries.value.length == 0 || hospitals.value.length == 0){
-                if(beneficiariesTable != null && hospitalsTable != null){
-                    fillHospitalArray();
-                    fillBeneficiariesArray();
-                }
-            }
             function fillBeneficiariesArray(){
                 beneficiaries.value = beneficiariesTable.map(beneficiaries => ({
                     value: beneficiaries.id,
@@ -336,53 +318,13 @@
                 console.log(beneficiariesModal.value)
             }
 
-            const beneficiariesSearchCategoryNames = {
-                title: "Beneficiaries",
-                categories: [
-                    {
-                        subtitle: "Claves de identidad",
-                        items: [
-                            "Nombre",
-                            "Apellidos",
-                            "CURP"
-                        ]
-                    },
-                    {
-                        subtitle: "Fecha de nacimiento",
-                        items: [
-                            "Año",
-                            "Mes",
-                            "Día"
-                        ]
-                    },
-                    {
-                        subtitle: "Tipos de Sangre",
-                        items: [
-                            {
-                            subtitle: "Rh Positivo",
-                                items: [
-                                    "A+",
-                                    "B+",
-                                    "AB+",
-                                    "O+"
-                                ]
-                            },
-                            {
-                            subtitle: "Rh Negativo",
-                                items: [
-                                    "A-",
-                                    "B-",
-                                    "AB-",
-                                    "O-"
-                                ]
-                            }
-                        ]
-                    },
-                ]
-            }
+
+            const copyOfBeneciariesTable = ref(beneficiariesTable)
+            const totalPagesOfBeneficiaries = ref(beneficiariesTable.value)
+            console.log(totalPagesOfBeneficiaries.value)
 
             return {
-                beneficiariesSearchCategoryNames,
+                copyOfBeneciariesTable,
                 beneficiariesModal,
                 preventOptionsDisplay,
                 handleChange,
