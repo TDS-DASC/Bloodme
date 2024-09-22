@@ -115,7 +115,7 @@
     import { useToast } from "vue-toastification";
     import axios from "@/plugins/axios";
 
-    export default({
+    export default{
         components:{
             profile,
             Card,
@@ -186,5 +186,5 @@
                 appointmentData,
             };
         }
-    })
+    }
 </script>
