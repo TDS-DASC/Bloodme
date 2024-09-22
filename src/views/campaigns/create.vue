@@ -151,21 +151,24 @@
         </div>
         <!-- Temporary search modal -->
         <div class="fixed inset-0 h-screen flex flex-col justify-center items-center bg-white bg-opacity-40 z-10 gap-2" v-if="beneficiariesModal">
-            <div class="flex gap-2 bg-white w-1/3 justify-center items-center align-middle p-2 border-2 shadow-lg rounded-md">
-                <input
-                    class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md"
-                    placeholder="Buscar..."
-                />
-                <Button btnClass="btn-danger" class="p-4 py-1" text="X" @click="beneficiariesModal = false" />
-            </div>
-            <div class="flex gap-2 bg-white w-1/2 justify-center items-center align-middle p-4 border-2 shadow-lg rounded-md">
-                <div class="flex flex-col overflow-hidden gap-2 w-full">
-                    <div v-for="item, index in copyOfBeneciariesTable" :key="index"  
-                    class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md
-                    flex justify-center items-center">
-                        <p> {{ item.name }} </p>
+            <div class="flex flex-col gap-2 bg-white w-1/2 justify-center items-center align-middle border-2 shadow-lg rounded-md">
+                <div class="flex border-b-2 border-gray-200 pb-2 w-full p-2 gap-2">
+                    <input
+                        class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md"
+                        placeholder="Buscar..."
+                    />
+                    <Button btnClass="btn-danger" class="p-4 py-1" text="X" @click="beneficiariesModal = false" />
+                </div>
+                <div class="select-none">
+                    <div class="flex flex-col overflow-hidden gap-2 w-full">
+                        <div v-for="item, index in copyOfBeneciariesTable" :key="index"  
+                        class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md
+                        flex justify-center items-center">
+                            <p> {{ item.name }} </p>
+                        </div>
                     </div>
                 </div>
+                <Button btnClass="btn-danger" class="p-4 py-1" text="X" @click="beneficiariesModal = false" />
             </div>
         </div>
     </div>
@@ -282,8 +285,20 @@
 
                 fillBeneficiariesArray();
                 fillHospitalArray();
+
+                copyOfBeneciariesTable.value = beneficiariesTable
+                totalPagesOfBeneficiaries.value = beneficiariesTable.length / itemsPerPageWanted
             }
             fetchData();
+
+            function paginateInformation(array, numberOfPagesWanted){
+                const paginatedArray = []
+                
+            }
+            
+            const copyOfBeneciariesTable = ref(null)
+            const totalPagesOfBeneficiaries = ref(null)
+            let itemsPerPageWanted = 4
 
             const { hospitalsTable } = useCachedDataStoreHospitals();
             useCachedDataStoreHospitals().fetchData();
@@ -291,7 +306,7 @@
 
             const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
             useCachedDataStoreBeneficiaries().fetchData();
-            let beneficiaries = ref([]);
+            let beneficiaries = ref([]); 
 
             function fillBeneficiariesArray(){
                 beneficiaries.value = beneficiariesTable.map(beneficiaries => ({
@@ -317,11 +332,6 @@
                 beneficiariesModal.value = true
                 console.log(beneficiariesModal.value)
             }
-
-
-            const copyOfBeneciariesTable = ref(beneficiariesTable)
-            const totalPagesOfBeneficiaries = ref(beneficiariesTable.value)
-            console.log(totalPagesOfBeneficiaries.value)
 
             return {
                 copyOfBeneciariesTable,

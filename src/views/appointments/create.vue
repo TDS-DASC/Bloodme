@@ -190,7 +190,7 @@
             }
             function createAppointment(){
                 confirmMessageFlag.value = false;
-                axios.post(`/api/appointments/`, formValues)
+                axios.post(`/api/campaigns/${campaign_id.value}/appointments`, formValues)
                 .then(res => {
                     useCachedDataStoreAppointments().refreshData();
                     toast.success("Cita creada correctamente!", { timeout: 1000 });
