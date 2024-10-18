@@ -1,32 +1,78 @@
 <template>
-     <div class="fixed inset-0 h-screen flex flex-col justify-center items-center bg-white bg-opacity-80 z-10">
+     <div class="fixed inset-0 h-screen flex flex-col justify-center items-center bg-white bg-opacity-30 z-10" >
         <div class="w-1/4 group">
-            <!-- <input class="p-2 w-full focus:outline-none focus:-translate-y-20 transition-all duration-300 border-2 border-gray-400 rounded-md" placeholder="Buscar..." @input="filterData($event.target.value)"> -->
-            <Beneficiaries v-if="typeOfModal=='beneficiaries'" @close="beneficiariesModal = false" />
-            <Campaigns v-if="typeOfModal=='campaigns'" />
+            <div class="fixed inset-0 h-screen flex flex-col justify-center items-center bg-white bg-opacity-40 z-10 gap-2">
+                <div class="flex flex-col pb-2 gap-2 bg-white w-1/2 justify-center items-center align-middle border-2 shadow-lg rounded-md">
+                    <div class="flex border-b-2 border-gray-200 pb-2 w-full p-2 gap-2">
+                        <input
+                            class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md"
+                            placeholder="Buscar..."
+                        />
+                        <Button btnClass="btn-danger" class="p-4 py-1" text="X" @click="action(false, null)" />
+                    </div>
+                    <div class="select-none p-4">
+                        <div class="grid grid-cols-5 overflow-hidden gap-5 w-full">
+                            <div v-for="item, index in paginatedValues" :key="index"  
+                            class="p-2 w-full focus:outline-none transition-all duration-300
+                            flex justify-center items-center">
+                                <Button btnClass="btn-primary" class="text-left w-full bg-cyan-700"  @click="action(false, item.label)"> {{ item.label }} </Button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center gap-2">
+                        <Button :btnClass="selectedPage === index ? 'btn-primary' : 'btn-secondary'" v-for="index in numberOfPages" :key="index" class="py-1 px-4" @click="selectedPage=index">{{ index }}</Button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import Icon from "@/components/Icon";
-    import Campaigns from "./Campaigns";
-    import Beneficiaries from "./Beneficiaries";
+    import Button from "@/components/Button";
+    import { ref, watch, defineEmits } from "vue";
     export default{
 
         components: {
             Icon,
-            Beneficiaries,
-            Campaigns
+            Button
         },
         props: {
-            typeOfModal: {
-                type: String,
+            modalValues: {
+                type: Array,
+                required: true,
             }
         },
-        setup(props) {
-            console.log(props.typeOfModal)
-            console.log("This is my modal component");
+        setup(props, { emit }) { 
+            const paginatedValues = ref(new Array())
+            const numberOfPages = ref(0)
+            const selectedPage = ref(1)
+
+            watch(() => props.modalValues, (newVal) => {
+                if (newVal && newVal.values) {
+                    console.log(props.modalValues)
+                    paginatedValues.value = props.modalValues.slice(0,10);
+                    numberOfPages.value = Math.ceil((props.modalValues.length)/10)
+                    console.log("Values: ", paginatedValues.value);
+                    console.log("Number of Pages: ", numberOfPages.value);
+                }
+            }, { immediate: true });
+
+            watch(selectedPage, () => {
+                let base = 10
+                let index = base*(selectedPage.value-1)
+                console.log("Index: "+ index)
+                paginatedValues.value = props.modalValues.slice((index),(index+base))
+            })
+
+            const action = (flag, value) => emit('close', [flag, value]);
+            return {
+                paginatedValues,
+                numberOfPages,
+                selectedPage,
+                action,
+            };
         }
     }
 </script>
