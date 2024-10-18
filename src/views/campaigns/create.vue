@@ -150,31 +150,14 @@
             </Card>
         </div>
         <!-- Temporary search modal -->
-        <div class="fixed inset-0 h-screen flex flex-col justify-center items-center bg-white bg-opacity-40 z-10 gap-2" v-if="beneficiariesModal">
-            <div class="flex flex-col gap-2 bg-white w-1/2 justify-center items-center align-middle border-2 shadow-lg rounded-md">
-                <div class="flex border-b-2 border-gray-200 pb-2 w-full p-2 gap-2">
-                    <input
-                        class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md"
-                        placeholder="Buscar..."
-                    />
-                    <Button btnClass="btn-danger" class="p-4 py-1" text="X" @click="beneficiariesModal = false" />
-                </div>
-                <div class="select-none">
-                    <div class="flex flex-col overflow-hidden gap-2 w-full">
-                        <div v-for="item, index in copyOfBeneciariesTable" :key="index"  
-                        class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md
-                        flex justify-center items-center">
-                            <p> {{ item.name }} </p>
-                        </div>
-                    </div>
-                </div>
-                <Button btnClass="btn-danger" class="p-4 py-1" text="X" @click="beneficiariesModal = false" />
-            </div>
-        </div>
+
+        <!-- v-if="beneficiariesModal"  --> 
+        <SearchModal v-if="beneficiariesModal" @close="handleClose" :modal-values=beneficiaries></SearchModal>
     </div>
 </template>
 
 <script>
+    import SearchModal from "@/components/SearchModal";
     import Card from "@/components/Card";
     import Button from "@/components/Button";
     import Textarea from "@/components/Textarea";
@@ -198,6 +181,14 @@
             Select,
             Textinput,
             Card,
+            SearchModal
+        },
+        methods: {
+            handleClose(value) {
+                // Recibes el valor emitido (en este caso 'false') desde el hijo
+                console.log("Evento close recibido:", value);
+                this.beneficiariesModal = value.flag; // Puedes cambiar el estado o realizar cualquier acción
+            }
         },
         setup() {
             const schema = yup.object().shape({
@@ -324,16 +315,21 @@
             let beneficiariesModal = ref(false)
             const handleChange =  () => {
                 beneficiariesModal.value = true
-                console.log(beneficiariesModal.value)
+                /* console.log(beneficiariesModal.value) */
             }
 
             const preventOptionsDisplay = (event) => {
                 event.preventDefault();
                 beneficiariesModal.value = true
-                console.log(beneficiariesModal.value)
+                /* console.log("beneficiariesModal: "+beneficiariesModal.value) */
+            }
+
+            function emitClose() {
+                console.log("closing window");
             }
 
             return {
+                emitClose,
                 copyOfBeneciariesTable,
                 beneficiariesModal,
                 preventOptionsDisplay,
