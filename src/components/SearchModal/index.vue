@@ -7,6 +7,7 @@
                         <input
                             class="h-8 p-2 w-full focus:outline-none transition-all duration-300 border-2 border-gray-400 rounded-md"
                             placeholder="Buscar..."
+                            @input="searchInputEvent($event.target.value)"
                         />
                         <Button btnClass="btn-danger" class="p-4 py-1" text="X" @click="action(false, null)" />
                     </div>
@@ -48,30 +49,51 @@
             const paginatedValues = ref(new Array())
             const numberOfPages = ref(0)
             const selectedPage = ref(1)
+            const elementsPerPageWanted = ref(10)
+
+            /*  */
+            function searchInputEvent(searchQuery){
+                if (searchQuery.trim() == '' || searchQuery == '') {
+                    paginatedValues.value = paginateValues(props.modalValues, elementsPerPageWanted.value);
+                    return;
+                }
+
+                const filteredData = props.modalValues.filter(item => {
+                    const searchString = [
+                        item.label
+                    ].join(' ').toLowerCase();
+
+                    return searchString.includes(searchQuery.toLowerCase());
+                });
+                paginatedValues.value = paginateValues(filteredData, elementsPerPageWanted.value);
+            } 
+
+            function paginateValues(unpaginatedArray, numberOfElementsPerPage){
+                const paginatedArray = unpaginatedArray.slice(0,numberOfElementsPerPage);
+                return paginatedArray
+            }
+
+            const action = (flag, value) => emit('close', [flag, value]);
 
             watch(() => props.modalValues, (newVal) => {
                 if (newVal && newVal.values) {
-                    console.log(props.modalValues)
-                    paginatedValues.value = props.modalValues.slice(0,10);
-                    numberOfPages.value = Math.ceil((props.modalValues.length)/10)
-                    console.log("Values: ", paginatedValues.value);
-                    console.log("Number of Pages: ", numberOfPages.value);
+                    paginatedValues.value = paginateValues(props.modalValues, elementsPerPageWanted.value)
+                    numberOfPages.value = Math.ceil((props.modalValues.length)/elementsPerPageWanted.value)
                 }
             }, { immediate: true });
 
             watch(selectedPage, () => {
                 let base = 10
                 let index = base*(selectedPage.value-1)
-                console.log("Index: "+ index)
                 paginatedValues.value = props.modalValues.slice((index),(index+base))
             })
 
-            const action = (flag, value) => emit('close', [flag, value]);
             return {
                 paginatedValues,
                 numberOfPages,
                 selectedPage,
                 action,
+                searchInputEvent
             };
         }
     }
