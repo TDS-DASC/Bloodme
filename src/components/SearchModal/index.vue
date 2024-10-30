@@ -70,6 +70,7 @@
 
             function paginateValues(unpaginatedArray, numberOfElementsPerPage){
                 const paginatedArray = unpaginatedArray.slice(0,numberOfElementsPerPage);
+                numberOfPages.value = Math.ceil((unpaginatedArray.length)/elementsPerPageWanted.value)
                 return paginatedArray
             }
 
@@ -78,7 +79,6 @@
             watch(() => props.modalValues, (newVal) => {
                 if (newVal && newVal.values) {
                     paginatedValues.value = paginateValues(props.modalValues, elementsPerPageWanted.value)
-                    numberOfPages.value = Math.ceil((props.modalValues.length)/elementsPerPageWanted.value)
                 }
             }, { immediate: true });
 
