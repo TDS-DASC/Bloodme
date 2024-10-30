@@ -112,7 +112,7 @@ export default {
             setTimeout(closeSession, 1000);
           })
           .catch(error => {
-            console.error('Error in login request:', error);
+            console.error('Error in logout request:', error);
           });
     }
     const imageMapping = {
