@@ -16,7 +16,7 @@ export const useCachedDataStoreBeneficiaries = defineStore({
         try {
           const response = await axios.get(`/api/beneficiaries`);
           response.data.forEach(beneficiary => {
-            if(this.beneficiariesTable.length <= response.data.length)
+            if(this.beneficiariesTable.length <= response.data.length-1)
               this.beneficiariesTable.push(beneficiary);
           });
           this.dataLoaded = true;
