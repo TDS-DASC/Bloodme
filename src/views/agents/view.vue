@@ -119,7 +119,7 @@
                         <!-- Separacion -->
 
 
-                        <ul class="list space-y-8 w-full">
+                            <ul class="list space-y-8 w-full">
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
                                         <Icon icon="streamline:blood-bag-donation" />
