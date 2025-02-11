@@ -11,6 +11,18 @@
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
             >
                 <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Select
+                        label="Participante *"
+                        type="text"
+                        placeholder="Seleccione el participante"
+                        name="participant"
+                        :options="participants_table"
+                        v-model="participant_value"
+                        :error="participant_valueError"
+                    />
+                    <p v-if="errors.blood_type" class="mt-2 text-danger-500 block text-sm">{{ errors.blood_type[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
                         label="Nombre *"
                         type="text"
@@ -34,7 +46,7 @@
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
-                        label="Fecha de nacimiento *"
+                        label="Fecha de nacimiento"
                         type="date" 
                         placeholder="Ingrese la fecha de nacimiento del beneficiario"
                         name="birth_date"
@@ -133,9 +145,10 @@
     import { ref } from "vue";
     import axios from "@/plugins/axios";
     import * as yup from 'yup';
-    import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
     import { useToast } from "vue-toastification";
     import router from '../../router';
+    import { useCachedDataStoreBeneficiaries } from '../../stores/beneficiariesStore';
+    import { useCachedDataStoreParticipants } from '../../stores/participantsStore';
 
     export default {
         components: {
@@ -147,7 +160,20 @@
             Card
         },
         setup() {
+            const { participantsTable} = useCachedDataStoreParticipants();
+            const participants_table = ref([]);
+            async function fetchData() {
+                await useCachedDataStoreParticipants().fetchData();
+                console.log(participantsTable)
+                participants_table.value = participantsTable.map(participant => ({
+                    value: participant.id,
+                    label: participant.name
+                }));
+            }
+            fetchData();
             const schema = yup.object().shape({
+                participant: yup.string()
+                    .required("El participante es requerido"),
                 name: yup.string()
                     .required("El nombre del beneficiario es requerido")
                     .min(3, "El nombre debe de contener al menos 3 caracteres")
@@ -156,8 +182,7 @@
                     .required("Los apellidos son requeridos")
                     .min(3, "El apellido debe de contener al menos 3 caracteres")
                     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
-                birth_date: yup.string()
-                    .required("La fecha de nacimiento es requerida"),
+                birth_date: yup.string(),
                 curp: yup.string()
                     .required("El curp es requerido")
                     .max(18, "El curp no puede exceder los 18 caracteres")
@@ -199,7 +224,7 @@
             }
             function createBeneficiary(){
                 confirmMessageFlag.value = false;
-                axios.post(`/api/beneficiaries/`, formValues)
+                axios.post(`api/participants/${participant_value.value}/beneficiaries`, formValues)
                 .then(res => {
                     console.log(res);
                     useCachedDataStoreBeneficiaries().refreshData();
@@ -228,6 +253,7 @@
             const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
             const { value: curp, errorMessage: curpError } = useField("curp");
             const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
+            const { value: participant_value, errorMessage: participant_valueError } = useField("participant");
 
             const blood_types = [
                 { value: 'A+', label: 'A+' },
@@ -241,6 +267,7 @@
             ];
 
             return {
+                participants_table,
                 blood_types,
                 createBeneficiary,
                 displayConfirmMessage,
@@ -255,6 +282,8 @@
                 curpError,
                 blood_type,
                 blood_typeError,
+                participant_value,
+                participant_valueError,
                 onSubmit,
                 errors,
                 errorMessage
