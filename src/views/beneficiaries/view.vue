@@ -8,7 +8,7 @@
                             <ul class="list space-y-8 w-full">
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="wpf:name" />
+                                        <Icon icon="line-md:account" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
@@ -22,26 +22,6 @@
                             <!-- end single list -->
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="cil:birthday-cake" />
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            Fecha de nacimiento
-                                        </div>
-                                        <div class="text-base text-slate-600 dark:text-slate-50" v-if="beneficiaryData">
-                                            {{ beneficiaryData.birth_date }}
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        <!-- Separacion -->
-
-
-                            <ul class="list space-y-8 w-full">
-                                
-                            <!-- end single list -->
-                                <li class="flex space-x-3 rtl:space-x-reverse">
-                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
                                         <Icon icon="mdi:dot" />
                                     </div>
                                     <div class="flex-1">
@@ -51,6 +31,27 @@
                                         <a class="text-base text-slate-600 dark:text-slate-50" v-if="beneficiaryData">
                                             {{ beneficiaryData.lastname }}
                                         </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        <!-- Separacion -->
+
+
+                            <ul class="list space-y-8 w-full">
+                                
+                            <!-- end single list -->
+                                
+                                <li class="flex space-x-3 rtl:space-x-reverse">
+                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                                        <Icon icon="cil:birthday-cake" />
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                                            Fecha de nacimiento
+                                        </div>
+                                        <div class="text-base text-slate-600 dark:text-slate-50" v-if="beneficiaryData">
+                                            {{ beneficiaryData.birth_date }}
+                                        </div>
                                     </div>
                                 </li>
                             <!-- end single list -->
