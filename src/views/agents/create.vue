@@ -348,7 +348,7 @@
             }
             function createUser(){
                 confirmMessageFlag.value = false;
-                axios.post(`/api/agents/`, formValues)
+                axios.post(`/api/hospitals/${hospital_id.value}/agents`, formValues)
                     .then(res => {
                         console.log(formValues.value);
                         useCachedDataStoreAgents().refreshData();
