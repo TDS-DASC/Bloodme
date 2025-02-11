@@ -70,7 +70,7 @@
                             <ul class="list space-y-8 w-full">
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="wpf:name" />
+                                        <Icon icon="line-md:account" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
@@ -221,8 +221,9 @@
             let userData = ref(null); 
 
             watch(agentsTable, () => {
-                console.log(agentsTable);
+                //console.log(agentsTable);
                 userData.value = agentsTable.find(objeto => objeto.id == id);
+                console.log(userData.value);
             });
 
             if(agentsTable)
