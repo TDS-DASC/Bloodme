@@ -186,8 +186,10 @@
         methods: {
             handleClose(value) {
                 // Recibes el valor emitido (en este caso 'false') desde el hijo
-                console.log("Evento close recibido:", value);
-                this.beneficiariesModal = value.flag; // Puedes cambiar el estado o realizar cualquier acción
+                this.beneficiariesModal = value.flag;
+                this.selectedBenefiaciarie.value = value
+                // [1][0] correspondiente a [1] = el arreglo que recibe y [0] = el id del elemento seleccionado
+                beneficiary_id.value = this.selectedBenefiaciarie.value[1][0]
             }
         },
         setup() {
@@ -324,12 +326,10 @@
                 /* console.log("beneficiariesModal: "+beneficiariesModal.value) */
             }
 
-            function emitClose() {
-                console.log("closing window");
-            }
+            const selectedBenefiaciarie = ref([])
 
             return {
-                emitClose,
+                selectedBenefiaciarie,
                 copyOfBeneciariesTable,
                 beneficiariesModal,
                 preventOptionsDisplay,
