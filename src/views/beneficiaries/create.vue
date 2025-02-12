@@ -16,7 +16,7 @@
                         type="text"
                         placeholder="Seleccione el participante"
                         name="participant"
-                        :options="participants_table"
+                        :options="sortedParticipantList"
                         v-model="participant_value"
                         :error="participant_valueError"
                     />
@@ -69,7 +69,7 @@
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Select
-                        label="Tipo de sangre"
+                        label="Tipo de sangre *"
                         type="text"
                         placeholder="Seleccione su tipo de sangre"
                         name="bloodtype"
@@ -95,6 +95,12 @@
                 </span>
                 <br><br>
                 <div>
+                    <div>
+                        <p class="font-bold dark:text-white">Participante al que será enlazado:</p>
+                        <p class="dark:text-gray-300">
+                            {{ sortedParticipantList.find(participant => participant.value == participant_value)?.label }}	
+                        </p>
+                    </div>
                     <div>
                         <p class="font-bold dark:text-white">Nombre/s:</p>
                         <p class="dark:text-gray-300">
@@ -161,11 +167,11 @@
         },
         setup() {
             const { participantsTable} = useCachedDataStoreParticipants();
-            const participants_table = ref([]);
+            const sortedParticipantList = ref([]);
             async function fetchData() {
                 await useCachedDataStoreParticipants().fetchData();
                 console.log(participantsTable)
-                participants_table.value = participantsTable.map(participant => ({
+                sortedParticipantList.value = participantsTable.map(participant => ({
                     value: participant.id,
                     label: participant.name
                 }));
@@ -267,7 +273,7 @@
             ];
 
             return {
-                participants_table,
+                sortedParticipantList,
                 blood_types,
                 createBeneficiary,
                 displayConfirmMessage,
