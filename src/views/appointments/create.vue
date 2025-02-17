@@ -54,6 +54,17 @@
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Select
+                        label="Status *"
+                        placeholder="Seleccione el estado de la cita"
+                        name="status"
+                        :options="selectOptionForStatusInput"
+                        v-model="status"
+                        :error="statusError"
+                    />
+                    <p v-if="errors.campaign_id" class="mt-2 text-danger-500 block text-sm">{{ errors.campaign_id[0] }}</p>
+                </div>
+                <div class="flex gap-0 flex-col justify-center align-middle">
+                    <Select
                         label="Participantes *"
                         placeholder="Seleccione una participante"
                         name="participant"
@@ -83,6 +94,12 @@
                         <p class="font-bold dark:text-white">Fecha de la cita:</p>
                         <p class="dark:text-gray-300">
                             {{ date }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold dark:text-white">Status:</p>
+                        <p class="dark:text-gray-300">
+                            {{ status }}
                         </p>
                     </div>
                     <div>
@@ -148,7 +165,9 @@
                 campaign_id: yup.string()
                     .required("La campaña es requerida"),
                 user_id: yup.string()
-                    .required("Se debe de escoger un participante")
+                    .required("Se debe de escoger un participante"),
+                status: yup.string()
+                    .required("El estado de la cita es requerido")
             });
 
             let formValues = ref([]);
@@ -168,7 +187,8 @@
                     { name: 'date', value: date.value },
                     { name: 'description', value: description.value },
                     { name: 'campaign_id', value: campaign_id.value },
-                    { name: 'user_id', value: 22 },
+                    { name: 'user_id', value: user_id.value },
+                    { name: 'status', value: 'pending' }
                 ];
                 trySubmit(newAppointmentForm);
             });
@@ -219,6 +239,7 @@
             const { value: description, errorMessage: descriptionError } = useField("description");
             const { value: campaign_id, errorMessage: campaign_idError } = useField("campaign_id");
             const { value: user_id, errorMessage: user_idError } = useField("user_id");
+            const { value: status, errorMessage: statusError } = useField("status");
             
             async function fetchData() {
                 await useCachedDataStoreParticipants().fetchData();
@@ -263,20 +284,29 @@
                 }));
             }
 
+            const selectOptionForStatusInput = ref([
+                { value: 'pending', label: 'Pendiente' },
+                { value: 'completed', label: 'Completada' },
+                { value: 'cancelled', label: 'Cancelada' }
+            ]);
             let selectOptionForCampaignsInput = ref([]);
             function createCampaignsWithBeneficiaryNames() {
+                console.log(campaignsTable)
                 const campaignsWithBeneficiaryNames = campaignsTable.map(campaign => {
-                    const beneficiary = beneficiariesTable.find(beneficiary => beneficiary.id === campaign.beneficiary_id);
+                    const beneficiary = beneficiariesTable.find(beneficiary => beneficiary.id == campaign.beneficiary_id);
                     const hospital = hospitalsTable.find(hospital => hospital.id == campaign.hospital_id)
                     return {
                         value: campaign.id,
-                        label: beneficiary.name + ' - ' + hospital.name
+                        label: (beneficiary ? beneficiary.name : 'No encontrado') + ' - ' + (hospital ? hospital.name : 'No encontrado')
                     };
                 });
                 selectOptionForCampaignsInput.value = campaignsWithBeneficiaryNames;
             }
 
             return {
+                selectOptionForStatusInput,
+                status,
+                statusError,
                 participants,
                 selectOptionForCampaignsInput,
                 campaigns,
