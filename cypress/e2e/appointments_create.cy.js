@@ -46,7 +46,7 @@ describe('Load appointments index', () => {
         cy.get('input[type=text]').type('Hola, este registro significa que paso la prueba de cypress').should('have.value', 'Hola, este registro significa que paso la prueba de cypress');
         cy.get('select[name=campaign]').select(2);
         cy.get('select[name=participant]').select(2);
-
+        cy.get('select[name=status]').select(2);
         cy.get('button[type=submit]').contains('Crear').click()
         cy.get('button').contains('Confirmar').click()
     });
