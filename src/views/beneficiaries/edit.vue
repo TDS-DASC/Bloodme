@@ -57,7 +57,7 @@
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Select
-                        label="Tipo de sangre"
+                        label="Tipo de sangre *"
                         type="text"
                         placeholder="Seleccione su tipo de sangre"
                         name="bloodtype"
@@ -75,7 +75,7 @@
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
+        <div class="absolute w-1/4 shadow-xl top-36 right-1/3" v-if="confirmMessageFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
                 <span class="dark:text-white">
                     Estas a punto de editar una entidad de la base de datos.<br>

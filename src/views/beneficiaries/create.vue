@@ -46,7 +46,7 @@
                 </div>
                 <div class="flex gap-0 flex-col justify-center align-middle">
                     <Textinput
-                        label="Fecha de nacimiento"
+                        label="Fecha de nacimiento *"
                         type="date" 
                         placeholder="Ingrese la fecha de nacimiento del beneficiario"
                         name="birth_date"
@@ -192,7 +192,8 @@
                     .required("Los apellidos son requeridos")
                     .min(3, "El apellido debe de contener al menos 3 caracteres")
                     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
-                birth_date: yup.string(),
+                birth_date: yup.string()
+                    .required("La fecha de nacimiento es requerida"),
                 curp: yup.string()
                     .required("El curp es requerido")
                     .max(18, "El curp no puede exceder los 18 caracteres")
