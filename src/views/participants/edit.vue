@@ -377,7 +377,7 @@
                 alias.value = participantData.value.alias;
                 birth_date.value = participantData.value.birth_date;
                 blood_type.value = participantData.value.blood_type;
-                phone_number.value = participantData.value.phone_number;
+                phone_number.value = participantData.value.phone_number.replace(/\D/g, '');
                 curp.value = participantData.value.curp;
                 email.value = participantData.value.email;
                 role.value = participantData.value.role;
@@ -385,29 +385,20 @@
                 image_url.value = participantData.value.image_url;
 
                 selectedImageIndex.value = user_profile_images.find((image) => image.value == participantData.value.image_url);
-                selectedImageIndex.value = selectedImageIndex.value.id;
+                if (selectedImageIndex.value !== undefined) {
+                    selectedImageIndex.value = selectedImageIndex.value.id;
+                }
             }
-
-            /* watch(participantsTable, () => {
-                participantData.value = participantsTable.find(objeto => objeto.id == participantId);
-                if(participantData.value != null){
-                    passParticipantValuesToSingleVariables();
-                }
-            });
-            if(participantsTable){
-                participantData.value = participantsTable.find(objeto => objeto.id == participantId);
-                if(participantData.value != null){
-                    passParticipantValuesToSingleVariables();
-                }
-            } */
 
             function toggleBorder(index) {
                 selectedImageIndex.value = index;
             }
             
             watch(selectedImageIndex, () => {
-                image_url.value = user_profile_images.find((image) => image.id == selectedImageIndex.value);
-                image_url.value = image_url.value.value;
+                if (selectedImageIndex.value !== undefined) {
+                    image_url.value = user_profile_images.find((image) => image.id == selectedImageIndex.value);
+                    image_url.value = image_url.value.value;
+                }
             });
 
             return {
