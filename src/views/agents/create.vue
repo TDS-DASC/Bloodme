@@ -236,7 +236,7 @@
                 sex: yup.string().nullable(),
                 image_url: yup.string().nullable(),
                 phone_number: yup.string().nullable()
-                    .required("El nummero de celular es requerido para crear un agente")
+                    .required("El numero de celular es requerido para crear un agente")
                     .max(10, "El Número de telefono no puede pasar de 10 digitos")
                     .min(10, "El Número de telefono no puede ser menor a 10 digitos"),
                 curp: yup.string()
