@@ -9,7 +9,6 @@
                             <div class="flex-none">
                                 <div class="md:h-[100px] md:w-[100px] h-[140px] w-[140px] md:ml-0 md:mr-0 ml-auto mr-auto md:mb-0 mb-4 rounded-full ring-4 ring-slate-100 relative">
                                     <img :src="profileImg" alt="" class="w-full h-full object-cover rounded-full" v-if="userData" />
-                                    <img src="@/assets/images/avatar/av-1.svg" alt="" class="w-full h-full object-cover rounded-full" v-else />
                                         <router-link
                                             :to="`/participants/${id}/edit`"
                                             class="absolute right-2 h-4 w-4 bg-slate-50 text-slate-600 rounded-full shadow-sm flex flex-col items-center justify-center md:top-[80px] top-[200px]"
@@ -259,9 +258,8 @@
                 'user9.png': profileImg9
             };
 
-            const profileImageKey = userData.value && userData.value.image_url ? userData.value.image_url : 'user.png'; // Default to user2.png if image_url is empty or null
-            const profileImg = imageMapping[profileImageKey];
-
+            const profileImageKey = userData.value && userData.value.image_url && imageMapping[userData.value.image_url] ? userData.value.image_url : Object.keys(imageMapping)[0];
+            const profileImg = ref(imageMapping[profileImageKey]);
             return {
                 profileImg,
                 confirmMessageFlag,
