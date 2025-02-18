@@ -10,115 +10,110 @@
                 @submit.prevent="onSubmit"
                 class="lg:grid-cols-2 grid gap-5 grid-cols-1"
             >
+                <Textinput
+                    label="Nombre *"
+                    type="text"
+                    placeholder="Ingrese el nombre"
+                    name="name"
+                    v-model="name"
+                    :error="nameError"
+                />
+                <Textinput
+                    label="Apellidos"
+                    type="text"
+                    placeholder="Ingrese sus apellidos"
+                    name="lastname"
+                    v-model="lastname"
+                    :error="lastnameError"
+                />
+                <Textinput
+                    label="Alias"
+                    type="text"
+                    placeholder="Ingrese el alias"
+                    name="alias"
+                    v-model="alias"
+                    :error="aliasError"
+                />
 
-                <div class="flex gap-0 flex-col justify-center align-middle">
-                    <Textinput
-                        label="Nombre *"
-                        type="text"
-                        placeholder="Ingrese el nombre"
-                        name="name"
-                        v-model="name"
-                        :error="nameError"
-                    />
-                    <p v-if="errors.name" class="mt-2 text-danger-500 block text-sm">{{ errors.name[0] }}</p>
-                </div>
+                <Textinput
+                    label="Fecha de nacimiento"
+                    type="date"
+                    placeholder="Fecha de nacimiento"
+                    name="date"
+                    v-model="birth_date"
+                    :error="birth_dateError"
+                />
 
-                <div class="flex gap-0 flex-col justify-center align-middle">
-                    <Textinput
-                        label="Apellidos"
-                        type="text"
-                        placeholder="Ingrese sus apellidos"
-                        name="lastname"
-                        v-model="lastname"
-                        :error="lastnameError"
-                    />
-                    <p v-if="errors.lastname" class="mt-2 text-danger-500 block text-sm">{{ errors.lastname[0] }}</p>
-                </div>
+                <Select
+                    label="Tipo de sangre"
+                    type="text"
+                    placeholder="Seleccione su tipo de sangre"
+                    name="bloodtype"
+                    :options="blood_types"
+                    v-model="blood_type"
+                    :error="blood_typeError"
+                />
+                <Select
+                    label="Sexo"
+                    type="text"
+                    placeholder="Seleccione su sexo"
+                    name="sex"
+                    v-model="sex"
+                    :error="sexError"
+                    :options="sex_options"
+                />
+                <Select
+                    label="Hospital"
+                    type="text"
+                    placeholder="Hospital perteneciente"
+                    name="hospital_id"
+                    v-model="hospital_id"
+                    :error="hospital_idError"
+                    :options="hospitals"
+                />
+                <Textinput
+                    label="Número celular"
+                    type="number"
+                    placeholder="Ingrese su número celular"
+                    name="phone"
+                    v-model="phone_number"
+                    :error="phone_numberError"
+                />
+                <Textinput
+                    label="CURP"
+                    type="text"
+                    placeholder="Ingrese un curp valido"
+                    name="curp"
+                    v-model="curp"
+                    :error="curpError"
+                />
+                <Textinput
+                    label="email"
+                    type="email"
+                    placeholder="Ingrese un correo electronico"
+                    name="email"
+                    v-model="email"
+                    :error="emailError"
+                />
+                <Textinput
+                    label="Selected Image*"
+                    type="string"
+                    placeholder="Imagen seleccionada"
+                    name="image_url"
+                    v-model="image_url"
+                    :error="image_urlError"
+                    disabled
+                />
 
-                <div class="flex gap-0 flex-col justify-center align-middle">
-                    <Textinput
-                        label="Alias"
-                        type="text"
-                        placeholder="Ingrese el alias"
-                        name="alias"
-                        v-model="alias"
-                        :error="aliasError"
-                    />
-                    <p v-if="errors.alias" class="mt-2 text-danger-500 block text-sm">{{ errors.alias[0] }}</p>
-                </div>
-
-                <div class="flex gap-0 flex-col justify-center align-middle">
-                    <Textinput
-                        label="Fecha de nacimiento"
-                        type="date"
-                        placeholder="Fecha de nacimiento"
-                        name="date"
-                        v-model="birth_date"
-                        :error="birth_dateError"
-                        />
-                    <p v-if="errors.birth_date" class="mt-2 text-danger-500 block text-sm">{{ errors.birth_date[0] }}</p>
-                </div>
-
-                <div class="flex gap-0 flex-col justify-center align-middle">
-                    <Select
-                        label="Sexo"
-                        type="text"
-                        placeholder="Seleccione su sexo"
-                        name="sex"
-                        v-model="sex"
-                        :error="sexError"
-                        :options="sex_options"
-                    />
-                    <p v-if="errors.sex" class="mt-2 text-danger-500 block text-sm">{{ errors.sex[0] }}</p>
-                </div>
-
-                <div class="flex gap-0 flex-col justify-center align-middle">
-                    <Select
-                        label="Hospital"
-                        type="text"
-                        placeholder="Hospital perteneciente"
-                        name="hospital_id"
-                        v-model="hospital_id"
-                        :error="hospital_idError"
-                        :options="hospitals"
-                    />
-                    <p v-if="errors.hospital_id" class="mt-2 text-danger-500 block text-sm">{{ errors.hospital_id[0] }}</p>
-                </div>
-
-                <div class="flex gap-0 flex-col justify-center align-middle">                    
-                    <Textinput
-                        label="Número celular"
-                        type="number"
-                        placeholder="Ingrese su número celular"
-                        name="phone"
-                        v-model="phone_number"
-                        :error="phone_numberError"
-                    />
-                    <p v-if="errors.phone_number" class="mt-2 text-danger-500 block text-sm">{{ errors.phone_number[0] }}</p>
-                </div>
-
-                <div class="flex gap-0 flex-col justify-center align-middle">                    
-                    <Textinput
-                        label="CURP"
-                        type="text"
-                        placeholder="Ingrese un curp valido"
-                        name="curp"
-                        v-model="curp"
-                        :error="curpError"
-                    />
-                    <p v-if="errors.curp" class="mt-2 text-danger-500 block text-sm">{{ errors.curp[0] }}</p>
-                </div>
-
-                <div class="flex gap-0 flex-col justify-center align-middle">                    
-                    <Textinput
-                        label="email"
-                        type="email"
-                        placeholder="Ingrese un correo electronico"
-                        name="email"
-                        v-model="email"
-                        :error="emailError"
-                    />
-                    <p v-if="errors.email" class="mt-2 text-danger-500 block text-sm">{{ errors.email[0] }}</p>
+                <div class="border border-gray-300 dark:border-gray-500 rounded-md p-4 w-fit">
+                    <p class="font-semibold mb-4 dark:text-slate-300">Selecciona una imagen de perfil</p>
+                    <div class="grid grid-cols-3 gap-0.5">
+                        <div v-for="(userPng, index) in [userPngOne, userPngTwo, userPngThree, userPngFour, userPngFive, userPngSix, userPngSeven, userPngEight, userPngNine]" :key="index" 
+                            class="group border-transparent hover:border-blue-500 border-4 w-fit h-fit rounded-sm transition duration-300"
+                            @click="toggleBorder(index)">
+                            <img :src="userPng" alt="User Image" class="group-hover:border-blue-500 p-2 transition duration-300" :class="{ 'border-blue-500 border-4': selectedImageIndex == index }" />
+                        </div>
+                    </div>
                 </div>
 
                 <div class="lg:col-span-2 gap-2 flex">
@@ -174,13 +169,23 @@
     import Textinput from "@/components/Textinput";
     import { useField, useForm } from "vee-validate";
     import Select from "@/components/Select";
-    import { useCachedDataStoreAgents } from '@/stores/agentsStore';
-    import { useRouter } from 'vue-router';
     import { ref, watch } from 'vue';
     import * as yup from 'yup';
     import axios from "@/plugins/axios";
     import { useToast } from "vue-toastification";
     import { useCachedDataStoreHospitals } from '../../stores/hospitalsStore';
+    import { useCachedDataStoreAgents } from '@/stores/agentsStore';
+    import { useRouter } from 'vue-router';
+
+    import userPngOne from "@/assets/images/all-img/UserImages/user.png";
+    import userPngTwo from "@/assets/images/all-img/UserImages/user2.png";
+    import userPngThree from "@/assets/images/all-img/UserImages/user3.png";
+    import userPngFour from "@/assets/images/all-img/UserImages/user4.png";
+    import userPngFive from "@/assets/images/all-img/UserImages/user5.png";
+    import userPngSix from "@/assets/images/all-img/UserImages/user6.png";
+    import userPngSeven from "@/assets/images/all-img/UserImages/user7.png";
+    import userPngEight from "@/assets/images/all-img/UserImages/user8.png";
+    import userPngNine from "@/assets/images/all-img/UserImages/user9.png";
 
     export default {
         components: {
@@ -192,6 +197,19 @@
         },
         props: {
             formInformation: Object,
+        },
+        data(){
+            return {
+                userPngOne: userPngOne,
+                userPngTwo: userPngTwo,
+                userPngThree: userPngThree,
+                userPngFour: userPngFour,
+                userPngFive: userPngFive,
+                userPngSix: userPngSix,
+                userPngSeven: userPngSeven,
+                userPngEight: userPngEight,
+                userPngNine: userPngNine,
+            }
         },
         setup() {
             const schema = yup.object().shape({
@@ -208,7 +226,11 @@
                     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]*$/, "El nombre no puede contener números"),
                 birth_date: yup.date().nullable(),
                 sex: yup.string().nullable(),
-                phone_number: yup.string().nullable(),
+                image_url: yup.string().nullable(),
+                phone_number: yup.string().nullable()
+                    .required("El numero de celular es requerido para crear un agente")
+                    .max(10, "El Número de telefono no puede pasar de 10 digitos")
+                    .min(10, "El Número de telefono no puede ser menor a 10 digitos"),
                 curp: yup.string()
                     .required("El curp es requerido")
                     .max(18, "El curp no puede exceder los 18 caracteres")
@@ -229,6 +251,8 @@
                 displayConfirmMessage();
             });
             const onSubmit = handleSubmit((values) => {
+                if(image_url.value == "" || image_url.value == null || image_url.value == undefined)
+                    image_url.value = 'user.png';
                 const newAgentForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastName', value: lastname.value },
@@ -278,15 +302,29 @@
                 { value: 'O-', label: 'O-' }
             ];
 
+            const user_profile_images = [
+                { value: 'user.png', id: '0' },
+                { value: 'user2.png', id: '1' },
+                { value: 'user3.png', id: '2' },
+                { value: 'user4.png', id: '3' },
+                { value: 'user5.png', id: '4' },
+                { value: 'user6.png', id: '5' },
+                { value: 'user7.png', id: '6' },
+                { value: 'user8.png', id: '7' },
+                { value: 'user9.png', id: '8' },
+            ];
+
             const { value: name, errorMessage: nameError } = useField("name");
             const { value: lastname, errorMessage: lastnameError } = useField("lastname");
             const { value: alias, errorMessage: aliasError } = useField("alias");
             const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
+            const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
             const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
             const { value: curp, errorMessage: curpError } = useField("curp");
             const { value: email, errorMessage: emailError } = useField("email");
             const { value: sex, errorMessage: sexError } = useField("sex");
             const { value: hospital_id, errorMessage: hospital_idError } = useField("hospital_id");
+            const { value: image_url, errorMessage: image_urlError } = useField("image_url");
 
             const router = useRouter();
             const { agentsTable } = useCachedDataStoreAgents();
@@ -298,11 +336,17 @@
                 lastname.value = agentData.value.lastname;
                 alias.value = agentData.value.alias;
                 birth_date.value = agentData.value.birth_date;
+                blood_type.value = agentData.value.blood_type;
                 phone_number.value = agentData.value.phone_number;
                 curp.value = agentData.value.curp;
                 email.value = agentData.value.email;
                 sex.value = agentData.value.sex;
                 hospital_id.value = agentData.value.hospital_id;
+                image_url.value = agentData.value.image_url;
+
+                if(agentData.value.image_url == null || agentData.value.image_url == "" || agentData.value.image_url == undefined){
+                    image_url.value = 'user.png';
+                }
             }
 
             let agentData = ref(null); 
@@ -349,7 +393,22 @@
                     });
             }
 
+            let selectedImageIndex = ref(null);
+            function toggleBorder(index) {
+                selectedImageIndex.value = index;
+                console.log(selectedImageIndex.value)
+            }
+            
+            watch(selectedImageIndex, () => {
+                image_url.value = user_profile_images.find((image) => image.id == selectedImageIndex.value);
+                image_url.value = image_url.value.value;
+            });
+
             return {
+                selectedImageIndex,
+                toggleBorder,
+                image_url,
+                image_urlError,
                 sex,
                 sexError,
                 name,
