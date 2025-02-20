@@ -98,6 +98,15 @@
                                     </div>
                                 </li>
                             <!-- end single list -->
+                                
+                            <!-- end single list -->
+                            </ul>
+                            
+
+                        <!-- Separacion -->
+
+
+                            <ul class="list space-y-8 w-full">
                                 <li class="flex space-x-3 rtl:space-x-reverse">
                                     <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
                                         <Icon icon="fluent-emoji-high-contrast:glasses" />
@@ -110,28 +119,6 @@
                                             <p v-if="userData.alias">{{ userData.alias }}</p>
                                             <p v-else> No registrado </p>
                                         </div>
-                                    </div>
-                                </li>
-                            <!-- end single list -->
-                            </ul>
-                            
-
-                        <!-- Separacion -->
-
-
-                            <ul class="list space-y-8 w-full">
-                                <li class="flex space-x-3 rtl:space-x-reverse">
-                                    <div class="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                                        <Icon icon="streamline:blood-bag-donation" />
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                                            Tipo de sangre 
-                                        </div>
-                                        <a class="text-base text-slate-600 dark:text-slate-50" v-if="userData">
-                                            <p v-if="userData.blood_type">{{ userData.blood_type }}</p>
-                                            <p v-else> No registrado </p>
-                                        </a>
                                     </div>
                                 </li>
                             <!-- end single list -->

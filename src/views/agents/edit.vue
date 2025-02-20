@@ -43,16 +43,6 @@
                     v-model="birth_date"
                     :error="birth_dateError"
                 />
-
-                <Select
-                    label="Tipo de sangre"
-                    type="text"
-                    placeholder="Seleccione su tipo de sangre"
-                    name="bloodtype"
-                    :options="blood_types"
-                    v-model="blood_type"
-                    :error="blood_typeError"
-                />
                 <Select
                     label="Sexo"
                     type="text"
@@ -166,12 +156,6 @@
                         <p class="font-bold dark:text-white">Hospital:</p>
                         <span class="dark:text-gray-300">
                             {{ hospitals.find(hospital => hospital.value == hospital_id).label }}
-                        </span>
-                    </div>
-                    <div v-if="blood_type">
-                        <p class="font-bold dark:text-white">Tipo de sangre:</p>
-                        <span class="dark:text-gray-300">
-                            {{ blood_type }}
                         </span>
                     </div>
                     <div v-if="phone_number">
@@ -326,16 +310,6 @@
                 { value: "H", label: "Hombre" },
                 { value: "M", label: "Mujer" },
             ];
-            const blood_types = [
-                { value: 'A+', label: 'A+' },
-                { value: 'A-', label: 'A-' },
-                { value: 'B+', label: 'B+' },
-                { value: 'B-', label: 'B-' },
-                { value: 'AB+', label: 'AB+' },
-                { value: 'AB-', label: 'AB-' },
-                { value: 'O+', label: 'O+' },
-                { value: 'O-', label: 'O-' }
-            ];
 
             const user_profile_images = [
                 { value: 'user.png', id: '0' },
@@ -353,7 +327,6 @@
             const { value: lastname, errorMessage: lastnameError } = useField("lastname");
             const { value: alias, errorMessage: aliasError } = useField("alias");
             const { value: birth_date, errorMessage: birth_dateError } = useField("birth_date");
-            const { value: blood_type, errorMessage: blood_typeError } = useField("blood_type");
             const { value: phone_number, errorMessage: phone_numberError } = useField("phone_number");
             const { value: curp, errorMessage: curpError } = useField("curp");
             const { value: email, errorMessage: emailError } = useField("email");
@@ -377,7 +350,6 @@
                 lastname.value = agentData.value.lastname;
                 alias.value = agentData.value.alias;
                 birth_date.value = agentData.value.birth_date;
-                blood_type.value = agentData.value.blood_type;
                 phone_number.value = agentData.value.phone_number;
                 curp.value = agentData.value.curp;
                 email.value = agentData.value.email;
@@ -415,6 +387,7 @@
                 axios.put(`/api/agents/${agentId}`, formValues)
                     .then(res => {
                         console.log(formValues.value);
+                        console.log(formValues);
                         useCachedDataStoreAgents().refreshData();
                         toast.success("¡Agente editado correctamente!", { timeout: 1000 });
                         setTimeout(userRedirect, 1000);
@@ -462,7 +435,6 @@
                 curpError,
                 email,
                 emailError,
-                blood_types,
                 sex_options,
                 hospitals,
                 onSubmit,
@@ -472,8 +444,6 @@
                 displayConfirmMessage,
                 editAgent,
                 errors,
-                blood_type,
-                blood_typeError
             };
         }
     }
