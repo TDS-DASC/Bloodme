@@ -88,7 +88,7 @@
                     :error="curpError"
                 />
                 <Textinput
-                    label="email"
+                    label="email *"
                     type="email"
                     placeholder="Ingrese un correo electronico"
                     name="email"
@@ -142,6 +142,42 @@
                         <p class="font-bold dark:text-white">Apellido del agente:</p>
                         <span class="dark:text-gray-300">
                             {{ lastname }}
+                        </span>
+                    </div>
+                    <div v-if="alias">
+                        <p class="font-bold dark:text-white">Alias:</p>
+                        <span class="dark:text-gray-300">
+                            {{ alias }}
+                        </span>
+                    </div>
+                    <div v-if="birth_date">
+                        <p class="font-bold dark:text-white">Fecha de nacimiento:</p>
+                        <span class="dark:text-gray-300">
+                            {{ birth_date }}
+                        </span>
+                    </div>
+                    <div v-if="sex">
+                        <p class="font-bold dark:text-white">Sexo:</p>
+                        <span class="dark:text-gray-300">
+                            {{ sex }}
+                        </span>
+                    </div>
+                    <div v-if="hospital_id">
+                        <p class="font-bold dark:text-white">Hospital:</p>
+                        <span class="dark:text-gray-300">
+                            {{ hospitals.find(hospital => hospital.value == hospital_id).label }}
+                        </span>
+                    </div>
+                    <div v-if="blood_type">
+                        <p class="font-bold dark:text-white">Tipo de sangre:</p>
+                        <span class="dark:text-gray-300">
+                            {{ blood_type }}
+                        </span>
+                    </div>
+                    <div v-if="phone_number">
+                        <p class="font-bold dark:text-white">Número celular:</p>
+                        <span class="dark:text-gray-300">
+                            {{ phone_number }}
                         </span>
                     </div>
                     <div>
