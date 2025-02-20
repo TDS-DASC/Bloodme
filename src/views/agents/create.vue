@@ -19,7 +19,7 @@
                     :error="nameError"
                 />
                 <Textinput
-                    label="Apellidos"
+                    label="Apellidos *"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
@@ -63,7 +63,7 @@
                     :options="sex_options"
                 />
                 <Select
-                    label="Hospital"
+                    label="Hospital *"
                     type="text"
                     placeholder="Hospital perteneciente"
                     name="hospital_id"
@@ -80,7 +80,7 @@
                     :error="phone_numberError"
                 />
                 <Textinput
-                    label="CURP"
+                    label="CURP *"
                     type="text"
                     placeholder="Ingrese un curp valido"
                     name="curp"
@@ -96,7 +96,7 @@
                     :error="emailError"
                 />
                 <Textinput
-                    label="Contraseña*"
+                    label="Contraseña *"
                     type="password"
                     placeholder="Ingrese su contraseña"
                     name="password"
@@ -105,7 +105,7 @@
                     hasicon
                 />
                 <Textinput
-                    label="Selected Image*"
+                    label="Imágen seleccionada *"
                     type="string"
                     placeholder="Imagen seleccionada"
                     name="image_url"
@@ -236,7 +236,6 @@
                 sex: yup.string().nullable(),
                 image_url: yup.string().nullable(),
                 phone_number: yup.string().nullable()
-                    .required("El numero de celular es requerido para crear un agente")
                     .max(10, "El Número de telefono no puede pasar de 10 digitos")
                     .min(10, "El Número de telefono no puede ser menor a 10 digitos"),
                 curp: yup.string()

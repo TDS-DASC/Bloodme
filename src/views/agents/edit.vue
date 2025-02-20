@@ -19,7 +19,7 @@
                     :error="nameError"
                 />
                 <Textinput
-                    label="Apellidos"
+                    label="Apellidos *"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
@@ -63,7 +63,7 @@
                     :options="sex_options"
                 />
                 <Select
-                    label="Hospital"
+                    label="Hospital *"
                     type="text"
                     placeholder="Hospital perteneciente"
                     name="hospital_id"
@@ -80,7 +80,7 @@
                     :error="phone_numberError"
                 />
                 <Textinput
-                    label="CURP"
+                    label="CURP *"
                     type="text"
                     placeholder="Ingrese un curp valido"
                     name="curp"
@@ -96,7 +96,7 @@
                     :error="emailError"
                 />
                 <Textinput
-                    label="Selected Image*"
+                    label="Imágen seleccionada *"
                     type="string"
                     placeholder="Imagen seleccionada"
                     name="image_url"
@@ -228,7 +228,6 @@
                 sex: yup.string().nullable(),
                 image_url: yup.string().nullable(),
                 phone_number: yup.string().nullable()
-                    .required("El numero de celular es requerido para crear un agente")
                     .max(10, "El Número de telefono no puede pasar de 10 digitos")
                     .min(10, "El Número de telefono no puede ser menor a 10 digitos"),
                 curp: yup.string()
@@ -330,7 +329,13 @@
             const { agentsTable } = useCachedDataStoreAgents();
             const agentId = router.currentRoute.value.params.id;
             useCachedDataStoreAgents().fetchData();
-
+            
+            let selectedImageIndex = ref(null);
+            function toggleBorder(index) {
+                selectedImageIndex.value = index;
+                console.log(selectedImageIndex.value)
+            }
+            
             function passAgentValuesToSingleVariables(){
                 name.value = agentData.value.name;
                 lastname.value = agentData.value.lastname;
@@ -343,9 +348,9 @@
                 sex.value = agentData.value.sex;
                 hospital_id.value = agentData.value.hospital_id;
                 image_url.value = agentData.value.image_url;
-
-                if(agentData.value.image_url == null || agentData.value.image_url == "" || agentData.value.image_url == undefined){
-                    image_url.value = 'user.png';
+                selectedImageIndex.value = user_profile_images.find((image) => image.value == agentData.value.image_url);
+                if (selectedImageIndex.value !== undefined) {
+                    selectedImageIndex.value = selectedImageIndex.value.id;
                 }
             }
 
@@ -392,12 +397,6 @@
                         console.log(error);
                     });
             }
-
-            let selectedImageIndex = ref(null);
-            function toggleBorder(index) {
-                selectedImageIndex.value = index;
-                console.log(selectedImageIndex.value)
-            }
             
             watch(selectedImageIndex, () => {
                 image_url.value = user_profile_images.find((image) => image.id == selectedImageIndex.value);
@@ -436,7 +435,9 @@
                 confirmMessageFlag,
                 displayConfirmMessage,
                 editAgent,
-                errors
+                errors,
+                blood_type,
+                blood_typeError
             };
         }
     }
