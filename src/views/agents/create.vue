@@ -388,10 +388,10 @@
                 selectedImageIndex.value = index;
                 console.log(selectedImageIndex.value)
             }
-            
+
             watch(selectedImageIndex, () => {
-                image_url.value = user_profile_images.find((image) => image.id == selectedImageIndex.value);
-                image_url.value = image_url.value.value;
+                const selectedImage = user_profile_images.find((image) => image.id == selectedImageIndex.value);
+                image_url.value = selectedImage ? selectedImage.value : null;
             });
             
 

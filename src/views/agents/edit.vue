@@ -271,7 +271,7 @@
             });
             const onSubmit = handleSubmit((values) => {
                 if(image_url.value == "" || image_url.value == null || image_url.value == undefined)
-                    image_url.value = 'user.png';
+                    image_url.value = null;
                 const newAgentForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastName', value: lastname.value },
@@ -345,7 +345,7 @@
             let selectedImageIndex = ref(0);
             function toggleBorder(index) {
                 selectedImageIndex.value = index;
-                console.log(selectedImageIndex.value)
+                console.log("From image selected: " + selectedImageIndex.value)
             }
             
             function passAgentValuesToSingleVariables(){
@@ -397,6 +397,11 @@
                         console.log(error);
                     });
             }
+
+            watch(selectedImageIndex, () => {
+                const selectedImage = user_profile_images.find((image) => image.id == selectedImageIndex.value);
+                image_url.value = selectedImage ? selectedImage.value : null;
+            });
 
             return {
                 selectedImageIndex,
