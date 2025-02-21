@@ -287,25 +287,7 @@
                 console.log(newAgentForm)
                 trySubmit(newAgentForm);
             });
-
-            let hospitals = ref([]);
-            const { hospitalsTable } = useCachedDataStoreHospitals();
-            useCachedDataStoreHospitals().fetchData();
-            watch(hospitalsTable, () => {
-                fillHospitalArray();
-            });
-
-            if(hospitals.value.length == 0){
-                if(hospitalsTable != null){
-                    fillHospitalArray();
-                }
-            }
-            function fillHospitalArray(){
-                hospitals.value = hospitalsTable.map(hospital => ({
-                    value: hospital.id,
-                    label: hospital.name
-                }));
-            }
+            
             const sex_options = [
                 { value: "H", label: "Hombre" },
                 { value: "M", label: "Mujer" },
@@ -334,18 +316,40 @@
             const { value: hospital_id, errorMessage: hospital_idError } = useField("hospital_id");
             const { value: image_url, errorMessage: image_urlError } = useField("image_url");
 
+            function fillHospitalArray(){
+                hospitals.value = hospitalsTable.map(hospital => ({
+                    value: hospital.id,
+                    label: hospital.name
+                }));
+            }
+
             const router = useRouter();
             const { agentsTable } = useCachedDataStoreAgents();
+            let hospitals = ref([]);
+            const { hospitalsTable } = useCachedDataStoreHospitals();
             const agentId = router.currentRoute.value.params.id;
-            useCachedDataStoreAgents().fetchData();
+            let agentData = ref(null); 
+
+            async function fetchData() {
+                await useCachedDataStoreHospitals().fetchData();
+                await useCachedDataStoreAgents().fetchData();
+                agentData.value = agentsTable.find(objeto => objeto.id == agentId);
+
+                if (agentData != null) {
+                    passAgentValuesToSingleVariables();
+                }
+                fillHospitalArray();
+            }
+            fetchData();
             
-            let selectedImageIndex = ref(null);
+            let selectedImageIndex = ref(0);
             function toggleBorder(index) {
                 selectedImageIndex.value = index;
                 console.log(selectedImageIndex.value)
             }
             
             function passAgentValuesToSingleVariables(){
+                console.log(agentData.value);
                 name.value = agentData.value.name;
                 lastname.value = agentData.value.lastname;
                 alias.value = agentData.value.alias;
@@ -362,19 +366,6 @@
                 }
             }
 
-            let agentData = ref(null); 
-            watch(agentsTable, () => {
-                agentData.value = agentsTable.find(objeto => objeto.id == agentId);
-                if(agentData.value != null){
-                    passAgentValuesToSingleVariables();
-                }
-            });
-            if(agentsTable){
-                agentData.value = agentsTable.find(objeto => objeto.id == agentId);
-                if(agentData.value != null){
-                    passAgentValuesToSingleVariables();
-                }
-            }
 
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
@@ -406,11 +397,6 @@
                         console.log(error);
                     });
             }
-            
-            watch(selectedImageIndex, () => {
-                image_url.value = user_profile_images.find((image) => image.id == selectedImageIndex.value);
-                image_url.value = image_url.value.value;
-            });
 
             return {
                 selectedImageIndex,
