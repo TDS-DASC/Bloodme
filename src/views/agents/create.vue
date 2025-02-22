@@ -185,7 +185,7 @@
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="createBeneficiary()" v-if="confirmMessageFlag == true" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" v-if="confirmMessageFlag == true" />
                     <Button btnClass="btn-dark" text="Retroceder" @click="displayConfirmMessage()" v-if="confirmMessageFlag == true" />
                     <Button btnClass="btn-primary" text="Confirmar" @click="backToIndex()" v-if="cancellationFlag == true" />
                     <Button btnClass="btn-dark" text="Retroceder" @click="displayCancellationMessage()" v-if="cancellationFlag == true" />
