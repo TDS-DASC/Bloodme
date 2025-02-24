@@ -389,7 +389,7 @@
                 router.push({ path: '/agents' });
             }
             let confirmCancelation = () => {
-                if(name.value || lastname.value || birth_date.value || curp.value || blood_type.value || participant_value.value) {
+                if(name.value || lastname.value || birth_date.value || curp.value || email.value || password.value || alias.value || sex.value || phone_number.value) {
                         cancellationFlag.value = true;
                 }else 
                     backToIndex()
