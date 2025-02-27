@@ -118,69 +118,71 @@
 
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
-                    <router-link
-                        :to="{ path:  '/participants/' }"
-                    ><Button btnClass="btn-dark" text="Cancelar" /></router-link>
+                    <Button type="button" text="Cancelar" btnClass="btn-dark" @click="confirmCancelation()"></Button>
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-40 right-1/3" v-if="confirmMessageFlag">
+        <div class="absolute w-1/4 shadow-xl top-36 right-1/3" v-if="confirmMessageFlag || cancellationFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                <p class="dark:text-white">
-                    Estas a punto de crear una nueva entidad en la base de datos.<br>
+                <span class="dark:text-white" v-if="confirmMessageFlag == true">
+                    Estas a punto de agregar una nueva entidad a la base de datos.<br>
                     ¿Estás seguro que quieres continuar?
-                </p>
+                </span>
+                <span class="dark:text-white" v-if="cancellationFlag == true">
+                    Vas a abandonar el formulario de creación con información que ya has ingresado.<br><br>
+                    ¿Estás seguro que quieres continuar? Esta información será eliminada.
+                </span>
                 <br>
                 <div>
-                    <div>
+                    <div v-if="name">
                         <p class="font-bold dark:text-white">Nombre:</p>
                         <p class="dark:text-gray-300">
                             {{ name }}
                         </p>
                     </div>
-                    <div>
+                    <div v-if="lastname">
                         <p class="font-bold dark:text-white">Apellidos:</p>
                         <p class="dark:text-gray-300">
                             {{ lastname }}
                         </p>
                     </div>
-                    <div>
+                    <div v-if="email">
                         <p class="font-bold dark:text-white">Correo electronico:</p>
                         <p class="dark:text-gray-300">
                             {{ email }}
                         </p>
                     </div>
-                    <div>
+                    <div v-if="alias">
                         <p class="font-bold dark:text-white">Alias:</p>
                         <p class="dark:text-gray-300">
                             {{ alias }}
                         </p>
                     </div>
-                    <div>
+                    <div v-if="birth_date">
                         <p class="font-bold dark:text-white">Fecha de nacimiento:</p>
                         <p class="dark:text-gray-300">
                             {{ birth_date }}
                         </p>
                     </div>
-                    <div>
+                    <div v-if="sex">
                         <p class="font-bold dark:text-white">Sexo:</p>
                         <p class="dark:text-gray-300">
                         {{ sex }}
                         </p>
                     </div>
-                    <div>
+                    <div v-if="phone_number">
                         <p class="font-bold dark:text-white">Número telefonico:</p>
                         <p class="dark:text-gray-300">
                         {{ phone_number }}
                         </p>
                     </div>
-                    <div>
+                    <div v-if="curp">
                         <p class="font-bold dark:text-white">CURP:</p>
                         <p class="dark:text-gray-300">
                             {{ curp }}
                         </p>
                     </div>
-                    <div>
+                    <div v-if="blood_type">
                         <p class="font-bold dark:text-white">Tipo de sangre:</p>
                         <p class="dark:text-gray-300">
                             {{ blood_type }}
@@ -188,8 +190,10 @@
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
-                    <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" v-if="confirmMessageFlag == true" />
+                    <Button btnClass="btn-dark" text="Retroceder" @click="displayConfirmMessage()" v-if="confirmMessageFlag == true" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="backToIndex()" v-if="cancellationFlag == true" />
+                    <Button btnClass="btn-dark" text="Retroceder" @click="displayCancellationMessage()" v-if="cancellationFlag == true" />
                 </div>
             </Card>
         </div>
@@ -329,13 +333,6 @@
                 { value: 'O-', label: 'O-' }
             ];
 
-
-            /* Aqui te quedaste, falta hacer que el numero seleccionado por el usuario al dar click, se compare
-            con el id de este array y así obtener el value correspondiente para despues mandarlo como image_url 
-            en la peticion POST
-            
-            Poner un color diferente en el modo oscuro al fondo de las imagenes
-            */
             const user_profile_images = [
                 { value: 'user.png', id: '0' },
                 { value: 'user2.png', id: '1' },
@@ -350,6 +347,9 @@
 
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            function displayCancellationMessage(){
+                cancellationFlag.value = !cancellationFlag.value;
             }
             const router = useRouter();
             function userRedirect(){
@@ -391,7 +391,23 @@
                 image_url.value = image_url.value.value;
             });
 
+            let cancellationFlag = ref(false)
+            let backToIndex = () => {
+                router.push({ path: '/participants' });
+            }
+            let confirmCancelation = () => {
+                if(name.value || lastname.value || alias.value || birth_date.value || blood_type.value || sex.value || phone_number.value || curp.value || password.value || email.value){
+                        cancellationFlag.value = true;
+                }else 
+                    backToIndex()
+            }
+
             return {
+                backToIndex,
+                cancellationFlag,
+                displayCancellationMessage,
+                confirmCancelation,
+                confirmMessageFlag,
                 image_url,
                 image_urlError,
                 selectedImageIndex,
