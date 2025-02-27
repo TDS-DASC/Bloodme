@@ -21,7 +21,7 @@
                 />
 
                 <Textinput
-                    label="Apellidos"
+                    label="Apellidos *"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
@@ -30,7 +30,7 @@
                 />
 
                 <Textinput
-                    label="email"
+                    label="email *"
                     type="email"
                     placeholder="Ingrese un correo electrónico"
                     name="email"
