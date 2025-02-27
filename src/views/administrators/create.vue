@@ -21,7 +21,7 @@
                 />
 
                 <Textinput
-                    label="Apellidos"
+                    label="Apellidos *"
                     type="text"
                     placeholder="Ingrese sus apellidos"
                     name="lastname"
@@ -30,7 +30,7 @@
                 />
 
                 <Textinput
-                    label="email"
+                    label="email *"
                     type="email"
                     placeholder="Ingrese un correo electrónico"
                     name="email"
@@ -50,42 +50,46 @@
 
                 <div class="lg:col-span-2 gap-2 flex">
                     <Button type="submit" text="Crear" btnClass="btn-primary"></Button>
-                    <router-link :to="{ path:  '/administrators/' }">
-                        <Button btnClass="btn-dark" text="Cancelar" />
-                    </router-link>
+                    <Button type="button" text="Cancelar" btnClass="btn-dark" @click="confirmCancelation()"></Button>
                 </div>
             </form>
         </div>
-        <div class="absolute w-1/4 shadow-xl top-1/3 right-1/3" v-if="confirmMessageFlag">
+        <div class="absolute w-1/4 shadow-xl top-36 right-1/3" v-if="confirmMessageFlag || cancellationFlag">
             <Card title="Se requiere confirmación" class="text-center" noborder>
-                <span class="dark:text-white">
+                <span class="dark:text-white" v-if="confirmMessageFlag == true">
                     Estas a punto de agregar una nueva entidad a la base de datos.<br>
                     ¿Estás seguro que quieres continuar?
                 </span>
+                <span class="dark:text-white" v-if="cancellationFlag == true">
+                    Vas a abandonar el formulario de creación con información que ya has ingresado.<br><br>
+                    ¿Estás seguro que quieres continuar? Esta información será eliminada.
+                </span>
                 <br><br>
                 <div>
-                    <div>
+                    <div v-if="name">
                         <p class="font-bold dark:text-white">Nombre/s:</p>
                         <span class="dark:text-gray-300">
                             {{ name }}
                         </span>
                     </div>
-                    <div>
+                    <div v-if="lastname">
                         <p class="font-bold dark:text-white">Apellido/s:</p>
                         <span class="dark:text-gray-300">
                             {{ lastname }}
                         </span>
                     </div>
-                    <div>
-                        <p class="font-bold dark:text-white">email:</p>
+                    <div v-if="email">
+                        <p class="font-bold dark:text-white">Email:</p>
                         <span class="dark:text-gray-300">
                             {{ email }}
                         </span>
                     </div>
                 </div>
                 <div class="mt-9 flex justify-evenly">
-                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" />
-                    <Button btnClass="btn-dark" text="Cancelar" @click="displayConfirmMessage()" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="createUser()" v-if="confirmMessageFlag == true" />
+                    <Button btnClass="btn-dark" text="Retroceder" @click="displayConfirmMessage()" v-if="confirmMessageFlag == true" />
+                    <Button btnClass="btn-primary" text="Confirmar" @click="backToIndex()" v-if="cancellationFlag == true" />
+                    <Button btnClass="btn-dark" text="Retroceder" @click="displayCancellationMessage()" v-if="cancellationFlag == true" />
                 </div>
             </Card>
         </div>
@@ -136,7 +140,6 @@
                 displayConfirmMessage();
             });
             const onSubmit = handleSubmit((values) => {
-                console.log("sup");
                 const newUserForm = [
                     { name: 'name', value: name.value },
                     { name: 'lastName', value: lastname.value },
@@ -153,6 +156,9 @@
 
             function displayConfirmMessage(){
                 confirmMessageFlag.value = !confirmMessageFlag.value;
+            }
+            function displayCancellationMessage(){
+                cancellationFlag.value = !cancellationFlag.value;
             }
             const router = useRouter();
             function userRedirect(){
@@ -180,8 +186,22 @@
                         console.log(error);
                     });
             }
+            let cancellationFlag = ref(false)
+            let backToIndex = () => {
+                router.push({ path: '/administrators' });
+            }
+            let confirmCancelation = () => {
+                if(name.value || lastname.value || password.value || email.value){
+                        cancellationFlag.value = true;
+                }else 
+                    backToIndex()
+            }
 
             return {
+                backToIndex,
+                cancellationFlag,
+                displayCancellationMessage,
+                confirmCancelation,
                 confirmMessageFlag,
                 createUser,
                 displayConfirmMessage,
