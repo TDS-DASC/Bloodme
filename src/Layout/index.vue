@@ -1,13 +1,13 @@
 <template>
   <main class="app-wrapper h-screen overflow-auto">
-    <Header :class="window.width > 1280 ? switchHeaderClass() : ''" />
+    <Header :class="window.width > 1280 && userRole != 'agent' ? switchHeaderClass() : ''" />
     <!-- end header -->
 
     <Sidebar
       v-if="
         this.$store.themeSettingsStore.menuLayout === 'vertical' &&
         this.$store.themeSettingsStore.sidebarHidden === false &&
-        window.width > 1280
+        window.width > 1280 && userRole != 'agent'
       "
     />
 
@@ -28,7 +28,7 @@
 
     <div
       class="content-wrapper transition-all duration-150"
-      :class="window.width > 1280 ? switchHeaderClass() : ''"
+      :class="window.width > 1280 && userRole != 'agent' ? switchHeaderClass() : ''"
     >
       <div
         class="page-content"
@@ -95,9 +95,16 @@ export default {
         return "ltr:ml-[248px] rtl:mr-[248px]";
       }
     },
-  },
+  }, setup(){
+    let userRole = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).role : null;
+    console.log(userRole)
+    return {
+      userRole
+    } 
+  }
   
 };
+
 </script>
 <style lang="scss">
 .router-animation-enter-active {
