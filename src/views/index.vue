@@ -361,13 +361,7 @@
     },
     setup() {
       const { appointmentsPerAgentTable } = useCachedDataStoreAppointmentsPerAgent();
-      const { campaignsTable } = useCachedDataStoreCampaigns();
-      const { beneficiariesTable } = useCachedDataStoreBeneficiaries();
-      const { hospitalsTable } = useCachedDataStoreHospitals();
       const combinedDataRef = ref([]);
-      const canceledAppointments = ref([])
-      const pendingAppointments = ref([])
-      const accomplishedAppointments = ref([])
 
       let originalData = [];
 
