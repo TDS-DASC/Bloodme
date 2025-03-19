@@ -2,12 +2,12 @@
     <div class="flex dark:bg-slate-900 w-full">
       <!-- Citas pendientes -->
       <div class="flex flex-col bg-gray-100 overflow-hidden dark:bg-slate-800 w-80 h-screen">
-        <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-xl p-1 py-2 font-semibold">
-          Citas pendientes
+        <div class="flex items-center justify-between p-2 dark:bg-slate-700 bg-slate-700 w-full relative">
+          <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-xl p-1 py-0 font-semibold">
+            Citas pendientes
+          </div>
         </div>
-        <div>
-          <button v-on:click="agentLogOut">Hello</button>
-        </div>
+          
         <div class="flex items-center pr-2 dark:bg-slate-800 bg-white">
           <div class="flex flex-1 items-center m-2 bg-white rounded-xl overflow-hidden border-2 border-black-400 border-solid">
             <Icon icon="material-symbols-light:search" style="font-size: 180%; font-weight: bold; color: gray;"/>
@@ -152,31 +152,36 @@
       </div>
 
       <!-- Información del paciente -->
-      <div class="flex-auto bg-white dark:bg-gray-800 overflow-auto">
+      <div class="flex-auto bg-white dark:bg-gray-800 overflow-hidden">
         <div name="header" class="text-start bg-slate-700 text-black text-3xl dark:bg-slate-800 z-10">
           <div name="header" class="bg-slate-700 dark:bg-slate-700 flex justify-between">
-            <div class="text-white dark:text-white text-xl px-4 py-4 font-semibold">
+            <div class="text-white dark:text-white text-xl px-4 py-2 font-semibold">
               Información
             </div>
-            <div class="text-white dark:text-white text-lg px-4 py-4 font-semibold">
+            <div class="text-white dark:text-white text-sm px-4 py-2 font-semibold flex justify-center items-center">
               <span v-if="appointment_date != ''">
                 <p>Fecha: {{ new Date(appointment_date).toLocaleDateString() }} - Hora: {{ new Date(appointment_date).toLocaleTimeString() }}</p>
               </span>
             </div>
-            <div class="flex justify-end">
-              <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
-                Cita pendiente
-              </button>
-              <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
-                Cita cancelada
-              </button>
-              <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
-                Cita completada
+            <div class="flex justify-end gap-10 ">
+              <div class="flex justify-end" v-if="appointment_status != ''">
+                <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
+                  Cita pendiente
+                </button>
+                <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
+                  Cita cancelada
+                </button>
+                <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
+                  Cita completada
+                </button>
+              </div>
+              <button type="button" class="btn bg-black-900 hover:bg-slate-800 text-white block w-fit text-center py-1 rounded-none" v-on:click="agentLogOut">
+                Cerrar sesión
               </button>
             </div>
           </div>
         </div>
-        <div class="p-4 h-screen overflow-auto">
+        <div class="p-4 overflow-hidden">
           <div class="px-3 py-2">
             <div class="flex justify-between border-b-2 pb-1">
               <p class="font-semibold text-gray-600 text-lg dark:text-white dark:border-b-2">Datos del donador</p>
