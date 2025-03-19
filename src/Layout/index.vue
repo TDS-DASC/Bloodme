@@ -42,10 +42,10 @@
               : 'container-fluid'
           }`"
         >
-          <div class="flex w-full flex-col p-4">
+          <div class="flex w-full flex-col" :class="userRole != 'agent' ? 'p-4' : ''" >
             <router-view v-slot="{ Component }">
               <transition name="router-animation" mode="out-in" appear>
-                <Breadcrumbs v-if="!this.$route.meta.hide" />
+                <Breadcrumbs v-if="!this.$route.meta.hide && userRole != 'agent'" />
               </transition>
               <transition name="router-animation" mode="out-in" appear>
                 <component :is="Component"></component>
