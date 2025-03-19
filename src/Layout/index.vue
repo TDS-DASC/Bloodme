@@ -1,6 +1,6 @@
 <template>
   <main class="app-wrapper h-screen overflow-auto">
-    <Header :class="window.width > 1280 && userRole != 'agent' ? switchHeaderClass() : ''" />
+    <Header :class="window.width > 1280" v-if="userRole != 'agent'" />
     <!-- end header -->
 
     <Sidebar

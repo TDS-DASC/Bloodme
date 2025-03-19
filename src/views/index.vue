@@ -1,9 +1,12 @@
 <template>
-    <div class="flex dark:bg-slate-900 gap-2 w-full" style="height: 83vh;">
+    <div class="flex dark:bg-slate-900 w-full">
       <!-- Citas pendientes -->
-      <div class="flex flex-col rounded-md bg-gray-100 overflow-hidden dark:bg-slate-800 w-80">
+      <div class="flex flex-col bg-gray-100 overflow-hidden dark:bg-slate-800 w-80 h-screen">
         <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-xl p-1 py-2 font-semibold">
           Citas pendientes
+        </div>
+        <div>
+          <button v-on:click="agentLogOut">Hello</button>
         </div>
         <div class="flex items-center pr-2 dark:bg-slate-800 bg-white">
           <div class="flex flex-1 items-center m-2 bg-white rounded-xl overflow-hidden border-2 border-black-400 border-solid">
@@ -149,7 +152,7 @@
       </div>
 
       <!-- Información del paciente -->
-      <div class="flex-auto rounded-md bg-white dark:bg-gray-800 overflow-auto">
+      <div class="flex-auto bg-white dark:bg-gray-800 overflow-auto">
         <div name="header" class="text-start bg-slate-700 text-black text-3xl dark:bg-slate-800 z-10">
           <div name="header" class="bg-slate-700 dark:bg-slate-700 flex justify-between">
             <div class="text-white dark:text-white text-xl px-4 py-4 font-semibold">
@@ -612,7 +615,31 @@
         combinedDataRef.value = filteredData;
       }
 
+      function deleteCookie(name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      }
+
+      function closeSession(){
+        localStorage.removeItem('user');
+        deleteCookie('XSRF-TOKEN');
+        deleteCookie('laravel_session');
+        window.location.href = '/home';
+      }
+
+      function agentLogOut() {
+        axios.post(`/logout`)
+          .then(res => {
+            localStorage.removeItem('user');
+            toast.info("¡A cerrado su sesión!", { timeout: 1000 });
+            setTimeout(closeSession, 1000);
+          })
+          .catch(error => {
+            console.error('Error in logout request:', error);
+          });
+      }
+
       return {
+        agentLogOut,
         filterData,
         canceled,
         pending,
