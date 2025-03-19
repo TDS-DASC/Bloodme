@@ -97,7 +97,6 @@ export default {
     },
   }, setup(){
     let userRole = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).role : null;
-    console.log(userRole)
     return {
       userRole
     } 
