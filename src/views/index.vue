@@ -1,15 +1,15 @@
 <template>
-    <div class="flex dark:bg-slate-900 w-full">
+    <div class="flex dark:bg-slate-900 bg-slate-700 w-full">
       <!-- Citas pendientes -->
-      <div class="flex flex-col bg-gray-100 overflow-hidden dark:bg-slate-800 w-80 h-screen">
+      <div class="flex flex-col bg-slate-700 overflow-hidden dark:bg-slate-800 w-80 h-screen border-x-4 border-b-4 border-slate-700">
         <div class="flex items-center justify-between p-2 dark:bg-slate-700 bg-slate-700 w-full relative">
           <div name="header" class="text-center bg-slate-700 dark:bg-slate-700 text-white dark:text-white text-xl p-1 py-0 font-semibold">
             Citas pendientes
           </div>
         </div>
           
-        <div class="flex items-center pr-2 dark:bg-slate-800 bg-white">
-          <div class="flex flex-1 items-center m-2 bg-white rounded-xl overflow-hidden border-2 border-black-400 border-solid">
+        <div class="flex bg-white items-center pr-2 dark:bg-slate-800 border-b-4 border-slate-700 rounded-xl">
+          <div class="flex flex-1 items-center m-2 bg-white rounded-xl overflow-hidden ">
             <Icon icon="material-symbols-light:search" style="font-size: 180%; font-weight: bold; color: gray;"/>
             <input class="py-0 w-full focus:outline-none" placeholder="Buscar..." @input="filterData($event.target.value)">
           </div>
@@ -52,102 +52,101 @@
           </button>
         </div>
 
-        <div class="h-full bg-white flex flex-col items-center justify-center" v-if="combinedDataRef == ''">
-          <svg xmlns="http://www.w3.org/2000/svg" width="27em" height="12em" viewBox="0 0 24 24" class="bg-white">
-            <path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12">
-              <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/>
-              <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/>
-            </path>
-          </svg>
+        <div class="h-full bg-white flex flex-col items-center justify-center rounded-xl" v-if="combinedDataRef == ''">
+          <div class="h-screen flex justify-center items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="27em" height="12em" viewBox="0 0 24 24" class="bg-white">
+              <path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12">
+                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/>
+                <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/>
+              </path>
+            </svg>
+          </div>
         </div>
 
-        <div class="bg-white dark:bg-slate-800 h-full p-2 pb-10 overflow-auto gap-2 flex flex-col" v-if="combinedDataRef != ''">
-          <div class="flex justify-center items-center">
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-              <button type="button" class="mx-2 btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-4 flex items-center" @click="changeAppointmentView('pending')" :class="{ 'bg-slate-500': pending, 'hover:bg-green-400': pending }">
-                Pendientes
-              </button>
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-          </div>
-
-          <template v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!pending">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
-              <div class="relative w-1/4 flex justify-center items-center ">
-                <img :src="bloodbag" alt="" class="max-h-16" />
-                <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
-              </div>
-              <div class="flex flex-col justify-start text-start w-full">
-                <div class="flex items-center justify-between gap-4 w-full">
-                  <p class="font-bold">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
-                  <div class="flex gap-2">
-                    <Icon icon="mdi:eye" style="font-size: 120%;" />
+        <div class="h-full rounded-xl overflow-hidden">
+          <div class="bg-white dark:bg-slate-800 h-full pb-10 overflow-y-auto flex flex-col rounded-xl" v-if="combinedDataRef != ''">
+            <div class="flex justify-center items-center">
+                <button type="button" class="btn bg-green-500 hover:bg-slate-600 text-white w-full text-center h-4 flex justify-center items-center rounded-none" @click="changeAppointmentView('pending')" :class="{ 'bg-slate-500': pending, 'hover:bg-green-400': pending }">
+                  Pendientes
+                </button>
+            </div>
+  
+            <template v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!pending">
+              
+              <button class="flex bg-white border-b-2 border-gray-200 hover:bg-gray-200 p-2 items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'pending'">
+                <div class="relative w-1/4 flex justify-center items-center ">
+                  <img :src="bloodbag" alt="" class="max-h-16" />
+                  <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
+                </div>
+                <div class="flex flex-col justify-start text-start w-full">
+                  <div class="flex items-center justify-between gap-4 w-full">
+                    <p class="font-bold">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+                    <div class="flex gap-2">
+                      <Icon icon="mdi:eye" style="font-size: 120%;" />
+                    </div>
+                  </div>
+                  <div class="flex items-center ">
+                    <Icon icon="mdi:location" />
+                    <p class="flex-2 max-w-xs text-xs">{{ appointment.hospital_address }}</p>
                   </div>
                 </div>
-                <div class="flex items-center ">
-                  <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs text-xs">{{ appointment.hospital_address }}</p>
-                </div>
-              </div>
-            </button>
-          </template>
-
-          <div class="flex justify-center items-center">
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-              <button type="button" class="mx-2 btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-4 flex items-center" @click="changeAppointmentView('canceled')" :class="{ 'bg-slate-500': canceled, 'hover:bg-green-400': canceled }">
-                Canceladas
               </button>
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-          </div>
-          
-          <template v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!canceled">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'cancelled'">
-              <div class="relative w-1/4 flex justify-center items-center ">
-                <img :src="bloodbag" alt="" class="max-h-16" />
-                <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
-              </div>
-              <div class="flex flex-col justify-start text-start w-full">
-                <div class="flex items-center justify-between">
-                  <p class="font-bold">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
-                  <div class="flex">
-                    <Icon icon="mdi:eye" style="font-size: 120%;" />
+            </template>
+  
+            <div class="flex justify-center items-center">
+                <button type="button" class="btn bg-green-500 hover:bg-slate-600 text-white w-full text-center h-4 flex justify-center items-center rounded-none" @click="changeAppointmentView('canceled')" :class="{ 'bg-slate-500': canceled, 'hover:bg-green-400': canceled }">
+                  Canceladas
+                </button>
+            </div>
+            
+            <template v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!canceled">
+              <button class="flex bg-white border-b-2 border-gray-200 hover:bg-gray-200 p-2 items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'cancelled'">
+                <div class="relative w-1/4 flex justify-center items-center ">
+                  <img :src="bloodbag" alt="" class="max-h-16" />
+                  <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
+                </div>
+                <div class="flex flex-col justify-start text-start w-full">
+                  <div class="flex items-center justify-between">
+                    <p class="font-bold">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+                    <div class="flex">
+                      <Icon icon="mdi:eye" style="font-size: 120%;" />
+                    </div>
+                  </div>
+                  <div class="flex items-center ">
+                    <Icon icon="mdi:location" />
+                    <p class="flex-2 max-w-xs text-xs">{{ appointment.hospital_address }}</p>
                   </div>
                 </div>
-                <div class="flex items-center ">
-                  <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs text-xs">{{ appointment.hospital_address }}</p>
-                </div>
-              </div>
-            </button>
-          </template>
-          
-          <div class="flex justify-center items-center">
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-              <button type="button" class="mx-2 btn bg-green-500 hover:bg-slate-600 text-white w-fit text-center h-4 flex items-center" @click="changeAppointmentView('completed')" :class="{ 'bg-slate-500': completed, 'hover:bg-green-400': completed }">
-                Completadas
               </button>
-            <div class="border-b-2 border-solid border-black-300 w-full"></div>
-          </div>
-
-          <template v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!completed">
-            <button class="flex bg-white border-2 border-gray-200 hover:bg-gray-200 p-2 rounded-xl items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'completed'">
-              <div class="relative w-1/4 flex justify-center items-center ">
-                <img :src="bloodbag" alt="" class="max-h-16" />
-                <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
-              </div>
-              <div class="flex flex-col justify-start text-start w-full">
-                <div class="flex items-center justify-between gap-4 w-full">
-                  <p class="font-bold">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
-                  <div class="flex gap-2">
-                    <Icon icon="mdi:eye" style="font-size: 120%;" />
+            </template>
+            
+            <div class="flex justify-center items-center">
+                <button type="button" class="btn bg-green-500 hover:bg-slate-600 text-white w-full text-center h-4 flex justify-center items-center rounded-none" @click="changeAppointmentView('completed')" :class="{ 'bg-slate-500': completed, 'hover:bg-green-400': completed }">
+                  Completadas
+                </button>
+            </div>
+  
+            <template v-for="(appointment, index) in combinedDataRef" :key="index" v-if="!completed">
+              <button class="flex bg-white border-b-2 border-gray-200 hover:bg-gray-200 p-2 items-center select-none transition duration-300 w-full" :class="{ 'bg-gray-200': selectedAppointment == index }"  @click="showPatientInformation(appointment, index)" v-if="appointment.appointment_status == 'completed'">
+                <div class="relative w-1/4 flex justify-center items-center ">
+                  <img :src="bloodbag" alt="" class="max-h-16" />
+                  <p class="absolute top-5 text-xs font-bold text-black-900">{{ appointment.user_blood_type ? appointment.user_blood_type : '¿?' }}</p>
+                </div>
+                <div class="flex flex-col justify-start text-start w-full">
+                  <div class="flex items-center justify-between gap-4 w-full">
+                    <p class="font-bold">{{ appointment.user_name }} {{ appointment.user_lastname }}</p>
+                    <div class="flex gap-2">
+                      <Icon icon="mdi:eye" style="font-size: 120%;" />
+                    </div>
+                  </div>
+                  <div class="flex items-center ">
+                    <Icon icon="mdi:location" />
+                    <p class="flex-2 max-w-xs text-xs">{{ appointment.hospital_address }}</p>
                   </div>
                 </div>
-                <div class="flex items-center ">
-                  <Icon icon="mdi:location" />
-                  <p class="flex-2 max-w-xs text-xs">{{ appointment.hospital_address }}</p>
-                </div>
-              </div>
-            </button>
-          </template>
+              </button>
+            </template>
+          </div>
         </div>
       </div>
 
@@ -168,7 +167,7 @@
                 <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
                   Cita pendiente
                 </button>
-                <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
+                <button type="button" class="btn bg-red-500 hover:bg-red-800 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
                   Cita cancelada
                 </button>
                 <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center py-1 rounded-none" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
@@ -333,7 +332,7 @@
           <div class="full flex justify-end gap-2">
             <button type="button" class="btn bg-warning-500 hover:bg-orange-600 text-white block w-fit text-center" @click="changeAppointmentValue('pending')" v-if="appointment_status != 'pending'">
             </button>
-            <button type="button" class="btn bg-black-700 hover:bg-black-800 text-white block w-fit text-center" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
+            <button type="button" class="btn bg-red-500 hover:bg-red-800 text-white block w-fit text-center" @click="changeAppointmentValue('cancelled')" v-if="appointment_status != 'cancelled'">
             </button>
             <button type="button" class="btn bg-green-500 hover:bg-green-600 text-white block w-fit text-center" @click="changeAppointmentValue('completed')"  v-if="appointment_status != 'completed' ">
             </button>
